@@ -9,3 +9,4 @@ Message me on facebook when you see this https://www.facebook.com/profile.php?id
 Also add your names to the Readme
 
 Fynn Schmitt-Ulms
+[Luca Leon Weishaupt](https://www.facebook.com/luca.weishaupt.39)
