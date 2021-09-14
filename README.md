@@ -14,3 +14,5 @@ Also add your names to the Readme
 
 * Danika De Vaz
 * Emmanuel Ma
+
+![Map](./elfenroads-sprites/small_map.png)
