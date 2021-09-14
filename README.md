@@ -11,3 +11,5 @@ Also add your names to the Readme
 * Fynn Schmitt-Ulms
 
 * [Luca Leon Weishaupt](https://www.facebook.com/luca.weishaupt.39)
+
+* Maria De Vaz
