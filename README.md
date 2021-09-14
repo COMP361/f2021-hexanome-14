@@ -13,3 +13,4 @@ Also add your names to the Readme
 * [Luca Leon Weishaupt](https://www.facebook.com/luca.weishaupt.39)
 
 * Danika De Vaz
+* Emmanuel Ma
