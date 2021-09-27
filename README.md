@@ -15,5 +15,6 @@ Also add your names to the Readme
 * Danika De Vaz
 * Emmanuel Ma
 * Pedro Khalil Jacob
+* Leo Chen
 
 ![Map](./elfenroads-sprites/small_map.png)
