@@ -1,6 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using System;
+using UnityEngine.EventSystems;
 
 public class CameraMovement : MonoBehaviour
 {
@@ -8,6 +11,7 @@ public class CameraMovement : MonoBehaviour
     private Camera cam;
 
     private Vector3 dragOrigin;
+    private bool drag = false;
 
     [SerializeField]
     private float zoomStep, minCamSize, maxCamSize;
@@ -15,10 +19,20 @@ public class CameraMovement : MonoBehaviour
     [SerializeField]
     private SpriteRenderer mapRenderer;
 
+    [SerializeField]
+    private GraphicRaycaster graphicRayCaster;
+
     private float mapMinX, mapMaxX, mapMinY, mapMaxY;
 
+    // [SerializeField]
+    // private EventSystem eventSystem;
+
+    private PointerEventData pointerData;
+
     private void Awake() {
-        mapMinX = mapRenderer.transform.position.x - mapRenderer.bounds.size.x / 2 - 5;
+        pointerData = new PointerEventData(null);
+
+        mapMinX = mapRenderer.transform.position.x - mapRenderer.bounds.size.x / 2;
         mapMaxX = mapRenderer.transform.position.x + mapRenderer.bounds.size.x / 2;
 
         mapMinY = mapRenderer.transform.position.y - mapRenderer.bounds.size.y / 2;
@@ -35,11 +49,26 @@ public class CameraMovement : MonoBehaviour
     {
         //save position of mouse in world space when drag starts (first time clicked)
 
+        pointerData.position = Input.mousePosition;
+
+        List<RaycastResult> results = new List<RaycastResult>();
+
+        graphicRayCaster.Raycast(pointerData, results);
+        
+        // if (results.Count > 0)
+        //     return;
+
         if (Input.GetMouseButtonDown(0))
-            dragOrigin = cam.ScreenToWorldPoint(Input.mousePosition);
+        {
+            if (results.Count == 0)
+            {
+                drag = true;
+                dragOrigin = cam.ScreenToWorldPoint(Input.mousePosition);
+            }
+        }
         //calculate distance between drag origin and new position if it is still held down
 
-        if (Input.GetMouseButton(0))
+        if (drag)
         {
             Vector3 difference = dragOrigin - cam.ScreenToWorldPoint(Input.mousePosition);
 
@@ -47,6 +76,11 @@ public class CameraMovement : MonoBehaviour
             //move the camera by that distance
 
             cam.transform.position = ClampCamera(cam.transform.position + difference);
+        }
+
+        if (Input.GetMouseButtonUp(0))
+        {
+            drag = false;
         }
     }
 
