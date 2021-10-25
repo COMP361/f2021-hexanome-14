@@ -58,13 +58,10 @@ public class CameraMovement : MonoBehaviour
         // if (results.Count > 0)
         //     return;
 
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && results.Count == 0)
         {
-            if (results.Count == 0)
-            {
-                drag = true;
-                dragOrigin = cam.ScreenToWorldPoint(Input.mousePosition);
-            }
+            drag = true;
+            dragOrigin = cam.ScreenToWorldPoint(Input.mousePosition);
         }
         //calculate distance between drag origin and new position if it is still held down
 

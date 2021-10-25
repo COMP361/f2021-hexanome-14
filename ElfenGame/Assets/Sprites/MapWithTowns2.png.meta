@@ -1,0 +1,636 @@
+fileFormatVersion: 2
+guid: d9517deb5c9c24e49b2455d39bc7c33a
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -2520324271970719382
+    second: MapWithTowns2_0
+  - first:
+      213: 8121877003243714199
+    second: MapWithTowns2_1
+  - first:
+      213: 1440056399627312077
+    second: MapWithTowns2_2
+  - first:
+      213: 8900561655872309667
+    second: MapWithTowns2_3
+  - first:
+      213: 5494230006908657125
+    second: MapWithTowns2_4
+  - first:
+      213: -570926970083547488
+    second: MapWithTowns2_5
+  - first:
+      213: 837324758560907544
+    second: MapWithTowns2_6
+  - first:
+      213: -6488274389950747667
+    second: MapWithTowns2_7
+  - first:
+      213: -2377836091921602377
+    second: MapWithTowns2_8
+  - first:
+      213: 9036957582311000310
+    second: MapWithTowns2_9
+  - first:
+      213: 5850518677023352677
+    second: MapWithTowns2_10
+  - first:
+      213: -8835310371934716921
+    second: MapWithTowns2_11
+  - first:
+      213: -4541938692757192327
+    second: MapWithTowns2_12
+  - first:
+      213: 570860134174219771
+    second: MapWithTowns2_13
+  - first:
+      213: 3110294782396708214
+    second: MapWithTowns2_14
+  - first:
+      213: 945638986623755516
+    second: MapWithTowns2_15
+  - first:
+      213: -4204286443474809628
+    second: MapWithTowns2_16
+  - first:
+      213: 6672064664170968133
+    second: MapWithTowns2_17
+  - first:
+      213: -1510358479478641298
+    second: MapWithTowns2_18
+  - first:
+      213: 1041432792692982387
+    second: MapWithTowns2_19
+  - first:
+      213: -1722432782978490299
+    second: MapWithTowns2_20
+  - first:
+      213: 6778792806664452320
+    second: MapWithTowns2_21
+  externalObjects: {}
+  serializedVersion: 11
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: MapWithTowns2_0
+      rect:
+        serializedVersion: 2
+        x: 521
+        y: 2013
+        width: 175
+        height: 147
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 175, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a69e36a8d62060dd0800000000000000
+      internalID: -2520324271970719382
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MapWithTowns2_1
+      rect:
+        serializedVersion: 2
+        x: 736
+        y: 1966
+        width: 156
+        height: 104
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 79671c75a14b6b070800000000000000
+      internalID: 8121877003243714199
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MapWithTowns2_2
+      rect:
+        serializedVersion: 2
+        x: 1310
+        y: 1939
+        width: 109
+        height: 83
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dcb505c6aab1cf310800000000000000
+      internalID: 1440056399627312077
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MapWithTowns2_3
+      rect:
+        serializedVersion: 2
+        x: 254
+        y: 1882
+        width: 154
+        height: 91
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3a94bb73ba5258b70800000000000000
+      internalID: 8900561655872309667
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MapWithTowns2_4
+      rect:
+        serializedVersion: 2
+        x: 1006
+        y: 1822
+        width: 145
+        height: 124
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5ed1514e41d6f3c40800000000000000
+      internalID: 5494230006908657125
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MapWithTowns2_5
+      rect:
+        serializedVersion: 2
+        x: 298
+        y: 1667
+        width: 112
+        height: 117
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0a6ea7312f8a318f0800000000000000
+      internalID: -570926970083547488
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MapWithTowns2_6
+      rect:
+        serializedVersion: 2
+        x: 536
+        y: 1757
+        width: 134
+        height: 116
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 811a9ab7e66ce9b00800000000000000
+      internalID: 837324758560907544
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MapWithTowns2_7
+      rect:
+        serializedVersion: 2
+        x: 1226
+        y: 1699
+        width: 146
+        height: 96
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: deba8b591d405f5a0800000000000000
+      internalID: -6488274389950747667
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MapWithTowns2_8
+      rect:
+        serializedVersion: 2
+        x: 1520
+        y: 1702
+        width: 134
+        height: 78
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7b8e8e63caa300fd0800000000000000
+      internalID: -2377836091921602377
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MapWithTowns2_9
+      rect:
+        serializedVersion: 2
+        x: 704
+        y: 1651
+        width: 132
+        height: 102
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6f88bef8a09b96d70800000000000000
+      internalID: 9036957582311000310
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MapWithTowns2_10
+      rect:
+        serializedVersion: 2
+        x: 976
+        y: 1602
+        width: 117
+        height: 97
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 567e3c74db7313150800000000000000
+      internalID: 5850518677023352677
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MapWithTowns2_11
+      rect:
+        serializedVersion: 2
+        x: 1244
+        y: 1506
+        width: 178
+        height: 173
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 70cb188370ca26580800000000000000
+      internalID: -8835310371934716921
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MapWithTowns2_12
+      rect:
+        serializedVersion: 2
+        x: 484
+        y: 1512
+        width: 133
+        height: 85
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9710b9ab2dac7f0c0800000000000000
+      internalID: -4541938692757192327
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MapWithTowns2_13
+      rect:
+        serializedVersion: 2
+        x: 735
+        y: 1457
+        width: 130
+        height: 74
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bfdd2e9744a1ce700800000000000000
+      internalID: 570860134174219771
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MapWithTowns2_14
+      rect:
+        serializedVersion: 2
+        x: 273
+        y: 1424
+        width: 151
+        height: 88
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 675b18320acf92b20800000000000000
+      internalID: 3110294782396708214
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MapWithTowns2_15
+      rect:
+        serializedVersion: 2
+        x: 989
+        y: 1386
+        width: 118
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cf4287be5a59f1d00800000000000000
+      internalID: 945638986623755516
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MapWithTowns2_16
+      rect:
+        serializedVersion: 2
+        x: 1527
+        y: 1346
+        width: 101
+        height: 75
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4ec81b241cf57a5c0800000000000000
+      internalID: -4204286443474809628
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MapWithTowns2_17
+      rect:
+        serializedVersion: 2
+        x: 282
+        y: 1201
+        width: 181
+        height: 91
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 544b852467fe79c50800000000000000
+      internalID: 6672064664170968133
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MapWithTowns2_18
+      rect:
+        serializedVersion: 2
+        x: 693
+        y: 1209
+        width: 131
+        height: 74
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e6d2d2317f02a0be0800000000000000
+      internalID: -1510358479478641298
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MapWithTowns2_19
+      rect:
+        serializedVersion: 2
+        x: 1085
+        y: 1193
+        width: 141
+        height: 70
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 37288e17b99e37e00800000000000000
+      internalID: 1041432792692982387
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MapWithTowns2_20
+      rect:
+        serializedVersion: 2
+        x: 1332
+        y: 1254
+        width: 121
+        height: 85
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 540641d7280b818e0800000000000000
+      internalID: -1722432782978490299
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MapWithTowns2_21
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 1920
+        height: 1082
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0e8353f542c131e50800000000000000
+      internalID: 6778792806664452320
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
