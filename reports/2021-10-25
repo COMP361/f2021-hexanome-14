@@ -1,0 +1,87 @@
+# Weekly Report, COMP361
+
+## Meta Information
+
+### Group
+
+ * Hexanome-14
+ * c#
+### Team Members
+
+ * Fynn Schmitt-Ulms
+ * Luca Weishaupt
+ * Danika De Vaz
+ * Emmanuel Ma
+ * Pedro Khalil Jacob
+ * Leo Chen
+
+## Status
+
+### 3 most outstanding tasks scheduled until the next report, per team member
+
+ * Fynn Schmitt-Ulms
+   * Finish user interface demo
+ * Luca Weishaupt
+   * Finish user interface demo
+ * Danika De Vaz
+   * Finish case model
+ * Emmanuel Ma
+   * Finish user interface demo
+ * Pedro Khalil Jacob
+   * Finish case model
+ * Leo Chen
+   * Finish user interface demo
+
+### Tasks achieved, scheduled for this report, per team member
+
+ * Fynn Schmitt-Ulms
+   * Watched Unity Tutorials
+   * Created a Main Menu for the interface
+   * Setup git version control for Unity
+ * Luca Weishaupt
+   * Watched Unity Tutorials
+   * Implemented a Drag and Drop Mechanism
+   * Assisted in setting up git version control
+ * Danika De Vaz
+   * Practiced use cases exercises
+   * strucutred textual templates
+   * Drafted the main success scenerios for playGame and createGame + their subfunctions.
+ * Emmanuel Ma
+ * Pedro Khalil Jacob
+   * Practiced use cases exercises
+   * Practiced unity
+   * Finished the use case model
+ * Leo Chen
+ * Checked on use cases
+
+### Tasks missed, scheduled for this report
+
+ * None
+
+### Top 3 unexpected challenges encountered since last report
+
+ * Sharing assets through git version control
+ * Difficulty downloading touchCore
+
+### Top 3 lessons learned since last report
+
+ * How to use git with unity
+ * Unity Development environment basics
+ * How to consider interactions steps
+
+### 3 most critical bugs in current functionality (optional)
+
+ * N/A
+
+### Contribution statement
+
+ * Fynn Schmitt-Ulms contributed 18% of the work effectuated since last week.
+ * Luca Weishaupt contributed 17% of the work effectuated since last week.
+ * Danika De Vaz contributed 18% of the work effectuated since last week.
+ * Emmanuel Ma contributed 16% of the work since last week.
+ * Pedro Khalil Jacob contributed 18% of the work since last week.
+ * Leo Chen contributed 16% of the work since last week.
+
+### Team mood
+
+ * Everything good after misterm season
