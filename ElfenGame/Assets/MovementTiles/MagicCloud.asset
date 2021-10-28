@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 10468c9f488a5480a906bcbcd7ee9559, type: 3}
   m_Name: MagicCloud
   m_EditorClassIdentifier: 
-  mTile: 0
-  mImage: {fileID: 0}
-  mValidRoads: 
+  mTile: 3
+  mImage: {fileID: 21300000, guid: 8d61ff83b25ef48d4aacbfe5b883eb2f, type: 3}
+  mValidRoads: 030000000000000001000000

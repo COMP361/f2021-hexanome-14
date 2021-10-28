@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Unicorn
   m_EditorClassIdentifier: 
   mTile: 0
-  mImage: {fileID: 0}
-  mValidRoads: 
+  mImage: {fileID: 21300000, guid: 938bdba019f3b41cd96fad4be6e7438d, type: 3}
+  mValidRoads: 010000000200000003000000

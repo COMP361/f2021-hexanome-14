@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mTile: 4
   mImage: {fileID: 21300000, guid: 6799543ac7e4c476b84aebb95bb6fb25, type: 3}
-  mValidRoads: 00000000
+  mValidRoads: 0000000001000000

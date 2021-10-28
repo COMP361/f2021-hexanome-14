@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 10468c9f488a5480a906bcbcd7ee9559, type: 3}
   m_Name: ElfCycle
   m_EditorClassIdentifier: 
-  mTile: 0
-  mImage: {fileID: 0}
-  mValidRoads: 
+  mTile: 2
+  mImage: {fileID: 21300000, guid: f947aaf5f1da84d5eabff490bdd176f0, type: 3}
+  mValidRoads: 000000000100000003000000
