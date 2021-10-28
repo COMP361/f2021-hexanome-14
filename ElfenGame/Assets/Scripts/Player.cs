@@ -12,8 +12,8 @@ public class Player : MonoBehaviour
 
     public void addPlayer()
     {
-        GameObject player = Instantiate(playerPrefab) as GameObject;
-        player.transform.SetParent(leftPane.transform, worldPositionStays: false);
+        GameObject player = Instantiate(playerPrefab, leftPane.transform);
+        //player.transform.SetParent(leftPane.transform, worldPositionStays: false);
     }
 
 }
