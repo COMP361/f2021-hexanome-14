@@ -16,7 +16,7 @@ public class CreateMovementTiles : MonoBehaviour
         foreach (MovementTileSO tile in mTiles)
         {
             GameObject newTile = Instantiate(movementTilePrefab, transform);
-            newTile.GetComponent<MovementTileScript>().SetTileSO(tile);
+            newTile.GetComponent<MovementTileUIScript>().SetTileSO(tile);
         }
     }
 

@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 4131624656378400588}
   - component: {fileID: 4131624656378400586}
   - component: {fileID: 4131624656378400589}
-  - component: {fileID: -2528101676564052489}
+  - component: {fileID: -5956429921612103956}
   m_Layer: 5
-  m_Name: MovementTilePrefab
+  m_Name: MovementTileUIPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -76,7 +76,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &-2528101676564052489
+--- !u!114 &-5956429921612103956
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -88,3 +88,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9140fadd63904d51a081db3eb61ad32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mTile: {fileID: 0}

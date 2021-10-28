@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MovementTileScript : MonoBehaviour
+public class MovementTileUIScript : MonoBehaviour
 {
     public MovementTileSO mTile;
+
 
     public void SetTileSO(MovementTileSO newTileSO)
     {
