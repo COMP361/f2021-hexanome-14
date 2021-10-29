@@ -67,7 +67,12 @@ public class MovementTileSpriteScript : MonoBehaviour
                 {
                     throw new System.Exception("Paths must have GridManagers in a child Element");
                 }
-                gm.AddElement(gameObject);
+                bool added = gm.AddElement(gameObject);
+
+                if (!added)
+                {
+                    Destroy(gameObject);
+                }
             }
         }    
         

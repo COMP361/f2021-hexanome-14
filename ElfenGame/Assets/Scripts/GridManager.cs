@@ -41,15 +41,17 @@ public class GridManager : MonoBehaviour
         }
     }
 
-    public void AddElement(GameObject newGameObject)
+    public bool AddElement(GameObject newGameObject)
     {
         if (elements.Count >= nRows * nCols)
         {
-            throw new System.Exception("Too many Elements in GridManager");
+            return false;
         }
 
         elements.Add(newGameObject);
         PositionElements();
+
+        return true;
     }
 
     public void RemoveElement(GameObject gameObject)
