@@ -32,6 +32,29 @@ public class MovementTileSpriteScript : MonoBehaviour
         this.dragOrigin = dragOrigin;
         drag = true;
         GameConstants.mouseActivityManager.BeginDrag<PathScript>();
+        ColorPathsByValidity();
+    }
+
+    public void ColorPathsByValidity()
+    {
+        foreach (PathScript path in GameConstants.roadGroup.GetComponentsInChildren<PathScript>())
+        {
+            if (mTile.mValidRoads.Contains(path.roadType))
+            {
+                path.GetComponent<SpriteRenderer>().color = new Color(0.0f, 1.0f, 0.0f, 0.65f);
+            } else
+            {
+                path.GetComponent<SpriteRenderer>().color = new Color(1.0f, 0.0f, 0.0f, 0.65f);
+            }
+        }
+    }
+
+    public void ResetPathColor()
+    {
+        foreach(PathScript path in GameConstants.roadGroup.GetComponentsInChildren<PathScript>())
+        {
+            path.GetComponent<SpriteRenderer>().color = new Color(1.0f, 1.0f, 1.0f, 0.0f);
+        }
     }
 
 
@@ -74,6 +97,7 @@ public class MovementTileSpriteScript : MonoBehaviour
                     Destroy(gameObject);
                 }
             }
+            ResetPathColor();
         }    
         
 

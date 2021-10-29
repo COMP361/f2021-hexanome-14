@@ -169,6 +169,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 257c144ab1339493b9d9a0d90951618a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  roadType: 1
+  town1: {fileID: 1634158674}
+  town2: {fileID: 834547638}
 --- !u!60 &65735343
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -432,6 +435,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 257c144ab1339493b9d9a0d90951618a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  roadType: 1
+  town1: {fileID: 2052780338}
+  town2: {fileID: 2133348907}
 --- !u!1 &87193427
 GameObject:
   m_ObjectHideFlags: 0
@@ -586,6 +592,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 257c144ab1339493b9d9a0d90951618a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  roadType: 5
+  town1: {fileID: 2139169402}
+  town2: {fileID: 1260733635}
 --- !u!1 &89141148
 GameObject:
   m_ObjectHideFlags: 0
@@ -803,6 +812,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 257c144ab1339493b9d9a0d90951618a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  roadType: 1
+  town1: {fileID: 565439394}
+  town2: {fileID: 1855497432}
 --- !u!60 &125878907
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -1146,6 +1158,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 257c144ab1339493b9d9a0d90951618a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  roadType: 5
+  town1: {fileID: 1321864934}
+  town2: {fileID: 249634169}
 --- !u!1 &160372036
 GameObject:
   m_ObjectHideFlags: 0
@@ -1238,6 +1253,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 257c144ab1339493b9d9a0d90951618a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  roadType: 4
+  town1: {fileID: 249634169}
+  town2: {fileID: 2133348907}
 --- !u!60 &215932440
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -1424,6 +1442,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 257c144ab1339493b9d9a0d90951618a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  roadType: 2
+  town1: {fileID: 1260733635}
+  town2: {fileID: 1711117769}
 --- !u!60 &219146696
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -1571,6 +1592,7 @@ GameObject:
   - component: {fileID: 242425814}
   - component: {fileID: 242425816}
   - component: {fileID: 242425817}
+  - component: {fileID: 242425818}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -1632,6 +1654,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cam: {fileID: 1461493795}
+--- !u!114 &242425818
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 242425813}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4fc17bbd2a4af41eb860492f9f8d0629, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Elvenhold: {fileID: 249634169}
 --- !u!1 &248821004
 GameObject:
   m_ObjectHideFlags: 0
@@ -1799,6 +1834,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 257c144ab1339493b9d9a0d90951618a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  roadType: 4
+  town1: {fileID: 1321864934}
+  town2: {fileID: 1472564290}
 --- !u!1 &249634167
 GameObject:
   m_ObjectHideFlags: 0
@@ -2143,6 +2181,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 257c144ab1339493b9d9a0d90951618a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  roadType: 2
+  town1: {fileID: 1711117769}
+  town2: {fileID: 707033414}
 --- !u!1 &278959904
 GameObject:
   m_ObjectHideFlags: 0
@@ -2235,6 +2276,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 257c144ab1339493b9d9a0d90951618a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  roadType: 2
+  town1: {fileID: 1479858443}
+  town2: {fileID: 707033414}
 --- !u!60 &348834749
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -2488,6 +2532,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 257c144ab1339493b9d9a0d90951618a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  roadType: 3
+  town1: {fileID: 566919536}
+  town2: {fileID: 1472564290}
 --- !u!1 &382025912
 GameObject:
   m_ObjectHideFlags: 0
@@ -2780,6 +2827,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 257c144ab1339493b9d9a0d90951618a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  roadType: 4
+  town1: {fileID: 1472564290}
+  town2: {fileID: 566919536}
 --- !u!1 &402506204
 GameObject:
   m_ObjectHideFlags: 0
@@ -2918,6 +2968,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 257c144ab1339493b9d9a0d90951618a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  roadType: 4
+  town1: {fileID: 2133348907}
+  town2: {fileID: 1634158674}
 --- !u!60 &417706756
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -3160,6 +3213,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 257c144ab1339493b9d9a0d90951618a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  roadType: 0
+  town1: {fileID: 2027606496}
+  town2: {fileID: 249634169}
 --- !u!1 &447402123
 GameObject:
   m_ObjectHideFlags: 0
@@ -3351,8 +3407,8 @@ Transform:
   m_LocalPosition: {x: 2.77, y: -1.66, z: -2}
   m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_Children: []
-  m_Father: {fileID: 883947401}
-  m_RootOrder: 2
+  m_Father: {fileID: 2064882472}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &489661202
 MonoBehaviour:
@@ -3491,8 +3547,8 @@ Transform:
   m_LocalPosition: {x: 4.31, y: -2.15, z: -2}
   m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_Children: []
-  m_Father: {fileID: 883947401}
-  m_RootOrder: 4
+  m_Father: {fileID: 2064882472}
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &506067296
 MonoBehaviour:
@@ -3647,6 +3703,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 257c144ab1339493b9d9a0d90951618a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  roadType: 3
+  town1: {fileID: 1047994914}
+  town2: {fileID: 707033414}
 --- !u!60 &513928946
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -3800,6 +3859,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 257c144ab1339493b9d9a0d90951618a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  roadType: 3
+  town1: {fileID: 1853650226}
+  town2: {fileID: 1047994914}
 --- !u!60 &534881685
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -4419,6 +4481,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 257c144ab1339493b9d9a0d90951618a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  roadType: 2
+  town1: {fileID: 1711117769}
+  town2: {fileID: 728380168}
 --- !u!60 &577652901
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -4676,6 +4741,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 257c144ab1339493b9d9a0d90951618a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  roadType: 3
+  town1: {fileID: 1321864934}
+  town2: {fileID: 447402126}
 --- !u!1 &598636631
 GameObject:
   m_ObjectHideFlags: 0
@@ -5661,6 +5729,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 257c144ab1339493b9d9a0d90951618a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  roadType: 3
+  town1: {fileID: 2139169402}
+  town2: {fileID: 565439394}
 --- !u!1 &821831221
 GameObject:
   m_ObjectHideFlags: 0
@@ -6094,6 +6165,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 257c144ab1339493b9d9a0d90951618a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  roadType: 0
+  town1: {fileID: 2052780338}
+  town2: {fileID: 249634169}
 --- !u!1 &838165343
 GameObject:
   m_ObjectHideFlags: 0
@@ -6338,8 +6412,8 @@ Transform:
   m_LocalPosition: {x: 3.49, y: -1.55, z: -2}
   m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_Children: []
-  m_Father: {fileID: 883947401}
-  m_RootOrder: 6
+  m_Father: {fileID: 2064882472}
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &856198625
 MonoBehaviour:
@@ -6540,6 +6614,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 257c144ab1339493b9d9a0d90951618a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  roadType: 3
+  town1: {fileID: 1047994914}
+  town2: {fileID: 1634158674}
 --- !u!60 &877390259
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -6772,12 +6849,7 @@ Transform:
   m_Children:
   - {fileID: 1374997755}
   - {fileID: 974703377}
-  - {fileID: 489661201}
-  - {fileID: 1157017665}
-  - {fileID: 506067295}
-  - {fileID: 1560133499}
-  - {fileID: 856198624}
-  - {fileID: 1428800517}
+  - {fileID: 2064882472}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -6955,6 +7027,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 257c144ab1339493b9d9a0d90951618a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  roadType: 4
+  town1: {fileID: 566919536}
+  town2: {fileID: 2139169402}
 --- !u!1 &926660644
 GameObject:
   m_ObjectHideFlags: 0
@@ -7249,6 +7324,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 257c144ab1339493b9d9a0d90951618a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  roadType: 0
+  town1: {fileID: 1321864934}
+  town2: {fileID: 2052780338}
 --- !u!1 &1012100194
 GameObject:
   m_ObjectHideFlags: 0
@@ -7390,6 +7468,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 257c144ab1339493b9d9a0d90951618a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  roadType: 4
+  town1: {fileID: 1853650226}
+  town2: {fileID: 1855497432}
 --- !u!212 &1026786571
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -7721,6 +7802,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 257c144ab1339493b9d9a0d90951618a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  roadType: 1
+  town1: {fileID: 1479858443}
+  town2: {fileID: 2052780338}
 --- !u!60 &1116601769
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -7895,8 +7979,8 @@ Transform:
   m_LocalPosition: {x: 2.75, y: -2.27, z: -2}
   m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_Children: []
-  m_Father: {fileID: 883947401}
-  m_RootOrder: 3
+  m_Father: {fileID: 2064882472}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1157017666
 MonoBehaviour:
@@ -8152,6 +8236,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 257c144ab1339493b9d9a0d90951618a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  roadType: 4
+  town1: {fileID: 2027606496}
+  town2: {fileID: 249634169}
 --- !u!1 &1172052927
 GameObject:
   m_ObjectHideFlags: 0
@@ -8290,6 +8377,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 257c144ab1339493b9d9a0d90951618a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  roadType: 0
+  town1: {fileID: 1260733635}
+  town2: {fileID: 1853650226}
 --- !u!60 &1198112180
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -8630,6 +8720,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 257c144ab1339493b9d9a0d90951618a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  roadType: 1
+  town1: {fileID: 1472564290}
+  town2: {fileID: 2052780338}
 --- !u!1 &1260733633
 GameObject:
   m_ObjectHideFlags: 0
@@ -9324,6 +9417,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 257c144ab1339493b9d9a0d90951618a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  roadType: 5
+  town1: {fileID: 565439394}
+  town2: {fileID: 1260733635}
 --- !u!1 &1391962951
 GameObject:
   m_ObjectHideFlags: 0
@@ -9467,6 +9563,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 257c144ab1339493b9d9a0d90951618a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  roadType: 1
+  town1: {fileID: 728380168}
+  town2: {fileID: 2052780338}
 --- !u!1 &1395673268
 GameObject:
   m_ObjectHideFlags: 0
@@ -9570,6 +9669,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 257c144ab1339493b9d9a0d90951618a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  roadType: 0
+  town1: {fileID: 1855497432}
+  town2: {fileID: 1853650226}
 --- !u!212 &1395673274
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -9651,8 +9753,8 @@ Transform:
   m_LocalPosition: {x: 4.202, y: -1.569, z: -2}
   m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_Children: []
-  m_Father: {fileID: 883947401}
-  m_RootOrder: 7
+  m_Father: {fileID: 2064882472}
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1428800518
 MonoBehaviour:
@@ -10669,6 +10771,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 257c144ab1339493b9d9a0d90951618a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  roadType: 3
+  town1: {fileID: 566919536}
+  town2: {fileID: 2139169402}
 --- !u!1 &1560133498
 GameObject:
   m_ObjectHideFlags: 0
@@ -10699,8 +10804,8 @@ Transform:
   m_LocalPosition: {x: 3.64, y: -2.12, z: -2}
   m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_Children: []
-  m_Father: {fileID: 883947401}
-  m_RootOrder: 5
+  m_Father: {fileID: 2064882472}
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1560133500
 MonoBehaviour:
@@ -10855,6 +10960,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 257c144ab1339493b9d9a0d90951618a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  roadType: 1
+  town1: {fileID: 1855497432}
+  town2: {fileID: 1260733635}
 --- !u!60 &1561694397
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -11215,6 +11323,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 257c144ab1339493b9d9a0d90951618a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  roadType: 3
+  town1: {fileID: 566919536}
+  town2: {fileID: 728380168}
 --- !u!1 &1620767155
 GameObject:
   m_ObjectHideFlags: 0
@@ -11421,6 +11532,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 257c144ab1339493b9d9a0d90951618a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  roadType: 0
+  town1: {fileID: 1472564290}
+  town2: {fileID: 1321864934}
 --- !u!1 &1631062846
 GameObject:
   m_ObjectHideFlags: 0
@@ -11513,6 +11627,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 257c144ab1339493b9d9a0d90951618a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  roadType: 2
+  town1: {fileID: 1711117769}
+  town2: {fileID: 1853650226}
 --- !u!60 &1631186304
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -12322,6 +12439,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 257c144ab1339493b9d9a0d90951618a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  roadType: 1
+  town1: {fileID: 707033414}
+  town2: {fileID: 2133348907}
 --- !u!60 &1744733855
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -12597,6 +12717,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 257c144ab1339493b9d9a0d90951618a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  roadType: 1
+  town1: {fileID: 249634169}
+  town2: {fileID: 834547638}
 --- !u!60 &1816589712
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -13340,6 +13463,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 257c144ab1339493b9d9a0d90951618a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  roadType: 1
+  town1: {fileID: 1456724236}
+  town2: {fileID: 728380168}
 --- !u!1 &1879952526
 GameObject:
   m_ObjectHideFlags: 0
@@ -13386,6 +13512,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 257c144ab1339493b9d9a0d90951618a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  roadType: 0
+  town1: {fileID: 707033414}
+  town2: {fileID: 1634158674}
 --- !u!60 &1879952529
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -13810,6 +13939,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 257c144ab1339493b9d9a0d90951618a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  roadType: 5
+  town1: {fileID: 1321864934}
+  town2: {fileID: 447402126}
 --- !u!1 &2015872274
 GameObject:
   m_ObjectHideFlags: 0
@@ -13958,6 +14090,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 257c144ab1339493b9d9a0d90951618a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  roadType: 2
+  town1: {fileID: 728380168}
+  town2: {fileID: 1479858443}
 --- !u!1 &2027606493
 GameObject:
   m_ObjectHideFlags: 0
@@ -14304,6 +14439,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 257c144ab1339493b9d9a0d90951618a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  roadType: 1
+  town1: {fileID: 1472564290}
+  town2: {fileID: 728380168}
 --- !u!1 &2050980852
 GameObject:
   m_ObjectHideFlags: 0
@@ -14549,6 +14687,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 257c144ab1339493b9d9a0d90951618a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  roadType: 2
+  town1: {fileID: 1479858443}
+  town2: {fileID: 1711117769}
 --- !u!60 &2056906485
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -14693,6 +14834,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 257c144ab1339493b9d9a0d90951618a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  roadType: 1
+  town1: {fileID: 1479858443}
+  town2: {fileID: 2133348907}
 --- !u!60 &2057144490
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -14797,6 +14941,42 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &2064882471
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2064882472}
+  m_Layer: 0
+  m_Name: ElfStartHome
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2064882472
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2064882471}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 489661201}
+  - {fileID: 1157017665}
+  - {fileID: 506067295}
+  - {fileID: 1560133499}
+  - {fileID: 856198624}
+  - {fileID: 1428800517}
+  m_Father: {fileID: 883947401}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2070221288
 GameObject:
   m_ObjectHideFlags: 0
@@ -14994,6 +15174,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 257c144ab1339493b9d9a0d90951618a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  roadType: 5
+  town1: {fileID: 565439394}
+  town2: {fileID: 2139169402}
 --- !u!1 &2104660577
 GameObject:
   m_ObjectHideFlags: 0
@@ -15149,6 +15332,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 257c144ab1339493b9d9a0d90951618a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  roadType: 0
+  town1: {fileID: 447402126}
+  town2: {fileID: 2027606496}
 --- !u!1 &2133348904
 GameObject:
   m_ObjectHideFlags: 0
@@ -15450,6 +15636,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 257c144ab1339493b9d9a0d90951618a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  roadType: 5
+  town1: {fileID: 249634169}
+  town2: {fileID: 447402126}
 --- !u!1 &2139169399
 GameObject:
   m_ObjectHideFlags: 0

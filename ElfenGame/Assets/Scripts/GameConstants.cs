@@ -12,4 +12,9 @@ public static class GameConstants
     public static MouseActivityManager mouseActivityManager = gameManager.GetComponent<MouseActivityManager>();
 
     public static Camera mainCamera = mouseActivityManager.cam;
+
+    public static GameObject roadGroup = GameObject.Find("Roads");
+
+    //public static List<Elf> elves;
+
 }

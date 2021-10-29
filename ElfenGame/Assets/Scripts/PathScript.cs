@@ -4,25 +4,26 @@ using UnityEngine;
 
 public class PathScript : MonoBehaviour, IDragOver
 {
-    // Start is called before the first frame update
+    [SerializeField]
+    public RoadType roadType;
+
+    [SerializeField]
+    public NewTown town1, town2;
+
+    private GridManager gridManager;
+
     void Start()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        gridManager = GetComponentInChildren<GridManager>();
     }
 
     public void OnDragEnter()
     {
-        GetComponent<SpriteRenderer>().color = new Color(0.0f, 1.0f, 0.0f, 0.65f);
+        //GetComponent<SpriteRenderer>().color = new Color(0.0f, 1.0f, 0.0f, 0.65f);
     }
 
     public void OnDragExit()
     {
-        GetComponent<SpriteRenderer>().color = new Color(1.0f, 1.0f, 1.0f, 0.0f);
+        //GetComponent<SpriteRenderer>().color = new Color(1.0f, 1.0f, 1.0f, 0.0f);
     }
 }
