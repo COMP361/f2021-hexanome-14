@@ -6,6 +6,7 @@ using UnityEngine.EventSystems;
 public class Elf : MonoBehaviour
 {
     private Vector3 dragOrigin;
+    private GridManager dragOriginManager;
     private bool drag = false;
 
     [SerializeField]
@@ -28,14 +29,21 @@ public class Elf : MonoBehaviour
             {
                 Debug.Log("MouseDown on: " + hit.collider.gameObject.name);
 
-                if (hit.collider.gameObject == this.gameObject)
+                if (hit.collider.gameObject == gameObject)
                 {
                     drag = true;
                     dragOrigin = cam.ScreenToWorldPoint(Input.mousePosition);
                     dragOrigin = new Vector3(dragOrigin.x, dragOrigin.y, transform.position.z);
                     transform.localScale = new Vector3(0.15f, 0.15f, 0.15f);
                     GetComponent<SpriteRenderer>().color = new Color(1.0f, 1.0f, 1.0f, 0.65f);
-                    mouseActivityManager.beginElfDrag();
+
+                    GridManager parentGrid = GetComponentInParent<GridManager>();
+                    if (parentGrid != null)
+                    {
+                        parentGrid.RemoveElement(gameObject);
+                    }
+                    dragOriginManager = parentGrid;
+                    mouseActivityManager.BeginDrag<NewTown>();
 
                 }
             }
@@ -48,9 +56,9 @@ public class Elf : MonoBehaviour
         if (drag)
         {
             Vector2 MousePosition = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
-            Vector2 objPosition = Camera.main.ScreenToWorldPoint(MousePosition);
+            Vector2 objPosition = cam.ScreenToWorldPoint(MousePosition);
             transform.position = new Vector3(objPosition.x, objPosition.y, dragOrigin.z);
-            mouseActivityManager.whileElfDrag();
+            mouseActivityManager.WhileDrag<NewTown>();
         }
     }
 
@@ -58,17 +66,25 @@ public class Elf : MonoBehaviour
     {
         if (drag)
         {
-            NewTown town = mouseActivityManager.endElfDrag(this);
+            NewTown town = mouseActivityManager.EndDrag<NewTown>();
 
             transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
             GetComponent<SpriteRenderer>().color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
 
             if (town == null)
             {
-                transform.position = dragOrigin;
+                if (dragOriginManager != null)
+                {
+                    dragOriginManager.AddElement(gameObject);
+                } else
+                {
+                    transform.position = dragOrigin;
+                }
+                
             } else
             {
-                transform.position = new Vector3(town.gameObject.transform.position.x, town.gameObject.transform.position.y, dragOrigin.z);
+                //transform.position = new Vector3(town.gameObject.transform.position.x, town.gameObject.transform.position.y, dragOrigin.z);
+                town.GetComponent<GridManager>().AddElement(gameObject);
             }
 
             drag = false;

@@ -7,13 +7,13 @@ public class MouseActivityManager : MonoBehaviour
 {
 
     [SerializeField]
-    private Camera cam;
+    public Camera cam;
 
-    private NewTown hoveringOverTown;
+    private IDragOver dragOver;
 
     void Awake()
     {
-        hoveringOverTown = null;
+        dragOver = null;
     }
 
     // Start is called before the first frame update
@@ -30,19 +30,46 @@ public class MouseActivityManager : MonoBehaviour
         
     }
 
-    public void beginElfDrag()
+    public void BeginDrag<T>() where T : IDragOver
     {
-        hoveringOverTown = getMouseTown();
-        if (hoveringOverTown != null)
+        dragOver = GetMouseElement<T>();
+        if (dragOver != null)
         {
-            hoveringOverTown.OnDragEnter();
+            dragOver.OnDragEnter();
         }
     }
 
-    private NewTown getMouseTown()
+    public void WhileDrag<T>() where T : IDragOver
+    {
+        T curElement = GetMouseElement<T>();
+
+
+        if (dragOver != null && !dragOver.Equals(curElement))
+        {
+            dragOver.OnDragExit();
+        }
+
+        if (curElement != null && !curElement.Equals(dragOver))
+        {
+            curElement.OnDragEnter();
+        }
+
+        dragOver = curElement;
+    }
+
+    public T EndDrag<T>() where T : IDragOver
+    {
+        if (dragOver != null)
+            dragOver.OnDragExit();
+
+        return GetMouseElement<T>();
+
+    }
+
+    private T GetMouseElement<T>()
     {
         if (EventSystem.current.IsPointerOverGameObject())
-            return null;
+            return default(T);
 
         Vector2 position = cam.ScreenToWorldPoint(Input.mousePosition);
         RaycastHit2D[] results = Physics2D.RaycastAll(position, Vector2.zero);
@@ -53,42 +80,16 @@ public class MouseActivityManager : MonoBehaviour
             if (hit.collider == null || hit.collider.gameObject == null)
                 continue;
 
-            NewTown town = hit.collider.gameObject.GetComponent<NewTown>();
+            T element = hit.collider.gameObject.GetComponent<T>();
 
-            if (town == null)
+            if (element == null)
                 continue;
 
-            return town;
+            return element;
 
         }
 
-        return null;
-    }
-
-
-    public void whileElfDrag()
-    {
-        NewTown curTown = getMouseTown();
-
-        if (hoveringOverTown == curTown)
-            return;
-
-        if (hoveringOverTown != null)
-            hoveringOverTown.OnDragExit();
-
-        if (curTown != null)
-            curTown.OnDragEnter();
-
-        hoveringOverTown = curTown;
-    }
-
-    public NewTown endElfDrag(Elf elf)
-    {
-        if (hoveringOverTown != null)
-            hoveringOverTown.OnDragExit();
-
-        return getMouseTown();
-
+        return default(T);
     }
 
 

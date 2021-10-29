@@ -54,11 +54,8 @@ public class CameraMovement2 : MonoBehaviour
             {
                 Debug.Log("MouseDown on: " + hit.collider.gameObject.name);
 
-                if (hit.collider.gameObject == this.gameObject)
-                {
-                    drag = true;
-                    dragOrigin = cam.ScreenToWorldPoint(Input.mousePosition);
-                }
+                drag = true;
+                dragOrigin = cam.ScreenToWorldPoint(Input.mousePosition);
             }
         }
     }

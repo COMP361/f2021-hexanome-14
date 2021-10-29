@@ -89,3 +89,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mTile: {fileID: 0}
+  movementTileSpritePrefab: {fileID: 710000644895225578, guid: bae1bd41308d8427eb114e1101763928, type: 3}

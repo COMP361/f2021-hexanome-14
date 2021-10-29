@@ -29,11 +29,11 @@ public class GridManager : MonoBehaviour
             int row = index / nCols;
             int col = index % nCols;
 
-            float posX = col * tileSize - (colsNeeded * tileSize / 2);
-            float posY = row * -tileSize + (rowsNeeded * tileSize / 2);
+            float posX = col * tileSize - ((colsNeeded-1) * tileSize / 2);
+            float posY = row * -tileSize + ((rowsNeeded-1) * tileSize / 2);
 
             gm.transform.SetParent(gameObject.transform);
-            gm.transform.localPosition = new Vector3(posX, posY, -1);
+            gm.transform.localPosition = new Vector3(posX, posY, GameConstants.gridItemRelativeZ);
 
             Debug.Log(gm.name + '@' + gm.transform.localPosition.ToString());
 
@@ -48,7 +48,7 @@ public class GridManager : MonoBehaviour
             throw new System.Exception("Too many Elements in GridManager");
         }
 
-        elements.Add(Instantiate(newGameObject));
+        elements.Add(newGameObject);
         PositionElements();
     }
 

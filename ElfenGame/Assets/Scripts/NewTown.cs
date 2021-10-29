@@ -2,17 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NewTown : MonoBehaviour
+public class NewTown : MonoBehaviour, IDragOver
 {
-
-    public void OnMouseEnter()
-    {
-    }
-
-    public void OnMouseExit()
-    {
-        
-    }
 
     public void OnDragEnter()
     {

@@ -134,7 +134,8 @@ GameObject:
   - component: {fileID: 65735341}
   - component: {fileID: 65735344}
   - component: {fileID: 65735343}
-  m_Layer: 0
+  - component: {fileID: 65735342}
+  m_Layer: 7
   m_Name: RoadTichikToErgEren
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -156,6 +157,18 @@ Transform:
   m_Father: {fileID: 974703377}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &65735342
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 65735340}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 257c144ab1339493b9d9a0d90951618a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!60 &65735343
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -270,7 +283,8 @@ GameObject:
   - component: {fileID: 79850005}
   - component: {fileID: 79850007}
   - component: {fileID: 79850006}
-  m_Layer: 0
+  - component: {fileID: 79850008}
+  m_Layer: 7
   m_Name: RoadLapphalyaToRivinia
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -406,6 +420,18 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &79850008
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 79850004}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 257c144ab1339493b9d9a0d90951618a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &87193427
 GameObject:
   m_ObjectHideFlags: 0
@@ -417,7 +443,8 @@ GameObject:
   - component: {fileID: 87193428}
   - component: {fileID: 87193430}
   - component: {fileID: 87193429}
-  m_Layer: 0
+  - component: {fileID: 87193431}
+  m_Layer: 7
   m_Name: LakeGrangorToParundia
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -547,6 +574,18 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &87193431
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 87193427}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 257c144ab1339493b9d9a0d90951618a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &89141148
 GameObject:
   m_ObjectHideFlags: 0
@@ -556,7 +595,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 89141149}
-  m_Layer: 0
+  - component: {fileID: 89141150}
+  m_Layer: 7
   m_Name: Anchor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -577,6 +617,21 @@ Transform:
   m_Father: {fileID: 1380139969}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &89141150
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 89141148}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f6ff08730b674744ac8e03e76912408, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nRows: 2
+  nCols: 2
+  tileSize: 0.4
 --- !u!1 &90487506
 GameObject:
   m_ObjectHideFlags: 0
@@ -586,7 +641,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 90487507}
-  m_Layer: 0
+  - component: {fileID: 90487508}
+  m_Layer: 7
   m_Name: Anchor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -607,6 +663,21 @@ Transform:
   m_Father: {fileID: 373343393}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &90487508
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 90487506}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f6ff08730b674744ac8e03e76912408, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nRows: 2
+  nCols: 2
+  tileSize: 0.4
 --- !u!1 &91204666
 GameObject:
   m_ObjectHideFlags: 0
@@ -697,7 +768,8 @@ GameObject:
   - component: {fileID: 125878905}
   - component: {fileID: 125878908}
   - component: {fileID: 125878907}
-  m_Layer: 0
+  - component: {fileID: 125878906}
+  m_Layer: 7
   m_Name: RoadYttarToUsselen
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -719,6 +791,18 @@ Transform:
   m_Father: {fileID: 974703377}
   m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &125878906
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 125878904}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 257c144ab1339493b9d9a0d90951618a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!60 &125878907
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -820,6 +904,52 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &140372900
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 140372901}
+  - component: {fileID: 140372902}
+  m_Layer: 7
+  m_Name: Anchor
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &140372901
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 140372900}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.342, y: -0.331, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 2104660578}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &140372902
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 140372900}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f6ff08730b674744ac8e03e76912408, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nRows: 2
+  nCols: 2
+  tileSize: 0.4
 --- !u!1 &145450019
 GameObject:
   m_ObjectHideFlags: 0
@@ -829,7 +959,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 145450020}
-  m_Layer: 0
+  - component: {fileID: 145450021}
+  m_Layer: 7
   m_Name: Anchor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -850,6 +981,21 @@ Transform:
   m_Father: {fileID: 587114390}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &145450021
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 145450019}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f6ff08730b674744ac8e03e76912408, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nRows: 2
+  nCols: 2
+  tileSize: 0.4
 --- !u!1 &152370502
 GameObject:
   m_ObjectHideFlags: 0
@@ -861,7 +1007,8 @@ GameObject:
   - component: {fileID: 152370503}
   - component: {fileID: 152370505}
   - component: {fileID: 152370504}
-  m_Layer: 0
+  - component: {fileID: 152370506}
+  m_Layer: 7
   m_Name: LakeVirstToElvenhold
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -987,6 +1134,18 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &152370506
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 152370502}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 257c144ab1339493b9d9a0d90951618a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &160372036
 GameObject:
   m_ObjectHideFlags: 0
@@ -996,7 +1155,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 160372037}
-  m_Layer: 0
+  - component: {fileID: 160372038}
+  m_Layer: 7
   m_Name: Anchor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1017,6 +1177,21 @@ Transform:
   m_Father: {fileID: 152370503}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &160372038
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 160372036}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f6ff08730b674744ac8e03e76912408, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nRows: 2
+  nCols: 2
+  tileSize: 0.4
 --- !u!1 &215932437
 GameObject:
   m_ObjectHideFlags: 0
@@ -1028,7 +1203,8 @@ GameObject:
   - component: {fileID: 215932438}
   - component: {fileID: 215932441}
   - component: {fileID: 215932440}
-  m_Layer: 0
+  - component: {fileID: 215932439}
+  m_Layer: 7
   m_Name: RiverElvenholdToRivinia
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1050,6 +1226,18 @@ Transform:
   m_Father: {fileID: 974703377}
   m_RootOrder: 20
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &215932439
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 215932437}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 257c144ab1339493b9d9a0d90951618a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!60 &215932440
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -1153,7 +1341,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 217573933}
-  m_Layer: 0
+  - component: {fileID: 217573934}
+  m_Layer: 7
   m_Name: Anchor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1174,6 +1363,21 @@ Transform:
   m_Father: {fileID: 254786445}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &217573934
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 217573932}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f6ff08730b674744ac8e03e76912408, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nRows: 2
+  nCols: 2
+  tileSize: 0.4
 --- !u!1 &219146693
 GameObject:
   m_ObjectHideFlags: 0
@@ -1185,7 +1389,8 @@ GameObject:
   - component: {fileID: 219146694}
   - component: {fileID: 219146697}
   - component: {fileID: 219146696}
-  m_Layer: 0
+  - component: {fileID: 219146695}
+  m_Layer: 7
   m_Name: RoadParundiaToAlBaran
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1207,6 +1412,18 @@ Transform:
   m_Father: {fileID: 974703377}
   m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &219146695
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 219146693}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 257c144ab1339493b9d9a0d90951618a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!60 &219146696
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -1305,7 +1522,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 227399285}
-  m_Layer: 0
+  - component: {fileID: 227399286}
+  m_Layer: 7
   m_Name: Anchor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1326,6 +1544,21 @@ Transform:
   m_Father: {fileID: 79850005}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &227399286
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 227399284}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f6ff08730b674744ac8e03e76912408, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nRows: 2
+  nCols: 2
+  tileSize: 0.4
 --- !u!1 &242425813
 GameObject:
   m_ObjectHideFlags: 0
@@ -1410,7 +1643,8 @@ GameObject:
   - component: {fileID: 248821005}
   - component: {fileID: 248821007}
   - component: {fileID: 248821006}
-  m_Layer: 0
+  - component: {fileID: 248821008}
+  m_Layer: 7
   m_Name: RiverVirstToJxara
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1553,6 +1787,18 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &248821008
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 248821004}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 257c144ab1339493b9d9a0d90951618a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &249634167
 GameObject:
   m_ObjectHideFlags: 0
@@ -1565,7 +1811,8 @@ GameObject:
   - component: {fileID: 249634171}
   - component: {fileID: 249634170}
   - component: {fileID: 249634169}
-  m_Layer: 0
+  - component: {fileID: 249634172}
+  m_Layer: 8
   m_Name: TownElvenhold
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1724,6 +1971,21 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &249634172
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 249634167}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f6ff08730b674744ac8e03e76912408, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nRows: 2
+  nCols: 3
+  tileSize: 0.5
 --- !u!1 &254786444
 GameObject:
   m_ObjectHideFlags: 0
@@ -1735,7 +1997,8 @@ GameObject:
   - component: {fileID: 254786445}
   - component: {fileID: 254786447}
   - component: {fileID: 254786446}
-  m_Layer: 0
+  - component: {fileID: 254786448}
+  m_Layer: 7
   m_Name: RoadAlBaranToThrotmanni
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1868,6 +2131,18 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &254786448
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 254786444}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 257c144ab1339493b9d9a0d90951618a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &278959904
 GameObject:
   m_ObjectHideFlags: 0
@@ -1877,7 +2152,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 278959905}
-  m_Layer: 0
+  - component: {fileID: 278959906}
+  m_Layer: 7
   m_Name: Anchor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1898,6 +2174,21 @@ Transform:
   m_Father: {fileID: 1116601767}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &278959906
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 278959904}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f6ff08730b674744ac8e03e76912408, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nRows: 2
+  nCols: 2
+  tileSize: 0.4
 --- !u!1 &348834744
 GameObject:
   m_ObjectHideFlags: 0
@@ -1909,7 +2200,8 @@ GameObject:
   - component: {fileID: 348834745}
   - component: {fileID: 348834750}
   - component: {fileID: 348834749}
-  m_Layer: 0
+  - component: {fileID: 348834746}
+  m_Layer: 7
   m_Name: RoadFeodorToThrotmanni
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1931,6 +2223,18 @@ Transform:
   m_Father: {fileID: 974703377}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &348834746
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 348834744}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 257c144ab1339493b9d9a0d90951618a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!60 &348834749
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -2040,7 +2344,8 @@ GameObject:
   - component: {fileID: 373343393}
   - component: {fileID: 373343395}
   - component: {fileID: 373343394}
-  m_Layer: 0
+  - component: {fileID: 373343396}
+  m_Layer: 7
   m_Name: RoadMahDavikiaToJxara
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2171,6 +2476,18 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &373343396
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 373343392}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 257c144ab1339493b9d9a0d90951618a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &382025912
 GameObject:
   m_ObjectHideFlags: 0
@@ -2314,7 +2631,8 @@ GameObject:
   - component: {fileID: 383021978}
   - component: {fileID: 383021980}
   - component: {fileID: 383021979}
-  m_Layer: 0
+  - component: {fileID: 383021981}
+  m_Layer: 7
   m_Name: RiverJxaraToMahDavikia
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2450,6 +2768,18 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &383021981
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 383021977}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 257c144ab1339493b9d9a0d90951618a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &402506204
 GameObject:
   m_ObjectHideFlags: 0
@@ -2459,7 +2789,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 402506205}
-  m_Layer: 0
+  - component: {fileID: 402506206}
+  m_Layer: 7
   m_Name: Anchor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2480,6 +2811,21 @@ Transform:
   m_Father: {fileID: 2135812678}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &402506206
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 402506204}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f6ff08730b674744ac8e03e76912408, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nRows: 2
+  nCols: 2
+  tileSize: 0.4
 --- !u!1 &416624911
 GameObject:
   m_ObjectHideFlags: 0
@@ -2489,7 +2835,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 416624912}
-  m_Layer: 0
+  - component: {fileID: 416624913}
+  m_Layer: 7
   m_Name: Anchor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2510,6 +2857,21 @@ Transform:
   m_Father: {fileID: 1198112178}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &416624913
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 416624911}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f6ff08730b674744ac8e03e76912408, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nRows: 2
+  nCols: 2
+  tileSize: 0.4
 --- !u!1 &417706753
 GameObject:
   m_ObjectHideFlags: 0
@@ -2521,7 +2883,8 @@ GameObject:
   - component: {fileID: 417706754}
   - component: {fileID: 417706757}
   - component: {fileID: 417706756}
-  m_Layer: 0
+  - component: {fileID: 417706755}
+  m_Layer: 7
   m_Name: RiverRiviniaToTichik
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2543,6 +2906,18 @@ Transform:
   m_Father: {fileID: 974703377}
   m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &417706755
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 417706753}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 257c144ab1339493b9d9a0d90951618a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!60 &417706756
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -2660,7 +3035,8 @@ GameObject:
   - component: {fileID: 418428708}
   - component: {fileID: 418428710}
   - component: {fileID: 418428709}
-  m_Layer: 0
+  - component: {fileID: 418428711}
+  m_Layer: 7
   m_Name: RoadElvenholdToBeata
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2772,6 +3148,18 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &418428711
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 418428707}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 257c144ab1339493b9d9a0d90951618a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &447402123
 GameObject:
   m_ObjectHideFlags: 0
@@ -2784,7 +3172,8 @@ GameObject:
   - component: {fileID: 447402127}
   - component: {fileID: 447402126}
   - component: {fileID: 447402125}
-  m_Layer: 0
+  - component: {fileID: 447402128}
+  m_Layer: 8
   m_Name: TownStrykhaven
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2917,6 +3306,21 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &447402128
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 447402123}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f6ff08730b674744ac8e03e76912408, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nRows: 2
+  nCols: 3
+  tileSize: 0.5
 --- !u!1 &489661200
 GameObject:
   m_ObjectHideFlags: 0
@@ -2929,7 +3333,7 @@ GameObject:
   - component: {fileID: 489661204}
   - component: {fileID: 489661203}
   - component: {fileID: 489661202}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: blue_elf
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2944,11 +3348,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 489661200}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.931, y: -2.784, z: -2}
+  m_LocalPosition: {x: 2.77, y: -1.66, z: -2}
   m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_Children: []
   m_Father: {fileID: 883947401}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &489661202
 MonoBehaviour:
@@ -3057,6 +3461,146 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &506067294
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 506067295}
+  - component: {fileID: 506067298}
+  - component: {fileID: 506067297}
+  - component: {fileID: 506067296}
+  m_Layer: 9
+  m_Name: orange_elf
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &506067295
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 506067294}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 4.31, y: -2.15, z: -2}
+  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
+  m_Children: []
+  m_Father: {fileID: 883947401}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &506067296
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 506067294}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 698756d5f5950480b8a5b090cfac9f8e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cam: {fileID: 1461493795}
+  mouseActivityManager: {fileID: 242425817}
+--- !u!60 &506067297
+PolygonCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 506067294}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 5.12, y: 5.12}
+    newSize: {x: 5.12, y: 5.12}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: 1.4399999, y: 0.48999998}
+      - {x: 1.4399999, y: 1.15}
+      - {x: 1.16, y: 1.62}
+      - {x: 0.35999998, y: 2.47}
+      - {x: -1.27, y: 2.47}
+      - {x: -1.53, y: 2.18}
+      - {x: -1.53, y: 1.79}
+      - {x: -1.3, y: 1.6899999}
+      - {x: -1.53, y: 0.83}
+      - {x: -1.53, y: 0.04}
+      - {x: -1.24, y: -1.15}
+      - {x: -0.93, y: -1.1999999}
+      - {x: -0.88, y: -2.46}
+      - {x: 1.13, y: -2.46}
+      - {x: 1.4399999, y: -1.28}
+      - {x: 1.4399999, y: -0.14999999}
+      - {x: 1.24, y: -0.02}
+--- !u!212 &506067298
+SpriteRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 506067294}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_Sprite: {fileID: 21300000, guid: 006945d2240a2416ba450a342b08a5bf, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 5.12, y: 5.12}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
+  m_MaskInteraction: 0
+  m_SpriteSortPoint: 0
 --- !u!1 &513928942
 GameObject:
   m_ObjectHideFlags: 0
@@ -3068,7 +3612,8 @@ GameObject:
   - component: {fileID: 513928943}
   - component: {fileID: 513928947}
   - component: {fileID: 513928946}
-  m_Layer: 0
+  - component: {fileID: 513928944}
+  m_Layer: 7
   m_Name: RoadJaccarandaToThrotmanni
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3090,6 +3635,18 @@ Transform:
   m_Father: {fileID: 974703377}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &513928944
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 513928942}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 257c144ab1339493b9d9a0d90951618a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!60 &513928946
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -3208,7 +3765,8 @@ GameObject:
   - component: {fileID: 534881681}
   - component: {fileID: 534881686}
   - component: {fileID: 534881685}
-  m_Layer: 0
+  - component: {fileID: 534881682}
+  m_Layer: 7
   m_Name: RoadWylhienToJaccaranda
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3230,6 +3788,18 @@ Transform:
   m_Father: {fileID: 974703377}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &534881682
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 534881680}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 257c144ab1339493b9d9a0d90951618a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!60 &534881685
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -3343,7 +3913,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 550301477}
-  m_Layer: 0
+  - component: {fileID: 550301478}
+  m_Layer: 7
   m_Name: Anchor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3364,6 +3935,21 @@ Transform:
   m_Father: {fileID: 1561694395}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &550301478
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 550301476}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f6ff08730b674744ac8e03e76912408, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nRows: 2
+  nCols: 2
+  tileSize: 0.4
 --- !u!1 &553522589
 GameObject:
   m_ObjectHideFlags: 0
@@ -3373,7 +3959,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 553522590}
-  m_Layer: 0
+  - component: {fileID: 553522591}
+  m_Layer: 7
   m_Name: Anchor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3394,6 +3981,21 @@ Transform:
   m_Father: {fileID: 2095893759}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &553522591
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 553522589}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f6ff08730b674744ac8e03e76912408, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nRows: 2
+  nCols: 2
+  tileSize: 0.4
 --- !u!1 &556146221
 GameObject:
   m_ObjectHideFlags: 0
@@ -3404,7 +4006,7 @@ GameObject:
   m_Component:
   - component: {fileID: 556146222}
   - component: {fileID: 556146223}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Anchor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3437,8 +4039,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f6ff08730b674744ac8e03e76912408, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nRows: 1
-  nCols: 3
+  nRows: 2
+  nCols: 2
   tileSize: 0.4
 --- !u!1 &565439392
 GameObject:
@@ -3452,7 +4054,8 @@ GameObject:
   - component: {fileID: 565439396}
   - component: {fileID: 565439395}
   - component: {fileID: 565439394}
-  m_Layer: 0
+  - component: {fileID: 565439397}
+  m_Layer: 8
   m_Name: TownYttar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3589,6 +4192,21 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &565439397
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 565439392}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f6ff08730b674744ac8e03e76912408, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nRows: 2
+  nCols: 3
+  tileSize: 0.5
 --- !u!1 &566919534
 GameObject:
   m_ObjectHideFlags: 0
@@ -3601,7 +4219,8 @@ GameObject:
   - component: {fileID: 566919538}
   - component: {fileID: 566919537}
   - component: {fileID: 566919536}
-  m_Layer: 0
+  - component: {fileID: 566919539}
+  m_Layer: 8
   m_Name: TownMahDavikia
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3739,6 +4358,21 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &566919539
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 566919534}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f6ff08730b674744ac8e03e76912408, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nRows: 2
+  nCols: 3
+  tileSize: 0.5
 --- !u!1 &577652898
 GameObject:
   m_ObjectHideFlags: 0
@@ -3750,7 +4384,8 @@ GameObject:
   - component: {fileID: 577652899}
   - component: {fileID: 577652902}
   - component: {fileID: 577652901}
-  m_Layer: 0
+  - component: {fileID: 577652900}
+  m_Layer: 7
   m_Name: RoadAlBaranToDagAmura
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3772,6 +4407,18 @@ Transform:
   m_Father: {fileID: 974703377}
   m_RootOrder: 16
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &577652900
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 577652898}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 257c144ab1339493b9d9a0d90951618a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!60 &577652901
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -3879,7 +4526,8 @@ GameObject:
   - component: {fileID: 587114390}
   - component: {fileID: 587114392}
   - component: {fileID: 587114391}
-  m_Layer: 0
+  - component: {fileID: 587114393}
+  m_Layer: 7
   m_Name: RoadVirstToStrykhaven
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4016,139 +4664,18 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!1 &593160431
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 593160432}
-  - component: {fileID: 593160435}
-  - component: {fileID: 593160434}
-  - component: {fileID: 593160433}
-  m_Layer: 5
-  m_Name: Button
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &593160432
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 593160431}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 1150613581}
-  m_Father: {fileID: 783978451}
-  m_RootOrder: 5
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 40}
-  m_SizeDelta: {x: 160, y: 30}
-  m_Pivot: {x: 0, y: 0}
---- !u!114 &593160433
+--- !u!114 &587114393
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 593160431}
+  m_GameObject: {fileID: 587114389}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Script: {fileID: 11500000, guid: 257c144ab1339493b9d9a0d90951618a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Navigation:
-    m_Mode: 3
-    m_WrapAround: 0
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
-    m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
-  m_Colors:
-    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
-    m_ColorMultiplier: 1
-    m_FadeDuration: 0.1
-  m_SpriteState:
-    m_HighlightedSprite: {fileID: 0}
-    m_PressedSprite: {fileID: 0}
-    m_SelectedSprite: {fileID: 0}
-    m_DisabledSprite: {fileID: 0}
-  m_AnimationTriggers:
-    m_NormalTrigger: Normal
-    m_HighlightedTrigger: Highlighted
-    m_PressedTrigger: Pressed
-    m_SelectedTrigger: Selected
-    m_DisabledTrigger: Disabled
-  m_Interactable: 1
-  m_TargetGraphic: {fileID: 593160434}
-  m_OnClick:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 556146223}
-        m_TargetAssemblyTypeName: GridManager, Assembly-CSharp
-        m_MethodName: AddElement
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 710000644895225578, guid: bae1bd41308d8427eb114e1101763928, type: 3}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
---- !u!114 &593160434
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 593160431}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
---- !u!222 &593160435
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 593160431}
-  m_CullTransparentMesh: 1
 --- !u!1 &598636631
 GameObject:
   m_ObjectHideFlags: 0
@@ -4158,7 +4685,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 598636632}
-  m_Layer: 0
+  - component: {fileID: 598636633}
+  m_Layer: 7
   m_Name: Anchor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4173,12 +4701,27 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 598636631}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.172, y: 0.162, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2015872275}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &598636633
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 598636631}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f6ff08730b674744ac8e03e76912408, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nRows: 2
+  nCols: 2
+  tileSize: 0.4
 --- !u!1 &633023232
 GameObject:
   m_ObjectHideFlags: 0
@@ -4188,7 +4731,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 633023233}
-  m_Layer: 0
+  - component: {fileID: 633023234}
+  m_Layer: 7
   m_Name: Anchor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4209,6 +4753,21 @@ Transform:
   m_Father: {fileID: 248821005}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &633023234
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 633023232}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f6ff08730b674744ac8e03e76912408, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nRows: 2
+  nCols: 2
+  tileSize: 0.4
 --- !u!1 &672098273
 GameObject:
   m_ObjectHideFlags: 0
@@ -4218,7 +4777,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 672098274}
-  m_Layer: 0
+  - component: {fileID: 672098275}
+  m_Layer: 7
   m_Name: Anchor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4239,6 +4799,21 @@ Transform:
   m_Father: {fileID: 877390255}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &672098275
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 672098273}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f6ff08730b674744ac8e03e76912408, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nRows: 2
+  nCols: 2
+  tileSize: 0.4
 --- !u!1 &674175413
 GameObject:
   m_ObjectHideFlags: 0
@@ -4327,7 +4902,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 694015118}
-  m_Layer: 0
+  - component: {fileID: 694015119}
+  m_Layer: 7
   m_Name: Anchor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4348,6 +4924,21 @@ Transform:
   m_Father: {fileID: 1395673269}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &694015119
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 694015117}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f6ff08730b674744ac8e03e76912408, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nRows: 2
+  nCols: 2
+  tileSize: 0.4
 --- !u!1 &694967319
 GameObject:
   m_ObjectHideFlags: 0
@@ -4357,7 +4948,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 694967320}
-  m_Layer: 0
+  - component: {fileID: 694967321}
+  m_Layer: 7
   m_Name: Anchor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4378,6 +4970,21 @@ Transform:
   m_Father: {fileID: 1164303613}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &694967321
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 694967319}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f6ff08730b674744ac8e03e76912408, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nRows: 2
+  nCols: 2
+  tileSize: 0.4
 --- !u!1 &707033411
 GameObject:
   m_ObjectHideFlags: 0
@@ -4390,7 +4997,8 @@ GameObject:
   - component: {fileID: 707033415}
   - component: {fileID: 707033414}
   - component: {fileID: 707033413}
-  m_Layer: 0
+  - component: {fileID: 707033416}
+  m_Layer: 8
   m_Name: TownThrotmanni
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4528,6 +5136,21 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &707033416
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 707033411}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f6ff08730b674744ac8e03e76912408, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nRows: 2
+  nCols: 3
+  tileSize: 0.5
 --- !u!1 &728380166
 GameObject:
   m_ObjectHideFlags: 0
@@ -4540,7 +5163,8 @@ GameObject:
   - component: {fileID: 728380170}
   - component: {fileID: 728380169}
   - component: {fileID: 728380168}
-  m_Layer: 0
+  - component: {fileID: 728380171}
+  m_Layer: 8
   m_Name: TownDagAmura
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4670,6 +5294,21 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &728380171
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 728380166}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f6ff08730b674744ac8e03e76912408, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nRows: 2
+  nCols: 3
+  tileSize: 0.5
 --- !u!1 &737378758
 GameObject:
   m_ObjectHideFlags: 0
@@ -4679,7 +5318,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 737378759}
-  m_Layer: 0
+  - component: {fileID: 737378760}
+  m_Layer: 7
   m_Name: Anchor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4700,6 +5340,21 @@ Transform:
   m_Father: {fileID: 1744733853}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &737378760
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 737378758}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f6ff08730b674744ac8e03e76912408, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nRows: 2
+  nCols: 2
+  tileSize: 0.4
 --- !u!1 &770510652
 GameObject:
   m_ObjectHideFlags: 0
@@ -4709,7 +5364,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 770510653}
-  m_Layer: 0
+  - component: {fileID: 770510654}
+  m_Layer: 7
   m_Name: Anchor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4730,6 +5386,21 @@ Transform:
   m_Father: {fileID: 513928943}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &770510654
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 770510652}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f6ff08730b674744ac8e03e76912408, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nRows: 2
+  nCols: 2
+  tileSize: 0.4
 --- !u!1 &783978447
 GameObject:
   m_ObjectHideFlags: 0
@@ -4826,8 +5497,6 @@ RectTransform:
   - {fileID: 1819740682}
   - {fileID: 1453545465}
   - {fileID: 821831222}
-  - {fileID: 593160432}
-  - {fileID: 1430150854}
   - {fileID: 1331611084}
   m_Father: {fileID: 0}
   m_RootOrder: 2
@@ -4848,7 +5517,8 @@ GameObject:
   - component: {fileID: 789359783}
   - component: {fileID: 789359785}
   - component: {fileID: 789359784}
-  m_Layer: 0
+  - component: {fileID: 789359786}
+  m_Layer: 7
   m_Name: RoadGrangorToYttar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4979,6 +5649,18 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &789359786
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 789359782}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 257c144ab1339493b9d9a0d90951618a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &821831221
 GameObject:
   m_ObjectHideFlags: 0
@@ -5124,7 +5806,8 @@ GameObject:
   - component: {fileID: 834547639}
   - component: {fileID: 834547638}
   - component: {fileID: 834547637}
-  m_Layer: 0
+  - component: {fileID: 834547640}
+  m_Layer: 8
   m_Name: TownErgEren
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5250,6 +5933,21 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &834547640
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 834547635}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f6ff08730b674744ac8e03e76912408, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nRows: 2
+  nCols: 3
+  tileSize: 0.5
 --- !u!1 &837352677
 GameObject:
   m_ObjectHideFlags: 0
@@ -5261,7 +5959,8 @@ GameObject:
   - component: {fileID: 837352678}
   - component: {fileID: 837352680}
   - component: {fileID: 837352679}
-  m_Layer: 0
+  - component: {fileID: 837352681}
+  m_Layer: 7
   m_Name: RoadLapphalyaToElvenhold
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5383,6 +6082,18 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &837352681
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 837352677}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 257c144ab1339493b9d9a0d90951618a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &838165343
 GameObject:
   m_ObjectHideFlags: 0
@@ -5417,7 +6128,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 20}
   m_SizeDelta: {x: 0, y: 600}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &838165345
@@ -5437,8 +6148,8 @@ MonoBehaviour:
     m_Right: 0
     m_Top: 0
     m_Bottom: 0
-  m_ChildAlignment: 4
-  m_StartCorner: 3
+  m_ChildAlignment: 7
+  m_StartCorner: 2
   m_StartAxis: 0
   m_CellSize: {x: 100, y: 100}
   m_Spacing: {x: 40, y: 20}
@@ -5597,6 +6308,146 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 842684893}
   m_CullTransparentMesh: 1
+--- !u!1 &856198623
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 856198624}
+  - component: {fileID: 856198627}
+  - component: {fileID: 856198626}
+  - component: {fileID: 856198625}
+  m_Layer: 9
+  m_Name: turq_elf
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &856198624
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 856198623}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 3.49, y: -1.55, z: -2}
+  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
+  m_Children: []
+  m_Father: {fileID: 883947401}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &856198625
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 856198623}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 698756d5f5950480b8a5b090cfac9f8e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cam: {fileID: 1461493795}
+  mouseActivityManager: {fileID: 242425817}
+--- !u!60 &856198626
+PolygonCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 856198623}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 5.12, y: 5.12}
+    newSize: {x: 5.12, y: 5.12}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: 1.4399999, y: 0.48999998}
+      - {x: 1.4399999, y: 1.15}
+      - {x: 1.16, y: 1.62}
+      - {x: 0.35999998, y: 2.47}
+      - {x: -1.27, y: 2.47}
+      - {x: -1.53, y: 2.18}
+      - {x: -1.53, y: 1.79}
+      - {x: -1.3, y: 1.6899999}
+      - {x: -1.53, y: 0.83}
+      - {x: -1.53, y: 0.04}
+      - {x: -1.24, y: -1.15}
+      - {x: -0.93, y: -1.1999999}
+      - {x: -0.88, y: -2.46}
+      - {x: 1.13, y: -2.46}
+      - {x: 1.4399999, y: -1.28}
+      - {x: 1.4399999, y: -0.14999999}
+      - {x: 1.24, y: -0.02}
+--- !u!212 &856198627
+SpriteRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 856198623}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_Sprite: {fileID: 21300000, guid: 7e561d8fa6db94aea89f44bf4019c4ad, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 5.12, y: 5.12}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
+  m_MaskInteraction: 0
+  m_SpriteSortPoint: 0
 --- !u!1 &872331296
 GameObject:
   m_ObjectHideFlags: 0
@@ -5606,7 +6457,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 872331297}
-  m_Layer: 0
+  - component: {fileID: 872331298}
+  m_Layer: 7
   m_Name: Anchor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5627,6 +6479,21 @@ Transform:
   m_Father: {fileID: 2044345150}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &872331298
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 872331296}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f6ff08730b674744ac8e03e76912408, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nRows: 2
+  nCols: 2
+  tileSize: 0.4
 --- !u!1 &877390254
 GameObject:
   m_ObjectHideFlags: 0
@@ -5638,7 +6505,8 @@ GameObject:
   - component: {fileID: 877390255}
   - component: {fileID: 877390260}
   - component: {fileID: 877390259}
-  m_Layer: 0
+  - component: {fileID: 877390256}
+  m_Layer: 7
   m_Name: RoadJaccarandaToTichik
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5660,6 +6528,18 @@ Transform:
   m_Father: {fileID: 974703377}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &877390256
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 877390254}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 257c144ab1339493b9d9a0d90951618a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!60 &877390259
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -5891,8 +6771,13 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1374997755}
-  - {fileID: 489661201}
   - {fileID: 974703377}
+  - {fileID: 489661201}
+  - {fileID: 1157017665}
+  - {fileID: 506067295}
+  - {fileID: 1560133499}
+  - {fileID: 856198624}
+  - {fileID: 1428800517}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -5936,7 +6821,8 @@ GameObject:
   - component: {fileID: 911612772}
   - component: {fileID: 911612774}
   - component: {fileID: 911612773}
-  m_Layer: 0
+  - component: {fileID: 911612775}
+  m_Layer: 7
   m_Name: RiverMahDavikiaToGrangor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6057,6 +6943,18 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &911612775
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 911612771}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 257c144ab1339493b9d9a0d90951618a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &926660644
 GameObject:
   m_ObjectHideFlags: 0
@@ -6204,7 +7102,7 @@ Transform:
   - {fileID: 373343393}
   - {fileID: 911612772}
   m_Father: {fileID: 883947401}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1000820132
 GameObject:
@@ -6217,7 +7115,8 @@ GameObject:
   - component: {fileID: 1000820133}
   - component: {fileID: 1000820135}
   - component: {fileID: 1000820134}
-  m_Layer: 0
+  - component: {fileID: 1000820136}
+  m_Layer: 7
   m_Name: RoadVirstToLapphalya
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6338,6 +7237,18 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &1000820136
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1000820132}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 257c144ab1339493b9d9a0d90951618a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1012100194
 GameObject:
   m_ObjectHideFlags: 0
@@ -6347,7 +7258,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1012100195}
-  m_Layer: 0
+  - component: {fileID: 1012100196}
+  m_Layer: 7
   m_Name: Anchor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6368,6 +7280,21 @@ Transform:
   m_Father: {fileID: 87193428}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1012100196
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1012100194}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f6ff08730b674744ac8e03e76912408, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nRows: 2
+  nCols: 2
+  tileSize: 0.4
 --- !u!1 &1026786565
 GameObject:
   m_ObjectHideFlags: 0
@@ -6379,7 +7306,8 @@ GameObject:
   - component: {fileID: 1026786566}
   - component: {fileID: 1026786571}
   - component: {fileID: 1026786567}
-  m_Layer: 0
+  - component: {fileID: 1026786568}
+  m_Layer: 7
   m_Name: RiverWylhienToUsselen
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6450,6 +7378,18 @@ PolygonCollider2D:
       - {x: -0.094615385, y: -0.4544866}
       - {x: 0.095274724, y: -0.370091}
       - {x: 0.43285713, y: -0.19075035}
+--- !u!114 &1026786568
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1026786565}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 257c144ab1339493b9d9a0d90951618a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!212 &1026786571
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -6513,7 +7453,8 @@ GameObject:
   - component: {fileID: 1047994915}
   - component: {fileID: 1047994914}
   - component: {fileID: 1047994913}
-  m_Layer: 0
+  - component: {fileID: 1047994916}
+  m_Layer: 8
   m_Name: TownJaccaranda
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6657,6 +7598,21 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &1047994916
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1047994911}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f6ff08730b674744ac8e03e76912408, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nRows: 2
+  nCols: 3
+  tileSize: 0.5
 --- !u!1 &1081538485
 GameObject:
   m_ObjectHideFlags: 0
@@ -6730,7 +7686,8 @@ GameObject:
   - component: {fileID: 1116601767}
   - component: {fileID: 1116601770}
   - component: {fileID: 1116601769}
-  m_Layer: 0
+  - component: {fileID: 1116601768}
+  m_Layer: 7
   m_Name: RoadFeodorToLapphalya
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6752,6 +7709,18 @@ Transform:
   m_Father: {fileID: 974703377}
   m_RootOrder: 18
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1116601768
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1116601766}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 257c144ab1339493b9d9a0d90951618a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!60 &1116601769
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -6859,7 +7828,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1128844376}
-  m_Layer: 0
+  - component: {fileID: 1128844377}
+  m_Layer: 7
   m_Name: Anchor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6880,7 +7850,22 @@ Transform:
   m_Father: {fileID: 1594644010}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1150613580
+--- !u!114 &1128844377
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1128844375}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f6ff08730b674744ac8e03e76912408, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nRows: 2
+  nCols: 2
+  tileSize: 0.4
+--- !u!1 &1157017664
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -6888,77 +7873,138 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1150613581}
-  - component: {fileID: 1150613583}
-  - component: {fileID: 1150613582}
-  m_Layer: 5
-  m_Name: Text
+  - component: {fileID: 1157017665}
+  - component: {fileID: 1157017668}
+  - component: {fileID: 1157017667}
+  - component: {fileID: 1157017666}
+  m_Layer: 9
+  m_Name: green_elf
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!224 &1150613581
-RectTransform:
+--- !u!4 &1157017665
+Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1150613580}
+  m_GameObject: {fileID: 1157017664}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 2.75, y: -2.27, z: -2}
+  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_Children: []
-  m_Father: {fileID: 593160432}
-  m_RootOrder: 0
+  m_Father: {fileID: 883947401}
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 160, y: 30}
-  m_Pivot: {x: 0, y: 0}
---- !u!114 &1150613582
+--- !u!114 &1157017666
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1150613580}
+  m_GameObject: {fileID: 1157017664}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Script: {fileID: 11500000, guid: 698756d5f5950480b8a5b090cfac9f8e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 14
-    m_FontStyle: 0
-    m_BestFit: 0
-    m_MinSize: 10
-    m_MaxSize: 40
-    m_Alignment: 4
-    m_AlignByGeometry: 0
-    m_RichText: 1
-    m_HorizontalOverflow: 0
-    m_VerticalOverflow: 0
-    m_LineSpacing: 1
-  m_Text: Add SpriteTile
---- !u!222 &1150613583
-CanvasRenderer:
+  cam: {fileID: 1461493795}
+  mouseActivityManager: {fileID: 242425817}
+--- !u!60 &1157017667
+PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1150613580}
-  m_CullTransparentMesh: 1
+  m_GameObject: {fileID: 1157017664}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 5.12, y: 5.12}
+    newSize: {x: 5.12, y: 5.12}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: 1.4399999, y: 0.48999998}
+      - {x: 1.4399999, y: 1.15}
+      - {x: 1.16, y: 1.62}
+      - {x: 0.35999998, y: 2.47}
+      - {x: -1.27, y: 2.47}
+      - {x: -1.53, y: 2.18}
+      - {x: -1.53, y: 1.79}
+      - {x: -1.3, y: 1.6899999}
+      - {x: -1.53, y: 0.83}
+      - {x: -1.53, y: 0.04}
+      - {x: -1.24, y: -1.15}
+      - {x: -0.93, y: -1.1999999}
+      - {x: -0.88, y: -2.46}
+      - {x: 1.13, y: -2.46}
+      - {x: 1.4399999, y: -1.28}
+      - {x: 1.4399999, y: -0.14999999}
+      - {x: 1.24, y: -0.02}
+--- !u!212 &1157017668
+SpriteRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1157017664}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_Sprite: {fileID: 21300000, guid: d67da0a0362344a45bb885caaca77eed, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 5.12, y: 5.12}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
+  m_MaskInteraction: 0
+  m_SpriteSortPoint: 0
 --- !u!1 &1164303612
 GameObject:
   m_ObjectHideFlags: 0
@@ -6970,7 +8016,8 @@ GameObject:
   - component: {fileID: 1164303613}
   - component: {fileID: 1164303615}
   - component: {fileID: 1164303614}
-  m_Layer: 0
+  - component: {fileID: 1164303616}
+  m_Layer: 7
   m_Name: RiverBeataToElvenhold
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7093,6 +8140,18 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &1164303616
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1164303612}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 257c144ab1339493b9d9a0d90951618a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1172052927
 GameObject:
   m_ObjectHideFlags: 0
@@ -7102,7 +8161,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1172052928}
-  m_Layer: 0
+  - component: {fileID: 1172052929}
+  m_Layer: 7
   m_Name: Anchor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7123,6 +8183,21 @@ Transform:
   m_Father: {fileID: 1628271672}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1172052929
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1172052927}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f6ff08730b674744ac8e03e76912408, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nRows: 2
+  nCols: 2
+  tileSize: 0.4
 --- !u!1 &1173964971
 GameObject:
   m_ObjectHideFlags: 0
@@ -7132,7 +8207,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1173964972}
-  m_Layer: 0
+  - component: {fileID: 1173964973}
+  m_Layer: 7
   m_Name: Anchor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7153,6 +8229,21 @@ Transform:
   m_Father: {fileID: 65735341}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1173964973
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1173964971}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f6ff08730b674744ac8e03e76912408, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nRows: 2
+  nCols: 2
+  tileSize: 0.4
 --- !u!1 &1198112177
 GameObject:
   m_ObjectHideFlags: 0
@@ -7164,7 +8255,8 @@ GameObject:
   - component: {fileID: 1198112178}
   - component: {fileID: 1198112181}
   - component: {fileID: 1198112180}
-  m_Layer: 0
+  - component: {fileID: 1198112179}
+  m_Layer: 7
   m_Name: RoadParundiaToWylhien
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7186,6 +8278,18 @@ Transform:
   m_Father: {fileID: 974703377}
   m_RootOrder: 15
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1198112179
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1198112177}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 257c144ab1339493b9d9a0d90951618a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!60 &1198112180
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -7292,7 +8396,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1229962571}
-  m_Layer: 0
+  - component: {fileID: 1229962572}
+  m_Layer: 7
   m_Name: Anchor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7313,6 +8418,21 @@ Transform:
   m_Father: {fileID: 418428708}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1229962572
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1229962570}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f6ff08730b674744ac8e03e76912408, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nRows: 2
+  nCols: 2
+  tileSize: 0.4
 --- !u!1 &1233476929
 GameObject:
   m_ObjectHideFlags: 0
@@ -7322,7 +8442,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1233476930}
-  m_Layer: 0
+  - component: {fileID: 1233476931}
+  m_Layer: 7
   m_Name: Anchor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7343,6 +8464,21 @@ Transform:
   m_Father: {fileID: 2056906483}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1233476931
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1233476929}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f6ff08730b674744ac8e03e76912408, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nRows: 2
+  nCols: 2
+  tileSize: 0.4
 --- !u!1 &1243615959
 GameObject:
   m_ObjectHideFlags: 0
@@ -7354,7 +8490,8 @@ GameObject:
   - component: {fileID: 1243615960}
   - component: {fileID: 1243615962}
   - component: {fileID: 1243615961}
-  m_Layer: 0
+  - component: {fileID: 1243615963}
+  m_Layer: 7
   m_Name: RoadJxaraToLapphalya
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7481,6 +8618,18 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &1243615963
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1243615959}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 257c144ab1339493b9d9a0d90951618a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1260733633
 GameObject:
   m_ObjectHideFlags: 0
@@ -7493,7 +8642,8 @@ GameObject:
   - component: {fileID: 1260733637}
   - component: {fileID: 1260733636}
   - component: {fileID: 1260733635}
-  m_Layer: 0
+  - component: {fileID: 1260733638}
+  m_Layer: 8
   m_Name: TownParundia
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7629,6 +8779,21 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &1260733638
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1260733633}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f6ff08730b674744ac8e03e76912408, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nRows: 2
+  nCols: 3
+  tileSize: 0.5
 --- !u!1 &1307064242
 GameObject:
   m_ObjectHideFlags: 0
@@ -7638,7 +8803,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1307064243}
-  m_Layer: 0
+  - component: {fileID: 1307064244}
+  m_Layer: 7
   m_Name: Anchor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7659,6 +8825,21 @@ Transform:
   m_Father: {fileID: 1879952527}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1307064244
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1307064242}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f6ff08730b674744ac8e03e76912408, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nRows: 2
+  nCols: 2
+  tileSize: 0.4
 --- !u!1 &1321327807
 GameObject:
   m_ObjectHideFlags: 0
@@ -7668,7 +8849,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1321327808}
-  m_Layer: 0
+  - component: {fileID: 1321327809}
+  m_Layer: 7
   m_Name: Anchor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7689,6 +8871,21 @@ Transform:
   m_Father: {fileID: 219146694}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1321327809
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1321327807}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f6ff08730b674744ac8e03e76912408, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nRows: 2
+  nCols: 2
+  tileSize: 0.4
 --- !u!1 &1321864932
 GameObject:
   m_ObjectHideFlags: 0
@@ -7701,7 +8898,8 @@ GameObject:
   - component: {fileID: 1321864936}
   - component: {fileID: 1321864935}
   - component: {fileID: 1321864934}
-  m_Layer: 0
+  - component: {fileID: 1321864937}
+  m_Layer: 8
   m_Name: TownVirst
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7833,6 +9031,21 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &1321864937
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1321864932}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f6ff08730b674744ac8e03e76912408, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nRows: 2
+  nCols: 3
+  tileSize: 0.5
 --- !u!1 &1330317604
 GameObject:
   m_ObjectHideFlags: 0
@@ -7842,7 +9055,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1330317605}
-  m_Layer: 0
+  - component: {fileID: 1330317606}
+  m_Layer: 7
   m_Name: Anchor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7863,6 +9077,21 @@ Transform:
   m_Father: {fileID: 1870588240}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1330317606
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1330317604}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f6ff08730b674744ac8e03e76912408, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nRows: 2
+  nCols: 2
+  tileSize: 0.4
 --- !u!1 &1331611083
 GameObject:
   m_ObjectHideFlags: 0
@@ -7893,7 +9122,7 @@ RectTransform:
   m_Children:
   - {fileID: 838165344}
   m_Father: {fileID: 783978451}
-  m_RootOrder: 7
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -7970,7 +9199,8 @@ GameObject:
   - component: {fileID: 1380139969}
   - component: {fileID: 1380139971}
   - component: {fileID: 1380139970}
-  m_Layer: 0
+  - component: {fileID: 1380139972}
+  m_Layer: 7
   m_Name: LakeYttarToParundia
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8082,6 +9312,18 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &1380139972
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1380139968}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 257c144ab1339493b9d9a0d90951618a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1391962951
 GameObject:
   m_ObjectHideFlags: 0
@@ -8093,7 +9335,8 @@ GameObject:
   - component: {fileID: 1391962952}
   - component: {fileID: 1391962954}
   - component: {fileID: 1391962953}
-  m_Layer: 0
+  - component: {fileID: 1391962955}
+  m_Layer: 7
   m_Name: RoadDagAmuraToLapphayla
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8212,6 +9455,18 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &1391962955
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1391962951}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 257c144ab1339493b9d9a0d90951618a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1395673268
 GameObject:
   m_ObjectHideFlags: 0
@@ -8223,7 +9478,8 @@ GameObject:
   - component: {fileID: 1395673269}
   - component: {fileID: 1395673274}
   - component: {fileID: 1395673270}
-  m_Layer: 0
+  - component: {fileID: 1395673271}
+  m_Layer: 7
   m_Name: RoadUsselenToWylhien
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8302,6 +9558,18 @@ PolygonCollider2D:
       - {x: -0.8686813, y: -0.50637364}
       - {x: -0.47835162, y: -0.0843956}
       - {x: -0.4045055, y: 0}
+--- !u!114 &1395673271
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1395673268}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 257c144ab1339493b9d9a0d90951618a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!212 &1395673274
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -8353,7 +9621,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!1 &1409782744
+--- !u!1 &1428800516
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8361,167 +9629,138 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1430150854}
-  m_Layer: 5
-  m_Name: Button
+  - component: {fileID: 1428800517}
+  - component: {fileID: 1428800520}
+  - component: {fileID: 1428800519}
+  - component: {fileID: 1428800518}
+  m_Layer: 9
+  m_Name: red_elf
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!1 &1430150853
-GameObject:
+--- !u!4 &1428800517
+Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1430150858}
-  - component: {fileID: 1430150857}
-  - component: {fileID: 1430150855}
-  - component: {fileID: 1430150856}
-  m_Layer: 0
-  m_Name: 
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!224 &1430150854
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1409782744}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 1820185323}
-  - {fileID: 1430150858}
-  m_Father: {fileID: 783978451}
-  m_RootOrder: 6
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1430150855
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1430150853}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Navigation:
-    m_Mode: 3
-    m_WrapAround: 0
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
-    m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
-  m_Colors:
-    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
-    m_ColorMultiplier: 1
-    m_FadeDuration: 0.1
-  m_SpriteState:
-    m_HighlightedSprite: {fileID: 0}
-    m_PressedSprite: {fileID: 0}
-    m_SelectedSprite: {fileID: 0}
-    m_DisabledSprite: {fileID: 0}
-  m_AnimationTriggers:
-    m_NormalTrigger: Normal
-    m_HighlightedTrigger: Highlighted
-    m_PressedTrigger: Pressed
-    m_SelectedTrigger: Selected
-    m_DisabledTrigger: Disabled
-  m_Interactable: 1
-  m_TargetGraphic: {fileID: 1430150856}
-  m_OnClick:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 556146223}
-        m_TargetAssemblyTypeName: GridManager, Assembly-CSharp
-        m_MethodName: AddElement
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 710000644895225578, guid: bae1bd41308d8427eb114e1101763928, type: 3}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
---- !u!114 &1430150856
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1430150853}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
---- !u!222 &1430150857
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1430150853}
-  m_CullTransparentMesh: 1
---- !u!224 &1430150858
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1430150853}
+  m_GameObject: {fileID: 1428800516}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 4.202, y: -1.569, z: -2}
+  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_Children: []
-  m_Father: {fileID: 1430150854}
-  m_RootOrder: 1
+  m_Father: {fileID: 883947401}
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
-  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1428800518
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1428800516}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 698756d5f5950480b8a5b090cfac9f8e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cam: {fileID: 1461493795}
+  mouseActivityManager: {fileID: 242425817}
+--- !u!60 &1428800519
+PolygonCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1428800516}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 5.12, y: 5.12}
+    newSize: {x: 5.12, y: 5.12}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: 1.4399999, y: 0.48999998}
+      - {x: 1.4399999, y: 1.15}
+      - {x: 1.16, y: 1.62}
+      - {x: 0.35999998, y: 2.47}
+      - {x: -1.27, y: 2.47}
+      - {x: -1.53, y: 2.18}
+      - {x: -1.53, y: 1.79}
+      - {x: -1.3, y: 1.6899999}
+      - {x: -1.53, y: 0.83}
+      - {x: -1.53, y: 0.04}
+      - {x: -1.24, y: -1.15}
+      - {x: -0.93, y: -1.1999999}
+      - {x: -0.88, y: -2.46}
+      - {x: 1.13, y: -2.46}
+      - {x: 1.4399999, y: -1.28}
+      - {x: 1.4399999, y: -0.14999999}
+      - {x: 1.24, y: -0.02}
+--- !u!212 &1428800520
+SpriteRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1428800516}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_Sprite: {fileID: 21300000, guid: f0c7e1a6cbec849e1babb41b715998b0, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 5.12, y: 5.12}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
+  m_MaskInteraction: 0
+  m_SpriteSortPoint: 0
 --- !u!1 &1453545464
 GameObject:
   m_ObjectHideFlags: 0
@@ -8635,7 +9874,8 @@ GameObject:
   - component: {fileID: 1456724237}
   - component: {fileID: 1456724236}
   - component: {fileID: 1456724235}
-  m_Layer: 0
+  - component: {fileID: 1456724238}
+  m_Layer: 8
   m_Name: TownKihromah
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8767,6 +10007,21 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &1456724238
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1456724233}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f6ff08730b674744ac8e03e76912408, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nRows: 2
+  nCols: 3
+  tileSize: 0.5
 --- !u!1 &1461493793
 GameObject:
   m_ObjectHideFlags: 0
@@ -8875,7 +10130,8 @@ GameObject:
   - component: {fileID: 1472564291}
   - component: {fileID: 1472564290}
   - component: {fileID: 1472564289}
-  m_Layer: 0
+  - component: {fileID: 1472564292}
+  m_Layer: 8
   m_Name: TownJxara
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9002,6 +10258,21 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &1472564292
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1472564287}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f6ff08730b674744ac8e03e76912408, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nRows: 2
+  nCols: 3
+  tileSize: 0.5
 --- !u!1 &1479858440
 GameObject:
   m_ObjectHideFlags: 0
@@ -9014,7 +10285,8 @@ GameObject:
   - component: {fileID: 1479858444}
   - component: {fileID: 1479858443}
   - component: {fileID: 1479858442}
-  m_Layer: 0
+  - component: {fileID: 1479858445}
+  m_Layer: 8
   m_Name: TownFeodor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9142,6 +10414,21 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &1479858445
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1479858440}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f6ff08730b674744ac8e03e76912408, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nRows: 2
+  nCols: 3
+  tileSize: 0.5
 --- !u!1 &1532000361
 GameObject:
   m_ObjectHideFlags: 0
@@ -9151,7 +10438,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1532000362}
-  m_Layer: 0
+  - component: {fileID: 1532000363}
+  m_Layer: 7
   m_Name: Anchor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9172,6 +10460,21 @@ Transform:
   m_Father: {fileID: 1000820133}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1532000363
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1532000361}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f6ff08730b674744ac8e03e76912408, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nRows: 2
+  nCols: 2
+  tileSize: 0.4
 --- !u!1 &1540651851
 GameObject:
   m_ObjectHideFlags: 0
@@ -9181,7 +10484,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1540651852}
-  m_Layer: 0
+  - component: {fileID: 1540651853}
+  m_Layer: 7
   m_Name: Anchor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9202,6 +10506,21 @@ Transform:
   m_Father: {fileID: 577652899}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1540651853
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1540651851}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f6ff08730b674744ac8e03e76912408, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nRows: 2
+  nCols: 2
+  tileSize: 0.4
 --- !u!1 &1558536825
 GameObject:
   m_ObjectHideFlags: 0
@@ -9213,7 +10532,8 @@ GameObject:
   - component: {fileID: 1558536826}
   - component: {fileID: 1558536828}
   - component: {fileID: 1558536827}
-  m_Layer: 0
+  - component: {fileID: 1558536829}
+  m_Layer: 7
   m_Name: RoadMahDavikiaToGrangor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9337,6 +10657,158 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &1558536829
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1558536825}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 257c144ab1339493b9d9a0d90951618a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!1 &1560133498
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1560133499}
+  - component: {fileID: 1560133502}
+  - component: {fileID: 1560133501}
+  - component: {fileID: 1560133500}
+  m_Layer: 9
+  m_Name: pink_elf
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1560133499
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1560133498}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 3.64, y: -2.12, z: -2}
+  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
+  m_Children: []
+  m_Father: {fileID: 883947401}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1560133500
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1560133498}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 698756d5f5950480b8a5b090cfac9f8e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cam: {fileID: 1461493795}
+  mouseActivityManager: {fileID: 242425817}
+--- !u!60 &1560133501
+PolygonCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1560133498}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 5.12, y: 5.12}
+    newSize: {x: 5.12, y: 5.12}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: 1.4399999, y: 0.48999998}
+      - {x: 1.4399999, y: 1.15}
+      - {x: 1.16, y: 1.62}
+      - {x: 0.35999998, y: 2.47}
+      - {x: -1.27, y: 2.47}
+      - {x: -1.53, y: 2.18}
+      - {x: -1.53, y: 1.79}
+      - {x: -1.3, y: 1.6899999}
+      - {x: -1.53, y: 0.83}
+      - {x: -1.53, y: 0.04}
+      - {x: -1.24, y: -1.15}
+      - {x: -0.93, y: -1.1999999}
+      - {x: -0.88, y: -2.46}
+      - {x: 1.13, y: -2.46}
+      - {x: 1.4399999, y: -1.28}
+      - {x: 1.4399999, y: -0.14999999}
+      - {x: 1.24, y: -0.02}
+--- !u!212 &1560133502
+SpriteRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1560133498}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_Sprite: {fileID: 21300000, guid: 6719a8c845a1c4cdcaff201fd13e9794, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 5.12, y: 5.12}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
+  m_MaskInteraction: 0
+  m_SpriteSortPoint: 0
 --- !u!1 &1561694394
 GameObject:
   m_ObjectHideFlags: 0
@@ -9348,7 +10820,8 @@ GameObject:
   - component: {fileID: 1561694395}
   - component: {fileID: 1561694398}
   - component: {fileID: 1561694397}
-  m_Layer: 0
+  - component: {fileID: 1561694396}
+  m_Layer: 7
   m_Name: RoadUsselenToParundia
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9370,6 +10843,18 @@ Transform:
   m_Father: {fileID: 974703377}
   m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1561694396
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1561694394}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 257c144ab1339493b9d9a0d90951618a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!60 &1561694397
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -9562,7 +11047,8 @@ GameObject:
   - component: {fileID: 1594644010}
   - component: {fileID: 1594644012}
   - component: {fileID: 1594644011}
-  m_Layer: 0
+  - component: {fileID: 1594644013}
+  m_Layer: 7
   m_Name: RoadMahDavikiaToDagAmura
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9717,6 +11203,18 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &1594644013
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1594644009}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 257c144ab1339493b9d9a0d90951618a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1620767155
 GameObject:
   m_ObjectHideFlags: 0
@@ -9726,7 +11224,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1620767156}
-  m_Layer: 0
+  - component: {fileID: 1620767157}
+  m_Layer: 7
   m_Name: Anchor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9747,6 +11246,21 @@ Transform:
   m_Father: {fileID: 125878905}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1620767157
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1620767155}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f6ff08730b674744ac8e03e76912408, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nRows: 2
+  nCols: 2
+  tileSize: 0.4
 --- !u!1 &1628271671
 GameObject:
   m_ObjectHideFlags: 0
@@ -9758,7 +11272,8 @@ GameObject:
   - component: {fileID: 1628271672}
   - component: {fileID: 1628271674}
   - component: {fileID: 1628271673}
-  m_Layer: 0
+  - component: {fileID: 1628271675}
+  m_Layer: 7
   m_Name: RoadJxaraToVirst
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9894,6 +11409,18 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &1628271675
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1628271671}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 257c144ab1339493b9d9a0d90951618a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1631062846
 GameObject:
   m_ObjectHideFlags: 0
@@ -9903,7 +11430,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1631062847}
-  m_Layer: 0
+  - component: {fileID: 1631062848}
+  m_Layer: 7
   m_Name: Anchor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9924,6 +11452,21 @@ Transform:
   m_Father: {fileID: 2006171177}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1631062848
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1631062846}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f6ff08730b674744ac8e03e76912408, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nRows: 2
+  nCols: 2
+  tileSize: 0.4
 --- !u!1 &1631186300
 GameObject:
   m_ObjectHideFlags: 0
@@ -9935,7 +11478,8 @@ GameObject:
   - component: {fileID: 1631186301}
   - component: {fileID: 1631186305}
   - component: {fileID: 1631186304}
-  m_Layer: 0
+  - component: {fileID: 1631186302}
+  m_Layer: 7
   m_Name: RoadAlBaranToWylhien
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9957,6 +11501,18 @@ Transform:
   m_Father: {fileID: 974703377}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1631186302
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1631186300}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 257c144ab1339493b9d9a0d90951618a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!60 &1631186304
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -10088,7 +11644,8 @@ GameObject:
   - component: {fileID: 1634158675}
   - component: {fileID: 1634158674}
   - component: {fileID: 1634158673}
-  m_Layer: 0
+  - component: {fileID: 1634158676}
+  m_Layer: 8
   m_Name: TownTichik
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10214,6 +11771,21 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &1634158676
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1634158671}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f6ff08730b674744ac8e03e76912408, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nRows: 2
+  nCols: 3
+  tileSize: 0.5
 --- !u!1 &1648299384
 GameObject:
   m_ObjectHideFlags: 0
@@ -10223,7 +11795,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1648299385}
-  m_Layer: 0
+  - component: {fileID: 1648299386}
+  m_Layer: 7
   m_Name: Anchor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10244,6 +11817,21 @@ Transform:
   m_Father: {fileID: 1816589710}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1648299386
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1648299384}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f6ff08730b674744ac8e03e76912408, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nRows: 2
+  nCols: 2
+  tileSize: 0.4
 --- !u!1 &1703192008
 GameObject:
   m_ObjectHideFlags: 0
@@ -10253,7 +11841,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1703192009}
-  m_Layer: 0
+  - component: {fileID: 1703192010}
+  m_Layer: 7
   m_Name: Anchor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10274,6 +11863,21 @@ Transform:
   m_Father: {fileID: 215932438}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1703192010
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1703192008}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f6ff08730b674744ac8e03e76912408, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nRows: 2
+  nCols: 2
+  tileSize: 0.4
 --- !u!1 &1711117767
 GameObject:
   m_ObjectHideFlags: 0
@@ -10286,7 +11890,8 @@ GameObject:
   - component: {fileID: 1711117771}
   - component: {fileID: 1711117770}
   - component: {fileID: 1711117769}
-  m_Layer: 0
+  - component: {fileID: 1711117772}
+  m_Layer: 8
   m_Name: TownAlBaran
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10410,6 +12015,21 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &1711117772
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1711117767}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f6ff08730b674744ac8e03e76912408, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nRows: 2
+  nCols: 3
+  tileSize: 0.5
 --- !u!1 &1722029508
 GameObject:
   m_ObjectHideFlags: 0
@@ -10498,7 +12118,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1725957193}
-  m_Layer: 0
+  - component: {fileID: 1725957194}
+  m_Layer: 7
   m_Name: Anchor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10519,6 +12140,21 @@ Transform:
   m_Father: {fileID: 534881681}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1725957194
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1725957192}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f6ff08730b674744ac8e03e76912408, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nRows: 2
+  nCols: 2
+  tileSize: 0.4
 --- !u!1 &1737293371
 GameObject:
   m_ObjectHideFlags: 0
@@ -10651,7 +12287,8 @@ GameObject:
   - component: {fileID: 1744733853}
   - component: {fileID: 1744733856}
   - component: {fileID: 1744733855}
-  m_Layer: 0
+  - component: {fileID: 1744733854}
+  m_Layer: 7
   m_Name: RoadThrotmanniToRivinia
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10673,6 +12310,18 @@ Transform:
   m_Father: {fileID: 974703377}
   m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1744733854
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1744733852}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 257c144ab1339493b9d9a0d90951618a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!60 &1744733855
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -10773,7 +12422,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1758021714}
-  m_Layer: 0
+  - component: {fileID: 1758021715}
+  m_Layer: 7
   m_Name: Anchor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10794,6 +12444,21 @@ Transform:
   m_Father: {fileID: 1391962952}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1758021715
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1758021713}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f6ff08730b674744ac8e03e76912408, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nRows: 2
+  nCols: 2
+  tileSize: 0.4
 --- !u!1 &1802552981
 GameObject:
   m_ObjectHideFlags: 0
@@ -10803,7 +12468,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1802552982}
-  m_Layer: 0
+  - component: {fileID: 1802552983}
+  m_Layer: 7
   m_Name: Anchor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10824,6 +12490,21 @@ Transform:
   m_Father: {fileID: 348834745}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1802552983
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1802552981}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f6ff08730b674744ac8e03e76912408, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nRows: 2
+  nCols: 2
+  tileSize: 0.4
 --- !u!1 &1815135639
 GameObject:
   m_ObjectHideFlags: 0
@@ -10833,7 +12514,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1815135640}
-  m_Layer: 0
+  - component: {fileID: 1815135641}
+  m_Layer: 7
   m_Name: Anchor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10854,6 +12536,21 @@ Transform:
   m_Father: {fileID: 837352678}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1815135641
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1815135639}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f6ff08730b674744ac8e03e76912408, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nRows: 2
+  nCols: 2
+  tileSize: 0.4
 --- !u!1 &1816589709
 GameObject:
   m_ObjectHideFlags: 0
@@ -10865,7 +12562,8 @@ GameObject:
   - component: {fileID: 1816589710}
   - component: {fileID: 1816589713}
   - component: {fileID: 1816589712}
-  m_Layer: 0
+  - component: {fileID: 1816589711}
+  m_Layer: 7
   m_Name: RoadElvenholdToErgEren
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10887,6 +12585,18 @@ Transform:
   m_Father: {fileID: 974703377}
   m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1816589711
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1816589709}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 257c144ab1339493b9d9a0d90951618a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!60 &1816589712
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -11120,85 +12830,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1819740681}
   m_CullTransparentMesh: 1
---- !u!1 &1820185322
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1820185323}
-  - component: {fileID: 1820185325}
-  - component: {fileID: 1820185324}
-  m_Layer: 5
-  m_Name: Text
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &1820185323
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1820185322}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 1430150854}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1820185324
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1820185322}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 14
-    m_FontStyle: 0
-    m_BestFit: 0
-    m_MinSize: 10
-    m_MaxSize: 40
-    m_Alignment: 4
-    m_AlignByGeometry: 0
-    m_RichText: 1
-    m_HorizontalOverflow: 0
-    m_VerticalOverflow: 0
-    m_LineSpacing: 1
-  m_Text: Add SpriteTile
---- !u!222 &1820185325
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1820185322}
-  m_CullTransparentMesh: 1
 --- !u!1 &1853650224
 GameObject:
   m_ObjectHideFlags: 0
@@ -11211,7 +12842,8 @@ GameObject:
   - component: {fileID: 1853650227}
   - component: {fileID: 1853650226}
   - component: {fileID: 1853650228}
-  m_Layer: 0
+  - component: {fileID: 1853650229}
+  m_Layer: 8
   m_Name: TownWylhien
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11344,6 +12976,21 @@ PolygonCollider2D:
       - {x: 0.098791316, y: -0.58420545}
       - {x: 0.25703308, y: -0.36266696}
       - {x: 0.28868142, y: -0.27827138}
+--- !u!114 &1853650229
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1853650224}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f6ff08730b674744ac8e03e76912408, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nRows: 2
+  nCols: 3
+  tileSize: 0.5
 --- !u!1 &1855497429
 GameObject:
   m_ObjectHideFlags: 0
@@ -11356,7 +13003,8 @@ GameObject:
   - component: {fileID: 1855497433}
   - component: {fileID: 1855497432}
   - component: {fileID: 1855497431}
-  m_Layer: 0
+  - component: {fileID: 1855497434}
+  m_Layer: 8
   m_Name: TownUsselen
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11487,6 +13135,21 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &1855497434
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1855497429}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f6ff08730b674744ac8e03e76912408, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nRows: 2
+  nCols: 3
+  tileSize: 0.5
 --- !u!1 &1868680337
 GameObject:
   m_ObjectHideFlags: 0
@@ -11496,7 +13159,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1868680338}
-  m_Layer: 0
+  - component: {fileID: 1868680339}
+  m_Layer: 7
   m_Name: Anchor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11511,12 +13175,27 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1868680337}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.277, y: 0.123, z: 0}
+  m_LocalPosition: {x: -0.264, y: 0.132, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2057144488}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1868680339
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1868680337}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f6ff08730b674744ac8e03e76912408, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nRows: 2
+  nCols: 2
+  tileSize: 0.4
 --- !u!1 &1870588239
 GameObject:
   m_ObjectHideFlags: 0
@@ -11528,7 +13207,8 @@ GameObject:
   - component: {fileID: 1870588240}
   - component: {fileID: 1870588242}
   - component: {fileID: 1870588241}
-  m_Layer: 0
+  - component: {fileID: 1870588243}
+  m_Layer: 7
   m_Name: RoadKihromahToDagAmura
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11648,6 +13328,18 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &1870588243
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1870588239}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 257c144ab1339493b9d9a0d90951618a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1879952526
 GameObject:
   m_ObjectHideFlags: 0
@@ -11659,7 +13351,8 @@ GameObject:
   - component: {fileID: 1879952527}
   - component: {fileID: 1879952530}
   - component: {fileID: 1879952529}
-  m_Layer: 0
+  - component: {fileID: 1879952528}
+  m_Layer: 7
   m_Name: RoadThrotmanniToTichik
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11681,6 +13374,18 @@ Transform:
   m_Father: {fileID: 974703377}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1879952528
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1879952526}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 257c144ab1339493b9d9a0d90951618a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!60 &1879952529
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -11788,7 +13493,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1908813731}
-  m_Layer: 0
+  - component: {fileID: 1908813732}
+  m_Layer: 7
   m_Name: Anchor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11809,6 +13515,21 @@ Transform:
   m_Father: {fileID: 1558536826}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1908813732
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1908813730}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f6ff08730b674744ac8e03e76912408, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nRows: 2
+  nCols: 2
+  tileSize: 0.4
 --- !u!1 &1940069262
 GameObject:
   m_ObjectHideFlags: 0
@@ -11818,7 +13539,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1940069263}
-  m_Layer: 0
+  - component: {fileID: 1940069264}
+  m_Layer: 7
   m_Name: Anchor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11839,6 +13561,21 @@ Transform:
   m_Father: {fileID: 1243615960}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1940069264
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1940069262}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f6ff08730b674744ac8e03e76912408, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nRows: 2
+  nCols: 2
+  tileSize: 0.4
 --- !u!1 &1958537226
 GameObject:
   m_ObjectHideFlags: 0
@@ -11848,7 +13585,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1958537227}
-  m_Layer: 0
+  - component: {fileID: 1958537228}
+  m_Layer: 7
   m_Name: Anchor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11869,6 +13607,21 @@ Transform:
   m_Father: {fileID: 789359783}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1958537228
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1958537226}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f6ff08730b674744ac8e03e76912408, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nRows: 2
+  nCols: 2
+  tileSize: 0.4
 --- !u!1 &1994263968
 GameObject:
   m_ObjectHideFlags: 0
@@ -11878,7 +13631,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1994263969}
-  m_Layer: 0
+  - component: {fileID: 1994263970}
+  m_Layer: 7
   m_Name: Anchor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11899,6 +13653,21 @@ Transform:
   m_Father: {fileID: 383021978}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1994263970
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1994263968}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f6ff08730b674744ac8e03e76912408, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nRows: 2
+  nCols: 2
+  tileSize: 0.4
 --- !u!1 &2006171176
 GameObject:
   m_ObjectHideFlags: 0
@@ -11910,7 +13679,8 @@ GameObject:
   - component: {fileID: 2006171177}
   - component: {fileID: 2006171179}
   - component: {fileID: 2006171178}
-  m_Layer: 0
+  - component: {fileID: 2006171180}
+  m_Layer: 7
   m_Name: LakeVirstToStrykhaven
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12028,6 +13798,18 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &2006171180
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2006171176}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 257c144ab1339493b9d9a0d90951618a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2015872274
 GameObject:
   m_ObjectHideFlags: 0
@@ -12039,7 +13821,8 @@ GameObject:
   - component: {fileID: 2015872275}
   - component: {fileID: 2015872277}
   - component: {fileID: 2015872276}
-  m_Layer: 0
+  - component: {fileID: 2015872278}
+  m_Layer: 7
   m_Name: RoadDagAmuraToFeodor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12163,6 +13946,18 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &2015872278
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2015872274}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 257c144ab1339493b9d9a0d90951618a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2027606493
 GameObject:
   m_ObjectHideFlags: 0
@@ -12175,7 +13970,8 @@ GameObject:
   - component: {fileID: 2027606497}
   - component: {fileID: 2027606496}
   - component: {fileID: 2027606495}
-  m_Layer: 0
+  - component: {fileID: 2027606498}
+  m_Layer: 8
   m_Name: TownBeata
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12300,6 +14096,21 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &2027606498
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2027606493}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f6ff08730b674744ac8e03e76912408, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nRows: 2
+  nCols: 3
+  tileSize: 0.5
 --- !u!1 &2031484987
 GameObject:
   m_ObjectHideFlags: 0
@@ -12309,7 +14120,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2031484988}
-  m_Layer: 0
+  - component: {fileID: 2031484989}
+  m_Layer: 7
   m_Name: Anchor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12330,6 +14142,21 @@ Transform:
   m_Father: {fileID: 1631186301}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2031484989
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2031484987}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f6ff08730b674744ac8e03e76912408, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nRows: 2
+  nCols: 2
+  tileSize: 0.4
 --- !u!1 &2044345149
 GameObject:
   m_ObjectHideFlags: 0
@@ -12341,7 +14168,8 @@ GameObject:
   - component: {fileID: 2044345150}
   - component: {fileID: 2044345152}
   - component: {fileID: 2044345151}
-  m_Layer: 0
+  - component: {fileID: 2044345153}
+  m_Layer: 7
   m_Name: RoadJxaraToDagAmura
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12464,6 +14292,18 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &2044345153
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2044345149}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 257c144ab1339493b9d9a0d90951618a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2050980852
 GameObject:
   m_ObjectHideFlags: 0
@@ -12473,7 +14313,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2050980853}
-  m_Layer: 0
+  - component: {fileID: 2050980854}
+  m_Layer: 7
   m_Name: Anchor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12494,6 +14335,21 @@ Transform:
   m_Father: {fileID: 417706754}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2050980854
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2050980852}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f6ff08730b674744ac8e03e76912408, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nRows: 2
+  nCols: 2
+  tileSize: 0.4
 --- !u!1 &2052780336
 GameObject:
   m_ObjectHideFlags: 0
@@ -12506,7 +14362,8 @@ GameObject:
   - component: {fileID: 2052780340}
   - component: {fileID: 2052780339}
   - component: {fileID: 2052780338}
-  m_Layer: 0
+  - component: {fileID: 2052780341}
+  m_Layer: 8
   m_Name: TownLapphalya
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12631,6 +14488,21 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &2052780341
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2052780336}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f6ff08730b674744ac8e03e76912408, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nRows: 2
+  nCols: 3
+  tileSize: 0.5
 --- !u!1 &2056906482
 GameObject:
   m_ObjectHideFlags: 0
@@ -12642,7 +14514,8 @@ GameObject:
   - component: {fileID: 2056906483}
   - component: {fileID: 2056906486}
   - component: {fileID: 2056906485}
-  m_Layer: 0
+  - component: {fileID: 2056906484}
+  m_Layer: 7
   m_Name: RoadFeodorToAlBaran
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12664,6 +14537,18 @@ Transform:
   m_Father: {fileID: 974703377}
   m_RootOrder: 17
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2056906484
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2056906482}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 257c144ab1339493b9d9a0d90951618a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!60 &2056906485
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -12773,7 +14658,8 @@ GameObject:
   - component: {fileID: 2057144488}
   - component: {fileID: 2057144491}
   - component: {fileID: 2057144490}
-  m_Layer: 0
+  - component: {fileID: 2057144489}
+  m_Layer: 7
   m_Name: RoadFeodorToRivinia
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12795,6 +14681,18 @@ Transform:
   m_Father: {fileID: 974703377}
   m_RootOrder: 19
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2057144489
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2057144487}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 257c144ab1339493b9d9a0d90951618a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!60 &2057144490
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -12908,7 +14806,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2070221289}
-  m_Layer: 0
+  - component: {fileID: 2070221290}
+  m_Layer: 7
   m_Name: Anchor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12929,6 +14828,21 @@ Transform:
   m_Father: {fileID: 911612772}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2070221290
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2070221288}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f6ff08730b674744ac8e03e76912408, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nRows: 2
+  nCols: 2
+  tileSize: 0.4
 --- !u!1 &2095893758
 GameObject:
   m_ObjectHideFlags: 0
@@ -12940,7 +14854,8 @@ GameObject:
   - component: {fileID: 2095893759}
   - component: {fileID: 2095893761}
   - component: {fileID: 2095893760}
-  m_Layer: 0
+  - component: {fileID: 2095893762}
+  m_Layer: 7
   m_Name: LakeYttarToGrangor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13067,6 +14982,18 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &2095893762
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2095893758}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 257c144ab1339493b9d9a0d90951618a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2104660577
 GameObject:
   m_ObjectHideFlags: 0
@@ -13078,7 +15005,8 @@ GameObject:
   - component: {fileID: 2104660578}
   - component: {fileID: 2104660580}
   - component: {fileID: 2104660579}
-  m_Layer: 0
+  - component: {fileID: 2104660581}
+  m_Layer: 7
   m_Name: RoadStrykhavenToBeata
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13095,7 +15023,8 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 5.611, y: -3.203, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 140372901}
   m_Father: {fileID: 974703377}
   m_RootOrder: 30
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -13208,6 +15137,18 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &2104660581
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2104660577}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 257c144ab1339493b9d9a0d90951618a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2133348904
 GameObject:
   m_ObjectHideFlags: 0
@@ -13220,7 +15161,8 @@ GameObject:
   - component: {fileID: 2133348908}
   - component: {fileID: 2133348907}
   - component: {fileID: 2133348906}
-  m_Layer: 0
+  - component: {fileID: 2133348909}
+  m_Layer: 8
   m_Name: TownRivinia
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13352,6 +15294,21 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &2133348909
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2133348904}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f6ff08730b674744ac8e03e76912408, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nRows: 2
+  nCols: 3
+  tileSize: 0.5
 --- !u!1 &2135812677
 GameObject:
   m_ObjectHideFlags: 0
@@ -13363,7 +15320,8 @@ GameObject:
   - component: {fileID: 2135812678}
   - component: {fileID: 2135812680}
   - component: {fileID: 2135812679}
-  m_Layer: 0
+  - component: {fileID: 2135812681}
+  m_Layer: 7
   m_Name: LakeElvenholdToStrykhaven
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13480,6 +15438,18 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &2135812681
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2135812677}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 257c144ab1339493b9d9a0d90951618a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2139169399
 GameObject:
   m_ObjectHideFlags: 0
@@ -13492,7 +15462,8 @@ GameObject:
   - component: {fileID: 2139169403}
   - component: {fileID: 2139169402}
   - component: {fileID: 2139169401}
-  m_Layer: 0
+  - component: {fileID: 2139169404}
+  m_Layer: 8
   m_Name: TownGrangor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13628,3 +15599,18 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &2139169404
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2139169399}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f6ff08730b674744ac8e03e76912408, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nRows: 2
+  nCols: 3
+  tileSize: 0.5
