@@ -25,4 +25,9 @@ public class KeyBoardInput : MonoBehaviour
     }
 
 
+    private void Awake()
+    {
+        DontDestroyOnLoad(gameObject);
+    }
+
 }

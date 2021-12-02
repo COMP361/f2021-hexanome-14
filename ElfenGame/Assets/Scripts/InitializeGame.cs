@@ -7,9 +7,13 @@ public class InitializeGame : MonoBehaviour
 
     [SerializeField]
     public NewTown Elvenhold;
+
+    [SerializeField]
+    public Camera mainCamera;
     // Start is called before the first frame update
     void Start()
     {
+        //GameConstants.mainCamera = this.mainCamera;
         //GameObject elfGroup = GameObject.Find("ElfStartHome");
 
         //GameConstants.elves = new List<Elf>(elfGroup.GetComponentsInChildren<Elf>());
