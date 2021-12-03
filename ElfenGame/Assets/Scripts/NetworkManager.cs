@@ -48,14 +48,14 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public override void OnConnectedToMaster()
     {
-        Debug.LogError($"Connected to server. Looking for random room");
+        Debug.Log($"Connected to server. Looking for random room");
         PhotonNetwork.JoinRandomRoom();
     }
 
 
     public override void OnJoinRandomFailed(short returnCode, string message)
     {
-        Debug.LogError($"Joining random room failed because of {message}. Creating a new one.");
+        Debug.Log($"Joining random room failed because of {message}. Creating a new one.");
         PhotonNetwork.CreateRoom(null, new RoomOptions { MaxPlayers = 6, IsVisible = true });
     }
 
@@ -80,12 +80,12 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public override void OnJoinedRoom()
     {
-        Debug.LogError($"Player {PhotonNetwork.LocalPlayer.ActorNumber} joined the room");
+        //Debug.LogError($"Player {PhotonNetwork.LocalPlayer.ActorNumber} joined the room");
     }
 
     public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer)
     {
-        Debug.LogError($"Player {newPlayer.ActorNumber} entered the room.");
+        Debug.Log($"Player {newPlayer.ActorNumber} entered the room.");
 
         if (PhotonNetwork.IsMasterClient)
         {
