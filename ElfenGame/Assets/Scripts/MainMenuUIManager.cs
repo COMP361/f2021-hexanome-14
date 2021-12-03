@@ -14,19 +14,30 @@ public class MainMenuUIManager : MonoBehaviour, GameSessionsReceivedInterface
     [SerializeField] private GameObject gameSelectView;
     [SerializeField] private GameObject homeView;
 
+    [SerializeField] private GameObject gameOptionButtonsView;
+    [SerializeField] private GameObject gameCreatorOptionsView;
 
-    public void OnStartClicked()
+
+    public async void OnStartClicked()
     {
         connectionStatusText.gameObject.SetActive(true);
         gameSelectView.gameObject.SetActive(true);
         homeView.gameObject.SetActive(false);
         networkManager.Connect();
-        ForceUpdateList();
+        await Lobby.GetSessions(this);
+    }
+
+    public async void OnStartGameClicked()
+    {
+
     }
 
 
     public async void OnCreateGameClicked()
     {
+        gameOptionButtonsView.SetActive(false);
+        gameCreatorOptionsView.SetActive(true);
+
         await Lobby.CreateSession();
         GetComponent<PhotonView>().RPC(nameof(RPC_ListUpdated), RpcTarget.AllBuffered, new object[] { });
     }
@@ -66,7 +77,7 @@ public class MainMenuUIManager : MonoBehaviour, GameSessionsReceivedInterface
         GameObject newSession = Instantiate(sessionPrefab, availableGamesView.transform);
 
         GameSessionListItemScript sessionScript = newSession.GetComponent<GameSessionListItemScript>();
-        sessionScript.SetFields(gameSession.createdBy, gameSession.players.Count);
+        sessionScript.SetFields(gameSession);
     }
 
     //

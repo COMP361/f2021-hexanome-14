@@ -20,7 +20,7 @@ public class Lobby : MonoBehaviour
     static string resetToken;
     static List<string> sessionIDs;
     public static List<GameSession> availableGames = new List<GameSession>();
-    static string myUsername;
+    public static string myUsername;
     // Start is called before the first frame update
     async void Start()
     {
