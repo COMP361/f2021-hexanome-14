@@ -136,34 +136,6 @@ public class Lobby : MonoBehaviour
                     // Debug.Log(allGames);
                 }
                 Debug.Log(availableGames);
-                // GameSession gs = new GameSession() { session_ID = json[]};
-
-
-                string[] objects = responseString.Split('\"');
-
-                List<string> ids = new List<string>();
-                foreach (string item in objects)
-                {
-                    // var result = int.TryParse(item, out int temp);
-                    if (Regex.IsMatch(item, @"^\d+$"))
-                        {
-                            ids.Add(item);
-                        }
-
-                }
-                sessionIDs = ids;
-
-                Debug.Log(sessionIDs);
-                Regex regex = new Regex(@"\[.*?\]");
-                List<List<string>> players = new List<List<string>>();
-                foreach (Match match in regex.Matches(responseString))
-                {
-                    players.Add(match.Value.Split(new char[] { ',' }).ToList());
-                }
-                var matches = regex.Matches(responseString);
-
-
-                Debug.Log(players);
 
             }
         }
