@@ -22,7 +22,7 @@ public class MainMenuUIManager : MonoBehaviour, GameSessionsReceivedInterface, O
 
     public async void OnStartClicked()
     {
-        connectionStatusText.gameObject.SetActive(true);
+        //connectionStatusText.gameObject.SetActive(true);
         gameSelectView.gameObject.SetActive(true);
         homeView.gameObject.SetActive(false);
         networkManager.Connect();
