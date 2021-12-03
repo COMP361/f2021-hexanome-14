@@ -75,8 +75,8 @@ public class Lobby : MonoBehaviour
                     JObject json = JObject.Parse(responseString);
                     Debug.Log("Access Token Retreived: " + json["access_token"]);
 
-                    accessToken = json["access_token"].ToString();
-                    resetToken = json["refresh_token"].ToString();
+                    accessToken = json["access_token"].ToString().Replace("+", "%2B");
+                    resetToken = json["refresh_token"].ToString().Replace("+", "%2B");
                     myUsername = username;
                     SceneManager.LoadScene("MainMenu");
                 }
@@ -90,7 +90,7 @@ public class Lobby : MonoBehaviour
         }
     }
 
-    async Task CreateSession()
+    public static async Task CreateSession()
     {
         using (var httpClient = new HttpClient())
         {
@@ -162,7 +162,7 @@ public class Lobby : MonoBehaviour
                 JObject json = JObject.Parse(responseString);
                 //Debug.Log("Access Token Retreived: " + json["access_token"]);
 
-                List<GameSession> newGames = new List<GameSession>();
+                availableGames = new List<GameSession>();
 
 
                 // List<GameSession> allGames = new List<GameSession>();
@@ -176,17 +176,19 @@ public class Lobby : MonoBehaviour
 
                     GameSession gameSession = new GameSession() { session_ID = property.Name, players = property.Value["players"].ToObject<List<string>>(), createdBy = property.Value["creator"].ToString()};
                     
-                    newGames.Add(gameSession);
+                    availableGames.Add(gameSession);
                     //Debug.Log(gameSession.ToString());
                     // Debug.Log(allGames);
                 }
                 //Debug.Log(availableGames);
 
-                if (SessionListUpdated(newGames, availableGames))
-                {
-                    availableGames = newGames;
-                    callbackTarget.OnUpdatedGameListReceived(availableGames);
-                }
+                callbackTarget.OnUpdatedGameListReceived(availableGames);
+
+                //if (SessionListUpdated(newGames, availableGames))
+                //{
+                //    availableGames = newGames;
+                    
+                //}
 
             }
         }

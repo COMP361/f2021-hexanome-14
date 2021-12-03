@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Photon.Pun;
 
 public class MainMenuUIManager : MonoBehaviour, GameSessionsReceivedInterface
 {
@@ -13,27 +14,21 @@ public class MainMenuUIManager : MonoBehaviour, GameSessionsReceivedInterface
     [SerializeField] private GameObject gameSelectView;
     [SerializeField] private GameObject homeView;
 
-    public void Update()
-    {
-        Lobby.GetSessions(this);
-    }
 
     public void OnStartClicked()
     {
         connectionStatusText.gameObject.SetActive(true);
         gameSelectView.gameObject.SetActive(true);
         homeView.gameObject.SetActive(false);
+        networkManager.Connect();
         ForceUpdateList();
     }
 
-    public void OnConnect()
-    {
-        networkManager.Connect();
-    }
 
-    public void OnCreateGameClicked()
+    public async void OnCreateGameClicked()
     {
-
+        await Lobby.CreateSession();
+        GetComponent<PhotonView>().RPC(nameof(RPC_ListUpdated), RpcTarget.AllBuffered, new object[] { });
     }
 
     public void SetConnectionStatus(string status)
@@ -72,5 +67,14 @@ public class MainMenuUIManager : MonoBehaviour, GameSessionsReceivedInterface
 
         GameSessionListItemScript sessionScript = newSession.GetComponent<GameSessionListItemScript>();
         sessionScript.SetFields(gameSession.createdBy, gameSession.players.Count);
+    }
+
+    //
+
+
+    [PunRPC]
+    public async void RPC_ListUpdated()
+    {
+        await Lobby.GetSessions(this);
     }
 }
