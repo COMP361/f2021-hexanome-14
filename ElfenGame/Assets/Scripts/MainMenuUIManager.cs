@@ -13,6 +13,7 @@ public class MainMenuUIManager : MonoBehaviour
     public void OnGameLaunched()
     {
         connectionStatusText.gameObject.SetActive(true);
+        Lobby.GetSessions();
     }
 
     public void OnConnect()
