@@ -1626,39 +1626,43 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 709859055341044673, guid: 596d692525ed94d76910cd44cce397db, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
-      value: 5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 709859055341044673, guid: 596d692525ed94d76910cd44cce397db, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 648809057}
+      objectReference: {fileID: 1163413572}
     - target: {fileID: 709859055341044673, guid: 596d692525ed94d76910cd44cce397db, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
-      objectReference: {fileID: 1163413571}
+      objectReference: {fileID: 1163413572}
     - target: {fileID: 709859055341044673, guid: 596d692525ed94d76910cd44cce397db, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 709859055341044673, guid: 596d692525ed94d76910cd44cce397db, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: Connect
+      value: OnStartGameClicked
       objectReference: {fileID: 0}
     - target: {fileID: 709859055341044673, guid: 596d692525ed94d76910cd44cce397db, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
-      value: LoadScene
+      value: OnStartClicked
       objectReference: {fileID: 0}
     - target: {fileID: 709859055341044673, guid: 596d692525ed94d76910cd44cce397db, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: NetworkManager, Assembly-CSharp
+      value: MainMenuUIManager, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 709859055341044673, guid: 596d692525ed94d76910cd44cce397db, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
-      value: SceneLoader, Assembly-CSharp
+      value: MainMenuUIManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 709859055341044673, guid: 596d692525ed94d76910cd44cce397db, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 709859055341044673, guid: 596d692525ed94d76910cd44cce397db, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_StringArgument
-      value: Main
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 709859055341044673, guid: 596d692525ed94d76910cd44cce397db, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
@@ -1982,7 +1986,7 @@ PrefabInstance:
     - target: {fileID: 709859055341044673, guid: 596d692525ed94d76910cd44cce397db, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 648809057}
+      objectReference: {fileID: 1163413572}
     - target: {fileID: 709859055341044673, guid: 596d692525ed94d76910cd44cce397db, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
@@ -1993,7 +1997,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 709859055341044673, guid: 596d692525ed94d76910cd44cce397db, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: Connect
+      value: OnJoinGameClicked
       objectReference: {fileID: 0}
     - target: {fileID: 709859055341044673, guid: 596d692525ed94d76910cd44cce397db, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
@@ -2001,7 +2005,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 709859055341044673, guid: 596d692525ed94d76910cd44cce397db, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: NetworkManager, Assembly-CSharp
+      value: MainMenuUIManager, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 709859055341044673, guid: 596d692525ed94d76910cd44cce397db, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName

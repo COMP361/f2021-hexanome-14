@@ -33,7 +33,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     }
 
 
-    void LoadArena()
+    public void LoadArena()
     {
         if (!PhotonNetwork.IsMasterClient)
         {

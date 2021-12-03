@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using TMPro;
 using Photon.Pun;
 
-public class MainMenuUIManager : MonoBehaviour, GameSessionsReceivedInterface
+public class MainMenuUIManager : MonoBehaviour, GameSessionsReceivedInterface, OnGameSessionClickedHandler
 {
     [SerializeField] private TextMeshProUGUI connectionStatusText;
     [SerializeField] private NetworkManager networkManager;
@@ -18,6 +18,8 @@ public class MainMenuUIManager : MonoBehaviour, GameSessionsReceivedInterface
     [SerializeField] private GameObject gameCreatorOptionsView;
 
 
+    private Lobby.GameSession currentSelectedSession;
+
     public async void OnStartClicked()
     {
         connectionStatusText.gameObject.SetActive(true);
@@ -27,8 +29,19 @@ public class MainMenuUIManager : MonoBehaviour, GameSessionsReceivedInterface
         await Lobby.GetSessions(this);
     }
 
-    public async void OnStartGameClicked()
+    public void OnStartGameClicked()
     {
+        networkManager.LoadArena();
+    }
+
+    public async void OnJoinGameClicked()
+    {
+        if (currentSelectedSession != null)
+        {
+            await Lobby.JoinSession(currentSelectedSession.session_ID);
+            GetComponent<PhotonView>().RPC(nameof(RPC_ListUpdated), RpcTarget.AllBuffered, new object[] { });
+        }
+
 
     }
 
@@ -78,6 +91,7 @@ public class MainMenuUIManager : MonoBehaviour, GameSessionsReceivedInterface
 
         GameSessionListItemScript sessionScript = newSession.GetComponent<GameSessionListItemScript>();
         sessionScript.SetFields(gameSession);
+        sessionScript.SetOnGameSessionClickedHandler(this);
     }
 
     //
@@ -87,5 +101,10 @@ public class MainMenuUIManager : MonoBehaviour, GameSessionsReceivedInterface
     public async void RPC_ListUpdated()
     {
         await Lobby.GetSessions(this);
+    }
+
+    public void OnGameSessionClicked(Lobby.GameSession gameSession)
+    {
+        currentSelectedSession = gameSession;
     }
 }
