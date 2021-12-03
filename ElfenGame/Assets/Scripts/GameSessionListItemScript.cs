@@ -35,13 +35,14 @@ public class GameSessionListItemScript : MonoBehaviour, IPointerClickHandler
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        Image image = GetComponent<Image>();
-        image.color = new Color(102f / 255f, 236f / 255f, 77f / 255f, 74f / 255f);
 
         if (handler != null)
         {
             handler.OnGameSessionClicked(gameSession);
         }
+
+        Image image = GetComponent<Image>();
+        image.color = new Color(102f / 255f, 236f / 255f, 77f / 255f, 74f / 255f);
     }
 
     public void SetOnGameSessionClickedHandler(OnGameSessionClickedHandler handler)

@@ -38,6 +38,7 @@ public class MainMenuUIManager : MonoBehaviour, GameSessionsReceivedInterface, O
     {
         if (currentSelectedSession != null)
         {
+            Debug.Log($"Attempting to join Game {currentSelectedSession.session_ID} as user {Lobby.myUsername}");
             await Lobby.JoinSession(currentSelectedSession.session_ID);
             GetComponent<PhotonView>().RPC(nameof(RPC_ListUpdated), RpcTarget.AllBuffered, new object[] { });
         }
@@ -103,8 +104,17 @@ public class MainMenuUIManager : MonoBehaviour, GameSessionsReceivedInterface, O
         await Lobby.GetSessions(this);
     }
 
+    private void resetColors()
+    {
+        foreach (Image image in availableGamesView.GetComponentsInChildren<Image>())
+        {
+            image.color = new Color(238f / 255f, 100f / 255f, 100f / 255f, 74f / 255f);
+        }
+    }
+
     public void OnGameSessionClicked(Lobby.GameSession gameSession)
     {
+        resetColors();
         currentSelectedSession = gameSession;
     }
 }
