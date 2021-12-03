@@ -9,20 +9,23 @@ using System.Threading.Tasks;
 using UnityEngine;
 using System.Text.RegularExpressions;
 using System.Linq;
+using Newtonsoft.Json.Linq;
+using UnityEngine.SceneManagement;
 
 public class Lobby : MonoBehaviour
 {
 
     private static readonly HttpClient client = new HttpClient();
-    string accessToken;
-    string resetToken;
-    List<string> sessionIDs;
+    static string accessToken;
+    static string resetToken;
+    static List<string> sessionIDs;
+    static 
     // Start is called before the first frame update
     void Start()
     {
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("user", "bgp-client-name:bgp-client-pw");
         // Debug.Log(AuthenticateAsync());
-        AuthenticateAsync("maex", "abc123_ABC123");
+        // AuthenticateAsync("maex", "abc123_ABC123");
         //GetToken();
     }
 
@@ -35,7 +38,13 @@ public class Lobby : MonoBehaviour
         public string scope { get; set; }
     }
 
-    async Task AuthenticateAsync(string username, string password)
+    public class GameSession
+    {
+        public string access_token { get; set; }
+
+    }
+
+    static public async Task AuthenticateAsync(string username, string password)
     {
         using (var httpClient = new HttpClient())
         {
@@ -49,14 +58,25 @@ public class Lobby : MonoBehaviour
 
                 var response = await httpClient.SendAsync(request);
 
-                response.EnsureSuccessStatusCode();
+                // response.EnsureSuccessStatusCode();
                 var responseString = await response.Content.ReadAsStringAsync();
 
-                string[] objects = responseString.Split('\"');
-                accessToken = objects[3];
-                resetToken = objects[11];
+                if (response.IsSuccessStatusCode)
+                {
+                    JObject json = JObject.Parse(responseString);
+                    Debug.Log("Access Token Retreived: " + json["access_token"]);
 
-                await getSessions();
+                    accessToken = json["access_token"].ToString();
+                    resetToken = json["refresh_token"].ToString();
+
+                    SceneManager.LoadScene("MainMenu");
+                }
+                else
+                {
+
+                }
+
+                // await getSessions();
             }
         }
     }
@@ -78,7 +98,7 @@ public class Lobby : MonoBehaviour
         }
     }
 
-    async Task getSessions()
+    public static async Task GetSessions()
     {
         using (var httpClient = new HttpClient())
         {
@@ -87,6 +107,12 @@ public class Lobby : MonoBehaviour
                 var response = await httpClient.SendAsync(request);
 
                 var responseString = await response.Content.ReadAsStringAsync();
+
+                JObject json = JObject.Parse(responseString);
+                Debug.Log("Access Token Retreived: " + json["access_token"]);
+                
+                accessToken = json["access_token"].ToString();
+                resetToken = json["refresh_token"].ToString();
 
                 string[] objects = responseString.Split('\"');
 
@@ -110,6 +136,8 @@ public class Lobby : MonoBehaviour
                     players.Add(match.Value.Split(new char[] { ',' }).ToList());
                 }
                 var matches = regex.Matches(responseString);
+
+                GameSession gs = new GameSession() { access_token = "dafadf", expires_in = 676 };
 
                 Debug.Log(players);
 

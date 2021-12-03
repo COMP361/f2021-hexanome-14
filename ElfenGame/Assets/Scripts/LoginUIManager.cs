@@ -21,12 +21,15 @@ public class LoginUIManager : MonoBehaviour
         
     }
 
-    public void OnLoginClicked()
+    public async void OnLoginClicked()
     {
         string username = usernameInput.text;
         string password = passwordInput.text;
 
         Debug.Log($"Logging in with username: {username} and password: {password}");
+
+        await Lobby.AuthenticateAsync(usernameInput.text, passwordInput.text);
+        Lobby.GetSessions();
 
     }
 }
