@@ -195,14 +195,31 @@ public class Lobby : MonoBehaviour
     }
 
 
-    public static async Task joinSession(string sessionID)
+    public static async Task JoinSession(string sessionID)
     {
         using (var httpClient = new HttpClient())
         {
-            using (var request = new HttpRequestMessage(new HttpMethod("PUT"), $"http://127.0.0.1:4242/api/sessions/{sessionID}/players/{myUsername}?access_token={accessToken}"))
+            using (var request = new HttpRequestMessage(new HttpMethod("PUT"), $"http://18.116.53.177:4242/api/sessions/{sessionID}/players/{myUsername}?access_token={accessToken}"))
             {
                 var response = await httpClient.SendAsync(request);
                 Debug.Log(response);
+            }
+        }
+    }
+
+    public static async Task RenewToken()
+    {
+        using (var httpClient = new HttpClient())
+        {
+            using (var request = new HttpRequestMessage(new HttpMethod("POST"), "http://18.116.53.177:4242/oauth/token"))
+            {
+                var base64authorization = Convert.ToBase64String(Encoding.ASCII.GetBytes("bgp-client-name:bgp-client-pw"));
+                request.Headers.TryAddWithoutValidation("Authorization", $"Basic {base64authorization}");
+
+                request.Content = new StringContent($"grant_type=refresh_token&refresh_token={resetToken}");
+                request.Content.Headers.ContentType = MediaTypeHeaderValue.Parse("application/x-www-form-urlencoded");
+
+                var response = await httpClient.SendAsync(request);
             }
         }
     }
