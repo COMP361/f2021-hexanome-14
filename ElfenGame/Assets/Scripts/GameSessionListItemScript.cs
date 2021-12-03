@@ -12,9 +12,17 @@ public class GameSessionListItemScript : MonoBehaviour
     private TextMeshProUGUI nPlayersText;
 
 
-    public void SetFields(string createdBy, int nPlayers)
+    public void SetFields(Lobby.GameSession gameSession)
     {
-        createdByText.text = $"CreatedBy: {createdBy}";
-        nPlayersText.text = $"Players: {nPlayers}";
+        createdByText.text = $"CreatedBy: {gameSession.createdBy}";
+        nPlayersText.text = $"Players: {gameSession.players.Count}";
+
+        if (gameSession.players.Contains(Lobby.myUsername))
+        {
+            Image image = GetComponent<Image>();
+            image.color = new Color(89f / 255f, 231f / 255f, 230f / 255f, 74f / 255f);
+   
+        }
+        // EE6464
     }
 }
