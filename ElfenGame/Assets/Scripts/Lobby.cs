@@ -202,7 +202,7 @@ public class Lobby : MonoBehaviour
     {
         using (var httpClient = new HttpClient())
         {
-            using (var request = new HttpRequestMessage(new HttpMethod("PUT"), $"http://18.116.53.177:4242/api/sessions/{sessionID}/players/{myUsername}?access_token={accessToken}"))
+            using (var request = new HttpRequestMessage(new HttpMethod("PUT"), $"http://18.116.53.177:4242/api/sessions/{sessionID}/players/{myUsername}?access_token={accessToken}&location=18.116.53.177"))
             {
                 var response = await httpClient.SendAsync(request);
                 Debug.Log(response);
