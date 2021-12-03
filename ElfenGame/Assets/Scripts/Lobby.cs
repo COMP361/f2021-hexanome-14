@@ -79,6 +79,8 @@ public class Lobby : MonoBehaviour
                     accessToken = json["access_token"].ToString().Replace("+", "%2B");
                     resetToken = json["refresh_token"].ToString().Replace("+", "%2B");
                     myUsername = username;
+
+                    await RenewToken();
                     SceneManager.LoadScene("MainMenu");
                 }
                 else
@@ -221,6 +223,12 @@ public class Lobby : MonoBehaviour
                 request.Content.Headers.ContentType = MediaTypeHeaderValue.Parse("application/x-www-form-urlencoded");
 
                 var response = await httpClient.SendAsync(request);
+
+                var responseString = await response.Content.ReadAsStringAsync();
+                JObject json = JObject.Parse(responseString);
+                Debug.Log("Access Token Retreived: " + json["access_token"]);
+                accessToken = json["access_token"].ToString().Replace("+", "%2B");
+                resetToken = json["refresh_token"].ToString().Replace("+", "%2B");
                 Debug.Log(response);
             }
         }
