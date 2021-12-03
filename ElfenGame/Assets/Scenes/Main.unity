@@ -1684,6 +1684,7 @@ MonoBehaviour:
   mouseActivityManager: {fileID: 242425817}
   mainCamera: {fileID: 1461493795}
   roadGroup: {fileID: 974703376}
+  townGroup: {fileID: 1374997754}
 --- !u!1 &248821004
 GameObject:
   m_ObjectHideFlags: 0
@@ -3406,6 +3407,7 @@ GameObject:
   - component: {fileID: 489661204}
   - component: {fileID: 489661203}
   - component: {fileID: 489661202}
+  - component: {fileID: 489661205}
   m_Layer: 9
   m_Name: blue_elf
   m_TagString: Untagged
@@ -3534,6 +3536,28 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &489661205
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 489661200}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 2
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &506067294
 GameObject:
   m_ObjectHideFlags: 0
@@ -3546,6 +3570,7 @@ GameObject:
   - component: {fileID: 506067298}
   - component: {fileID: 506067297}
   - component: {fileID: 506067296}
+  - component: {fileID: 506067299}
   m_Layer: 9
   m_Name: orange_elf
   m_TagString: Untagged
@@ -3674,6 +3699,28 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &506067299
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 506067294}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 1
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &513928942
 GameObject:
   m_ObjectHideFlags: 0
@@ -6349,10 +6396,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1562634289}
-        m_TargetAssemblyTypeName: SceneLoader, Assembly-CSharp
-        m_MethodName: LoadScene
-        m_Mode: 5
+      - m_Target: {fileID: 242425819}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+        m_MethodName: LeaveRoom
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -6411,6 +6458,7 @@ GameObject:
   - component: {fileID: 856198627}
   - component: {fileID: 856198626}
   - component: {fileID: 856198625}
+  - component: {fileID: 856198628}
   m_Layer: 9
   m_Name: turq_elf
   m_TagString: Untagged
@@ -6539,6 +6587,28 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &856198628
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 856198623}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 4
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &872331296
 GameObject:
   m_ObjectHideFlags: 0
@@ -7978,6 +8048,7 @@ GameObject:
   - component: {fileID: 1157017668}
   - component: {fileID: 1157017667}
   - component: {fileID: 1157017666}
+  - component: {fileID: 1157017669}
   m_Layer: 9
   m_Name: green_elf
   m_TagString: Untagged
@@ -8106,6 +8177,28 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &1157017669
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1157017664}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 5
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &1164303612
 GameObject:
   m_ObjectHideFlags: 0
@@ -9752,6 +9845,7 @@ GameObject:
   - component: {fileID: 1428800520}
   - component: {fileID: 1428800519}
   - component: {fileID: 1428800518}
+  - component: {fileID: 1428800521}
   m_Layer: 9
   m_Name: red_elf
   m_TagString: Untagged
@@ -9880,6 +9974,28 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &1428800521
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1428800516}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 6
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &1453545464
 GameObject:
   m_ObjectHideFlags: 0
@@ -10237,6 +10353,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f2385727ce814badab894f17241d0bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cam: {fileID: 1461493795}
+  zoomStep: 0
+  minCamSize: 0
+  maxCamSize: 0
+  mapRenderer: {fileID: 883947400}
+  graphicRayCaster: {fileID: 783978448}
 --- !u!1 &1472564287
 GameObject:
   m_ObjectHideFlags: 0
@@ -10803,6 +10925,7 @@ GameObject:
   - component: {fileID: 1560133502}
   - component: {fileID: 1560133501}
   - component: {fileID: 1560133500}
+  - component: {fileID: 1560133503}
   m_Layer: 9
   m_Name: pink_elf
   m_TagString: Untagged
@@ -10931,6 +11054,28 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &1560133503
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1560133498}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 3
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &1561694394
 GameObject:
   m_ObjectHideFlags: 0

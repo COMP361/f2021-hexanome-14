@@ -8,7 +8,7 @@ public class MainMenuUIManager : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI connectionStatusText;
     [SerializeField] private NetworkManager networkManager;
-
+    [SerializeField] private TextMeshProUGUI scrollViewElementPrefab;
 
     public void OnGameLaunched()
     {
@@ -23,5 +23,15 @@ public class MainMenuUIManager : MonoBehaviour
     public void SetConnectionStatus(string status)
     {
         connectionStatusText.text = status;
+    }
+
+    public void UpdateAvailableRoomList(List<string> roomNames)
+    {
+        Debug.LogError("Rooms updated");
+
+        foreach (string roomName in roomNames)
+        {
+            Debug.LogError($"Room found: {roomName}");
+        }
     }
 }

@@ -23,13 +23,26 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     private void Update()
     {
-        uiManager.SetConnectionStatus(PhotonNetwork.NetworkClientState.ToString());
+        if (uiManager != null)
+            uiManager.SetConnectionStatus(PhotonNetwork.NetworkClientState.ToString());
     }
 
     private void Awake()
     {
         PhotonNetwork.AutomaticallySyncScene = true;
     }
+
+
+    void LoadArena()
+    {
+        if (!PhotonNetwork.IsMasterClient)
+        {
+            Debug.LogError("PhotonNetwork: Trying to load a level but we are not the master client");
+        }
+        Debug.Log($"PhotonNetwork : Loading Map with {PhotonNetwork.CurrentRoom.PlayerCount} players");
+        PhotonNetwork.LoadLevel("Main");
+    }
+
 
     #region Photon Callbacks
 
@@ -43,13 +56,25 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public override void OnJoinRandomFailed(short returnCode, string message)
     {
         Debug.LogError($"Joining random room failed because of {message}. Creating a new one.");
-        PhotonNetwork.CreateRoom(null);
+        PhotonNetwork.CreateRoom(null, new RoomOptions { MaxPlayers = 6, IsVisible = true });
     }
 
 
     public void CreateRoom(string roomName)
     {
-        PhotonNetwork.CreateRoom(roomName);
+        PhotonNetwork.CreateRoom(roomName, new RoomOptions { MaxPlayers = 6, IsVisible = true });
+    }
+
+    public override void OnRoomListUpdate(List<RoomInfo> roomList)
+    {
+        List<string> roomNames = new List<string>();
+
+        foreach (RoomInfo roomInfo in roomList)
+        {
+            roomNames.Add(roomInfo.Name);
+        }
+
+        uiManager.UpdateAvailableRoomList(roomNames);
     }
 
 
@@ -61,6 +86,20 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer)
     {
         Debug.LogError($"Player {newPlayer.ActorNumber} entered the room.");
+
+        if (PhotonNetwork.IsMasterClient)
+        {
+            Debug.Log("OnPlayerEnteredRoom IsMasterClient");
+
+            LoadArena();
+        }
+
+    }
+
+
+    public override void OnLeftRoom()
+    {
+        //SceneManager.LoadScene("MainMenu");
 
     }
 

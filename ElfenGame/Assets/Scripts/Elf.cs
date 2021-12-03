@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -14,7 +15,13 @@ public class Elf : MonoBehaviour
 
     [SerializeField]
     MouseActivityManager mouseActivityManager;
+    private PhotonView photonView;
 
+
+    public void Awake()
+    {
+        photonView = GetComponent<PhotonView>();
+    }
 
     private void OnMouseDown()
     {
@@ -84,10 +91,18 @@ public class Elf : MonoBehaviour
             } else
             {
                 //transform.position = new Vector3(town.gameObject.transform.position.x, town.gameObject.transform.position.y, dragOrigin.z);
-                town.GetComponent<GridManager>().AddElement(gameObject);
+                photonView.RPC(nameof(RPC_PlaceInNewTown), RpcTarget.AllBuffered, new object[] { town.name, name });
             }
 
             drag = false;
         }
+    }
+
+    [PunRPC]
+    public void RPC_PlaceInNewTown(string townName, string elfName)
+    {
+        NewTown destination = GameManager._instance.townDict[townName];
+        Debug.Log($"Successfully found town: {destination.name}");
+        destination.GetComponent<GridManager>().AddElement(gameObject);
     }
 }

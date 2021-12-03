@@ -2,7 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameManager : MonoBehaviour
+using Photon.Pun;
+using Photon.Realtime;
+using UnityEngine.SceneManagement;
+
+public class GameManager : MonoBehaviourPunCallbacks
 {
     public const float dragZ = -5;
     public const float gridItemRelativeZ = -1;
@@ -21,9 +25,21 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     public GameObject roadGroup;
 
+    [SerializeField]
+    public GameObject townGroup;
+
+
+    public Dictionary<string, NewTown> townDict = new Dictionary<string, NewTown>();
+
 
     void Awake()
     {
+
+        foreach (NewTown town in townGroup.GetComponentsInChildren<NewTown>())
+        {
+            townDict.Add(town.name, town);
+        }
+
         if (_instance == null)
         {
             DontDestroyOnLoad(gameObject);
@@ -33,5 +49,6 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
+
 
 }
