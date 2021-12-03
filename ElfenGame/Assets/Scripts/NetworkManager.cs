@@ -91,7 +91,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         {
             Debug.Log("OnPlayerEnteredRoom IsMasterClient");
 
-            LoadArena();
+            //LoadArena();
         }
 
     }
