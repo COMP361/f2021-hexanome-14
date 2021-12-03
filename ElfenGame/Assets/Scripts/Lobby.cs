@@ -22,11 +22,12 @@ public class Lobby : MonoBehaviour
     public static List<GameSession> availableGames = new List<GameSession>();
     static string myUsername;
     // Start is called before the first frame update
-    void Start()
+    async void Start()
     {
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("user", "bgp-client-name:bgp-client-pw");
         // Debug.Log(AuthenticateAsync());
-        AuthenticateAsync("maex", "abc123_ABC123");
+        // await AuthenticateAsync("maex", "abc123_ABC123");
+        // await RenewToken();
         //GetToken();
     }
 
@@ -220,6 +221,7 @@ public class Lobby : MonoBehaviour
                 request.Content.Headers.ContentType = MediaTypeHeaderValue.Parse("application/x-www-form-urlencoded");
 
                 var response = await httpClient.SendAsync(request);
+                Debug.Log(response);
             }
         }
     }
