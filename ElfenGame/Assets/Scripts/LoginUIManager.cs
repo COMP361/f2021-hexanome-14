@@ -27,5 +27,6 @@ public class LoginUIManager : MonoBehaviour
         string password = passwordInput.text;
 
         Debug.Log($"Logging in with username: {username} and password: {password}");
+
     }
 }

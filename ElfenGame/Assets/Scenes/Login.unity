@@ -136,6 +136,7 @@ GameObject:
   - component: {fileID: 112990047}
   - component: {fileID: 112990046}
   - component: {fileID: 112990050}
+  - component: {fileID: 112990051}
   m_Layer: 0
   m_Name: EventSystem
   m_TagString: Untagged
@@ -217,6 +218,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   usernameInput: {fileID: 865540562}
   passwordInput: {fileID: 2121069283}
+--- !u!114 &112990051
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 112990045}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36c3379b0ea0501459f08ce4ec28a771, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &176320974
 GameObject:
   m_ObjectHideFlags: 0
@@ -463,8 +476,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bda32c3703cda4c1085f6556d6c49cf2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  usernameInput: {fileID: 0}
-  passwordInput: {fileID: 0}
+  usernameInput: {fileID: 865540562}
+  passwordInput: {fileID: 2121069283}
 --- !u!1 &554045162
 GameObject:
   m_ObjectHideFlags: 0
