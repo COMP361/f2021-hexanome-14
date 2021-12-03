@@ -19,7 +19,7 @@ public class Lobby : MonoBehaviour
     static string accessToken;
     static string resetToken;
     static List<string> sessionIDs;
-    static 
+    static GameSession[] availableGames;
     // Start is called before the first frame update
     void Start()
     {
@@ -40,7 +40,7 @@ public class Lobby : MonoBehaviour
 
     public class GameSession
     {
-        public string access_token { get; set; }
+        public int session_ID { get; set; }
 
     }
 
@@ -110,9 +110,10 @@ public class Lobby : MonoBehaviour
 
                 JObject json = JObject.Parse(responseString);
                 Debug.Log("Access Token Retreived: " + json["access_token"]);
-                
-                accessToken = json["access_token"].ToString();
-                resetToken = json["refresh_token"].ToString();
+
+
+                // GameSession gs = new GameSession() { session_ID = json[]};
+
 
                 string[] objects = responseString.Split('\"');
 
@@ -137,7 +138,6 @@ public class Lobby : MonoBehaviour
                 }
                 var matches = regex.Matches(responseString);
 
-                GameSession gs = new GameSession() { access_token = "dafadf", expires_in = 676 };
 
                 Debug.Log(players);
 
