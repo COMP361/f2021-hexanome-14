@@ -1247,6 +1247,8 @@ MonoBehaviour:
   sessionPrefab: {fileID: 9165140205176489676, guid: ca13d43e133594038aed8c4420781ad4, type: 3}
   gameSelectView: {fileID: 791782323}
   homeView: {fileID: 949114556}
+  gameOptionButtonsView: {fileID: 236037641}
+  gameCreatorOptionsView: {fileID: 467176695}
 --- !u!114 &1163413573
 MonoBehaviour:
   m_ObjectHideFlags: 0
