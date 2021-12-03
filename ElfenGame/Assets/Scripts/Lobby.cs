@@ -19,7 +19,7 @@ public class Lobby : MonoBehaviour
     static string accessToken;
     static string resetToken;
     static List<string> sessionIDs;
-    static List<GameSession> availableGames = new List<GameSession>();
+    public static List<GameSession> availableGames = new List<GameSession>();
     // Start is called before the first frame update
     void Start()
     {
@@ -106,7 +106,49 @@ public class Lobby : MonoBehaviour
         }
     }
 
-    public static async Task GetSessions()
+    public static bool SessionListUpdated(List<GameSession> list1, List<GameSession> list2)
+    {
+        bool updated = false;
+
+        foreach (GameSession game1 in list1)
+        {
+            bool foundMatch = false;
+            foreach (GameSession game2 in list2)
+            {
+                if (game1.session_ID == game2.session_ID)
+                {
+                    foundMatch = true;
+                }
+            }
+
+            if (!foundMatch)
+            {
+                updated = true;
+            }
+        }
+
+        foreach (GameSession game1 in list2)
+        {
+            bool foundMatch = false;
+            foreach (GameSession game2 in list1)
+            {
+                if (game1.session_ID == game2.session_ID)
+                {
+                    foundMatch = true;
+                }
+            }
+
+            if (!foundMatch)
+            {
+                updated = true;
+            }
+        }
+
+
+        return updated;
+    }
+
+    public static async Task GetSessions(GameSessionsReceivedInterface callbackTarget)
     {
         using (var httpClient = new HttpClient())
         {
@@ -117,25 +159,33 @@ public class Lobby : MonoBehaviour
                 var responseString = await response.Content.ReadAsStringAsync();
 
                 JObject json = JObject.Parse(responseString);
-                Debug.Log("Access Token Retreived: " + json["access_token"]);
-                
+                //Debug.Log("Access Token Retreived: " + json["access_token"]);
+
+                List<GameSession> newGames = new List<GameSession>();
+
+
                 // List<GameSession> allGames = new List<GameSession>();
                 foreach (var game in json["sessions"].Children())
                 {
                     var property = game as JProperty;
-                    Debug.Log(property);
-                    Debug.Log(property.Value["creator"]);
-                    Debug.Log(property.Value["players"]);
+                    //Debug.Log(property);
+                    //Debug.Log(property.Value["creator"]);
+                    //Debug.Log(property.Value["players"]);
 
-                 
 
                     GameSession gameSession = new GameSession() { session_ID = property.Name, players = property.Value["players"].ToObject<List<string>>(), createdBy = property.Value["creator"].ToString()};
                     
-                    availableGames.Add(gameSession);
-                    Debug.Log(gameSession.ToString());
+                    newGames.Add(gameSession);
+                    //Debug.Log(gameSession.ToString());
                     // Debug.Log(allGames);
                 }
-                Debug.Log(availableGames);
+                //Debug.Log(availableGames);
+
+                if (SessionListUpdated(newGames, availableGames))
+                {
+                    availableGames = newGames;
+                    callbackTarget.OnUpdatedGameListReceived(availableGames);
+                }
 
             }
         }

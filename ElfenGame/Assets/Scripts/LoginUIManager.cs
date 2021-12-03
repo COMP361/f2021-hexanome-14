@@ -29,7 +29,7 @@ public class LoginUIManager : MonoBehaviour
         Debug.Log($"Logging in with username: {username} and password: {password}");
 
         await Lobby.AuthenticateAsync(usernameInput.text, passwordInput.text);
-        Lobby.GetSessions();
+        //Lobby.GetSessions();
 
     }
 }
