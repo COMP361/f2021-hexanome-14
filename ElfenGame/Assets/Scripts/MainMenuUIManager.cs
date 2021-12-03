@@ -14,6 +14,7 @@ public class MainMenuUIManager : MonoBehaviour, GameSessionsReceivedInterface
     public void OnGameLaunched()
     {
         connectionStatusText.gameObject.SetActive(true);
+        Lobby.GetSessions();
     }
 
     public void OnConnect()

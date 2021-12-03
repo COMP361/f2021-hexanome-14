@@ -19,13 +19,13 @@ public class Lobby : MonoBehaviour
     static string accessToken;
     static string resetToken;
     static List<string> sessionIDs;
-    static GameSession[] availableGames;
+    static List<GameSession> availableGames = new List<GameSession>();
     // Start is called before the first frame update
     void Start()
     {
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("user", "bgp-client-name:bgp-client-pw");
         // Debug.Log(AuthenticateAsync());
-        // AuthenticateAsync("maex", "abc123_ABC123");
+        AuthenticateAsync("maex", "abc123_ABC123");
         //GetToken();
     }
 
@@ -40,8 +40,16 @@ public class Lobby : MonoBehaviour
 
     public class GameSession
     {
-        public int session_ID { get; set; }
+        public string session_ID { get; set; }
 
+        public List<string> players { get; set; }
+
+        public string createdBy { get; set; }
+
+        public string ToString()
+        {
+            return $"Id: {this.session_ID}, N players {this.players.Count}, createdby: {this.createdBy}";
+        }
     }
 
     static public async Task AuthenticateAsync(string username, string password)
@@ -110,8 +118,24 @@ public class Lobby : MonoBehaviour
 
                 JObject json = JObject.Parse(responseString);
                 Debug.Log("Access Token Retreived: " + json["access_token"]);
+                
+                // List<GameSession> allGames = new List<GameSession>();
+                foreach (var game in json["sessions"].Children())
+                {
+                    var property = game as JProperty;
+                    Debug.Log(property);
+                    Debug.Log(property.Value["creator"]);
+                    Debug.Log(property.Value["players"]);
 
+                 
 
+                    GameSession gameSession = new GameSession() { session_ID = property.Name, players = property.Value["players"].ToObject<List<string>>(), createdBy = property.Value["creator"].ToString()};
+                    
+                    availableGames.Add(gameSession);
+                    Debug.Log(gameSession.ToString());
+                    // Debug.Log(allGames);
+                }
+                Debug.Log(availableGames);
                 // GameSession gs = new GameSession() { session_ID = json[]};
 
 
