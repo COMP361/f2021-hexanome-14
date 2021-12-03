@@ -65,17 +65,17 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         PhotonNetwork.CreateRoom(roomName, new RoomOptions { MaxPlayers = 6, IsVisible = true });
     }
 
-    public override void OnRoomListUpdate(List<RoomInfo> roomList)
-    {
-        List<string> roomNames = new List<string>();
+    //public override void OnRoomListUpdate(List<RoomInfo> roomList)
+    //{
+    //    List<string> roomNames = new List<string>();
 
-        foreach (RoomInfo roomInfo in roomList)
-        {
-            roomNames.Add(roomInfo.Name);
-        }
+    //    foreach (RoomInfo roomInfo in roomList)
+    //    {
+    //        roomNames.Add(roomInfo.Name);
+    //    }
 
-        uiManager.UpdateAvailableRoomList(roomNames);
-    }
+    //    uiManager.UpdateAvailableRoomList(roomNames);
+    //}
 
 
     public override void OnJoinedRoom()

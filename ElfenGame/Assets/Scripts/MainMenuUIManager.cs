@@ -4,11 +4,12 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class MainMenuUIManager : MonoBehaviour
+public class MainMenuUIManager : MonoBehaviour, GameSessionsReceivedInterface
 {
     [SerializeField] private TextMeshProUGUI connectionStatusText;
     [SerializeField] private NetworkManager networkManager;
-    [SerializeField] private TextMeshProUGUI scrollViewElementPrefab;
+    [SerializeField] private GameObject availableGamesView;
+    [SerializeField] private GameObject sessionPrefab;
 
     public void OnGameLaunched()
     {
@@ -25,13 +26,24 @@ public class MainMenuUIManager : MonoBehaviour
         connectionStatusText.text = status;
     }
 
-    public void UpdateAvailableRoomList(List<string> roomNames)
+    public void OnUpdatedGameListReceived(List<Lobby.GameSession> gameSessions)
     {
-        Debug.LogError("Rooms updated");
+        RemoveAllGameSessions();
 
-        foreach (string roomName in roomNames)
+    }
+
+    private void RemoveAllGameSessions()
+    {
+        foreach (Transform child in availableGamesView.transform)
         {
-            Debug.LogError($"Room found: {roomName}");
+            GameObject.Destroy(child.gameObject);
         }
+
+    }
+
+    private void AddGameSession(Lobby.GameSession gameSession)
+    {
+        GameObject newSession = Instantiate(sessionPrefab, availableGamesView.transform);
+        
     }
 }
