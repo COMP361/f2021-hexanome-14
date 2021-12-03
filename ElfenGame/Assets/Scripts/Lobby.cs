@@ -97,7 +97,7 @@ public class Lobby : MonoBehaviour
         {
             using (var request = new HttpRequestMessage(new HttpMethod("POST"), $"http://18.116.53.177:4242/api/sessions?location=18.116.53.177&access_token={accessToken}"))
             {
-                request.Content = new StringContent("{\"game\":\"ElfenGame\", \"creator\":\"maex\", \"savegame\":\"\"}");
+                request.Content = new StringContent("{\"game\":\"ElfenGame\", \"creator\":\""+ myUsername + "\", \"savegame\":\"\"}");
                 request.Content.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json");
 
                 var response = await httpClient.SendAsync(request);
