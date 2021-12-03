@@ -18,7 +18,7 @@ public class Lobby : MonoBehaviour
     private static readonly HttpClient client = new HttpClient();
     static string accessToken;
     static string resetToken;
-    static List<string> sessionIDs;
+    static string myUsername;
     static List<GameSession> availableGames = new List<GameSession>();
     // Start is called before the first frame update
     void Start()
@@ -76,7 +76,7 @@ public class Lobby : MonoBehaviour
 
                     accessToken = json["access_token"].ToString();
                     resetToken = json["refresh_token"].ToString();
-
+                    myUsername = username;
                     SceneManager.LoadScene("MainMenu");
                 }
                 else
@@ -137,6 +137,19 @@ public class Lobby : MonoBehaviour
                 }
                 Debug.Log(availableGames);
 
+            }
+        }
+    }
+
+
+    public static async Task joinSession(string sessionID)
+    {
+        using (var httpClient = new HttpClient())
+        {
+            using (var request = new HttpRequestMessage(new HttpMethod("PUT"), $"http://127.0.0.1:4242/api/sessions/{sessionID}/players/{myUsername}?access_token={accessToken}"))
+            {
+                var response = await httpClient.SendAsync(request);
+                Debug.Log(response);
             }
         }
     }
