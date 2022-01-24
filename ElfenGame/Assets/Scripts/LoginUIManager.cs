@@ -12,7 +12,7 @@ public class LoginUIManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        LobbyService.initGameService();
     }
 
     // Update is called once per frame

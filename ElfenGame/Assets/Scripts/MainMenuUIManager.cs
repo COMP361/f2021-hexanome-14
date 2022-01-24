@@ -8,7 +8,6 @@ using Photon.Pun;
 public class MainMenuUIManager : MonoBehaviour, GameSessionsReceivedInterface, OnGameSessionClickedHandler
 {
     [SerializeField] private TextMeshProUGUI connectionStatusText;
-    [SerializeField] private NetworkManager networkManager;
     [SerializeField] private GameObject availableGamesView;
     [SerializeField] private GameObject sessionPrefab;
     [SerializeField] private GameObject gameSelectView;
@@ -16,22 +15,60 @@ public class MainMenuUIManager : MonoBehaviour, GameSessionsReceivedInterface, O
 
     [SerializeField] private GameObject gameOptionButtonsView;
     [SerializeField] private GameObject gameCreatorOptionsView;
+    [SerializeField] private GameObject gameJoinedOptionsView;
 
 
     private Lobby.GameSession currentSelectedSession;
 
-    public async void OnStartClicked()
+    public void Update()
+    {
+        SetConnectionStatus(GameConstants.networkManager.getNetworkState());
+    }
+
+    public async void Start()
+    {
+        await Lobby.LongPollForUpdates(this);
+        if (GameConstants.networkManager)
+        {
+            GameConstants.networkManager.Connect();
+        }
+    }
+
+    public void OnStartClicked()
     {
         //connectionStatusText.gameObject.SetActive(true);
         gameSelectView.gameObject.SetActive(true);
         homeView.gameObject.SetActive(false);
-        networkManager.Connect();
-        await Lobby.LongPollForUpdates(this);
+        OnUpdatedGameListReceived(Lobby.availableGames);
+        InGameSelectView();
+    }
+
+    public void InGameSelectView()
+    {
+        if (GameConstants.networkManager.inGameMaster())
+        {
+            gameCreatorOptionsView.SetActive(true);
+            gameOptionButtonsView.SetActive(false);
+            gameJoinedOptionsView.SetActive(false);
+            SetGameActive(false);
+        } else if (GameConstants.networkManager.inGame())
+        {
+            gameCreatorOptionsView.SetActive(false);
+            gameOptionButtonsView.SetActive(false);
+            gameJoinedOptionsView.SetActive(true);
+            SetGameActive(false);
+        } else
+        {
+            gameCreatorOptionsView.SetActive(false);
+            gameOptionButtonsView.SetActive(true);
+            gameJoinedOptionsView.SetActive(false);
+            SetGameActive(true);
+        }
     }
 
     public void OnStartGameClicked()
     {
-        networkManager.LoadArena();
+        GameConstants.networkManager.LoadArena();
     }
 
     public async void OnJoinGameClicked()
@@ -40,14 +77,11 @@ public class MainMenuUIManager : MonoBehaviour, GameSessionsReceivedInterface, O
         {
             Debug.Log($"Attempting to join Game {currentSelectedSession.session_ID} as user {Lobby.myUsername}");
             await Lobby.JoinSession(currentSelectedSession.session_ID);
-            networkManager.ConnectToRoom(currentSelectedSession.session_ID);
+            GameConstants.networkManager.JoinRoom(currentSelectedSession.session_ID);
             //GetComponent<PhotonView>().RPC(nameof(RPC_ListUpdated), RpcTarget.AllBuffered, new object[] { });
         }
 
-
-
     }
-
 
     public async void OnCreateGameClicked()
     {
@@ -57,6 +91,18 @@ public class MainMenuUIManager : MonoBehaviour, GameSessionsReceivedInterface, O
         await Lobby.CreateSession();
 
         //GetComponent<PhotonView>().RPC(nameof(RPC_ListUpdated), RpcTarget.AllBuffered, new object[] { });
+    }
+
+    public void OnLeaveGameClicked()
+    {
+        GameConstants.networkManager.LeaveRoom();
+        InGameSelectView();
+    }
+
+    public void OnDeleteGameClicked()
+    {
+        GameConstants.networkManager.LeaveRoom();
+        InGameSelectView();
     }
 
     public void SetConnectionStatus(string status)
@@ -71,8 +117,12 @@ public class MainMenuUIManager : MonoBehaviour, GameSessionsReceivedInterface, O
         foreach (Lobby.GameSession game in gameSessions)
         {
             AddGameSession(game);
-        }
 
+            if (game.createdBy == Lobby.myUsername)
+            {
+                GameConstants.networkManager.CreateRoom(game.session_ID);
+            }
+        }
     }
 
     public void ForceUpdateList()
@@ -89,6 +139,20 @@ public class MainMenuUIManager : MonoBehaviour, GameSessionsReceivedInterface, O
 
     }
 
+    private void SetGameActive(bool active)
+    {
+        foreach (GameSessionListItemScript sessionScript in availableGamesView.GetComponentsInChildren<GameSessionListItemScript>())
+        {
+            if (active)
+            {
+                sessionScript.activate();
+            }else
+            {
+                sessionScript.deactivate();
+            }
+        }
+    }
+
     private void AddGameSession(Lobby.GameSession gameSession)
     {
         GameObject newSession = Instantiate(sessionPrefab, availableGamesView.transform);
@@ -98,14 +162,13 @@ public class MainMenuUIManager : MonoBehaviour, GameSessionsReceivedInterface, O
         sessionScript.SetOnGameSessionClickedHandler(this);
     }
 
-    //
+    public void OnEscapePressed()
+    {
+        gameSelectView.gameObject.SetActive(false);
+        homeView.gameObject.SetActive(true);
+        GameConstants.networkManager.LeaveRoom();
+    }
 
-
-    //[PunRPC]
-    //public async void RPC_ListUpdated()
-    //{
-    //    await Lobby.GetSessions(this);
-    //}
 
     private void resetColors()
     {

@@ -12,6 +12,8 @@ using System.Linq;
 using Newtonsoft.Json.Linq;
 using UnityEngine.SceneManagement;
 using System.Threading;
+using System.Security.Cryptography;
+using Newtonsoft.Json;
 
 public class Lobby : MonoBehaviour
 {
@@ -23,6 +25,7 @@ public class Lobby : MonoBehaviour
     public static List<GameSession> availableGames = new List<GameSession>();
     public static string myUsername;
     public static DateTime lastRenew;
+    public static string lastHash = "-";
 
 
     // Start is called before the first frame update
@@ -62,7 +65,7 @@ public class Lobby : MonoBehaviour
     {
         using (var httpClient = new HttpClient())
         {
-            using (var request = new HttpRequestMessage(new HttpMethod("POST"), "http://3.20.204.227:4242/oauth/token"))
+            using (var request = new HttpRequestMessage(new HttpMethod("POST"), $"{GameConstants.lobbyServiceUrl}/oauth/token"))
             {
                 var base64authorization = Convert.ToBase64String(Encoding.ASCII.GetBytes("bgp-client-name:bgp-client-pw"));
                 request.Headers.TryAddWithoutValidation("Authorization", $"Basic {base64authorization}");
@@ -75,9 +78,11 @@ public class Lobby : MonoBehaviour
                 // response.EnsureSuccessStatusCode();
                 var responseString = await response.Content.ReadAsStringAsync();
 
+
                 if (response.IsSuccessStatusCode)
                 {
-                    JObject json = JObject.Parse(responseString);
+                    //var result = JsonConvert.DeserializeObject(responseString);
+                    JObject json = JsonConvert.DeserializeObject<JObject>(responseString);
                     Debug.Log("Access Token Retreived: " + json["access_token"]);
 
                     accessToken = json["access_token"].ToString().Replace("+", "%2B");
@@ -89,7 +94,6 @@ public class Lobby : MonoBehaviour
                 }
                 else
                 {
-
                 }
 
                 // await getSessions();
@@ -97,9 +101,22 @@ public class Lobby : MonoBehaviour
         }
     }
 
+    private static string createMd5Hex(string data)
+    {
+        MD5CryptoServiceProvider md5 = new MD5CryptoServiceProvider();
+        byte[] dataHash = md5.ComputeHash(Encoding.UTF8.GetBytes(data));
+        StringBuilder sb = new StringBuilder();
+        foreach (byte b in dataHash)
+        {
+            sb.Append(b.ToString("x2").ToLower());
+        }
+        return sb.ToString();
+    }
+
     public static async Task LongPollForUpdates(GameSessionsReceivedInterface callbackTarget)
     {
-        var url = $"http://3.20.204.227:4242/api/sessions?location=18.116.53.177&access_token={accessToken}";
+        var url = $"{GameConstants.lobbyServiceUrl}/api/sessions/?hash={lastHash}&location=18.116.53.177&access_token={accessToken}";
+        //Debug.Log(lastHash);
         using (var client = new HttpClient())
         {
             client.Timeout = TimeSpan.FromMilliseconds(Timeout.Infinite);
@@ -111,30 +128,43 @@ public class Lobby : MonoBehaviour
 
                 var responseString = await response.Content.ReadAsStringAsync();
 
-                JObject json = JObject.Parse(responseString);
-                //Debug.Log("Access Token Retreived: " + json["access_token"]);
 
-                availableGames = new List<GameSession>();
-
-
-                // List<GameSession> allGames = new List<GameSession>();
-                foreach (var game in json["sessions"].Children())
+                try
                 {
-                    var property = game as JProperty;
-                    //Debug.Log(property);
-                    //Debug.Log(property.Value["creator"]);
-                    //Debug.Log(property.Value["players"]);
+                    var json = JsonConvert.DeserializeObject<JObject>(responseString);
+
+                    //Debug.Log("Access Token Retreived: " + json["access_token"]);
+
+                    availableGames = new List<GameSession>();
+
+                    lastHash = createMd5Hex(responseString);
+
+                    // List<GameSession> allGames = new List<GameSession>();
+                    foreach (JToken game in json["sessions"].Children())
+                    {
+                        var property = game as JProperty;
+                        //Debug.Log(property);
+                        //Debug.Log(property.Value["creator"]);
+                        //Debug.Log(property.Value["players"]);
 
 
-                    GameSession gameSession = new GameSession() { session_ID = property.Name, players = property.Value["players"].ToObject<List<string>>(), createdBy = property.Value["creator"].ToString() };
+                        GameSession gameSession = new GameSession() { session_ID = property.Name, players = property.Value["players"].ToObject<List<string>>(), createdBy = property.Value["creator"].ToString() };
 
-                    availableGames.Add(gameSession);
-                    //Debug.Log(gameSession.ToString());
-                    // Debug.Log(allGames);
+                        availableGames.Add(gameSession);
+                        //Debug.Log(gameSession.ToString());
+                        // Debug.Log(allGames);
+                    }
+                    //Debug.Log(availableGames);
+
+                    if (callbackTarget != null)
+                    {
+                        callbackTarget.OnUpdatedGameListReceived(availableGames);
+                    }
+                } catch (JsonReaderException)
+                {
+                    Debug.LogError($"Failed to parse json: {responseString}");
                 }
-                //Debug.Log(availableGames);
-
-                callbackTarget.OnUpdatedGameListReceived(availableGames);
+                
             }
         }
 
@@ -145,7 +175,7 @@ public class Lobby : MonoBehaviour
     {
         using (var httpClient = new HttpClient())
         {
-            using (var request = new HttpRequestMessage(new HttpMethod("POST"), $"http://3.20.204.227:4242/api/sessions?location=18.116.53.177&access_token={accessToken}"))
+            using (var request = new HttpRequestMessage(new HttpMethod("POST"), $"{GameConstants.lobbyServiceUrl}/api/sessions?location=18.116.53.177&access_token={accessToken}"))
             {
                 request.Content = new StringContent("{\"game\":\"ElfenGame\", \"creator\":\""+ myUsername + "\", \"savegame\":\"\"}");
                 request.Content.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json");
@@ -204,13 +234,13 @@ public class Lobby : MonoBehaviour
     {
         using (var httpClient = new HttpClient())
         {
-            using (var request = new HttpRequestMessage(new HttpMethod("GET"), "http://3.20.204.227:4242/api/sessions"))
+            using (var request = new HttpRequestMessage(new HttpMethod("GET"), $"{GameConstants.lobbyServiceUrl}/api/sessions"))
             {
                 var response = await httpClient.SendAsync(request);
 
                 var responseString = await response.Content.ReadAsStringAsync();
 
-                JObject json = JObject.Parse(responseString);
+                JObject json = JsonConvert.DeserializeObject<JObject>(responseString);
                 //Debug.Log("Access Token Retreived: " + json["access_token"]);
 
                 availableGames = new List<GameSession>();
@@ -250,7 +280,7 @@ public class Lobby : MonoBehaviour
     {
         using (var httpClient = new HttpClient())
         {
-            using (var request = new HttpRequestMessage(new HttpMethod("PUT"), $"http://3.20.204.227:4242/api/sessions/{sessionID}/players/{myUsername}?access_token={accessToken}&location=18.116.53.177"))
+            using (var request = new HttpRequestMessage(new HttpMethod("PUT"), $"{GameConstants.lobbyServiceUrl}/api/sessions/{sessionID}/players/{myUsername}?access_token={accessToken}&location=18.116.53.177"))
             {
                 var response = await httpClient.SendAsync(request);
                 Debug.Log(response);
@@ -262,7 +292,7 @@ public class Lobby : MonoBehaviour
     {
         using (var httpClient = new HttpClient())
         {
-            using (var request = new HttpRequestMessage(new HttpMethod("POST"), "http://3.20.204.227:4242/oauth/token"))
+            using (var request = new HttpRequestMessage(new HttpMethod("POST"), $"{GameConstants.lobbyServiceUrl}/oauth/token"))
             {
                 var base64authorization = Convert.ToBase64String(Encoding.ASCII.GetBytes("bgp-client-name:bgp-client-pw"));
                 request.Headers.TryAddWithoutValidation("Authorization", $"Basic {base64authorization}");
@@ -273,7 +303,7 @@ public class Lobby : MonoBehaviour
                 var response = await httpClient.SendAsync(request);
 
                 var responseString = await response.Content.ReadAsStringAsync();
-                JObject json = JObject.Parse(responseString);
+                var json = JsonConvert.DeserializeObject<JObject>(responseString);
                 Debug.Log("Access Token Retreived: " + json["access_token"]);
                 accessToken = json["access_token"].ToString().Replace("+", "%2B");
                 resetToken = json["refresh_token"].ToString().Replace("+", "%2B");
@@ -287,9 +317,10 @@ public class Lobby : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if ((DateTime.Now - lastRenew).Minutes > 1)
+        if ((DateTime.Now - lastRenew).Milliseconds > 100000)
         {
             Debug.Log("Renewing Token Automatically");
+            lastRenew = DateTime.Now;
             RenewToken();
         }
     }

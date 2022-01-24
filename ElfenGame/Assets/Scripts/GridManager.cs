@@ -33,7 +33,7 @@ public class GridManager : MonoBehaviour
             float posY = row * -tileSize + ((rowsNeeded-1) * tileSize / 2);
 
             gm.transform.SetParent(gameObject.transform);
-            gm.transform.localPosition = new Vector3(posX, posY, GameManager.gridItemRelativeZ);
+            gm.transform.localPosition = new Vector3(posX, posY, GameConstants.gridItemRelativeZ);
 
             Debug.Log(gm.name + '@' + gm.transform.localPosition.ToString());
 

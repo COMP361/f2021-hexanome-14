@@ -6,11 +6,6 @@ using UnityEngine.UI;
 public class KeyBoardInput : MonoBehaviour
 {
     // Start is called before the first frame update
-    [SerializeField]
-    public GameObject panel;
-
-    // [SerializeField]
-    private bool isPaused = false;
 
 
     // Update is called once per frame
@@ -18,10 +13,16 @@ public class KeyBoardInput : MonoBehaviour
     {
         if (Input.GetKeyDown("p"))
         {
-            isPaused = !isPaused;
+            GameConstants.mainUIManager.OnPausePressed();
         }
 
-        panel.SetActive(isPaused);
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (GameConstants.mainMenuUIManager != null)
+            {
+                GameConstants.mainMenuUIManager.OnEscapePressed();
+            }
+        }
     }
 
 

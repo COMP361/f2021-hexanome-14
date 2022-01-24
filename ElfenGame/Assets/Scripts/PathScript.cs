@@ -21,13 +21,13 @@ public class PathScript : MonoBehaviour, IDragOver
     {
         //GetComponent<SpriteRenderer>().color = new Color(0.0f, 1.0f, 0.0f, 0.65f);
         Color curColor = GetComponent<SpriteRenderer>().color;
-        GetComponent<SpriteRenderer>().color = new Color(curColor.r, curColor.g, curColor.b, GameManager.pathColoringHoverAlpha);
+        GetComponent<SpriteRenderer>().color = new Color(curColor.r, curColor.g, curColor.b, GameConstants.pathColoringHoverAlpha);
     }
 
     public void OnDragExit()
     {
         //GetComponent<SpriteRenderer>().color = new Color(1.0f, 1.0f, 1.0f, 0.0f);
         Color curColor = GetComponent<SpriteRenderer>().color;
-        GetComponent<SpriteRenderer>().color = new Color(curColor.r, curColor.g, curColor.b, GameManager.pathColoringAlpha);
+        GetComponent<SpriteRenderer>().color = new Color(curColor.r, curColor.g, curColor.b, GameConstants.pathColoringAlpha);
     }
 }

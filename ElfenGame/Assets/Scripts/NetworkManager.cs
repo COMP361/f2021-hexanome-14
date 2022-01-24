@@ -3,39 +3,55 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
+using UnityEngine.SceneManagement;
 
 public class NetworkManager : MonoBehaviourPunCallbacks
 {
 
-    [SerializeField] MainMenuUIManager uiManager;
-
     public void Connect()
     {
-        if (PhotonNetwork.IsConnected)
+        if (!PhotonNetwork.IsConnected)
         {
-            PhotonNetwork.JoinRandomRoom();
-        }
-        else
-        {
+            PhotonNetwork.AuthValues = new AuthenticationValues();
+            PhotonNetwork.AuthValues.UserId = Lobby.myUsername;
             PhotonNetwork.ConnectUsingSettings();
         }
     }
 
-    public void ConnectToRoom(string roomName)
+    public void Start()
+    {
+        DontDestroyOnLoad(gameObject);
+    }
+
+    public void Disconnect()
+    {
+        if (PhotonNetwork.IsConnected)
+        {
+            PhotonNetwork.Disconnect();
+        }
+    }
+
+    public void JoinRoom(string roomName)
     {
         if (PhotonNetwork.IsConnected)
         {
             PhotonNetwork.JoinRoom(roomName);
-        } else
-        {
-            PhotonNetwork.ConnectUsingSettings();
         }
     }
 
-    private void Update()
+    public string getNetworkState()
     {
-        if (uiManager != null)
-            uiManager.SetConnectionStatus(PhotonNetwork.NetworkClientState.ToString());
+        return PhotonNetwork.NetworkClientState.ToString();
+    }
+
+    public bool inGameMaster()
+    {
+        return PhotonNetwork.InRoom && PhotonNetwork.IsMasterClient;
+    }
+
+    public bool inGame()
+    {
+        return PhotonNetwork.InRoom;
     }
 
     private void Awake()
@@ -43,9 +59,32 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         PhotonNetwork.AutomaticallySyncScene = true;
     }
 
+    public void LeaveRoom()
+    {
+        if (PhotonNetwork.InRoom)
+        {
+            PhotonNetwork.LeaveRoom();
+        }
+        
+    }
+
+    public override void OnPlayerLeftRoom(Photon.Realtime.Player otherPlayer)
+    {
+        //base.OnPlayerLeftRoom(otherPlayer);
+        if (otherPlayer != PhotonNetwork.LocalPlayer)
+        {
+            LeaveRoom();
+        }
+    }
+    
 
     public void LoadArena()
     {
+        if (!PhotonNetwork.InRoom)
+        {
+            Debug.LogError("PhotonNetwork: Trying to load game but not in room");
+            return;
+        }
         if (!PhotonNetwork.IsMasterClient)
         {
             Debug.LogError("PhotonNetwork: Trying to load a level but we are not the master client");
@@ -59,21 +98,22 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public override void OnConnectedToMaster()
     {
-        Debug.Log($"Connected to server. Looking for random room");
-        PhotonNetwork.JoinRandomRoom();
+        Debug.Log($"Connected to server.");
     }
 
-
-    public override void OnJoinRandomFailed(short returnCode, string message)
-    {
-        Debug.Log($"Joining random room failed because of {message}. Creating a new one.");
-        PhotonNetwork.CreateRoom(null, new RoomOptions { MaxPlayers = 6, IsVisible = true });
-    }
+    //public override void OnJoinRandomFailed(short returnCode, string message)
+    //{
+    //    Debug.Log($"Joining random room failed because of {message}. Creating a new one.");
+    //    PhotonNetwork.CreateRoom(null, new RoomOptions { MaxPlayers = 6, IsVisible = true });
+    //}
 
 
     public void CreateRoom(string roomName)
     {
-        PhotonNetwork.CreateRoom(roomName, new RoomOptions { MaxPlayers = 6, IsVisible = true });
+        if (PhotonNetwork.IsConnectedAndReady)
+        {
+            PhotonNetwork.CreateRoom(roomName, new RoomOptions { MaxPlayers = 6, IsVisible = true });
+        }
     }
 
     //public override void OnRoomListUpdate(List<RoomInfo> roomList)
@@ -97,6 +137,11 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom()
     {
         //Debug.LogError($"Player {PhotonNetwork.LocalPlayer.ActorNumber} joined the room");
+
+        if (GameConstants.mainMenuUIManager != null)
+        {
+            GameConstants.mainMenuUIManager.InGameSelectView();
+        }
     }
 
     public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer)
@@ -115,8 +160,13 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public override void OnLeftRoom()
     {
-        //SceneManager.LoadScene("MainMenu");
-
+        if (SceneManager.GetActiveScene() == SceneManager.GetSceneByName("Main"))
+        {
+            SceneManager.LoadScene("MainMenu");
+        } else if (GameConstants.mainMenuUIManager != null)
+        {
+            GameConstants.mainMenuUIManager.InGameSelectView();
+        }
     }
 
     #endregion

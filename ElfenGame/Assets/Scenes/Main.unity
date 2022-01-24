@@ -1589,7 +1589,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 242425815}
-  - component: {fileID: 242425814}
   - component: {fileID: 242425816}
   - component: {fileID: 242425817}
   - component: {fileID: 242425818}
@@ -1601,19 +1600,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &242425814
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 242425813}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2ddcdeb45adae428fbffb55f9de6079f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  panel: {fileID: 1453545464}
 --- !u!4 &242425815
 Transform:
   m_ObjectHideFlags: 0
@@ -6396,9 +6382,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 242425819}
-        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: LeaveRoom
+      - m_Target: {fileID: 1562634290}
+        m_TargetAssemblyTypeName: MainUIManager, Assembly-CSharp
+        m_MethodName: exitGameClicked
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -11239,6 +11225,7 @@ GameObject:
   - component: {fileID: 1562634287}
   - component: {fileID: 1562634286}
   - component: {fileID: 1562634289}
+  - component: {fileID: 1562634290}
   m_Layer: 0
   m_Name: EventSystem
   m_TagString: Untagged
@@ -11306,6 +11293,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c48d53302fec442419094265ce55c6b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1562634290
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1562634285}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 661710338a72d48fd8bb20e8fddeabc2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pausePanel: {fileID: 1453545464}
 --- !u!1 &1594644009
 GameObject:
   m_ObjectHideFlags: 0

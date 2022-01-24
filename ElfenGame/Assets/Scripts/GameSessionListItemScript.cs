@@ -15,6 +15,8 @@ public class GameSessionListItemScript : MonoBehaviour, IPointerClickHandler
     private Lobby.GameSession gameSession;
     private OnGameSessionClickedHandler handler;
 
+    private bool active = true;
+
 
     public void SetToDefaultColor()
     {
@@ -44,6 +46,8 @@ public class GameSessionListItemScript : MonoBehaviour, IPointerClickHandler
 
     public void OnPointerClick(PointerEventData eventData)
     {
+        if (!active)
+            return;
 
         if (handler != null)
         {
@@ -57,6 +61,27 @@ public class GameSessionListItemScript : MonoBehaviour, IPointerClickHandler
     public void SetOnGameSessionClickedHandler(OnGameSessionClickedHandler handler)
     {
         this.handler = handler;
+    }
+
+    public void deactivate()
+    {
+        Image image = GetComponent<Image>();
+        if (gameSession.players.Contains(Lobby.myUsername))
+        {
+            image.color = new Color(89f / 255f, 231f / 255f, 230f / 255f, 74f / 255f);
+
+        }
+        else
+        {
+            image.color = new Color(107f / 255f, 107f / 255f, 107f / 255f, 74f / 255f);
+
+        }
+        active = false;
+    }
+
+    public void activate()
+    {
+        active = true;
     }
 
 }

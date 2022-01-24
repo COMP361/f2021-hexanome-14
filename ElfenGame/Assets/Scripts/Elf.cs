@@ -101,7 +101,12 @@ public class Elf : MonoBehaviour
     [PunRPC]
     public void RPC_PlaceInNewTown(string townName, string elfName)
     {
-        NewTown destination = GameManager._instance.townDict[townName];
+        NewTown destination = GameConstants.townDict[townName];
+        if (destination == null)
+        {
+            GameConstants.townDict = null;
+            destination = GameConstants.townDict[townName];
+        }
         Debug.Log($"Successfully found town: {destination.name}");
         destination.GetComponent<GridManager>().AddElement(gameObject);
     }

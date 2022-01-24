@@ -31,27 +31,27 @@ public class MovementTileSpriteScript : MonoBehaviour
         Debug.Log("Dragging Tile Sprite.");
         this.dragOrigin = dragOrigin;
         drag = true;
-        GameManager._instance.mouseActivityManager.BeginDrag<PathScript>();
+        GameConstants.mouseActivityManager.BeginDrag<PathScript>();
         ColorPathsByValidity();
     }
 
     public void ColorPathsByValidity()
     {
-        foreach (PathScript path in GameManager._instance.roadGroup.GetComponentsInChildren<PathScript>())
+        foreach (PathScript path in GameConstants.roadGroup.GetComponentsInChildren<PathScript>())
         {
             if (mTile.mValidRoads.Contains(path.roadType))
             {
-                path.GetComponent<SpriteRenderer>().color = new Color(0.0f, 1.0f, 0.0f, GameManager.pathColoringAlpha);
+                path.GetComponent<SpriteRenderer>().color = new Color(0.0f, 1.0f, 0.0f, GameConstants.pathColoringAlpha);
             } else
             {
-                path.GetComponent<SpriteRenderer>().color = new Color(1.0f, 0.0f, 0.0f, GameManager.pathColoringAlpha);
+                path.GetComponent<SpriteRenderer>().color = new Color(1.0f, 0.0f, 0.0f, GameConstants.pathColoringAlpha);
             }
         }
     }
 
     public void ResetPathColor()
     {
-        foreach(PathScript path in GameManager._instance.roadGroup.GetComponentsInChildren<PathScript>())
+        foreach(PathScript path in GameConstants.roadGroup.GetComponentsInChildren<PathScript>())
         {
             path.GetComponent<SpriteRenderer>().color = new Color(1.0f, 1.0f, 1.0f, 0.0f);
         }
@@ -64,9 +64,9 @@ public class MovementTileSpriteScript : MonoBehaviour
         if (drag)
         {
             Vector2 MousePosition = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
-            Vector2 objPosition = GameManager._instance.mainCamera.ScreenToWorldPoint(MousePosition);
-            transform.position = new Vector3(objPosition.x, objPosition.y, GameManager.dragZ);
-            GameManager._instance.mouseActivityManager.WhileDrag<PathScript>();
+            Vector2 objPosition = GameConstants.mainCamera.ScreenToWorldPoint(MousePosition);
+            transform.position = new Vector3(objPosition.x, objPosition.y, GameConstants.dragZ);
+            GameConstants.mouseActivityManager.WhileDrag<PathScript>();
         }
     }
 
@@ -77,7 +77,7 @@ public class MovementTileSpriteScript : MonoBehaviour
             drag = false;
 
             Debug.Log("Dragging Tile Sprite. Done.");
-            PathScript path = GameManager._instance.mouseActivityManager.EndDrag<PathScript>();
+            PathScript path = GameConstants.mouseActivityManager.EndDrag<PathScript>();
 
             if (path == null)
             {
