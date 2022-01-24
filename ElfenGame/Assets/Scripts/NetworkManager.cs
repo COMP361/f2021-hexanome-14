@@ -21,6 +21,17 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         }
     }
 
+    public void ConnectToRoom(string roomName)
+    {
+        if (PhotonNetwork.IsConnected)
+        {
+            PhotonNetwork.JoinRoom(roomName);
+        } else
+        {
+            PhotonNetwork.ConnectUsingSettings();
+        }
+    }
+
     private void Update()
     {
         if (uiManager != null)
@@ -76,6 +87,11 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     //    uiManager.UpdateAvailableRoomList(roomNames);
     //}
+
+    public override void OnCreateRoomFailed(short returnCode, string message)
+    {
+        Debug.Log(message);
+    }
 
 
     public override void OnJoinedRoom()

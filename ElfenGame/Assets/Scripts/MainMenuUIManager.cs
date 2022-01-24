@@ -26,7 +26,7 @@ public class MainMenuUIManager : MonoBehaviour, GameSessionsReceivedInterface, O
         gameSelectView.gameObject.SetActive(true);
         homeView.gameObject.SetActive(false);
         networkManager.Connect();
-        await Lobby.GetSessions(this);
+        await Lobby.LongPollForUpdates(this);
     }
 
     public void OnStartGameClicked()
@@ -40,8 +40,10 @@ public class MainMenuUIManager : MonoBehaviour, GameSessionsReceivedInterface, O
         {
             Debug.Log($"Attempting to join Game {currentSelectedSession.session_ID} as user {Lobby.myUsername}");
             await Lobby.JoinSession(currentSelectedSession.session_ID);
-            GetComponent<PhotonView>().RPC(nameof(RPC_ListUpdated), RpcTarget.AllBuffered, new object[] { });
+            networkManager.ConnectToRoom(currentSelectedSession.session_ID);
+            //GetComponent<PhotonView>().RPC(nameof(RPC_ListUpdated), RpcTarget.AllBuffered, new object[] { });
         }
+
 
 
     }
@@ -53,7 +55,8 @@ public class MainMenuUIManager : MonoBehaviour, GameSessionsReceivedInterface, O
         gameCreatorOptionsView.SetActive(true);
 
         await Lobby.CreateSession();
-        GetComponent<PhotonView>().RPC(nameof(RPC_ListUpdated), RpcTarget.AllBuffered, new object[] { });
+
+        //GetComponent<PhotonView>().RPC(nameof(RPC_ListUpdated), RpcTarget.AllBuffered, new object[] { });
     }
 
     public void SetConnectionStatus(string status)
@@ -98,17 +101,17 @@ public class MainMenuUIManager : MonoBehaviour, GameSessionsReceivedInterface, O
     //
 
 
-    [PunRPC]
-    public async void RPC_ListUpdated()
-    {
-        await Lobby.GetSessions(this);
-    }
+    //[PunRPC]
+    //public async void RPC_ListUpdated()
+    //{
+    //    await Lobby.GetSessions(this);
+    //}
 
     private void resetColors()
     {
-        foreach (Image image in availableGamesView.GetComponentsInChildren<Image>())
+        foreach (GameSessionListItemScript sessionScript in availableGamesView.GetComponentsInChildren<GameSessionListItemScript>())
         {
-            image.color = new Color(238f / 255f, 100f / 255f, 100f / 255f, 74f / 255f);
+            sessionScript.SetToDefaultColor();
         }
     }
 

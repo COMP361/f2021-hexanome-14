@@ -16,19 +16,28 @@ public class GameSessionListItemScript : MonoBehaviour, IPointerClickHandler
     private OnGameSessionClickedHandler handler;
 
 
+    public void SetToDefaultColor()
+    {
+        Image image = GetComponent<Image>();
+        if (gameSession.players.Contains(Lobby.myUsername))
+        {
+            image.color = new Color(89f / 255f, 231f / 255f, 230f / 255f, 74f / 255f);
+
+        }
+        else
+        {
+            image.color = new Color(238f / 255f, 100f / 255f, 100f / 255f, 74f / 255f);
+
+        }
+    }
+
     public void SetFields(Lobby.GameSession gameSession)
     {
         createdByText.text = $"CreatedBy: {gameSession.createdBy}";
         nPlayersText.text = $"Players: {gameSession.players.Count}";
 
-        if (gameSession.players.Contains(Lobby.myUsername))
-        {
-            Image image = GetComponent<Image>();
-            image.color = new Color(89f / 255f, 231f / 255f, 230f / 255f, 74f / 255f);
-   
-        }
-
         this.gameSession = gameSession;
+        SetToDefaultColor();
         // EE6464
     }
 
