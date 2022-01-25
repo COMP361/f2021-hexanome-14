@@ -18,6 +18,11 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         }
     }
 
+    public bool isConnected()
+    {
+        return PhotonNetwork.IsConnected;
+    }
+
     public void Start()
     {
         DontDestroyOnLoad(gameObject);

@@ -22,7 +22,12 @@ public class MainMenuUIManager : MonoBehaviour, GameSessionsReceivedInterface, O
 
     public void Update()
     {
-        SetConnectionStatus(GameConstants.networkManager.getNetworkState());
+        if (GameConstants.networkManager != null)
+        {
+            SetConnectionStatus(GameConstants.networkManager.getNetworkState());
+            if (!GameConstants.networkManager.isConnected())
+                GameConstants.networkManager.Connect();
+        }
     }
 
     public async void Start()

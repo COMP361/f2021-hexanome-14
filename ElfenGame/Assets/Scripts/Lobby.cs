@@ -94,6 +94,10 @@ public class Lobby : MonoBehaviour
                 }
                 else
                 {
+                    if (GameConstants.loginUIManager != null)
+                    {
+                        GameConstants.loginUIManager.OnLoginFailed();
+                    }
                 }
 
                 // await getSessions();
@@ -128,42 +132,47 @@ public class Lobby : MonoBehaviour
 
                 var responseString = await response.Content.ReadAsStringAsync();
 
-
-                try
+                if (response.IsSuccessStatusCode)
                 {
-                    var json = JsonConvert.DeserializeObject<JObject>(responseString);
-
-                    //Debug.Log("Access Token Retreived: " + json["access_token"]);
-
-                    availableGames = new List<GameSession>();
-
-                    lastHash = createMd5Hex(responseString);
-
-                    // List<GameSession> allGames = new List<GameSession>();
-                    foreach (JToken game in json["sessions"].Children())
+                    try
                     {
-                        var property = game as JProperty;
-                        //Debug.Log(property);
-                        //Debug.Log(property.Value["creator"]);
-                        //Debug.Log(property.Value["players"]);
+                        JObject json = JsonConvert.DeserializeObject<JObject>(responseString);
+
+                        //Debug.Log("Access Token Retreived: " + json["access_token"]);
+
+                        availableGames = new List<GameSession>();
+
+                        lastHash = createMd5Hex(responseString);
+
+                        // List<GameSession> allGames = new List<GameSession>();
+                        foreach (JToken game in json["sessions"].Children())
+                        {
+                            var property = game as JProperty;
+                            //Debug.Log(property);
+                            //Debug.Log(property.Value["creator"]);
+                            //Debug.Log(property.Value["players"]);
 
 
-                        GameSession gameSession = new GameSession() { session_ID = property.Name, players = property.Value["players"].ToObject<List<string>>(), createdBy = property.Value["creator"].ToString() };
+                            GameSession gameSession = new GameSession() { session_ID = property.Name, players = property.Value["players"].ToObject<List<string>>(), createdBy = property.Value["creator"].ToString() };
 
-                        availableGames.Add(gameSession);
-                        //Debug.Log(gameSession.ToString());
-                        // Debug.Log(allGames);
+                            availableGames.Add(gameSession);
+                            //Debug.Log(gameSession.ToString());
+                            // Debug.Log(allGames);
+                        }
+                        //Debug.Log(availableGames);
+
+                        if (callbackTarget != null)
+                        {
+                            callbackTarget.OnUpdatedGameListReceived(availableGames);
+                        }
                     }
-                    //Debug.Log(availableGames);
-
-                    if (callbackTarget != null)
+                    catch (JsonReaderException)
                     {
-                        callbackTarget.OnUpdatedGameListReceived(availableGames);
+                        Debug.LogError($"Failed to parse json: {responseString}");
                     }
-                } catch (JsonReaderException)
-                {
-                    Debug.LogError($"Failed to parse json: {responseString}");
                 }
+
+                
                 
             }
         }

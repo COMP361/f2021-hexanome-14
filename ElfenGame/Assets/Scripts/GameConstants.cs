@@ -10,9 +10,18 @@ public static class GameConstants
     public const float pathColoringAlpha = 0.35f;
     public const float pathColoringHoverAlpha = 0.8f;
 
+    public static Color greenFaded = new Color(102f / 255f, 236f / 255f, 77f / 255f, 74f / 255f);
+    public static Color redFaded = new Color(238f / 255f, 100f / 255f, 100f / 255f, 74f / 255f);
+    public static Color blueFaded = new Color(89f / 255f, 231f / 255f, 230f / 255f, 74f / 255f);
+    public static Color greyFaded = new Color(107f / 255f, 107f / 255f, 107f / 255f, 74f / 255f);
+
+    public static Color green = new Color(102f / 255f, 236f / 255f, 77f / 255f);
+    public static Color red = new Color(238f / 255f, 100f / 255f, 100f / 255f);
+
     public static string lobbyServiceUrl = "http://18.223.185.13:4242";
 
     private static NetworkManager _networkManager;
+    private static ChatManager _chatManager;
     private static MouseActivityManager _mouseActivityManager;
     private static Camera _mainCamera;
 
@@ -90,6 +99,17 @@ public static class GameConstants
                 _networkManager = Object.FindObjectOfType<NetworkManager>();
             }
             return _networkManager;
+        }
+    }
+    public static ChatManager chatManager
+    {
+        get
+        {
+            if (_chatManager == null)
+            {
+                _chatManager = Object.FindObjectOfType<ChatManager>();
+            }
+            return _chatManager;
         }
     }
     public static MouseActivityManager mouseActivityManager
