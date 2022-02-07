@@ -17,4 +17,7 @@ EditorBuildSettings:
   - enabled: 0
     path: 
     guid: 00000000000000000000000000000000
+  - enabled: 1
+    path: Assets/Scenes/Connecting.unity
+    guid: eb19b04a29acd448aa7971620e362aab
   m_configObjects: {}

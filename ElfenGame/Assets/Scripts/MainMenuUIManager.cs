@@ -7,7 +7,6 @@ using Photon.Pun;
 
 public class MainMenuUIManager : MonoBehaviour, GameSessionsReceivedInterface, OnGameSessionClickedHandler
 {
-    [SerializeField] private TextMeshProUGUI connectionStatusText;
     [SerializeField] private GameObject availableGamesView;
     [SerializeField] private GameObject sessionPrefab;
     [SerializeField] private GameObject gameSelectView;
@@ -22,21 +21,11 @@ public class MainMenuUIManager : MonoBehaviour, GameSessionsReceivedInterface, O
 
     public void Update()
     {
-        if (GameConstants.networkManager != null)
-        {
-            SetConnectionStatus(GameConstants.networkManager.getNetworkState());
-            if (!GameConstants.networkManager.isConnected())
-                GameConstants.networkManager.Connect();
-        }
     }
 
     public async void Start()
     {
         await Lobby.LongPollForUpdates(this);
-        if (GameConstants.networkManager)
-        {
-            GameConstants.networkManager.Connect();
-        }
     }
 
     public void OnStartClicked()
@@ -108,11 +97,6 @@ public class MainMenuUIManager : MonoBehaviour, GameSessionsReceivedInterface, O
     {
         GameConstants.networkManager.LeaveRoom();
         InGameSelectView();
-    }
-
-    public void SetConnectionStatus(string status)
-    {
-        connectionStatusText.text = status;
     }
 
     public void OnUpdatedGameListReceived(List<Lobby.GameSession> gameSessions)

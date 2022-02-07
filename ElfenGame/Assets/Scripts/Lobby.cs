@@ -90,7 +90,7 @@ public class Lobby : MonoBehaviour
                     myUsername = username;
 
                     await RenewToken();
-                    SceneManager.LoadScene("MainMenu");
+                    SceneManager.LoadScene("Connecting");
                 }
                 else
                 {

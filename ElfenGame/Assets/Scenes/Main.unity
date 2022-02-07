@@ -11289,6 +11289,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pausePanel: {fileID: 1453545464}
+  playerPrefab: {fileID: 6058394782067960364, guid: 531d65c8912454387b14f3a36e791228, type: 3}
+  leftPane: {fileID: 926660644}
 --- !u!1 &1594644009
 GameObject:
   m_ObjectHideFlags: 0

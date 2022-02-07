@@ -4,6 +4,7 @@ using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine.SceneManagement;
+using ExitGames.Client.Photon;
 
 public class NetworkManager : MonoBehaviourPunCallbacks
 {
@@ -44,6 +45,21 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         }
     }
 
+    public List<Photon.Realtime.Player> GetPlayers()
+    {
+        if (PhotonNetwork.IsConnected && PhotonNetwork.InRoom)
+        {
+            List<Photon.Realtime.Player> players = new List<Photon.Realtime.Player>();
+
+            foreach(Photon.Realtime.Player p in PhotonNetwork.CurrentRoom.Players.Values)
+            {
+                players.Add(p);
+            }
+            return players;
+        }
+        return null;
+    }
+
     public string getNetworkState()
     {
         return PhotonNetwork.NetworkClientState.ToString();
@@ -81,7 +97,29 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             LeaveRoom();
         }
     }
-    
+
+    public void SetPlayerProperty(object key, object value)
+    {
+        ExitGames.Client.Photon.Hashtable hashtable = new ExitGames.Client.Photon.Hashtable();
+        hashtable.Add(key, value);
+        PhotonNetwork.LocalPlayer.SetCustomProperties(hashtable);
+    }
+
+    public override void OnPlayerPropertiesUpdate(Photon.Realtime.Player targetPlayer, ExitGames.Client.Photon.Hashtable changedProps)
+    {
+        base.OnPlayerPropertiesUpdate(targetPlayer, changedProps);
+
+        Debug.Log($"{targetPlayer.UserId} properties updated");
+        PlayerManager pm = PlayerManager.GetPlayer(targetPlayer.UserId);
+        if (pm)
+        {
+            foreach (DictionaryEntry entry in changedProps)
+            {
+                pm.updatePropertiesCallback((string) entry.Key, entry.Value);
+            }
+        }
+    }
+
 
     public void LoadArena()
     {

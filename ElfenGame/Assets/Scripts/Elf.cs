@@ -91,7 +91,7 @@ public class Elf : MonoBehaviour
             } else
             {
                 //transform.position = new Vector3(town.gameObject.transform.position.x, town.gameObject.transform.position.y, dragOrigin.z);
-                photonView.RPC(nameof(RPC_PlaceInNewTown), RpcTarget.AllBuffered, new object[] { town.name, name });
+                photonView.RPC(nameof(RPC_PlaceInNewTown), RpcTarget.AllBuffered, new object[] { town.name });
             }
 
             drag = false;
@@ -99,7 +99,7 @@ public class Elf : MonoBehaviour
     }
 
     [PunRPC]
-    public void RPC_PlaceInNewTown(string townName, string elfName)
+    public void RPC_PlaceInNewTown(string townName)
     {
         NewTown destination = GameConstants.townDict[townName];
         if (destination == null)
