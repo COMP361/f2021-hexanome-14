@@ -13,7 +13,7 @@ public class KeyBoardInput : MonoBehaviour
     {
         if (Input.GetKeyDown("p"))
         {
-            if (GameConstants.mainUIManager != null)
+            if (GameConstants.mainUIManager != null && (!GameConstants.chatManager || !GameConstants.chatManager.isActive()))
             {
                 GameConstants.mainUIManager.OnPausePressed();
             }
@@ -32,10 +32,10 @@ public class KeyBoardInput : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Tab))
         {
-            if (GameConstants.chatManager != null && GameConstants.chatManager.isActive())
+            if (GameConstants.chatManager && GameConstants.chatManager.isActive())
             {
                 GameConstants.chatManager.OnTabPressed();
-            } else if (GameConstants.loginUIManager != null)
+            } else if (GameConstants.loginUIManager)
             {
                 GameConstants.loginUIManager.OnTabPressed();
             }
