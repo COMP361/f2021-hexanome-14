@@ -8,6 +8,7 @@ public class PlayerManager : MonoBehaviour
     private int _nCoins = 0;
     private int _nPoints = 0;
 
+
     private List<Card> _mCards;
     private List<MovementTile> _mTiles;
 

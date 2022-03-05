@@ -35,6 +35,7 @@ public class MovementTileSpriteScript : MonoBehaviour
         ColorPathsByValidity();
     }
 
+    // todo : change this one
     public void ColorPathsByValidity()
     {
         foreach (PathScript path in GameConstants.roadGroup.GetComponentsInChildren<PathScript>())
