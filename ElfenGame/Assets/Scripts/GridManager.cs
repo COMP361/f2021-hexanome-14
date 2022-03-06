@@ -60,4 +60,38 @@ public class GridManager : MonoBehaviour
         PositionElements();
     }
 
+    /*
+    public bool checkHasObstacle(PathScript p){
+        foreach ( GameObject el in elements)
+        {
+            MovementTileSpriteScript mvts = el.GetComponent<Obstacle>();
+            if (mvts != null){
+                return true;
+            }
+        }
+        return true;
+    }
+    */
+
+    public int checkNumMovTile(PathScript p){
+        int n = 0;
+        foreach ( GameObject el in elements)
+        {
+            MovementTileSpriteScript mvts = el.GetComponent<MovementTileSpriteScript>();
+            if (mvts != null){
+                n++;
+            } 
+        }
+        return n;
+    }
+
+    public bool checkHasSpecial(PathScript p){
+        return false;
+    }
+
+    public bool checkHasDoubleTok(PathScript p){
+        return false;
+    }
+
+    
 }

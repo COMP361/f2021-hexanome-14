@@ -70,6 +70,23 @@ public class MovementTileSpriteScript : MonoBehaviour
             GameConstants.mouseActivityManager.WhileDrag<PathScript>();
         }
     }
+    
+    public bool isValid(PathScript p){
+        GridManager gm = p.GetComponentInChildren<GridManager>();
+        if (gm == null)
+        {
+            throw new System.Exception("Paths must have GridManagers in a child Element");
+        }
+
+        //if (gm.)
+        if (mTile.mValidRoads.Contains(p.roadType) && gm.checkNumMovTile(p) == 0){
+            Debug.Log("Valid ");
+            return true;
+        } else {
+            Debug.Log("Not Valid ");
+            return false;
+        }
+    }
 
     public void EndDrag()
     {
@@ -80,7 +97,7 @@ public class MovementTileSpriteScript : MonoBehaviour
             Debug.Log("Dragging Tile Sprite. Done.");
             PathScript path = GameConstants.mouseActivityManager.EndDrag<PathScript>();
 
-            if (path == null)
+            if (path == null || !isValid(path))
             {
                 dragOrigin.IncrementCounter();
                 Destroy(gameObject);
