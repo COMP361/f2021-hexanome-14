@@ -146,6 +146,7 @@ public class ChatManager : MonoBehaviour, IChatClientListener
         if (msgInputField.isFocused)
         {
             toInputField.Select();
+            //toInputField
         } else
         {
             msgInputField.Select();

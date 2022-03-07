@@ -30,7 +30,7 @@ public class MainUIManager : MonoBehaviour
     void Start()
     {
         InitializePlayerManagers();
-        PlayerManager pm = playerPrefab.GetComponent<PlayerManager>();
+        Player pm = playerPrefab.GetComponent<Player>();
         
     }
 
@@ -47,7 +47,7 @@ public class MainUIManager : MonoBehaviour
             foreach (Photon.Realtime.Player p in GameConstants.networkManager.GetPlayers())
             {
                 GameObject g = Instantiate(playerPrefab, leftPane.transform);
-                PlayerManager pm = g.GetComponent<PlayerManager>();
+                Player pm = g.GetComponent<Player>();
 
                 pm.initialize(p.UserId);
                 pm.updateStats();
@@ -70,7 +70,7 @@ public class MainUIManager : MonoBehaviour
     public void OnShowCardHandPressed()
     {
         Transform cardsGroup =  cardPanel.transform.GetChild(0);
-        PlayerManager pm = playerPrefab.GetComponent<PlayerManager>();
+        Player pm = playerPrefab.GetComponent<Player>();
         if (!isViewingCards){
             isViewingCards = true;
             cardPanel.SetActive(true);
@@ -122,7 +122,7 @@ public class MainUIManager : MonoBehaviour
     }
 
     public void OnSelectPressed(){
-        PlayerManager pm = playerPrefab.GetComponent<PlayerManager>();
+        Player pm = playerPrefab.GetComponent<Player>();
         foreach ( Card card in pm.mCards){
             if (card.selected){
                 Debug.Log(CardEnum.GetName(card.cardType.GetType(), card.cardType));

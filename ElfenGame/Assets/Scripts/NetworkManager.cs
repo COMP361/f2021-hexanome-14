@@ -110,7 +110,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         base.OnPlayerPropertiesUpdate(targetPlayer, changedProps);
 
         Debug.Log($"{targetPlayer.UserId} properties updated");
-        PlayerManager pm = PlayerManager.GetPlayer(targetPlayer.UserId);
+        Player pm = Player.GetPlayer(targetPlayer.UserId);
         if (pm)
         {
             foreach (DictionaryEntry entry in changedProps)
