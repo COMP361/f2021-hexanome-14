@@ -24,5 +24,11 @@ public class NewTown : MonoBehaviour, IDragOver
     public void DisplayVisited()
     { 
         //TODO: Implement
+
+        foreach(Player p in Player.GetAllPlayers())
+        {
+            bool visited = p.visited(name); // if true don't display, if false display indicator that player still needs to visit town
+            //p.playerColor.GetColor() returns a Color object corresponding to the players color
+	    }
     }
 }
