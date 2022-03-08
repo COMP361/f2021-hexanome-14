@@ -18,6 +18,12 @@ static class PlayerColorExtension
     
     static Dictionary<PlayerColor, Color> colors = new Dictionary<PlayerColor, Color>()
     {
+        {PlayerColor.Blue, new Color(0f, 3f/255f, 255f/255f)},
+        {PlayerColor.Green, new Color(0f, 255f/255f, 0f/255f)},
+        {PlayerColor.Red, new Color(255f/255f, 0f/255f, 9f/255f)},
+        {PlayerColor.Pink, new Color(255f/255f, 0f/255f, 210f/255f)},
+        {PlayerColor.Orange, new Color(255f/255f, 101f/255f, 0f/255f)},
+        {PlayerColor.Cyan, new Color(0f, 255f/255f, 245f/255f)},
     };
 
 
