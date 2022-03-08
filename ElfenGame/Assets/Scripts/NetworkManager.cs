@@ -8,16 +8,7 @@ using ExitGames.Client.Photon;
 
 public class NetworkManager : MonoBehaviourPunCallbacks
 {
-    public static byte[] SerializeCardEnum(object card)
-    {
-        var c = (CardEnum)card;
-        return new byte[] { (byte)c};
-    }
-
-    public static object DeserializeCardEnum(byte[] v)
-    {
-        return (CardEnum)v[0];
-    }
+    const byte SPAWN_PLAYER_CODE = 12;
 
     public void Connect()
     {
@@ -25,8 +16,9 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         {
             PhotonNetwork.AuthValues = new AuthenticationValues();
             PhotonNetwork.AuthValues.UserId = Lobby.myUsername;
-            PhotonNetwork.ConnectUsingSettings();
-            PhotonPeer.RegisterType(typeof(CardEnum), 255, SerializeCardEnum, DeserializeCardEnum);
+            _ = PhotonNetwork.ConnectUsingSettings();
+            PhotonPeer.RegisterType(typeof(CardEnum), 255, CardEnumExtension.Serialize, CardEnumExtension.Deserialize);
+            PhotonPeer.RegisterType(typeof(PlayerColor), 254, PlayerColorExtension.Serialize, PlayerColorExtension.Deserialize);
             networkPlayers = new Dictionary<string, Photon.Realtime.Player>();
         }
     }
@@ -168,8 +160,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         base.OnPlayerPropertiesUpdate(targetPlayer, changedProps);
 
         Debug.Log($"{targetPlayer.UserId} properties updated");
-        Player pm = Player.GetPlayer(targetPlayer.UserId);
-        if (pm)
+        Player pm = Player.GetOrCreatePlayer(targetPlayer.UserId);
+        if (pm != null)
         {
             foreach (DictionaryEntry entry in changedProps)
             {
@@ -178,6 +170,32 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         }
     }
 
+
+    //public void SpawnPlayer(string username, PhotonView photonView)
+    //{
+    //    if (PhotonNetwork.AllocateRoomViewID(photonView))
+    //    {
+    //        object[] data = new object[] { username, photonView.ViewID };
+
+    //        RaiseEventOptions raiseEventOptions = new RaiseEventOptions
+    //        {
+    //            Receivers = ReceiverGroup.Others,
+    //            CachingOption = EventCaching.AddToRoomCache
+    //        };
+
+    //        SendOptions sendOptions = new SendOptions
+    //        {
+    //            Reliability = true
+    //        };
+
+    //        PhotonNetwork.RaiseEvent(SPAWN_PLAYER_CODE, data, raiseEventOptions, sendOptions);
+
+    //    }
+    //    else
+    //    {
+    //        Debug.LogError("Failed to allocate ViewId");
+    //    }
+    //}
 
     public void LoadArena()
     {
@@ -233,6 +251,18 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     //    uiManager.UpdateAvailableRoomList(roomNames);
     //}
 
+    //public void OnEvent(EventData photonEvent)
+    //{
+    //    if (photonEvent.Code == SPAWN_PLAYER_CODE && GameConstants.mainUIManager)
+    //    {
+    //        object[] data = (object[])photonEvent.CustomData;
+    //        string username = (string)data[0];
+    //        int viewId = (int)data[1];
+
+    //        GameConstants.mainUIManager.InitPlayer(username, viewId);
+	   // }
+    //}
+
     public override void OnCreateRoomFailed(short returnCode, string message)
     {
         Debug.Log(message);
@@ -247,11 +277,15 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         {
             GameConstants.mainMenuUIManager.InGameSelectView();
         }
+
+        _ = Player.GetOrCreatePlayer(Lobby.myUsername);
     }
 
     public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer)
     {
         Debug.Log($"Player {newPlayer.ActorNumber} entered the room.");
+
+        Player.GetOrCreatePlayer(newPlayer.UserId);
 
         if (PhotonNetwork.IsMasterClient)
         {

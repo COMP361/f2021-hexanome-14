@@ -35,7 +35,7 @@ public class GridManager : MonoBehaviour
             gm.transform.SetParent(gameObject.transform);
             gm.transform.localPosition = new Vector3(posX, posY, GameConstants.gridItemRelativeZ);
 
-            Debug.Log(gm.name + '@' + gm.transform.localPosition.ToString());
+            //Debug.Log(gm.name + '@' + gm.transform.localPosition.ToString());
 
             index++;
         }

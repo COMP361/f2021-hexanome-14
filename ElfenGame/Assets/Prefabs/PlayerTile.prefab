@@ -163,7 +163,7 @@ GameObject:
   - component: {fileID: 6058394782067960365}
   - component: {fileID: 6058394782067960367}
   - component: {fileID: 6058394782067960366}
-  - component: {fileID: 5566203714572859044}
+  - component: {fileID: 2386740455338137936}
   m_Layer: 5
   m_Name: PlayerTile
   m_TagString: Untagged
@@ -230,7 +230,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &5566203714572859044
+--- !u!114 &2386740455338137936
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -239,12 +239,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 6058394782067960364}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 83eb04097f555411595e6c12a03a7af0, type: 3}
+  m_Script: {fileID: 11500000, guid: 3cd20e90ea6a34d6f8e84f8889002ced, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mCards: 
-  mTiles: 
-  userName: 
   mNameText: {fileID: 6058394782859229899}
   mCoinText: {fileID: 6058394783587440338}
   mCardText: {fileID: 6058394782262072272}
@@ -262,7 +259,7 @@ GameObject:
   - component: {fileID: 6058394782108912638}
   - component: {fileID: 6058394782108912637}
   m_Layer: 5
-  m_Name: Text
+  m_Name: TileText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -341,7 +338,7 @@ GameObject:
   - component: {fileID: 6058394782262072273}
   - component: {fileID: 6058394782262072272}
   m_Layer: 5
-  m_Name: Text
+  m_Name: CardText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -420,7 +417,7 @@ GameObject:
   - component: {fileID: 6058394782428325406}
   - component: {fileID: 6058394782428325405}
   m_Layer: 5
-  m_Name: Text
+  m_Name: PointsText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -796,7 +793,7 @@ GameObject:
   - component: {fileID: 6058394783587440339}
   - component: {fileID: 6058394783587440338}
   m_Layer: 5
-  m_Name: Text
+  m_Name: CoinText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -818,7 +815,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 84.724045, y: -26.356384}
   m_SizeDelta: {x: 64.0225, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6058394783587440339

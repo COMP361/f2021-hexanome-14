@@ -58,10 +58,13 @@ public class Game
     private void InitPlayers()
     {
         players = new List<string>();
-	    
+
+        byte cur = 0;
 	    foreach(Player p in Player.GetAllPlayers())
         {
             players.Add(p.userName);
+            p.playerColor = (PlayerColor)cur;
+            cur++;
 	    }
 
         players.Shuffle();
@@ -133,5 +136,9 @@ public class Game
     }
 
 
+    public String GetCurPlayer()
+    {
+        return players[curPlayerIndex];
+    }
 
 }

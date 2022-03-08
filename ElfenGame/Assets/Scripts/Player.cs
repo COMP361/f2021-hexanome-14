@@ -1,29 +1,32 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Player : MonoBehaviour
+public class Player
 {
     private int _nCoins = 0;
     private int _nPoints = 0;
 
-
+    private PlayerColor _playerColor;
+    private Elf elf;
+    private PlayerTile tile;
     private List<CardEnum> _mCards;
-	
+
     private List<MovementTile> _mTiles;
 
     private string _userName;
+    private string _curTown;
 
     public const string pCOINS = "COINS";
     public const string pPOINTS = "POINTS";
     public const string pNAME = "NAME";
     public const string pCARDS = "CARDS";
     public const string pTILES = "TILES";
+    public const string pCOLOR = "COLOR";
+    public const string pTOWN = "TOWN";
 
+    #region Public Member Definitions
     public int nCoins
     {
         get
@@ -32,7 +35,9 @@ public class Player : MonoBehaviour
         }
         set
         {
-            if (GameConstants.networkManager) GameConstants.networkManager.SetPlayerPropertyByPlayerName(_userName, pCOINS, value);
+            if (_nCoins != value && GameConstants.networkManager) GameConstants.networkManager.SetPlayerPropertyByPlayerName(_userName, pCOINS, value);
+            _nCoins = value;
+            if (tile != null) tile.SetCoins(_nCoins);
         }
     }
     public int nPoints
@@ -43,7 +48,23 @@ public class Player : MonoBehaviour
         }
         set
         {
-            if (GameConstants.networkManager) GameConstants.networkManager.SetPlayerPropertyByPlayerName(_userName, pPOINTS, value);
+            if (_nPoints != value && GameConstants.networkManager) GameConstants.networkManager.SetPlayerPropertyByPlayerName(_userName, pPOINTS, value);
+            _nPoints = value;
+            if (tile != null) tile.SetPoints(_nPoints);
+        }
+    }
+
+    public PlayerColor playerColor
+    {
+        get
+        {
+            return _playerColor;
+        }
+        set
+        {
+            if (_playerColor != value && GameConstants.networkManager) GameConstants.networkManager.SetPlayerPropertyByPlayerName(_userName, pCOLOR, value);
+            _playerColor = value;
+            if (elf != null) elf.UpdateColor();
         }
     }
 
@@ -52,11 +73,11 @@ public class Player : MonoBehaviour
         get
         {
             return _mCards;
-	    }
+        }
     }
 
     public List<MovementTile> mTiles
-    { 
+    {
         get
         {
             return _mTiles;
@@ -70,9 +91,26 @@ public class Player : MonoBehaviour
         }
         set
         {
-            if (GameConstants.networkManager) GameConstants.networkManager.SetPlayerPropertyByPlayerName(_userName, pNAME, value);
+            if (_userName != value && GameConstants.networkManager) GameConstants.networkManager.SetPlayerPropertyByPlayerName(_userName, pNAME, value);
+            _userName = value;
+            if (tile != null) tile.SetName(_userName);
         }
     }
+
+    public string curTown
+    {
+        get { return _curTown; }
+        set
+        {
+            if (_curTown != value && GameConstants.networkManager) GameConstants.networkManager.SetPlayerPropertyByPlayerName(_userName, pTOWN, value);
+            if (elf != null) elf.MoveToTown(value, _curTown);
+            _curTown = value;
+        }
+    }
+
+    #endregion
+
+    #region stat syncing
 
     public void AddCard(CardEnum card)
     {
@@ -87,58 +125,74 @@ public class Player : MonoBehaviour
     }
 
 
-    [SerializeField]
-    Text mNameText, mCoinText, mCardText, mTileText, mPointText;
-
-    public void updatePropertiesCallback(string key, object value)
+        public void updatePropertiesCallback(string key, object value)
     {
         if (key == pCOINS)
         {
             _nCoins = (int)value;
+            if (tile != null) tile.SetCards(_nCoins);
         } else if (key == pPOINTS)
         {
             _nPoints = (int)value;
+            if (tile != null) tile.SetPoints(_nPoints);
         }
         else if (key == pCARDS)
         {
             _mCards = ((CardEnum[])value).ToList();
-        } else if (key == pNAME)
+            if (Lobby.myUsername == _userName && GameConstants.mainUIManager) GameConstants.mainUIManager.UpdateCardHand();
+            if (tile != null) tile.SetCards(_mCards.Count);
+        }
+        else if (key == pNAME)
         {
             _userName = (string)value;
-        }
-        updateStats();
+            if (tile != null) tile.SetName(_userName);
+        } else if (key == pCOLOR)
+        {
+            _playerColor = (PlayerColor)value;
+            if (elf != null) elf.UpdateColor();
+	    } else if (key == pTOWN)
+        {
+            if (elf != null) elf.MoveToTown((string)value, _curTown);
+            _curTown = (string)value;
+	    }
     }
 
-    public void updateStats()
+    #endregion
+
+    public Player(string username)
     {
-        mNameText.text = userName;
-        mCoinText.text = nCoins.ToString();
-        mPointText.text = nPoints.ToString();
-        mCardText.text = mCards.Count.ToString();
-        mTileText.text = mTiles.Count.ToString();
-        if (GameConstants.mainUIManager) GameConstants.mainUIManager.UpdateCardHand();
+        _userName = username;
+        curTown = "TownElvenhold";
+        Reset();
+        if (tile != null) tile.UpdateStats(username, nCoins, nPoints, mCards.Count, mTiles.Count);
     }
 
-    public void reset()
+    public void Reset()
     {
         nPoints = 0;
         nCoins = 0;
         _mCards = new List<CardEnum>();
         _mTiles = new List<MovementTile>();
-
-        if (GameConstants.networkManager)
-        {
-            GameConstants.networkManager.SetPlayerPropertyByPlayerName(_userName, pCARDS, mCards.ToArray());
-            //GameConstants.networkManager.SetPlayerPropertyByPlayerName(_userName, pTILES, mTiles.ToArray());
-        }
     }
 
-    public void Initialize(string name)
+    public bool IsMyTurn()
     {
-        _userName = name;
-        reset();
+        return (Game.currentGame != null) && (Game.currentGame.GetCurPlayer() == _userName);
     }
 
+
+    public void SetElf(Elf elf)
+    {
+        this.elf = elf;
+    }
+
+    public void SetTile(PlayerTile tile)
+    {
+        this.tile = tile;
+        tile.UpdateStats(userName, nCoins, nPoints, mCards.Count, mTiles.Count);
+    }
+
+    #region static methods
 
     private static Dictionary<string, Player> _players = new Dictionary<string, Player>();
 
@@ -149,26 +203,30 @@ public class Player : MonoBehaviour
 
     public static List<Player> GetAllPlayers()
     {
-
-        _players = new Dictionary<string, Player>();
-        foreach (Player pm in FindObjectsOfType<Player>())
-        {
-            _players.Add(pm.userName, pm);
-        }
-
         return _players.Values.ToList();
+    }
+
+    public static Player GetOrCreatePlayer(string p)
+    {
+        if (!_players.ContainsKey(p))
+        {
+            Player newPlayer = new Player(p);
+            _players[p] = newPlayer;
+	    }
+
+        return _players[p];
     }
 
     public static Player GetPlayer(string p)
     {
         if (!_players.ContainsKey(p))
         {
-            _players = new Dictionary<string, Player>();
-            foreach (Player pm in FindObjectsOfType<Player>())
-            {
-                _players.Add(pm.userName, pm);
-            }
-        }
+            Debug.LogError($"Could not find player {p} in Dictionary: {_players.Keys.ToArray<string>()}");
+            return null;
+	    }
+
         return _players[p];
     }
+
+    #endregion
 }

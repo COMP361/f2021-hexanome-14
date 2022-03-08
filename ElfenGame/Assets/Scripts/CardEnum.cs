@@ -17,7 +17,7 @@ public enum CardEnum : byte
 
 static class CardEnumExtension
 {
-    static Dictionary<CardEnum, String> resourceNames = new Dictionary<CardEnum, String>()
+    static Dictionary<CardEnum, string> resourceNames = new Dictionary<CardEnum, string>()
     {
         {CardEnum.Dragon, "Dragon" },
         {CardEnum.ElfCycle, "ElfCycle" },
@@ -33,5 +33,16 @@ static class CardEnumExtension
     { 
          
         return Resources.Load<Sprite>(resourceNames[card]);
+    }
+
+    public static byte[] Serialize(object card)
+    {
+        var c = (CardEnum)card;
+        return new byte[] { (byte)c};
+    }
+
+    public static object Deserialize(byte[] v)
+    {
+        return (CardEnum)v[0];
     }
 }

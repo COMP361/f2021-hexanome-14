@@ -4,23 +4,25 @@ using Photon.Pun;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class Elf : MonoBehaviour
+public class Elf : MonoBehaviour 
 {
     private Vector3 dragOrigin;
     private GridManager dragOriginManager;
     private bool drag = false;
 
-    [SerializeField]
-    Camera cam;
+    private Player player;
 
-    [SerializeField]
-    MouseActivityManager mouseActivityManager;
-    private PhotonView photonView;
-
-
-    public void Awake()
+    public void LinkToPlayer(Player p)
     {
-        photonView = GetComponent<PhotonView>();
+        player = p;
+        p.SetElf(this);
+        GetComponent<SpriteRenderer>().sprite = p.playerColor.GetSprite();
+        name = p.userName;
+    }
+
+    public void UpdateColor()
+    {
+        if (player != null) GetComponent<SpriteRenderer>().sprite = player.playerColor.GetSprite();
     }
 
     private void OnMouseDown()
@@ -31,7 +33,7 @@ public class Elf : MonoBehaviour
         }
         else
         {
-            RaycastHit2D hit = Physics2D.Raycast(cam.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
+            RaycastHit2D hit = Physics2D.Raycast(GameConstants.mainCamera.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
             if (hit.collider != null)
             {
                 Debug.Log("MouseDown on: " + hit.collider.gameObject.name);
@@ -39,7 +41,7 @@ public class Elf : MonoBehaviour
                 if (hit.collider.gameObject == gameObject)
                 {
                     drag = true;
-                    dragOrigin = cam.ScreenToWorldPoint(Input.mousePosition);
+                    dragOrigin = GameConstants.mainCamera.ScreenToWorldPoint(Input.mousePosition);
                     dragOrigin = new Vector3(dragOrigin.x, dragOrigin.y, transform.position.z);
                     transform.localScale = new Vector3(0.15f, 0.15f, 0.15f);
                     GetComponent<SpriteRenderer>().color = new Color(1.0f, 1.0f, 1.0f, 0.65f);
@@ -50,7 +52,7 @@ public class Elf : MonoBehaviour
                         parentGrid.RemoveElement(gameObject);
                     }
                     dragOriginManager = parentGrid;
-                    mouseActivityManager.BeginDrag<NewTown>();
+                    GameConstants.mouseActivityManager.BeginDrag<NewTown>();
 
                 }
             }
@@ -63,9 +65,9 @@ public class Elf : MonoBehaviour
         if (drag)
         {
             Vector2 MousePosition = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
-            Vector2 objPosition = cam.ScreenToWorldPoint(MousePosition);
+            Vector2 objPosition = GameConstants.mainCamera.ScreenToWorldPoint(MousePosition);
             transform.position = new Vector3(objPosition.x, objPosition.y, dragOrigin.z);
-            mouseActivityManager.WhileDrag<NewTown>();
+            GameConstants.mouseActivityManager.WhileDrag<NewTown>();
         }
     }
 
@@ -73,7 +75,7 @@ public class Elf : MonoBehaviour
     {
         if (drag)
         {
-            NewTown town = mouseActivityManager.EndDrag<NewTown>();
+            NewTown town = GameConstants.mouseActivityManager.EndDrag<NewTown>();
 
             transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
             GetComponent<SpriteRenderer>().color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
@@ -91,23 +93,30 @@ public class Elf : MonoBehaviour
             } else
             {
                 //transform.position = new Vector3(town.gameObject.transform.position.x, town.gameObject.transform.position.y, dragOrigin.z);
-                photonView.RPC(nameof(RPC_PlaceInNewTown), RpcTarget.AllBuffered, new object[] { town.name });
+                player.curTown = town.name;
             }
 
             drag = false;
         }
     }
 
-    [PunRPC]
-    public void RPC_PlaceInNewTown(string townName)
+    public void MoveToTown(string destination, string source)
     {
-        NewTown destination = GameConstants.townDict[townName];
-        if (destination == null)
+        NewTown sourceTown = GameConstants.townDict[source];
+        if (sourceTown != null)
+        {
+            sourceTown.GetComponent<GridManager>().RemoveElement(gameObject);
+	    }
+
+        NewTown destinationTown = GameConstants.townDict[destination];
+        if (destinationTown == null)
         {
             GameConstants.townDict = null;
-            destination = GameConstants.townDict[townName];
+            destinationTown = GameConstants.townDict[destination];
         }
-        Debug.Log($"Successfully found town: {destination.name}");
-        destination.GetComponent<GridManager>().AddElement(gameObject);
+        Debug.Log($"Elf {player.userName} moved to {destination}");
+        destinationTown.GetComponent<GridManager>().AddElement(gameObject);
+
     }
+
 }
