@@ -20,4 +20,9 @@ public class NewTown : MonoBehaviour, IDragOver
         //Debug.Log("Dragged Out of :" + name);
         transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
     }
+
+    public void DisplayVisited()
+    { 
+        //TODO: Implement
+    }
 }

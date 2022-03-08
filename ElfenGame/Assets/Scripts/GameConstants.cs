@@ -77,9 +77,12 @@ public static class GameConstants
             if (_townDict == null || _townDict.ContainsValue(null))
             {
                 _townDict = new Dictionary<string, NewTown>();
-                foreach (NewTown town in townGroup.GetComponentsInChildren<NewTown>())
+                if (townGroup != null)
                 {
-                    _townDict.Add(town.name, town);
+                    foreach (NewTown town in townGroup.GetComponentsInChildren<NewTown>())
+                    {
+                        _townDict.Add(town.name, town);
+                    }
                 }
             }
             return _townDict;

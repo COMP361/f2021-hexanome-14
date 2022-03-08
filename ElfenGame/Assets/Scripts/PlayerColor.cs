@@ -15,6 +15,16 @@ static class PlayerColorExtension
             {PlayerColor.Cyan, "turq_elf" },
 
     };
+    
+    static Dictionary<PlayerColor, Color> colors = new Dictionary<PlayerColor, Color>()
+    {
+    };
+
+
+    public static Color GetColor(this PlayerColor playerColor)
+    {
+        return colors[playerColor]; 
+    }
 
     public static Sprite GetSprite(this PlayerColor playerColor)
     {

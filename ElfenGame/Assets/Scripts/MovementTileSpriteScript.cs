@@ -35,12 +35,11 @@ public class MovementTileSpriteScript : MonoBehaviour
         ColorPathsByValidity();
     }
 
-    // todo : change this one
     public void ColorPathsByValidity()
     {
         foreach (PathScript path in GameConstants.roadGroup.GetComponentsInChildren<PathScript>())
         {
-            if (mTile.mValidRoads.Contains(path.roadType))
+            if (isValid(path))
             {
                 path.GetComponent<SpriteRenderer>().color = new Color(0.0f, 1.0f, 0.0f, GameConstants.pathColoringAlpha);
             } else
@@ -80,10 +79,10 @@ public class MovementTileSpriteScript : MonoBehaviour
 
         //if (gm.)
         if (mTile.mValidRoads.Contains(p.roadType) && gm.checkNumMovTile(p) == 0){
-            Debug.Log("Valid ");
+            //Debug.Log("Valid ");
             return true;
         } else {
-            Debug.Log("Not Valid ");
+            //Debug.Log("Not Valid ");
             return false;
         }
     }

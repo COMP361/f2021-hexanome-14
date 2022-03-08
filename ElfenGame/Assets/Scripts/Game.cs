@@ -63,13 +63,16 @@ public class Game
 	    foreach(Player p in Player.GetAllPlayers())
         {
             players.Add(p.userName);
-            p.playerColor = (PlayerColor)cur;
+            
+            // Set Player Colors
+            // TODO: Remove Later
+	        p.playerColor = (PlayerColor)cur;
             cur++;
 	    }
 
         players.Shuffle();
         Debug.Log(players.ToString());
-        curPlayerIndex = 0;
+        curPlayerIndex = 0; 
     }
 
 

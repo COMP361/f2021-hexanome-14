@@ -14,7 +14,7 @@ public class GridManager : MonoBehaviour
     private List<GameObject> elements;
 
 
-    private void Start()
+    private void Awake()
     {
         elements = new List<GameObject>();
     }
@@ -56,8 +56,11 @@ public class GridManager : MonoBehaviour
 
     public void RemoveElement(GameObject gameObject)
     {
-        elements.Remove(gameObject);
-        PositionElements();
+        if (elements.Contains(gameObject))
+        {
+            elements.Remove(gameObject);
+            PositionElements();
+        }
     }
 
     /*

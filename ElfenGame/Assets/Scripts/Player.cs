@@ -26,6 +26,60 @@ public class Player
     public const string pCOLOR = "COLOR";
     public const string pTOWN = "TOWN";
 
+    private Dictionary<string, bool> visitedTown;
+
+    #region Private Update Methods
+    private void UpdateCoins(int value)
+    {
+        _nCoins = value;
+        if (tile != null) tile.SetCoins(_nCoins);
+    }
+
+    private void UpdatePoints(int value)
+    {
+        _nPoints = value;
+        if (tile != null) tile.SetPoints(_nPoints);
+    }
+
+    private void UpdateColor(PlayerColor value)
+    {
+        _playerColor = value;
+        if (elf != null) elf.UpdateColor();
+    }
+
+    private void UpdateName(string value)
+    {
+        _userName = value;
+        if (tile != null) tile.SetName(_userName);
+    }
+
+    private void UpdateTown(string value)
+    {
+        if (elf != null) elf.MoveToTown(value, _curTown);
+        _curTown = value;
+        visitedTown[_curTown] = true;
+        if (GameConstants.townDict.ContainsKey(_curTown))
+        {
+            NewTown town = GameConstants.townDict[_curTown];
+            town.DisplayVisited();
+        }
+        int nVisited = 0;
+        foreach (bool b in visitedTown.Values)
+        {
+            if (b) nVisited++;
+        }
+        nPoints = nVisited-1;
+    }
+
+    private void UpdateCards(List<CardEnum> cards)
+    {
+        _mCards = cards;
+        if (Lobby.myUsername == _userName && GameConstants.mainUIManager) GameConstants.mainUIManager.UpdateCardHand();
+        if (tile != null) tile.SetCards(_mCards.Count);
+    }
+
+    #endregion
+
     #region Public Member Definitions
     public int nCoins
     {
@@ -36,8 +90,7 @@ public class Player
         set
         {
             if (_nCoins != value && GameConstants.networkManager) GameConstants.networkManager.SetPlayerPropertyByPlayerName(_userName, pCOINS, value);
-            _nCoins = value;
-            if (tile != null) tile.SetCoins(_nCoins);
+            UpdateCoins(value);
         }
     }
     public int nPoints
@@ -49,8 +102,7 @@ public class Player
         set
         {
             if (_nPoints != value && GameConstants.networkManager) GameConstants.networkManager.SetPlayerPropertyByPlayerName(_userName, pPOINTS, value);
-            _nPoints = value;
-            if (tile != null) tile.SetPoints(_nPoints);
+            UpdatePoints(value);
         }
     }
 
@@ -63,8 +115,7 @@ public class Player
         set
         {
             if (_playerColor != value && GameConstants.networkManager) GameConstants.networkManager.SetPlayerPropertyByPlayerName(_userName, pCOLOR, value);
-            _playerColor = value;
-            if (elf != null) elf.UpdateColor();
+            UpdateColor(value);
         }
     }
 
@@ -92,8 +143,7 @@ public class Player
         set
         {
             if (_userName != value && GameConstants.networkManager) GameConstants.networkManager.SetPlayerPropertyByPlayerName(_userName, pNAME, value);
-            _userName = value;
-            if (tile != null) tile.SetName(_userName);
+            UpdateName(value);
         }
     }
 
@@ -103,8 +153,7 @@ public class Player
         set
         {
             if (_curTown != value && GameConstants.networkManager) GameConstants.networkManager.SetPlayerPropertyByPlayerName(_userName, pTOWN, value);
-            if (elf != null) elf.MoveToTown(value, _curTown);
-            _curTown = value;
+            UpdateTown(value);
         }
     }
 
@@ -125,36 +174,32 @@ public class Player
     }
 
 
-        public void updatePropertiesCallback(string key, object value)
+    public void updatePropertiesCallback(string key, object value)
     {
         if (key == pCOINS)
         {
-            _nCoins = (int)value;
-            if (tile != null) tile.SetCards(_nCoins);
-        } else if (key == pPOINTS)
+            UpdateCoins((int)value);
+        }
+        else if (key == pPOINTS)
         {
-            _nPoints = (int)value;
-            if (tile != null) tile.SetPoints(_nPoints);
+            UpdatePoints((int)value);
         }
         else if (key == pCARDS)
         {
-            _mCards = ((CardEnum[])value).ToList();
-            if (Lobby.myUsername == _userName && GameConstants.mainUIManager) GameConstants.mainUIManager.UpdateCardHand();
-            if (tile != null) tile.SetCards(_mCards.Count);
+            UpdateCards(((CardEnum[])value).ToList());
         }
         else if (key == pNAME)
         {
-            _userName = (string)value;
-            if (tile != null) tile.SetName(_userName);
-        } else if (key == pCOLOR)
+            UpdateName((string)value);
+        }
+        else if (key == pCOLOR)
         {
-            _playerColor = (PlayerColor)value;
-            if (elf != null) elf.UpdateColor();
-	    } else if (key == pTOWN)
+            UpdateColor((PlayerColor)value);
+        }
+        else if (key == pTOWN)
         {
-            if (elf != null) elf.MoveToTown((string)value, _curTown);
-            _curTown = (string)value;
-	    }
+            UpdateTown((string)value);
+        }
     }
 
     #endregion
@@ -162,8 +207,8 @@ public class Player
     public Player(string username)
     {
         _userName = username;
-        curTown = "TownElvenhold";
         Reset();
+        curTown = "TownElvenhold";
         if (tile != null) tile.UpdateStats(username, nCoins, nPoints, mCards.Count, mTiles.Count);
     }
 
@@ -173,6 +218,11 @@ public class Player
         nCoins = 0;
         _mCards = new List<CardEnum>();
         _mTiles = new List<MovementTile>();
+        visitedTown = new Dictionary<string, bool>();
+        foreach (string townName in GameConstants.townDict.Keys)
+        {
+            visitedTown[townName] = false;
+        }
     }
 
     public bool IsMyTurn()
@@ -180,6 +230,10 @@ public class Player
         return (Game.currentGame != null) && (Game.currentGame.GetCurPlayer() == _userName);
     }
 
+    public bool visited(string townName)
+    {
+        return visitedTown[townName];
+    }
 
     public void SetElf(Elf elf)
     {
@@ -212,7 +266,7 @@ public class Player
         {
             Player newPlayer = new Player(p);
             _players[p] = newPlayer;
-	    }
+        }
 
         return _players[p];
     }
@@ -223,7 +277,7 @@ public class Player
         {
             Debug.LogError($"Could not find player {p} in Dictionary: {_players.Keys.ToArray<string>()}");
             return null;
-	    }
+        }
 
         return _players[p];
     }
