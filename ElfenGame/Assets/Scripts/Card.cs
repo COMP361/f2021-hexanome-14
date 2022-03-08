@@ -7,25 +7,34 @@ using UnityEngine.EventSystems;
 
 public class Card : MonoBehaviour
 {
+    [SerializeField] public Image cardImage;
+
+    private Image background;
     public CardEnum cardType;
 
     public bool selected;
 
-    public Card(CardEnum e){
+
+
+    public void Initialize(CardEnum e){
         cardType = e;
         selected = false;
+        background = GetComponent<Image>();
 
+        cardImage.sprite = e.GetSprite();
+        background.color = GameConstants.blue;
     }
 
-    public void OnClickCard(GameObject go ){
+
+    public void OnClickCard(){
+
         selected = !selected;
         Debug.Log("Clicked, now it is : " + selected);
+
         if (selected){
-            go.transform.GetChild(0).gameObject.SetActive(false);
-            go.transform.GetChild(1).gameObject.SetActive(true);
+            background.color = GameConstants.green;
         } else {
-            go.transform.GetChild(0).gameObject.SetActive(true);
-            go.transform.GetChild(1).gameObject.SetActive(false);
+            background.color = GameConstants.blue;
         }
     }
 

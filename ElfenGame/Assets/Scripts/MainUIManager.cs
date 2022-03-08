@@ -31,7 +31,11 @@ public class MainUIManager : MonoBehaviour
     {
         InitializePlayerManagers();
         Player pm = playerPrefab.GetComponent<Player>();
-        
+
+        if (GameConstants.networkManager && GameConstants.networkManager.IsMasterClient())
+        {
+            Game.currentGame.Init();
+	    }
     }
 
     // Update is called once per frame
@@ -49,7 +53,7 @@ public class MainUIManager : MonoBehaviour
                 GameObject g = Instantiate(playerPrefab, leftPane.transform);
                 Player pm = g.GetComponent<Player>();
 
-                pm.initialize(p.UserId);
+                pm.Initialize(p.UserId);
                 pm.updateStats();
             }
         }
@@ -69,64 +73,26 @@ public class MainUIManager : MonoBehaviour
 
     public void OnShowCardHandPressed()
     {
-        Transform cardsGroup =  cardPanel.transform.GetChild(0);
-        Player pm = playerPrefab.GetComponent<Player>();
-        if (!isViewingCards){
-            isViewingCards = true;
-            cardPanel.SetActive(true);
-            confirmButton.SetActive(true);
-
-            
-            /*
-            GameObject g = Instantiate(cardPrefab, cardPanel.transform);
-            g.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("T01");
-            g.GetComponent<SpriteRenderer>().sortingOrder = 2;
-            */
-            pm.mCards = new List<Card>();
-            pm.mCards.Add(new Card(CardEnum.T02));
-            pm.mCards.Add(new Card(CardEnum.T03));
-            pm.mCards.Add(new Card(CardEnum.T04));
-            pm.mCards.Add(new Card(CardEnum.T05));
-            pm.mCards.Add(new Card(CardEnum.T06));
-            pm.mCards.Add(new Card(CardEnum.T07));
-            pm.mCards.Add(new Card(CardEnum.witch));
-
-        
-            foreach ( Card card in pm.mCards){
-                GameObject g = Instantiate(cardPrefab, cardPanel.transform);
-                g.transform.SetParent(cardsGroup);
-                CardEnum c = card.cardType;
-                g.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>(CardEnum.GetName(c.GetType(), c));
-                g.GetComponent<SpriteRenderer>().sortingOrder = 2;
-                UnityEngine.UI.Button button = g.transform.GetChild(2).GetComponent<Button>();
-                button.onClick.AddListener(() => card.OnClickCard(g));
-            }
-        //pm.mCards;
-        }else {
-
-            //unselect all the cards
-            foreach ( Card card in pm.mCards){
-                card.selected = false;
-            }
-            
-            // delete all the children and unset the plane 
-            foreach (Transform child in cardsGroup.transform) {
-                GameObject.Destroy(child.gameObject);
-            }
-            isViewingCards = false;
-            cardPanel.SetActive(false);
-            confirmButton.SetActive(false);
-        }
-        
-        
+        isViewingCards = !isViewingCards;
+        cardPanel.SetActive(isViewingCards);
     }
 
-    public void OnSelectPressed(){
-        Player pm = playerPrefab.GetComponent<Player>();
-        foreach ( Card card in pm.mCards){
-            if (card.selected){
-                Debug.Log(CardEnum.GetName(card.cardType.GetType(), card.cardType));
-            }
+    public void UpdateCardHand()
+    { 
+   
+	    foreach (Card card in cardPanel.GetComponentsInChildren<Card>())
+        {
+            Destroy(card.gameObject);
+		}
+
+        Transform cardGroup = cardPanel.GetComponentInChildren<GridLayoutGroup>().transform;	
+	    foreach (CardEnum c in Player.GetLocalPlayer().mCards)
+        {
+            GameObject g = Instantiate(cardPrefab, cardGroup);
+            Card card = g.GetComponent<Card>();
+
+            card.Initialize(c);
+
         }
     }
 }

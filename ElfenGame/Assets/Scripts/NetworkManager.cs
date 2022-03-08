@@ -8,6 +8,16 @@ using ExitGames.Client.Photon;
 
 public class NetworkManager : MonoBehaviourPunCallbacks
 {
+    public static byte[] SerializeCardEnum(object card)
+    {
+        var c = (CardEnum)card;
+        return new byte[] { (byte)c};
+    }
+
+    public static object DeserializeCardEnum(byte[] v)
+    {
+        return (CardEnum)v[0];
+    }
 
     public void Connect()
     {
@@ -16,8 +26,26 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             PhotonNetwork.AuthValues = new AuthenticationValues();
             PhotonNetwork.AuthValues.UserId = Lobby.myUsername;
             PhotonNetwork.ConnectUsingSettings();
+            PhotonPeer.RegisterType(typeof(CardEnum), 255, SerializeCardEnum, DeserializeCardEnum);
+            networkPlayers = new Dictionary<string, Photon.Realtime.Player>();
         }
     }
+   
+     
+    private Dictionary<string, Photon.Realtime.Player> networkPlayers;
+    private Photon.Realtime.Player GetPlayer(string playerId)
+    { 
+        if (!networkPlayers.ContainsKey(playerId))
+        { 
+	        foreach (Photon.Realtime.Player p in PhotonNetwork.CurrentRoom.Players.Values)
+            {
+                networkPlayers[p.UserId] = p;
+	        }
+	    }
+
+        return networkPlayers[playerId];
+    }
+
 
     public bool isConnected()
     {
@@ -36,6 +64,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             PhotonNetwork.Disconnect();
         }
     }
+
+
 
     public void JoinRoom(string roomName)
     {
@@ -96,13 +126,41 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         {
             LeaveRoom();
         }
+
+    }
+
+    public override void OnRoomPropertiesUpdate(ExitGames.Client.Photon.Hashtable propertiesThatChanged)
+    {
+        base.OnRoomPropertiesUpdate(propertiesThatChanged);
+
+        Debug.Log("Room properties updated");
+        if (Game.currentGame != null)
+        { 
+	        foreach (DictionaryEntry entry in propertiesThatChanged)
+            {
+                Game.currentGame.UpdateProperties((string)entry.Key, entry.Value);
+	        }
+	    }
+    }
+
+    public void SetGameProperty(object key, object value)
+    {
+        ExitGames.Client.Photon.Hashtable hashtable = new ExitGames.Client.Photon.Hashtable();
+        hashtable.Add(key, value);
+        _ = PhotonNetwork.CurrentRoom.SetCustomProperties(hashtable);
+    }
+
+    public void SetPlayerPropertyByPlayerName(string playerName, object key, object value)
+    { 
+        ExitGames.Client.Photon.Hashtable hashtable = new ExitGames.Client.Photon.Hashtable();
+        hashtable.Add(key, value);
+        Photon.Realtime.Player p = GetPlayer(playerName);
+        if (p != null) p.SetCustomProperties(hashtable);
     }
 
     public void SetPlayerProperty(object key, object value)
     {
-        ExitGames.Client.Photon.Hashtable hashtable = new ExitGames.Client.Photon.Hashtable();
-        hashtable.Add(key, value);
-        PhotonNetwork.LocalPlayer.SetCustomProperties(hashtable);
+        SetPlayerPropertyByPlayerName(Lobby.myUsername, key, value);
     }
 
     public override void OnPlayerPropertiesUpdate(Photon.Realtime.Player targetPlayer, ExitGames.Client.Photon.Hashtable changedProps)
@@ -136,6 +194,10 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         PhotonNetwork.LoadLevel("Main");
     }
 
+    public bool IsMasterClient()
+    {
+        return PhotonNetwork.IsMasterClient;
+    }
 
     #region Photon Callbacks
 

@@ -1,5 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,7 +12,8 @@ public class Player : MonoBehaviour
     private int _nPoints = 0;
 
 
-    private List<Card> _mCards;
+    private List<CardEnum> _mCards;
+	
     private List<MovementTile> _mTiles;
 
     private string _userName;
@@ -17,6 +21,8 @@ public class Player : MonoBehaviour
     public const string pCOINS = "COINS";
     public const string pPOINTS = "POINTS";
     public const string pNAME = "NAME";
+    public const string pCARDS = "CARDS";
+    public const string pTILES = "TILES";
 
     public int nCoins
     {
@@ -26,7 +32,7 @@ public class Player : MonoBehaviour
         }
         set
         {
-            if (GameConstants.networkManager) GameConstants.networkManager.SetPlayerProperty(pCOINS, value);
+            if (GameConstants.networkManager) GameConstants.networkManager.SetPlayerPropertyByPlayerName(_userName, pCOINS, value);
         }
     }
     public int nPoints
@@ -37,12 +43,25 @@ public class Player : MonoBehaviour
         }
         set
         {
-            if (GameConstants.networkManager) GameConstants.networkManager.SetPlayerProperty(pPOINTS, value);
+            if (GameConstants.networkManager) GameConstants.networkManager.SetPlayerPropertyByPlayerName(_userName, pPOINTS, value);
         }
     }
 
-    public List<Card> mCards;
-    public List<MovementTile> mTiles;
+    public List<CardEnum> mCards
+    {
+        get
+        {
+            return _mCards;
+	    }
+    }
+
+    public List<MovementTile> mTiles
+    { 
+        get
+        {
+            return _mTiles;
+        }
+    }
     public string userName
     {
         get
@@ -51,9 +70,22 @@ public class Player : MonoBehaviour
         }
         set
         {
-            if (GameConstants.networkManager) GameConstants.networkManager.SetPlayerProperty(pNAME, value);
+            if (GameConstants.networkManager) GameConstants.networkManager.SetPlayerPropertyByPlayerName(_userName, pNAME, value);
         }
     }
+
+    public void AddCard(CardEnum card)
+    {
+        _mCards.Add(card);
+        if (GameConstants.networkManager) GameConstants.networkManager.SetPlayerPropertyByPlayerName(_userName, pCARDS, mCards.ToArray());
+    }
+
+    public void RemoveCard(CardEnum card)
+    {
+        _mCards.Remove(card);
+        if (GameConstants.networkManager) GameConstants.networkManager.SetPlayerPropertyByPlayerName(_userName, pCARDS, mCards.ToArray());
+    }
+
 
     [SerializeField]
     Text mNameText, mCoinText, mCardText, mTileText, mPointText;
@@ -66,12 +98,10 @@ public class Player : MonoBehaviour
         } else if (key == pPOINTS)
         {
             _nPoints = (int)value;
-        //} else if (p == CARDS)
-        //{
-        //    _mCards = (List<Card>)value;
-        //} else if (p == playerProperties.TILES)
-        //{
-        //    _mTiles = (List<MovementTile>)value;
+        }
+        else if (key == pCARDS)
+        {
+            _mCards = ((CardEnum[])value).ToList();
         } else if (key == pNAME)
         {
             _userName = (string)value;
@@ -86,17 +116,48 @@ public class Player : MonoBehaviour
         mPointText.text = nPoints.ToString();
         mCardText.text = mCards.Count.ToString();
         mTileText.text = mTiles.Count.ToString();
+        if (GameConstants.mainUIManager) GameConstants.mainUIManager.UpdateCardHand();
     }
 
-    public void initialize(string name)
+    public void reset()
+    {
+        nPoints = 0;
+        nCoins = 0;
+        _mCards = new List<CardEnum>();
+        _mTiles = new List<MovementTile>();
+
+        if (GameConstants.networkManager)
+        {
+            GameConstants.networkManager.SetPlayerPropertyByPlayerName(_userName, pCARDS, mCards.ToArray());
+            //GameConstants.networkManager.SetPlayerPropertyByPlayerName(_userName, pTILES, mTiles.ToArray());
+        }
+    }
+
+    public void Initialize(string name)
     {
         _userName = name;
-        _nPoints = 0;
-        _nCoins = 0;
+        reset();
     }
 
 
     private static Dictionary<string, Player> _players = new Dictionary<string, Player>();
+
+    public static Player GetLocalPlayer()
+    {
+        return GetPlayer(Lobby.myUsername);
+    }
+
+    public static List<Player> GetAllPlayers()
+    {
+
+        _players = new Dictionary<string, Player>();
+        foreach (Player pm in FindObjectsOfType<Player>())
+        {
+            _players.Add(pm.userName, pm);
+        }
+
+        return _players.Values.ToList();
+    }
 
     public static Player GetPlayer(string p)
     {

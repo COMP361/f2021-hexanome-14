@@ -62,6 +62,10 @@ public class MainMenuUIManager : MonoBehaviour, GameSessionsReceivedInterface, O
 
     public void OnStartGameClicked()
     {
+        foreach (Player p in Player.GetAllPlayers())
+        {
+            p.reset();
+	    }
         GameConstants.networkManager.LoadArena();
     }
 
