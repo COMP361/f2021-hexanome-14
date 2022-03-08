@@ -45,6 +45,7 @@ public class Player
     {
         _playerColor = value;
         if (elf != null) elf.UpdateColor();
+        if (tile != null) tile.SetColor(value);
     }
 
     private void UpdateName(string value)
@@ -209,7 +210,7 @@ public class Player
         _userName = username;
         Reset();
         curTown = "TownElvenhold";
-        if (tile != null) tile.UpdateStats(username, nCoins, nPoints, mCards.Count, mTiles.Count);
+        if (tile != null) tile.UpdateStats(username, nCoins, nPoints, mCards.Count, mTiles.Count, playerColor);
     }
 
     public void Reset()
@@ -243,7 +244,7 @@ public class Player
     public void SetTile(PlayerTile tile)
     {
         this.tile = tile;
-        tile.UpdateStats(userName, nCoins, nPoints, mCards.Count, mTiles.Count);
+        tile.UpdateStats(userName, nCoins, nPoints, mCards.Count, mTiles.Count, playerColor);
     }
 
     #region static methods

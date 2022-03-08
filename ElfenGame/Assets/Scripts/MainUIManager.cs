@@ -34,15 +34,11 @@ public class MainUIManager : MonoBehaviour
     void Start()
     {
         GameConstants.townDict = null; // Force reset of town Dict
-        foreach (Player p in Player.GetAllPlayers())
-        {
-            InitPlayer(p.userName);
+        foreach (string playerName in Game.currentGame.GetPlayerList())
+        { 
+	        InitPlayer(playerName);
         }
 
-        if (GameConstants.networkManager && GameConstants.networkManager.IsMasterClient())
-        {
-            Game.currentGame.Init();
-        }
     }
 
     public void InitPlayer(string username)

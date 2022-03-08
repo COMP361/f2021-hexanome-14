@@ -41,8 +41,7 @@ public class Game
     {
         Debug.Log("Game Init Called");
         InitDeck();
-        InitPlayers();
-
+        InitPlayersList();
 
         for (int i = 0; i < players.Count; i++)
         {
@@ -52,28 +51,30 @@ public class Game
             {
                 p.AddCard(Draw());
             }
-	    }
-    }
-
-    private void InitPlayers()
-    {
-        players = new List<string>();
-
-        byte cur = 0;
-	    foreach(Player p in Player.GetAllPlayers())
-        {
-            players.Add(p.userName);
             
             // Set Player Colors
             // TODO: Remove Later
-	        p.playerColor = (PlayerColor)cur;
-            cur++;
+            p.playerColor = (PlayerColor)i;
 	    }
+        curPlayerIndex = 0;
+    }
 
+    public void InitPlayersList()
+    {
+        players = new List<string>();
+        foreach (Player p in Player.GetAllPlayers())
+        {
+            players.Add(p.userName);
+        }
         players.Shuffle();
         Debug.Log(players.ToString());
-        curPlayerIndex = 0; 
+        if (GameConstants.networkManager)
+        {
+            GameConstants.networkManager.SetGameProperty(pPLAYERS, players.ToArray());
+	    }
     }
+
+    public List<string> GetPlayerList() { return players; }
 
 
     private void InitDeck()

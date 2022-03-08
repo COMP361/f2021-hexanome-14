@@ -66,6 +66,7 @@ public class MainMenuUIManager : MonoBehaviour, GameSessionsReceivedInterface, O
         {
             p.Reset();
 	    }
+        Game.currentGame.Init();
         GameConstants.networkManager.LoadArena();
     }
 
