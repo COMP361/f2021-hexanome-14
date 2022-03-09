@@ -22,23 +22,28 @@ static public class ListExtension
     }
 }
 
-public class Game 
+public class Game
 {
     private const string pDECK = "DECK";
+    private const string pPILE = "PILE";
+    private const string pVISIBLE = "VISIBLE";
     private const string pPOINTER = "POINTER";
     private const string pPLAYERS = "PLAYERS";
     private const string pCUR_PLAYER = "CUR_PLAYER";
     private const string pCUR_ROUND = "CUR_ROUND";
     private const string pCUR_PHASE = "CUR_PHASE";
     private const string pMAX_ROUNDS = "MAX_ROUNDS";
+
     private const string pPASSED_PLAYERS = "PASSED_PLAYERS";
     private const string pPATH_TILE = "PATH_TILE";
 
     public static Game currentGame = new Game();
 
     private List<CardEnum> deck;
+    private List<MovementTile> pile;
+    private List<MovementTile> visibleTiles;
     private int curCardPointer;
-    private Hashtable onRoad; 
+    private Hashtable onRoad;
 
     private List<string> players;
     private int _curPlayerIndex;
@@ -111,12 +116,41 @@ public class Game
         }
     }
 
+    public void SyncPile()
+    {
+        if (GameConstants.networkManager) GameConstants.networkManager.SetGameProperty(pPILE, pile.ToArray());
+    }
+
+    public void SyncVisible()
+    {
+        if (GameConstants.networkManager) GameConstants.networkManager.SetGameProperty(pVISIBLE, visibleTiles.ToArray());
+    }
+
+    public List<MovementTile> GetVisible()
+    {
+        return visibleTiles;
+    }
+
+    public void UpdatePile(List<MovementTile> newPile)
+    {
+        pile = newPile;
+        // TODO: Update visualization of pile 
+    }
+
+    public void UpdateVisible(List<MovementTile> newVisible)
+    {
+        visibleTiles = newVisible;
+        if (GameConstants.mainUIManager) GameConstants.mainUIManager.UpdateAvailableTokens();
+        // TODO: Update visualization of Visible tiles
+    }
+
     public void Init(int maxRnds)
     {
         Debug.Log("Game Init Called");
         onRoad = new Hashtable();
 	    InitDeck();
         InitPlayersList();
+        InitPile();
 
         curPhase = GamePhase.HideCounter;
 
@@ -145,6 +179,33 @@ public class Game
         curRound = 1;
         _maxRounds = -1;
         maxRounds = maxRnds;
+    }
+
+    private void InitPile()
+    {
+        pile = new List<MovementTile>();
+        visibleTiles = new List<MovementTile>();
+
+        for (int i = 0; i < 8; ++i)
+        {
+            pile.Add(MovementTile.Dragon);
+            pile.Add(MovementTile.Elfcycle);
+            pile.Add(MovementTile.GiantPig);
+            pile.Add(MovementTile.MagicCloud);
+            pile.Add(MovementTile.TrollWagon);
+            pile.Add(MovementTile.Unicorn);
+	    }
+
+        pile.Shuffle();
+
+        for (int i = 0; i < 5; ++i)
+        {
+            visibleTiles.Add(pile[0]);
+            pile.RemoveAt(0);
+	    }
+
+        SyncPile();
+        SyncVisible();
     }
 
     public void InitPlayersList()
@@ -232,14 +293,50 @@ public class Game
             _maxRounds = (int)data;
             if (GameConstants.mainUIManager) GameConstants.mainUIManager.UpdateRoundInfo();
         }
+        else if (key == pPILE)
+        {
+            UpdatePile(((MovementTile[])data).ToList());
+	    }
+        else if (key == pVISIBLE)
+        {
+            UpdateVisible(((MovementTile[])data).ToList());
+	    }
     }
 
-    public void nextPlayer(bool pass)
+    public void RemoveVisibleTile(MovementTile movementTile)
+    {
+        int index = visibleTiles.IndexOf(movementTile);
+        if (index == -1) return;
+
+        pile.Add(movementTile);
+        visibleTiles[index] = pile[0];
+        pile.RemoveAt(0);
+        SyncPile();
+        SyncVisible();
+    }
+
+    public void AddTileToPile(MovementTile tile)
+    {
+        pile.Add(tile);
+        SyncPile();
+    }
+
+
+    public MovementTile RemoveTileFromPile()
+    {
+        MovementTile ret = pile[0];
+        pile.RemoveAt(0);
+        SyncPile();
+        return ret; 
+    }
+
+    public void nextPlayer(bool passed = false)
     {
         curPlayerIndex = (curPlayerIndex + 1) % players.Count;
         // Debug.LogError($"Current Player {GetCurPlayer()}");
         Debug.LogError($"Current Player Index {curPlayerIndex}");
-        if (pass) 
+
+        if (curPhase == GamePhase.PlaceCounter && passed) 
         {
             passedPlayers += 1;
         } else
@@ -248,7 +345,6 @@ public class Game
         }
         if ((curPlayerIndex == (curRound-1) % players.Count && curPhase != GamePhase.PlaceCounter) || (passedPlayers == players.Count))
         {
-            passedPlayers = 0;
             if (curPhase == GamePhase.Travel)
             {
                 if (curRound == maxRounds)

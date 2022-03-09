@@ -26,7 +26,13 @@ public class MainUIManager : MonoBehaviour
     public GameObject cardPanel;
 
     [SerializeField]
+    public GameObject tileGroup, tileWindow;
+
+    [SerializeField]
     public GameObject cardPrefab;
+
+    [SerializeField]
+    public GameObject tilePrefab;
 
     [SerializeField]
     public GameObject confirmButton;
@@ -68,6 +74,7 @@ public class MainUIManager : MonoBehaviour
         }
 
         UpdateRoundInfo();
+        UpdateAvailableTokens();
         foreach (NewTown town in GameConstants.townDict.Values)
         {
             town.DisplayVisited();
@@ -112,7 +119,7 @@ public class MainUIManager : MonoBehaviour
     public void DoneMove()
     {
         if (!Player.GetLocalPlayer().IsMyTurn()) return;
-        Game.currentGame.nextPlayer(Game.currentGame.curPhase == GamePhase.PlaceCounter);
+        Game.currentGame.nextPlayer(passed : true);
     }
 
     public void UpdateRoundInfo()
@@ -122,11 +129,60 @@ public class MainUIManager : MonoBehaviour
             $"Turn: {Game.currentGame.GetCurPlayer()}";
     }
 
+    public void SelectTokenPressed()
+    { 
+        //TODO: Implement this
+    }
+
+    public void SelectRandomTokenPressed()
+    { 
+        //TODO: Implement this
+    }
+
+    public void SelectCardsPressed()
+    { 
+        //TODO: Implement this
+    }
+
+    public void showTokenSelection()
+    {
+        tileWindow.SetActive(true);
+    }
+
+    public void hideTokenSelection()
+    {
+        tileWindow.SetActive(false);
+    }
+
+    public void UpdateAvailableTokens()
+    {
+        foreach (TileHolderScript thscript in tileGroup.GetComponentsInChildren<TileHolderScript>() )
+        {
+            Destroy(thscript.gameObject);
+	    }
+
+        foreach (MovementTile tile in Game.currentGame.GetVisible())
+        {
+            GameObject g = Instantiate(tilePrefab, tileGroup.transform);
+
+            TileHolderScript thscript = g.GetComponent<TileHolderScript>();
+            thscript.SetTile(mTileDict[tile]);
+	    }
+    }
+
+    public void SetTokensNotSelected()
+    {
+        foreach (TileHolderScript thscript in tileGroup.GetComponentsInChildren<TileHolderScript>())
+        {
+            thscript.selected = false;
+            thscript.SetBackGroundColor();
+	    }
+    }
 
     public void UpdateCardHand()
-    { 
-   
-	    foreach (Card card in cardPanel.GetComponentsInChildren<Card>())
+    {
+
+        foreach (Card card in cardPanel.GetComponentsInChildren<Card>())
         {
             Destroy(card.gameObject);
 		}
@@ -138,7 +194,6 @@ public class MainUIManager : MonoBehaviour
             Card card = g.GetComponent<Card>();
 
             card.Initialize(c);
-
         }
     }
 
@@ -148,6 +203,7 @@ public class MainUIManager : MonoBehaviour
         if (GameConstants.roadGroup == null) return;
         foreach (GridManager gm in GameConstants.roadGroup.GetComponentsInChildren<GridManager>())
         {
+            gm.AddNonObstacleTilesToDeck();
             gm.Clear();
         }
     }

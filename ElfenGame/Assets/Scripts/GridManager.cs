@@ -29,6 +29,22 @@ public class GridManager : MonoBehaviour
         PositionElements();
     }
 
+    public void AddNonObstacleTilesToDeck()
+    { 
+        foreach(GameObject go in elements)
+        {
+            MovementTileSpriteScript spriteScript = go.GetComponent<MovementTileSpriteScript>();
+            if (spriteScript == null) continue;
+
+            MovementTile tile = spriteScript.mTile.mTile;
+
+            if (tile != MovementTile.RoadObstacle)
+            {
+                Game.currentGame.AddTileToPile(tile);
+	        }
+	    }
+    }
+
     private void PositionElements()
     {
         int colsNeeded = Mathf.Min(nCols, elements.Count);
