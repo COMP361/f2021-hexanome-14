@@ -5,6 +5,7 @@ using UnityEngine;
 public class NewTown : MonoBehaviour, IDragOver
 {
 
+    public GameObject pointPrefab;
     public void OnDragEnter()
     {
         //Not a built in method
@@ -33,9 +34,15 @@ public class NewTown : MonoBehaviour, IDragOver
             bool isVisited = p.visited(name); // if true don't display, if false display indicator that player still needs to visit town
                                  //p.playerColor.GetColor() returns a Color object corresponding to the players color
 
-			if (!isVisited)
+			Debug.Log("here");
+            if (!isVisited)
             {
-                //pointsManager.AddElement();
+                
+                GameObject g = Instantiate(pointPrefab);
+                SpriteRenderer gs = g.transform.GetComponent<SpriteRenderer>();
+                gs.color = p.playerColor.GetColor();
+                g.transform.localScale = new Vector3(0.25f, 0.25f, 0.25f);
+                pointsManager.AddElement(g);
 	        }
         }
     }
