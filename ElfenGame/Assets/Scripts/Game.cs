@@ -30,6 +30,7 @@ public class Game
     private const string pCUR_PLAYER = "CUR_PLAYER";
     private const string pCUR_ROUND = "CUR_ROUND";
     private const string pCUR_PHASE = "CUR_PHASE";
+    private const string pMAX_ROUNDS = "MAX_ROUNDS";
 
     public static Game currentGame = new Game();
 
@@ -40,8 +41,7 @@ public class Game
     private int _curPlayerIndex;
     private int _curRound;
     private int _maxRounds;
-    private int maxRounds;
-    private GamePhase curPhase;
+    private GamePhase _curPhase;
 
     public int curPlayerIndex
     {
@@ -52,6 +52,30 @@ public class Game
         set
         {
             if (_curPlayerIndex != value && GameConstants.networkManager) GameConstants.networkManager.SetGameProperty(pCUR_PLAYER, value);
+        }
+    }
+
+    public int maxRounds
+    {
+        get
+        {
+            return _maxRounds;
+        }
+        set
+        {
+            if (_maxRounds != value && GameConstants.networkManager) GameConstants.networkManager.SetGameProperty(pMAX_ROUNDS, value);
+        }
+    }
+
+    public GamePhase curPhase
+    {
+        get
+        {
+            return _curPhase;
+        }
+        set
+        {
+            if (_curPhase != value && GameConstants.networkManager) GameConstants.networkManager.SetGameProperty(pCUR_PHASE, value);
         }
     }
 
@@ -165,11 +189,16 @@ public class Game
         else if (key == pCUR_ROUND)
         {
             _curRound = (int)data;
+            if (GameConstants.mainUIManager) GameConstants.mainUIManager.UpdateRoundInfo();
         }
         else if (key == pCUR_PHASE)
         {
             curPhase = (GamePhase)data;
             Debug.LogError($"Cur Phase set to {Enum.GetName(typeof(GamePhase), curPhase)}");
+        }
+        else if (key == pMAX_ROUNDS)
+        {
+            _maxRounds = (int)data;
         }
     }
 

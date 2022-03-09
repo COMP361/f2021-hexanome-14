@@ -1,8 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using ExitGames.Client.Photon;
 using Photon.Pun;
 using Photon.Realtime;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -29,6 +31,9 @@ public class MainUIManager : MonoBehaviour
     [SerializeField]
     public GameObject confirmButton;
 
+    [SerializeField]
+    private TextMeshProUGUI roundInfo;
+
     private bool isPaused = false;
     private bool isViewingCards = false;
     // Start is called before the first frame update
@@ -40,6 +45,8 @@ public class MainUIManager : MonoBehaviour
         { 
 	        InitPlayer(playerName);
         }
+
+        UpdateRoundInfo();
 
     }
 
@@ -82,6 +89,13 @@ public class MainUIManager : MonoBehaviour
     public void DoneMove()
     {
         Game.currentGame.nextPlayer();
+    }
+
+    public void UpdateRoundInfo()
+    {
+        roundInfo.text = $"Round: {Game.currentGame.curRound}/{Game.currentGame.maxRounds}\n" +
+            $"Phase: {Enum.GetName(typeof(GamePhase), Game.currentGame.curPhase)}\n" +
+            $"Turn: {Game.currentGame.GetCurPlayer()}";
     }
 
 
