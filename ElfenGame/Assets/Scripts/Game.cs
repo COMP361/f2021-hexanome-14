@@ -199,6 +199,7 @@ public class Game
         else if (key == pMAX_ROUNDS)
         {
             _maxRounds = (int)data;
+            if (GameConstants.mainUIManager) GameConstants.mainUIManager.UpdateRoundInfo();
         }
     }
 
