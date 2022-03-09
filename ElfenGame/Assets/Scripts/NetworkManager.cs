@@ -25,6 +25,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback
             PhotonPeer.RegisterType(typeof(PlayerColor), 254, PlayerColorExtension.Serialize, PlayerColorExtension.Deserialize);
             PhotonPeer.RegisterType(typeof(GamePhase), 253, GamePhaseExtension.Serialize, GamePhaseExtension.Deserialize);
             networkPlayers = new Dictionary<string, Photon.Realtime.Player>();
+            ResetPlayerProperties();
         }
     }
    
@@ -42,6 +43,21 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback
 
         if (networkPlayers.ContainsKey(playerId)) return networkPlayers[playerId];
         else return null;
+    }
+
+    private void ResetPlayerProperties()
+    { 
+	    ExitGames.Client.Photon.Hashtable hashtable = new ExitGames.Client.Photon.Hashtable();
+        hashtable.Add("COINS", null);
+        hashtable.Add("POINTS", null);
+        hashtable.Add("NAME", null);
+        hashtable.Add("CARDS", null);
+        hashtable.Add("TILES", null);
+        hashtable.Add("COLOR", null);
+        hashtable.Add("TOWN", null);
+        Photon.Realtime.Player p = PhotonNetwork.LocalPlayer;
+	    if (p != null) p.SetCustomProperties(hashtable);
+
     }
 
 

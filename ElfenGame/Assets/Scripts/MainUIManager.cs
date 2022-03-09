@@ -88,8 +88,7 @@ public class MainUIManager : MonoBehaviour
         p.SetTile(tile);
         elf.LinkToPlayer(p);
 
-        p.curTown = "TownElvenhold";
-
+        p.Reset();
     }
 
     public void OnPausePressed()

@@ -60,6 +60,7 @@ public class Player
         if (elf != null) elf.MoveToTown(value, _curTown);
         _curTown = value;
         visitedTown[_curTown] = true;
+        Debug.LogError($"Updating town {value} for player {_userName}");
         if (GameConstants.townDict.ContainsKey(_curTown))
         {
             NewTown town = GameConstants.townDict[_curTown];
@@ -220,15 +221,6 @@ public class Player
         return _mTiles[tile];
     }
 
-    public void ResetTiles()
-    { 
-        foreach (MovementTile movementTile in mTiles.Keys)
-        {
-            _mTiles[movementTile] = 0;
-            if (GameConstants.networkManager) GameConstants.networkManager.SetPlayerPropertyByPlayerName(_userName, pTILES, new object[] { _mTiles[movementTile] });
-	    }
-    }
-
 
     public void updatePropertiesCallback(string key, object value)
     {
@@ -284,7 +276,6 @@ public class Player
         nCoins = 0;
         _mCards = new List<CardEnum>();
         _mTiles = new Dictionary<MovementTile, int>();
-        ResetTiles();
         visitedTown = new Dictionary<string, bool>();
         foreach (string townName in GameConstants.townDict.Keys)
         {
@@ -301,13 +292,6 @@ public class Player
 
     public bool visited(string townName)
     {
-        if (!visitedTown.ContainsKey(townName))
-        {
-            foreach (string tName in GameConstants.townDict.Keys)
-            {
-                visitedTown[tName] = false;
-            }
-        }
         return visitedTown[townName];
     }
 
