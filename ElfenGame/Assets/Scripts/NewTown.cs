@@ -38,7 +38,7 @@ public class NewTown : MonoBehaviour, IDragOver
             bool isVisited = p.visited(name); // if true don't display, if false display indicator that player still needs to visit town
                                  //p.playerColor.GetColor() returns a Color object corresponding to the players color
 
-			Debug.Log("here");
+			//Debug.Log("here");
             if (!isVisited)
             {
                 

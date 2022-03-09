@@ -155,7 +155,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback
     {
         base.OnRoomPropertiesUpdate(propertiesThatChanged);
 
-        Debug.Log("Room properties updated");
+        //Debug.Log("Room properties updated");
         if (Game.currentGame != null)
         { 
 	        foreach (DictionaryEntry entry in propertiesThatChanged)
@@ -189,7 +189,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback
     {
         base.OnPlayerPropertiesUpdate(targetPlayer, changedProps);
 
-        Debug.Log($"{targetPlayer.UserId} properties updated");
+        //Debug.Log($"{targetPlayer.UserId} properties updated");
         Player pm = Player.GetOrCreatePlayer(targetPlayer.UserId);
         if (pm != null)
         {

@@ -155,7 +155,7 @@ public class Game
             players.Add(p.userName);
         }
         players.Shuffle();
-        Debug.Log(players.ToString());
+        //Debug.Log(players.ToString());
         if (GameConstants.networkManager)
         {
             GameConstants.networkManager.SetGameProperty(pPLAYERS, players.ToArray());
