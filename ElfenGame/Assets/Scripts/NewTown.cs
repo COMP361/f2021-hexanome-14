@@ -4,6 +4,12 @@ using UnityEngine;
 
 public class NewTown : MonoBehaviour, IDragOver
 {
+    private GameObject pointsHolder;
+
+    public void Awake()
+    {
+        pointsHolder = (GameObject) Instantiate(Resources.Load("PointsHolder"), transform);
+    }
 
     public GameObject pointPrefab;
     public void OnDragEnter()
@@ -26,7 +32,7 @@ public class NewTown : MonoBehaviour, IDragOver
     {
         //TODO: Implement
 
-        GridManager pointsManager = GetComponentInChildren<GridManager>();
+        GridManager pointsManager = pointsHolder.GetComponent<GridManager>();
         pointsManager.Clear();
 
         foreach(Player p in Player.GetAllPlayers())
