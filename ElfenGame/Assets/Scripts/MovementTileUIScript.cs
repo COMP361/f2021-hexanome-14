@@ -41,7 +41,7 @@ public class MovementTileUIScript : MonoBehaviour, IDragHandler, IBeginDragHandl
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        if (nTiles <= 0 || !Player.GetLocalPlayer().IsMyTurn()) return;
+        if (nTiles <= 0 || !Player.GetLocalPlayer().IsMyTurn() || Game.currentGame.curPhase != GamePhase.PlaceCounter) return;
         GameObject newTileSprite = Instantiate(movementTileSpritePrefab);
         draggingSprite = newTileSprite.GetComponent<MovementTileSpriteScript>();
         draggingSprite.SetTileSO(mTile);

@@ -12,8 +12,15 @@ public class PlayerTile : MonoBehaviour
 
 
     public void UpdateStats(string userName, int nCoins, int nPoints, int nCards, int nTiles, PlayerColor color)
-    {
-        mNameText.text = userName;
+    {   
+        if (Player.GetLocalPlayer().userName == userName)
+        {
+            mNameText.text = userName + " (me)";
+        }
+        else
+        {
+            mNameText.text = userName;
+        }
         mCoinText.text = nCoins.ToString();
         mPointText.text = nPoints.ToString();
         mCardText.text = nCards.ToString();
