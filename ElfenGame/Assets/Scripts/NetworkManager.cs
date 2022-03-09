@@ -5,8 +5,9 @@ using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine.SceneManagement;
 using ExitGames.Client.Photon;
+using System;
 
-public class NetworkManager : MonoBehaviourPunCallbacks
+public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback
 {
     const byte SPAWN_PLAYER_CODE = 12;
     const byte EVENT_ADD_TILE_CODE = 3;
@@ -186,7 +187,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public void AddTileToRoad(string roadName, MovementTile movementTile)
     {
         object[] data = new object[] { roadName, movementTile };
-
+        //Debug.Log("Sending Event");
         RaiseEvent(EVENT_ADD_TILE_CODE, data);
     }
 
@@ -221,6 +222,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             object[] data = (object[])photonEvent.CustomData;
             string roadName = (string)data[0];
             MovementTile movementTile = (MovementTile)data[1];
+            Debug.LogError($"Add Tile Event triggered for road {roadName} and Tile {Enum.GetName(typeof(MovementTile), movementTile)}");
 
             GameConstants.mainUIManager.AddTile(roadName, movementTile);
         }

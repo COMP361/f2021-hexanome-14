@@ -120,7 +120,7 @@ public static class GameConstants
                 {
                     foreach (PathScript road in roadGroup.GetComponentsInChildren<PathScript>())
                     {
-                        _roadDict.Add(road.name, road);
+                        _roadDict.Add(road.gameObject.name, road);
                     }
                 }
             }

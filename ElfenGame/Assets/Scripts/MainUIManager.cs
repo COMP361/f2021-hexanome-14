@@ -155,6 +155,6 @@ public class MainUIManager : MonoBehaviour
         MovementTileSpriteScript spriteScript = newTileSprite.GetComponent<MovementTileSpriteScript>();
         spriteScript.SetTileSO(mTileDict[movementTile]);
 
-        _ = pathScript.GetComponent<GridManager>().AddElement(newTileSprite);
+        _ = pathScript.GetComponentInChildren<GridManager>().AddElement(newTileSprite);
     }
 }
