@@ -68,6 +68,10 @@ public class MainUIManager : MonoBehaviour
         }
 
         UpdateRoundInfo();
+        foreach (NewTown town in GameConstants.townDict.Values)
+        {
+            town.DisplayVisited();
+	    }
     }
 
     public void InitPlayer(string username)
