@@ -31,6 +31,7 @@ public class Game
     private const string pCUR_ROUND = "CUR_ROUND";
     private const string pCUR_PHASE = "CUR_PHASE";
     private const string pMAX_ROUNDS = "MAX_ROUNDS";
+    private const string pPASSED_PLAYERS = "PASSED_PLAYERS";
     private const string pPATH_TILE = "PATH_TILE";
 
     public static Game currentGame = new Game();
@@ -43,6 +44,7 @@ public class Game
     private int _curPlayerIndex;
     private int _curRound;
     private int _maxRounds;
+    private int _passedPlayers;
     private GamePhase _curPhase;
 
     public int curPlayerIndex
@@ -55,6 +57,19 @@ public class Game
         {
             if (_curPlayerIndex != value && GameConstants.networkManager) GameConstants.networkManager.SetGameProperty(pCUR_PLAYER, value);
             _curPlayerIndex = value;
+        }
+    }
+
+    public int passedPlayers
+    {
+        get
+        {
+            return _passedPlayers;
+        }
+        set
+        {
+            if (_passedPlayers != value && GameConstants.networkManager) GameConstants.networkManager.SetGameProperty(pPASSED_PLAYERS, value);
+            _passedPlayers = value;
         }
     }
 
@@ -182,13 +197,16 @@ public class Game
         if (key == pDECK)
         {
             deck = ((CardEnum[])data).ToList();
-        } else if (key == pPOINTER)
+        }
+        else if (key == pPOINTER)
         {
             curCardPointer = (int)data;
-	    } else if (key == pPLAYERS)
+        }
+        else if (key == pPLAYERS)
         {
             players = ((string[])data).ToList();
-	    } else if (key == pCUR_PLAYER)
+        }
+        else if (key == pCUR_PLAYER)
         {
             _curPlayerIndex = (int)data;
             if (GameConstants.mainUIManager) GameConstants.mainUIManager.UpdateRoundInfo();
@@ -198,6 +216,10 @@ public class Game
         {
             _curRound = (int)data;
             if (GameConstants.mainUIManager) GameConstants.mainUIManager.UpdateRoundInfo();
+        }
+        else if (key == pPASSED_PLAYERS)
+        {
+            _passedPlayers = (int)data;
         }
         else if (key == pCUR_PHASE)
         {
