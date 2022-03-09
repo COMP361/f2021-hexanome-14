@@ -30,8 +30,6 @@ public class NewTown : MonoBehaviour, IDragOver
 
     public void DisplayVisited()
     {
-        //TODO: Implement
-
         GridManager pointsManager = pointsHolder.GetComponent<GridManager>();
         pointsManager.Clear();
 

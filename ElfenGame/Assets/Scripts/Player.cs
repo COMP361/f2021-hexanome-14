@@ -270,7 +270,6 @@ public class Player
     {
         _userName = username;
         Reset();
-        curTown = "TownElvenhold";
         if (tile != null)
         {
             tile.UpdateStats(username, nCoins, nPoints, mCards.Count, mTiles.Count, playerColor);
@@ -291,6 +290,7 @@ public class Player
         {
             visitedTown[townName] = false;
         }
+        curTown = "TownElvenhold";
         
     }
 
