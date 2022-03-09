@@ -55,7 +55,7 @@ public class MovementTileUIScript : MonoBehaviour, IDragHandler, IBeginDragHandl
         if (placed)
         {
             Player.GetLocalPlayer().RemoveTile(mTile.mTile);
-            Game.currentGame.nextPlayer();
+            Game.currentGame.nextPlayer(false);
         }
         draggingSprite = null;
     }

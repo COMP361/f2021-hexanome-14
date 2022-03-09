@@ -234,13 +234,21 @@ public class Game
         }
     }
 
-    public void nextPlayer()
+    public void nextPlayer(bool pass)
     {
         curPlayerIndex = (curPlayerIndex + 1) % players.Count;
         // Debug.LogError($"Current Player {GetCurPlayer()}");
         Debug.LogError($"Current Player Index {curPlayerIndex}");
-        if (curPlayerIndex == (curRound-1) % players.Count)
+        if (pass) 
         {
+            passedPlayers += 1;
+        } else
+        {
+            passedPlayers = 0;
+        }
+        if ((curPlayerIndex == (curRound-1) % players.Count && curPhase != GamePhase.PlaceCounter) || (passedPlayers == players.Count))
+        {
+            passedPlayers = 0;
             if (curPhase == GamePhase.Travel)
             {
                 if (curRound == maxRounds)
