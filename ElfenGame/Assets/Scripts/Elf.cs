@@ -40,6 +40,7 @@ public class Elf : MonoBehaviour
 
                 if (hit.collider.gameObject == gameObject)
                 {
+                    if (!Player.GetLocalPlayer().IsMyTurn() || Player.GetLocalPlayer() != player) return;
                     drag = true;
                     dragOrigin = GameConstants.mainCamera.ScreenToWorldPoint(Input.mousePosition);
                     dragOrigin = new Vector3(dragOrigin.x, dragOrigin.y, transform.position.z);

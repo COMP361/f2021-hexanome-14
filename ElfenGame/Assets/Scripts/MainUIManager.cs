@@ -88,6 +88,7 @@ public class MainUIManager : MonoBehaviour
 
     public void DoneMove()
     {
+        if (!Player.GetLocalPlayer().IsMyTurn()) return;
         Game.currentGame.nextPlayer();
     }
 
