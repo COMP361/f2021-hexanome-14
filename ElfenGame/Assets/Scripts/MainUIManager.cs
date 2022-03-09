@@ -34,6 +34,7 @@ public class MainUIManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        if (GameConstants.networkManager) GameConstants.networkManager.verifyAllPlayersExist();
         GameConstants.townDict = null; // Force reset of town Dict
         foreach (string playerName in Game.currentGame.GetPlayerList())
         { 

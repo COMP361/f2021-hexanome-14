@@ -84,6 +84,14 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         return null;
     }
 
+    public void verifyAllPlayersExist()
+    { 
+        foreach (Photon.Realtime.Player p in GetPlayers())
+        {
+            _ = Player.GetOrCreatePlayer(p.UserId);
+	    }
+    }
+
     public string getNetworkState()
     {
         return PhotonNetwork.NetworkClientState.ToString();
