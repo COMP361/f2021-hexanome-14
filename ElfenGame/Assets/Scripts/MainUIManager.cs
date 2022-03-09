@@ -25,6 +25,7 @@ public class MainUIManager : MonoBehaviour
 
     [SerializeField]
     public GameObject cardPrefab;
+
     [SerializeField]
     public GameObject confirmButton;
 
@@ -75,6 +76,12 @@ public class MainUIManager : MonoBehaviour
         isViewingCards = !isViewingCards;
         cardPanel.SetActive(isViewingCards);
     }
+
+    public void DoneMove()
+    {
+        Game.currentGame.nextPlayer();
+    }
+
 
     public void UpdateCardHand()
     { 
