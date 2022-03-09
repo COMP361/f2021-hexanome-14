@@ -112,9 +112,30 @@ public class GridManager : MonoBehaviour
         
         foreach ( GameObject element in elements)
         {
+
             moveTile = element.GetComponent<MovementTileSpriteScript>();
+            MovementTile tile = moveTile.mTile.mTile;
+            if (tile != MovementTile.RoadObstacle)
+            {
+                return moveTile;
+            }
         }
-        return moveTile;
+        return null;
+    }
+
+    public bool HasObstacle()
+    {
+        foreach( GameObject element in elements)
+        {
+            MovementTileSpriteScript moveTile = element.GetComponent<MovementTileSpriteScript>();
+            MovementTile tile = moveTile.mTile.mTile;
+            if (tile == MovementTile.RoadObstacle)
+            {
+                return true;
+            }
+            
+        }
+        return false;
     }
 
     

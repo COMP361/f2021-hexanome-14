@@ -34,6 +34,15 @@ public class PathScript : MonoBehaviour, IDragOver
 
     public MovementTileSpriteScript GetMovementTile()
     {
+
         return gridManager.GetMovementTile();
     }
+
+    public bool HasObstacle()
+    {
+        return gridManager.HasObstacle();
+
+
+    }
+
 }

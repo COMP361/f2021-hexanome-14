@@ -9,10 +9,8 @@ using UnityEngine.EventSystems;
 
 public static class MoveValidator
 {
-
-    // map roadtype to dictionary of movement card type, and their required counts
-    // in for loop, count number of cards that have the right movementtile type, then lookup the amount u need in dictionary, then check if u have the
-    // right amount
+    // dictionary maps roadType to movementTile type and their required counts
+    // iterate over cards, and check if there are enough cards that validate this move
 
     static Dictionary<RoadType, Dictionary<MovementTile, int>> transportationChart = new Dictionary<RoadType, Dictionary<MovementTile, int>>()
     {
@@ -54,40 +52,119 @@ public static class MoveValidator
             {MovementTile.Dragon, 1}
         }
         },
-
-        // FIGURE OUT HOW TO IMPLEMENT RIVER/LAKE/RAFT movements
-        //{RoadType.River, new Dictionary<MovementTile, int>
+        
     };
 
-   
-    public static bool IsMoveValid(PathScript path, List<CardEnum> cards) 
+    public static bool IsMoveValid(PathScript path, List<CardEnum> cards)
     {
-        MovementTileSpriteScript movementTile = path.GetMovementTile();
+        MovementTileSpriteScript movementTileWrapper = path.GetMovementTile();
+        MovementTile movementTile = movementTileWrapper.mTile.mTile;
 
         // There's no movementTile on path
-        if (movementTile == null)
+        if (movementTileWrapper == null)
         {
             return false;
         }
 
-        // count number of cards that match the movementTile type
-        int numOfType = 0;
-        MovementTile mEnum = movementTile.mTile.mTile;
 
-        foreach (CardEnum cEnum in cards)
+        // returns true if path is river and theres valid num of raft cards
+        if (path.roadType == RoadType.River)
         {
-            if (cEnum.ToString() == mEnum.ToString())
-            {
-                numOfType++;
-            }
+            int numOfRaftCards = NumOfRaftCards(cards);
+            return (numOfRaftCards >= 1);
         }
 
-        if (numOfType >= transportationChart[path.roadType][mEnum])
+
+        // Getting num of cards from dictionary
+        int requiredCount = transportationChart[path.roadType][movementTile];
+
+
+        // adding 1 to required num of cards if theres an obstacle
+        if (path.HasObstacle())
+        {
+            requiredCount++;
+        }
+
+
+        // count number of cards that match the movementTile type
+        int actualCount = NumberOfMovementType(cards, movementTile);
+
+        // return true if there are valid cards to make a move
+        if (actualCount >= requiredCount)
         {
             return true;
         }
+
+
+        //// caravan check
+        //if (!CardsAreSame(cards) && cards.Count >= 3)
+        //{
+        //    if (!path.HasObstacle())
+        //    {
+        //        return true;
+        //    }
+        //    return (cards.Count >= 4);
+        //}
+
         return false;
 
-        // implement CARAVAN check
     }
+
+
+    // returns true if all cards in list are of same type
+    private static bool CardsAreSame(List<CardEnum> cards)
+    {
+        String firstCardName = Enum.GetName(typeof(CardEnum), cards[0]);
+        foreach(CardEnum cEnum in cards)
+        {
+            String cName = Enum.GetName(typeof(CardEnum), cEnum);
+            if (cName != firstCardName)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+
+    private static int NumOfRaftCards(List<CardEnum> cards)
+    {
+        int numOfRaftCard = 0;
+        foreach(CardEnum cEnum in cards)
+        {
+            if (cEnum == CardEnum.Raft)
+            {
+                numOfRaftCard++;
+            }
+        }
+        return numOfRaftCard;
+    }
+
+
+
+
+     // Counts the number of cards that have the same type as movement tile
+     private static int NumberOfMovementType(List<CardEnum> cards, MovementTile movementTile)
+     {
+        int countOfCards = 0;
+        String tileName = Enum.GetName(typeof(MovementTile), movementTile);
+
+        foreach (CardEnum cEnum in cards)
+        {
+            String cardName = Enum.GetName(typeof(CardEnum), cEnum);
+
+            if (cardName == tileName)
+            {
+                countOfCards++;
+            }
+        }
+        return countOfCards;
+    }
+     
+
+
+
+
+    
 }
