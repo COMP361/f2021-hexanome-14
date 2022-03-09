@@ -103,4 +103,14 @@ public class MainUIManager : MonoBehaviour
 
         }
     }
+
+
+    public void ClearAllTiles()
+    {
+        if (GameConstants.roadGroup == null) return;
+        foreach (GridManager gm in GameConstants.roadGroup.GetComponentsInChildren<GridManager>())
+        {
+            gm.Clear();
+        }
+    }
 }

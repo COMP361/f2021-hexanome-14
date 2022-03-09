@@ -19,6 +19,16 @@ public class GridManager : MonoBehaviour
         elements = new List<GameObject>();
     }
 
+    public void Clear()
+    {
+        foreach(GameObject go in elements)
+        {
+            Destroy(go);
+	    }
+        elements.Clear();
+        PositionElements();
+    }
+
     private void PositionElements()
     {
         int colsNeeded = Mathf.Min(nCols, elements.Count);

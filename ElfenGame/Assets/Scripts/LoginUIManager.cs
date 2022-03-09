@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -62,5 +63,16 @@ public class LoginUIManager : MonoBehaviour
     {
         statusText.text = "Login Failed. Please Try Again";
         statusText.color = GameConstants.red;
+    }
+
+    public async void QuickLogin(string v)
+    {
+        string password = "abc123_ABC123";
+        Debug.Log($"Logging in with username: {v} and password: {password}");
+
+        OnAttemptToLogin();
+
+        await Lobby.AuthenticateAsync(v, password);
+
     }
 }
