@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -13,7 +14,7 @@ public class Player
     private PlayerTile tile;
     private List<CardEnum> _mCards;
 
-    private List<MovementTile> _mTiles;
+    private Dictionary<MovementTile, int> _mTiles;
 
     private string _userName;
     private string _curTown;
@@ -79,6 +80,19 @@ public class Player
         if (tile != null) tile.SetCards(_mCards.Count);
     }
 
+
+    private void UpdateTiles(Dictionary<MovementTile, int> dictionary)
+    {
+        _mTiles = dictionary;
+        if (GameConstants.tileGroup != null)
+        {
+            foreach (MovementTileUIScript mtScript in GameConstants.tileGroup.GetComponentsInChildren<MovementTileUIScript>())
+            {
+                mtScript.UpdateText();
+            }
+        }
+    }
+
     #endregion
 
     #region Public Member Definitions
@@ -128,7 +142,7 @@ public class Player
         }
     }
 
-    public List<MovementTile> mTiles
+    public Dictionary<MovementTile, int> mTiles
     {
         get
         {
@@ -174,6 +188,30 @@ public class Player
         if (GameConstants.networkManager) GameConstants.networkManager.SetPlayerPropertyByPlayerName(_userName, pCARDS, mCards.ToArray());
     }
 
+    public void RemoveTile(MovementTile tile)
+    {
+        if (!_mTiles.ContainsKey(tile)) _mTiles[tile] = 0;
+        if (_mTiles[tile] > 0)
+        {
+            _mTiles[tile]--;
+            if (GameConstants.networkManager) GameConstants.networkManager.SetPlayerPropertyByPlayerName(_userName, pTILES, mTiles);
+        }
+    }
+
+    public void AddTile(MovementTile tile)
+    {
+        if (!_mTiles.ContainsKey(tile)) _mTiles[tile] = 0;
+        _mTiles[tile]++;
+        if (GameConstants.networkManager) GameConstants.networkManager.SetPlayerPropertyByPlayerName(_userName, pTILES, mTiles);
+    }
+
+    internal int GetNumTilesOfType(MovementTile tile)
+    {
+        if (!_mTiles.ContainsKey(tile)) _mTiles[tile] = 0;
+        return _mTiles[tile];
+    }
+
+
 
     public void updatePropertiesCallback(string key, object value)
     {
@@ -189,6 +227,10 @@ public class Player
         {
             UpdateCards(((CardEnum[])value).ToList());
         }
+        else if (key == pTILES)
+        { 
+	        UpdateTiles((Dictionary<MovementTile, int>) value);
+        }
         else if (key == pNAME)
         {
             UpdateName((string)value);
@@ -202,6 +244,7 @@ public class Player
             UpdateTown((string)value);
         }
     }
+
 
     #endregion
 
@@ -218,7 +261,7 @@ public class Player
         nPoints = 0;
         nCoins = 0;
         _mCards = new List<CardEnum>();
-        _mTiles = new List<MovementTile>();
+        UpdateTiles(new Dictionary<MovementTile, int>());
         visitedTown = new Dictionary<string, bool>();
         foreach (string townName in GameConstants.townDict.Keys)
         {

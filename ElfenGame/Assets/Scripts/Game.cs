@@ -55,6 +55,8 @@ public class Game
             // Set Player Colors
             // TODO: Remove Later
             p.playerColor = (PlayerColor)i;
+
+            //p.AddTile(MovementTile.GiantPig);
 	    }
         curPlayerIndex = 0;
     }

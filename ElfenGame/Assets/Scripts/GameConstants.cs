@@ -19,8 +19,10 @@ public static class GameConstants
     public static Color red = new Color(238f / 255f, 100f / 255f, 100f / 255f);
     public static Color blue = new Color(89f / 255f, 231f / 255f, 230f / 255f);
 
-    public static string lobbyServiceUrl = "http://18.223.185.13:4242";
+    public static Color white = new Color(1.0f, 1.0f, 1.0f);
+    public static Color grey = new Color(107f / 255f, 107f / 255f, 107f / 255f);
 
+    public static string lobbyServiceUrl = "http://18.223.185.13:4242";
     private static NetworkManager _networkManager;
     private static ChatManager _chatManager;
     private static MouseActivityManager _mouseActivityManager;
@@ -34,6 +36,7 @@ public static class GameConstants
 
     private static GameObject _roadGroup;
     private static GameObject _townGroup;
+    private static GameObject _tileGroup;
 
 
 
@@ -70,6 +73,17 @@ public static class GameConstants
             return _townGroup;
         }
     }
+    public static GameObject tileGroup
+    {
+        get
+        {
+            if (_tileGroup == null)
+            {
+                _tileGroup = GameObject.Find("TileArea");
+            }
+            return _tileGroup;
+        }
+    }
     public static Dictionary<string, NewTown> townDict
     {
         get
@@ -92,7 +106,7 @@ public static class GameConstants
         {
             _townDict = value;
         }
-}
+    }
 
     public static NetworkManager networkManager
     {

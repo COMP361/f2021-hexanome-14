@@ -13,7 +13,15 @@ public class MovementTileUIScript : MonoBehaviour, IDragHandler, IBeginDragHandl
     [SerializeField]
     public GameObject movementTileSpritePrefab;
 
+    [SerializeField]
+    public Text countText;
+
     private MovementTileSpriteScript draggingSprite;
+
+    public void Start()
+    {
+        UpdateText();
+    }
 
 
     public void SetTileSO(MovementTileSO newTileSO)
@@ -33,6 +41,7 @@ public class MovementTileUIScript : MonoBehaviour, IDragHandler, IBeginDragHandl
 
     public void OnBeginDrag(PointerEventData eventData)
     {
+        if (nTiles <= 0) return;
         GameObject newTileSprite = Instantiate(movementTileSpritePrefab);
         draggingSprite = newTileSprite.GetComponent<MovementTileSpriteScript>();
         draggingSprite.SetTileSO(mTile);
@@ -41,24 +50,22 @@ public class MovementTileUIScript : MonoBehaviour, IDragHandler, IBeginDragHandl
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        draggingSprite.EndDrag();
+        if (draggingSprite == null) return;
+        bool placed = draggingSprite.EndDrag();
+        if (placed) Player.GetLocalPlayer().RemoveTile(mTile.mTile);
         draggingSprite = null;
     }
 
-    private void UpdateText()
+    public void UpdateText()
     {
-        //TODO: Implement this
-    }
-
-    public void IncrementCounter()
-    {
-        nTiles++;
-        UpdateText();
-    }
-
-    public void DecrementCounter()
-    {
-        nTiles--;
-        UpdateText();
+        nTiles = Player.GetLocalPlayer().GetNumTilesOfType(mTile.mTile);
+        countText.text = nTiles.ToString();
+        if (nTiles == 0)
+        {
+            GetComponent<Image>().color = GameConstants.grey;
+	    } else
+        {
+            GetComponent<Image>().color = GameConstants.white;
+	    }
     }
 }

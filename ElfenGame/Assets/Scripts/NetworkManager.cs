@@ -18,6 +18,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             PhotonNetwork.AuthValues.UserId = Lobby.myUsername;
             _ = PhotonNetwork.ConnectUsingSettings();
             PhotonPeer.RegisterType(typeof(CardEnum), 255, CardEnumExtension.Serialize, CardEnumExtension.Deserialize);
+            PhotonPeer.RegisterType(typeof(MovementTile), 252, MovementTileExtension.Serialize, MovementTileExtension.Deserialize);
             PhotonPeer.RegisterType(typeof(PlayerColor), 254, PlayerColorExtension.Serialize, PlayerColorExtension.Deserialize);
             networkPlayers = new Dictionary<string, Photon.Realtime.Player>();
         }

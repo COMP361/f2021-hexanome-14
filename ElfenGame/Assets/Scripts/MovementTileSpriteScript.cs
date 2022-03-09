@@ -87,8 +87,9 @@ public class MovementTileSpriteScript : MonoBehaviour
         }
     }
 
-    public void EndDrag()
+    public bool EndDrag()
     {
+        bool added = false;
         if (drag)
         {
             drag = false;
@@ -98,7 +99,6 @@ public class MovementTileSpriteScript : MonoBehaviour
 
             if (path == null || !isValid(path))
             {
-                dragOrigin.IncrementCounter();
                 Destroy(gameObject);
             } else
             {
@@ -107,7 +107,7 @@ public class MovementTileSpriteScript : MonoBehaviour
                 {
                     throw new System.Exception("Paths must have GridManagers in a child Element");
                 }
-                bool added = gm.AddElement(gameObject);
+                added = gm.AddElement(gameObject);
 
                 if (!added)
                 {
@@ -115,8 +115,7 @@ public class MovementTileSpriteScript : MonoBehaviour
                 }
             }
             ResetPathColor();
-        }    
-        
-
+        }
+        return added;
     }    
 }
