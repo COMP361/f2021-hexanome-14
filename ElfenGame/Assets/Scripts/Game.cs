@@ -28,6 +28,8 @@ public class Game
     private const string pPOINTER = "POINTER";
     private const string pPLAYERS = "PLAYERS";
     private const string pCUR_PLAYER = "CUR_PLAYER";
+    private const string pCUR_ROUND = "CUR_ROUND";
+    private const string pCUR_PHASE = "CUR_PHASE";
 
     public static Game currentGame = new Game();
 
@@ -35,13 +37,46 @@ public class Game
     private int curCardPointer; 
 
     private List<String> players;
-    private int curPlayerIndex;
+    private int _curPlayerIndex;
+    private int _curRound;
+    private int _maxRounds;
+    private int maxRounds;
+    private GamePhase curPhase;
 
-    public void Init()
+    public int curPlayerIndex
+    {
+        get
+        {
+            return _curPlayerIndex;
+        }
+        set
+        {
+            if (_curPlayerIndex != value && GameConstants.networkManager) GameConstants.networkManager.SetGameProperty(pCUR_PLAYER, value);
+        }
+    }
+
+    public int curRound
+    {
+        get
+        {
+            return _curRound;
+        }
+        set
+        {
+            if (_curRound != value && GameConstants.networkManager) GameConstants.networkManager.SetGameProperty(pCUR_ROUND, value);
+        }
+    }
+
+    public void Init(int maxRnds)
     {
         Debug.Log("Game Init Called");
         InitDeck();
         InitPlayersList();
+
+        if (GameConstants.networkManager)
+        {
+            GameConstants.networkManager.SetGameProperty(pCUR_PHASE, GamePhase.HideCounter);
+        }
 
         for (int i = 0; i < players.Count; i++)
         {
@@ -58,7 +93,12 @@ public class Game
 
             //p.AddTile(MovementTile.GiantPig);
 	    }
+        _curPlayerIndex = -1;
         curPlayerIndex = 0;
+        _curRound = -1;
+        curRound = 0;
+        _maxRounds = -1;
+        maxRounds = maxRnds;
     }
 
     public void InitPlayersList()
@@ -119,8 +159,38 @@ public class Game
             players = ((string[])data).ToList();
 	    } else if (key == pCUR_PLAYER)
         {
-            curPlayerIndex = (int)data;
-	    }
+            _curPlayerIndex = (int)data;
+            Debug.LogError($"The current Player is {Game.currentGame.GetCurPlayer()}");
+        }
+        else if (key == pCUR_ROUND)
+        {
+            _curRound = (int)data;
+        }
+        else if (key == pCUR_PHASE)
+        {
+            curPhase = (GamePhase)data;
+            Debug.LogError($"Cur Phase set to {Enum.GetName(typeof(GamePhase), curPhase)}");
+        }
+    }
+
+    public void nextPlayer()
+    {
+        curPlayerIndex = (curPlayerIndex + 1) % players.Count;
+        if (curPlayerIndex == curRound)
+        {
+            if (curRound == maxRounds)
+            {
+                // TODO: Game Over
+                Debug.LogError($"Game Over");
+            }
+            else
+            {
+                curRound = curRound + 1;
+                curPlayerIndex = (curPlayerIndex + 1) % players.Count;
+
+                Debug.LogError($"Cur Round is: {curRound}"); 
+            }
+        }
     }
 
     public CardEnum Draw()
@@ -142,9 +212,10 @@ public class Game
     }
 
 
-    public String GetCurPlayer()
+    public string GetCurPlayer()
     {
-        return players[curPlayerIndex];
+        return players[_curPlayerIndex];
     }
+
 
 }

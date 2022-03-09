@@ -66,7 +66,7 @@ public class MainMenuUIManager : MonoBehaviour, GameSessionsReceivedInterface, O
         {
             p.Reset();
 	    }
-        Game.currentGame.Init();
+        Game.currentGame.Init(4); //TODO: Select max rounds
         GameConstants.networkManager.LoadArena();
     }
 
