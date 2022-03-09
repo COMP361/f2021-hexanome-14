@@ -34,20 +34,39 @@ public class MainUIManager : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI roundInfo;
 
+    [SerializeField]
+    public GameObject movementTileSpritePrefab;
+
+    [SerializeField]
+    public List<MovementTileSO> mTiles;
+
+    [SerializeField]
+    GameObject movementTileUIPrefab;
+
+    private Dictionary<MovementTile, MovementTileSO> mTileDict;
+
     private bool isPaused = false;
     private bool isViewingCards = false;
     // Start is called before the first frame update
     void Start()
     {
+        mTileDict = new Dictionary<MovementTile, MovementTileSO>();
+        foreach (MovementTileSO tile in mTiles)
+        {
+            mTileDict[tile.mTile] = tile;
+            GameObject newTile = Instantiate(movementTileUIPrefab, GameConstants.tileGroup.transform);
+            newTile.GetComponent<MovementTileUIScript>().SetTileSO(tile);
+        }
+
         if (GameConstants.networkManager) GameConstants.networkManager.verifyAllPlayersExist();
         GameConstants.townDict = null; // Force reset of town Dict
+        GameConstants.roadDict = null;
         foreach (string playerName in Game.currentGame.GetPlayerList())
-        { 
-	        InitPlayer(playerName);
+        {
+            InitPlayer(playerName);
         }
 
         UpdateRoundInfo();
-
     }
 
     public void InitPlayer(string username)
@@ -126,5 +145,15 @@ public class MainUIManager : MonoBehaviour
         {
             gm.Clear();
         }
+    }
+
+    internal void AddTile(string roadName, MovementTile movementTile)
+    {
+        PathScript pathScript = GameConstants.roadDict[roadName];
+        GameObject newTileSprite = Instantiate(movementTileSpritePrefab);
+        MovementTileSpriteScript spriteScript = newTileSprite.GetComponent<MovementTileSpriteScript>();
+        spriteScript.SetTileSO(mTileDict[movementTile]);
+
+        _ = pathScript.GetComponent<GridManager>().AddElement(newTileSprite);
     }
 }

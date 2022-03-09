@@ -6337,7 +6337,6 @@ GameObject:
   m_Component:
   - component: {fileID: 838165344}
   - component: {fileID: 838165345}
-  - component: {fileID: 838165346}
   m_Layer: 5
   m_Name: TileArea
   m_TagString: Untagged
@@ -6388,26 +6387,6 @@ MonoBehaviour:
   m_Spacing: {x: 40, y: 20}
   m_Constraint: 1
   m_ConstraintCount: 2
---- !u!114 &838165346
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 838165343}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 18f11250edbf0483cbe90e09595a2de0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mTiles:
-  - {fileID: 11400000, guid: 2122c5e4ddb2b45c085c587bccc0e55e, type: 2}
-  - {fileID: 11400000, guid: 9263f6467da9e4eb68cc43f2d30da6ae, type: 2}
-  - {fileID: 11400000, guid: 51744996c72b34dd392f635d0433743d, type: 2}
-  - {fileID: 11400000, guid: e9ad3baf01ef047e489237c100a9fc7f, type: 2}
-  - {fileID: 11400000, guid: a8b617198bc074765bd10b07c2257242, type: 2}
-  - {fileID: 11400000, guid: 5ffb6bcf1977a405e9f6df41c925c08d, type: 2}
-  movementTilePrefab: {fileID: 4131624656378400591, guid: d7f8e7b4263ed44ac98881b738a32700, type: 3}
 --- !u!1 &842684893
 GameObject:
   m_ObjectHideFlags: 0
@@ -11467,6 +11446,15 @@ MonoBehaviour:
   cardPrefab: {fileID: 382647109788817177, guid: 43a10a912996f435793c972cbc8bf73d, type: 3}
   confirmButton: {fileID: 869195900}
   roundInfo: {fileID: 882909193}
+  movementTileSpritePrefab: {fileID: 710000644895225578, guid: bae1bd41308d8427eb114e1101763928, type: 3}
+  mTiles:
+  - {fileID: 11400000, guid: 2122c5e4ddb2b45c085c587bccc0e55e, type: 2}
+  - {fileID: 11400000, guid: 9263f6467da9e4eb68cc43f2d30da6ae, type: 2}
+  - {fileID: 11400000, guid: 51744996c72b34dd392f635d0433743d, type: 2}
+  - {fileID: 11400000, guid: e9ad3baf01ef047e489237c100a9fc7f, type: 2}
+  - {fileID: 11400000, guid: a8b617198bc074765bd10b07c2257242, type: 2}
+  - {fileID: 11400000, guid: 5ffb6bcf1977a405e9f6df41c925c08d, type: 2}
+  movementTileUIPrefab: {fileID: 4131624656378400591, guid: d7f8e7b4263ed44ac98881b738a32700, type: 3}
 --- !u!1 &1594644009
 GameObject:
   m_ObjectHideFlags: 0

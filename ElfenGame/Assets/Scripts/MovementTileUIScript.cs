@@ -52,7 +52,10 @@ public class MovementTileUIScript : MonoBehaviour, IDragHandler, IBeginDragHandl
     {
         if (draggingSprite == null) return;
         bool placed = draggingSprite.EndDrag();
-        if (placed) Player.GetLocalPlayer().RemoveTile(mTile.mTile);
+        if (placed)
+        {
+            Player.GetLocalPlayer().RemoveTile(mTile.mTile);
+        }
         draggingSprite = null;
     }
 

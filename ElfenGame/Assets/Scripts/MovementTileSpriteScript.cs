@@ -112,7 +112,10 @@ public class MovementTileSpriteScript : MonoBehaviour
                 if (!added)
                 {
                     Destroy(gameObject);
-                }
+                } else
+                {
+                    if (GameConstants.networkManager) GameConstants.networkManager.AddTileToRoad(path.name, mTile.mTile);
+		        }
             }
             ResetPathColor();
         }

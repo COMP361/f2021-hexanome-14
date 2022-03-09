@@ -33,6 +33,7 @@ public static class GameConstants
     private static MainUIManager _mainUIManager;
 
     private static Dictionary<string, NewTown> _townDict;
+    private static Dictionary<string, PathScript> _roadDict;
 
     private static GameObject _roadGroup;
     private static GameObject _townGroup;
@@ -108,6 +109,29 @@ public static class GameConstants
         }
     }
 
+    public static Dictionary<string, PathScript> roadDict
+    {
+        get
+        {
+            if (_roadDict == null || _roadDict.ContainsValue(null))
+            {
+                _roadDict = new Dictionary<string, PathScript>();
+                if (roadGroup != null)
+                {
+                    foreach (PathScript road in roadGroup.GetComponentsInChildren<PathScript>())
+                    {
+                        _roadDict.Add(road.name, road);
+                    }
+                }
+            }
+            return _roadDict;
+        }
+
+        set
+        {
+            _roadDict = value;
+        }
+    }
     public static NetworkManager networkManager
     {
         get
