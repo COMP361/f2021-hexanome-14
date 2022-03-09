@@ -39,7 +39,7 @@ public class Game
     private int curCardPointer;
     private Hashtable onRoad; 
 
-    private List<String> players;
+    private List<string> players;
     private int _curPlayerIndex;
     private int _curRound;
     private int _maxRounds;

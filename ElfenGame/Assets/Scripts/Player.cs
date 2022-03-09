@@ -80,10 +80,8 @@ public class Player
         if (tile != null) tile.SetCards(_mCards.Count);
     }
 
-
-    private void UpdateTiles(MovementTile movementTile, int newVal)
-    {
-        _mTiles[movementTile] = newVal;
+    private void DisplayTiles()
+    { 
         if (GameConstants.tileGroup != null)
         {
             foreach (MovementTileUIScript mtScript in GameConstants.tileGroup.GetComponentsInChildren<MovementTileUIScript>())
@@ -96,6 +94,12 @@ public class Player
 
             if (tile != null) tile.SetTiles(nTiles);
         }
+    }
+
+    private void UpdateTiles(MovementTile movementTile, int newVal)
+    {
+        _mTiles[movementTile] = newVal;
+        DisplayTiles();  
     }
 
     #endregion
@@ -267,7 +271,11 @@ public class Player
         _userName = username;
         Reset();
         curTown = "TownElvenhold";
-        if (tile != null) tile.UpdateStats(username, nCoins, nPoints, mCards.Count, mTiles.Count, playerColor);
+        if (tile != null)
+        {
+            tile.UpdateStats(username, nCoins, nPoints, mCards.Count, mTiles.Count, playerColor);
+            DisplayTiles();
+	    }
     }
 
     public void Reset()
@@ -312,6 +320,7 @@ public class Player
     {
         this.tile = tile;
         tile.UpdateStats(userName, nCoins, nPoints, mCards.Count, mTiles.Count, playerColor);
+        DisplayTiles();
     }
 
     #region static methods
