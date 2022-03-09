@@ -57,6 +57,7 @@ public class MainUIManager : MonoBehaviour
             GameObject newTile = Instantiate(movementTileUIPrefab, GameConstants.tileGroup.transform);
             newTile.GetComponent<MovementTileUIScript>().SetTileSO(tile);
         }
+        UpdateCardHand();
 
         if (GameConstants.networkManager) GameConstants.networkManager.verifyAllPlayersExist();
         GameConstants.townDict = null; // Force reset of town Dict
