@@ -228,6 +228,7 @@ public class Game
                 }
                 else
                 {
+                    if (GameConstants.mainUIManager) GameConstants.mainUIManager.ClearAllTiles();
                     curPhase = GamePhase.HideCounter;
                     curRound = curRound + 1;
                     curPlayerIndex = (curPlayerIndex + 1) % players.Count;
