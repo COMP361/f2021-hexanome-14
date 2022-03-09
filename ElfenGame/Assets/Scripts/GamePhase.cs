@@ -2,7 +2,7 @@
 using UnityEngine;
 
 
-public enum GamePhase : byte {HideCounter, DrawCounters1, DrawCounters2, DrawCounters3, PlaceCounter};
+public enum GamePhase : byte {HideCounter, DrawCounters1, DrawCounters2, DrawCounters3, PlaceCounter, Travel};
 static class GamePhaseExtension
 {
     public static byte[] Serialize(object phase)

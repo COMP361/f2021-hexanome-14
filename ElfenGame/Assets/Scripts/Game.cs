@@ -52,6 +52,7 @@ public class Game
         set
         {
             if (_curPlayerIndex != value && GameConstants.networkManager) GameConstants.networkManager.SetGameProperty(pCUR_PLAYER, value);
+            _curPlayerIndex = value;
         }
     }
 
@@ -76,6 +77,7 @@ public class Game
         set
         {
             if (_curPhase != value && GameConstants.networkManager) GameConstants.networkManager.SetGameProperty(pCUR_PHASE, value);
+            _curPhase = value;
         }
     }
 
@@ -88,6 +90,7 @@ public class Game
         set
         {
             if (_curRound != value && GameConstants.networkManager) GameConstants.networkManager.SetGameProperty(pCUR_ROUND, value);
+            _curRound = value;
         }
     }
 
@@ -97,10 +100,7 @@ public class Game
         InitDeck();
         InitPlayersList();
 
-        if (GameConstants.networkManager)
-        {
-            GameConstants.networkManager.SetGameProperty(pCUR_PHASE, GamePhase.HideCounter);
-        }
+        curPhase = GamePhase.HideCounter;
 
         for (int i = 0; i < players.Count; i++)
         {
@@ -116,11 +116,15 @@ public class Game
             p.playerColor = (PlayerColor)i;
 
             p.AddTile(MovementTile.GiantPig);
+            p.AddTile(MovementTile.GiantPig);
+            p.AddTile(MovementTile.GiantPig);
+            p.AddTile(MovementTile.TrollWagon);
+            p.AddTile(MovementTile.Unicorn);
         }
         _curPlayerIndex = -1;
         curPlayerIndex = 0;
         _curRound = -1;
-        curRound = 0;
+        curRound = 1;
         _maxRounds = -1;
         maxRounds = maxRnds;
     }
@@ -184,6 +188,7 @@ public class Game
 	    } else if (key == pCUR_PLAYER)
         {
             _curPlayerIndex = (int)data;
+            if (GameConstants.mainUIManager) GameConstants.mainUIManager.UpdateRoundInfo();
             Debug.LogError($"The current Player is {Game.currentGame.GetCurPlayer()}");
         }
         else if (key == pCUR_ROUND)
@@ -194,6 +199,7 @@ public class Game
         else if (key == pCUR_PHASE)
         {
             curPhase = (GamePhase)data;
+            if (GameConstants.mainUIManager) GameConstants.mainUIManager.UpdateRoundInfo();
             Debug.LogError($"Cur Phase set to {Enum.GetName(typeof(GamePhase), curPhase)}");
         }
         else if (key == pMAX_ROUNDS)
@@ -206,20 +212,30 @@ public class Game
     public void nextPlayer()
     {
         curPlayerIndex = (curPlayerIndex + 1) % players.Count;
-        if (curPlayerIndex == curRound % players.Count)
+        // Debug.LogError($"Current Player {GetCurPlayer()}");
+        Debug.LogError($"Current Player Index {curPlayerIndex}");
+        if (curPlayerIndex == (curRound-1) % players.Count)
         {
-            if (curRound == maxRounds)
+            if (curPhase == GamePhase.Travel)
             {
-                // TODO: Game Over
-                Debug.LogError($"Game Over");
+                if (curRound == maxRounds)
+                {
+                    // TODO: Game Over
+                    Debug.LogError($"Game Over");
+                }
+                else
+                {
+                    curPhase = GamePhase.HideCounter;
+                    curRound = curRound + 1;
+                    curPlayerIndex = (curPlayerIndex + 1) % players.Count;
+                }
             }
             else
             {
-                curRound = curRound + 1;
-                curPlayerIndex = (curPlayerIndex + 1) % players.Count;
-
-                Debug.LogError($"Cur Round is: {curRound}"); 
+                curPhase++;
             }
+
+            Debug.LogError($"Cur Round is: {curRound}"); 
         }
     }
 
