@@ -63,7 +63,7 @@ public class Player
         if (GameConstants.townDict.ContainsKey(_curTown))
         {
             NewTown town = GameConstants.townDict[_curTown];
-            town.DisplayVisited();
+            if (town != null) town.DisplayVisited();
         }
         int nVisited = 0;
         foreach (bool b in visitedTown.Values)
@@ -272,6 +272,7 @@ public class Player
 
     public void Reset()
     {
+        Debug.Log($"Resetting Player {_userName}");
         nPoints = 0;
         nCoins = 0;
         _mCards = new List<CardEnum>();
@@ -324,6 +325,21 @@ public class Player
 
     public static List<Player> GetAllPlayers()
     {
+        if (GameConstants.networkManager)
+        {
+            List<string> toRemove = new List<string>();
+            foreach (string pName in _players.Keys)
+            { 
+	           if (GameConstants.networkManager.GetPlayer(pName) == null)
+                {
+                    toRemove.Add(pName);
+                }
+            }
+            foreach (string pName in toRemove)
+            {
+                _players.Remove(pName);
+            }
+        }
         return _players.Values.ToList();
     }
 

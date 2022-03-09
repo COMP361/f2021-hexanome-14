@@ -27,7 +27,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
    
      
     private Dictionary<string, Photon.Realtime.Player> networkPlayers;
-    private Photon.Realtime.Player GetPlayer(string playerId)
+    public Photon.Realtime.Player GetPlayer(string playerId)
     { 
         if (!networkPlayers.ContainsKey(playerId))
         { 
@@ -37,7 +37,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 	        }
 	    }
 
-        return networkPlayers[playerId];
+        if (networkPlayers.ContainsKey(playerId)) return networkPlayers[playerId];
+        else return null;
     }
 
 

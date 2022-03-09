@@ -59,6 +59,22 @@ public class KeyBoardInput : MonoBehaviour
                 GameConstants.chatManager.setChatVisible();
             }
         }
+
+        if (Input.GetKeyDown("`"))
+        {
+            if (GameConstants.loginUIManager)
+            {
+                GameConstants.loginUIManager.QuickLogin("fynn");
+            }
+        }
+
+        if (Input.GetKeyDown("="))
+        { 
+	        if (GameConstants.loginUIManager)
+            {
+                GameConstants.loginUIManager.QuickLogin("maex");
+	        }
+	    }
     }
 
 
