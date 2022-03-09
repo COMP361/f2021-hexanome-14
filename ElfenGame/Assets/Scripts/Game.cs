@@ -91,8 +91,8 @@ public class Game
             // TODO: Remove Later
             p.playerColor = (PlayerColor)i;
 
-            //p.AddTile(MovementTile.GiantPig);
-	    }
+            p.AddTile(MovementTile.GiantPig);
+        }
         _curPlayerIndex = -1;
         curPlayerIndex = 0;
         _curRound = -1;
@@ -176,7 +176,7 @@ public class Game
     public void nextPlayer()
     {
         curPlayerIndex = (curPlayerIndex + 1) % players.Count;
-        if (curPlayerIndex == curRound)
+        if (curPlayerIndex == curRound % players.Count)
         {
             if (curRound == maxRounds)
             {

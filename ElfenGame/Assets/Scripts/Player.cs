@@ -81,15 +81,20 @@ public class Player
     }
 
 
-    private void UpdateTiles(Dictionary<MovementTile, int> dictionary)
+    private void UpdateTiles(MovementTile movementTile, int newVal)
     {
-        _mTiles = dictionary;
+        _mTiles[movementTile] = newVal;
         if (GameConstants.tileGroup != null)
         {
             foreach (MovementTileUIScript mtScript in GameConstants.tileGroup.GetComponentsInChildren<MovementTileUIScript>())
             {
                 mtScript.UpdateText();
             }
+
+            int nTiles = 0;
+            foreach (int v in _mTiles.Values) nTiles += v;
+
+            if (tile != null) tile.SetTiles(nTiles);
         }
     }
 
@@ -194,7 +199,7 @@ public class Player
         if (_mTiles[tile] > 0)
         {
             _mTiles[tile]--;
-            if (GameConstants.networkManager) GameConstants.networkManager.SetPlayerPropertyByPlayerName(_userName, pTILES, mTiles);
+            if (GameConstants.networkManager) GameConstants.networkManager.SetPlayerPropertyByPlayerName(_userName, pTILES, new object[] { tile, _mTiles[tile] });
         }
     }
 
@@ -202,7 +207,7 @@ public class Player
     {
         if (!_mTiles.ContainsKey(tile)) _mTiles[tile] = 0;
         _mTiles[tile]++;
-        if (GameConstants.networkManager) GameConstants.networkManager.SetPlayerPropertyByPlayerName(_userName, pTILES, mTiles);
+        if (GameConstants.networkManager) GameConstants.networkManager.SetPlayerPropertyByPlayerName(_userName, pTILES, new object[] { tile, _mTiles[tile] });
     }
 
     internal int GetNumTilesOfType(MovementTile tile)
@@ -211,6 +216,14 @@ public class Player
         return _mTiles[tile];
     }
 
+    public void ResetTiles()
+    { 
+        foreach (MovementTile movementTile in mTiles.Keys)
+        {
+            _mTiles[movementTile] = 0;
+            if (GameConstants.networkManager) GameConstants.networkManager.SetPlayerPropertyByPlayerName(_userName, pTILES, new object[] { _mTiles[movementTile] });
+	    }
+    }
 
 
     public void updatePropertiesCallback(string key, object value)
@@ -228,8 +241,9 @@ public class Player
             UpdateCards(((CardEnum[])value).ToList());
         }
         else if (key == pTILES)
-        { 
-	        UpdateTiles((Dictionary<MovementTile, int>) value);
+        {
+            object[] vals = (object[]) value; 
+	        UpdateTiles((MovementTile) vals[0], (int) vals[1]);
         }
         else if (key == pNAME)
         {
@@ -261,12 +275,14 @@ public class Player
         nPoints = 0;
         nCoins = 0;
         _mCards = new List<CardEnum>();
-        UpdateTiles(new Dictionary<MovementTile, int>());
+        _mTiles = new Dictionary<MovementTile, int>();
+        ResetTiles();
         visitedTown = new Dictionary<string, bool>();
         foreach (string townName in GameConstants.townDict.Keys)
         {
             visitedTown[townName] = false;
         }
+        
     }
 
     public bool IsMyTurn()
@@ -276,6 +292,13 @@ public class Player
 
     public bool visited(string townName)
     {
+        if (!visitedTown.ContainsKey(townName))
+        {
+            foreach (string tName in GameConstants.townDict.Keys)
+            {
+                visitedTown[tName] = false;
+            }
+        }
         return visitedTown[townName];
     }
 

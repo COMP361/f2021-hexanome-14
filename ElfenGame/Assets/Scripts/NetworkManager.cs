@@ -273,7 +273,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public override void OnJoinedRoom()
     {
-        //Debug.LogError($"Player {PhotonNetwork.LocalPlayer.ActorNumber} joined the room");
+        Debug.LogError($"Local Player {PhotonNetwork.LocalPlayer.UserId} joined the room");
 
         if (GameConstants.mainMenuUIManager != null)
         {
@@ -285,7 +285,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer)
     {
-        Debug.Log($"Player {newPlayer.ActorNumber} entered the room.");
+        Debug.LogError($"Player {newPlayer.UserId} entered the room.");
 
         Player.GetOrCreatePlayer(newPlayer.UserId);
 
