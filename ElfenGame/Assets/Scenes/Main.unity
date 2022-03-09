@@ -6387,6 +6387,27 @@ MonoBehaviour:
   m_Spacing: {x: 40, y: 20}
   m_Constraint: 1
   m_ConstraintCount: 2
+--- !u!114 &838165346
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 838165343}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18f11250edbf0483cbe90e09595a2de0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mTiles:
+  - {fileID: 11400000, guid: 2122c5e4ddb2b45c085c587bccc0e55e, type: 2}
+  - {fileID: 11400000, guid: 9263f6467da9e4eb68cc43f2d30da6ae, type: 2}
+  - {fileID: 11400000, guid: 51744996c72b34dd392f635d0433743d, type: 2}
+  - {fileID: 11400000, guid: e9ad3baf01ef047e489237c100a9fc7f, type: 2}
+  - {fileID: 11400000, guid: a8b617198bc074765bd10b07c2257242, type: 2}
+  - {fileID: 11400000, guid: 5ffb6bcf1977a405e9f6df41c925c08d, type: 2}
+  - {fileID: 11400000, guid: 46335361afdff644ab7211fcad0e0e97, type: 2}
+  movementTilePrefab: {fileID: 4131624656378400591, guid: d7f8e7b4263ed44ac98881b738a32700, type: 3}
 --- !u!1 &842684893
 GameObject:
   m_ObjectHideFlags: 0
@@ -6815,7 +6836,11 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: BLABLABLABLA
+  m_text: 'Current Round
+
+    Current Phase
+
+    Current Player'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6ae18d47c1d8b4cb997679c4a2711137, type: 2}
   m_sharedMaterial: {fileID: -5780743633931938014, guid: 6ae18d47c1d8b4cb997679c4a2711137, type: 2}
@@ -6842,7 +6867,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 72
+  m_fontSize: 67.8
   m_fontSizeBase: 100
   m_fontWeight: 400
   m_enableAutoSizing: 1
