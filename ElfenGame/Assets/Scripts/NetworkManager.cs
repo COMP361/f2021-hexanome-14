@@ -9,6 +9,8 @@ using ExitGames.Client.Photon;
 public class NetworkManager : MonoBehaviourPunCallbacks
 {
     const byte SPAWN_PLAYER_CODE = 12;
+    const byte EVENT_ADD_TILE_CODE = 3;
+    const byte EVENT_REMOVE_ALL_TILES_CODE = 4;
 
     public void Connect()
     {
@@ -181,6 +183,54 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         }
     }
 
+    public void AddTileToRoad(string roadName, MovementTile movementTile)
+    {
+        object[] data = new object[] { roadName, movementTile };
+
+        RaiseEvent(EVENT_ADD_TILE_CODE, data);
+    }
+
+    public void ClearAllTiles()
+    {
+        object[] data = new object[] { };
+
+        RaiseEvent(EVENT_REMOVE_ALL_TILES_CODE, data);
+    }
+
+    private void RaiseEvent(byte eventCode, object[] data)
+    { 
+        RaiseEventOptions raiseEventOptions = new RaiseEventOptions
+        {
+            Receivers = ReceiverGroup.Others,
+            CachingOption = EventCaching.AddToRoomCache
+        };
+
+        SendOptions sendOptions = new SendOptions
+        {
+            Reliability = true
+        };
+
+        PhotonNetwork.RaiseEvent(eventCode, data, raiseEventOptions, sendOptions);
+
+    }
+
+    public void OnEvent(EventData photonEvent)
+    {
+        if (photonEvent.Code == EVENT_ADD_TILE_CODE && GameConstants.mainUIManager)
+        {
+            object[] data = (object[])photonEvent.CustomData;
+            string roadName = (string)data[0];
+            MovementTile movementTile = (MovementTile)data[1];
+
+            GameConstants.mainUIManager.AddTile(roadName, movementTile);
+        }
+        else if (photonEvent.Code == EVENT_REMOVE_ALL_TILES_CODE && GameConstants.mainUIManager)
+        {
+            GameConstants.mainUIManager.ClearAllTiles();
+        }
+    }
+
+
 
     //public void SpawnPlayer(string username, PhotonView photonView)
     //{
@@ -262,19 +312,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     //    uiManager.UpdateAvailableRoomList(roomNames);
     //}
 
-    //public void OnEvent(EventData photonEvent)
-    //{
-    //    if (photonEvent.Code == SPAWN_PLAYER_CODE && GameConstants.mainUIManager)
-    //    {
-    //        object[] data = (object[])photonEvent.CustomData;
-    //        string username = (string)data[0];
-    //        int viewId = (int)data[1];
-
-    //        GameConstants.mainUIManager.InitPlayer(username, viewId);
-	   // }
-    //}
-
-    public override void OnCreateRoomFailed(short returnCode, string message)
+        public override void OnCreateRoomFailed(short returnCode, string message)
     {
         Debug.Log(message);
     }

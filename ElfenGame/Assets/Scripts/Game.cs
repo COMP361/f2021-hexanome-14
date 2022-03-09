@@ -31,11 +31,13 @@ public class Game
     private const string pCUR_ROUND = "CUR_ROUND";
     private const string pCUR_PHASE = "CUR_PHASE";
     private const string pMAX_ROUNDS = "MAX_ROUNDS";
+    private const string pPATH_TILE = "PATH_TILE";
 
     public static Game currentGame = new Game();
 
     private List<CardEnum> deck;
-    private int curCardPointer; 
+    private int curCardPointer;
+    private Hashtable onRoad; 
 
     private List<String> players;
     private int _curPlayerIndex;
@@ -97,7 +99,8 @@ public class Game
     public void Init(int maxRnds)
     {
         Debug.Log("Game Init Called");
-        InitDeck();
+        onRoad = new Hashtable();
+	    InitDeck();
         InitPlayersList();
 
         curPhase = GamePhase.HideCounter;
@@ -255,6 +258,30 @@ public class Game
 
 
         return ret;
+    }
+
+    public void AddTileToRoad(string roadName, MovementTile movementTile)
+    { 
+        if (onRoad.ContainsKey(roadName))
+        {
+            MovementTile[] tilesOnRoad = (MovementTile[]) onRoad[roadName];
+            Array.Resize(ref tilesOnRoad, tilesOnRoad.Length + 1);
+            tilesOnRoad[tilesOnRoad.Length - 1] = movementTile;
+            onRoad[roadName] = tilesOnRoad;
+	    } else
+        {
+            onRoad[roadName] = new MovementTile[] { movementTile };
+	    }
+    }
+
+    public void ClearTilesOnAllRoads()
+    {
+        string[] toClear = new string[onRoad.Keys.Count];
+        onRoad.Keys.CopyTo(toClear, 0); 
+        foreach (string roadName in toClear)
+        {
+            onRoad.Remove(roadName);
+        }
     }
 
 
