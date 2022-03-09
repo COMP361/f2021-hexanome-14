@@ -106,26 +106,15 @@ public class GridManager : MonoBehaviour
         return false;
     }
 
-    public MovementTileSpriteScript getMovementTile()
+    public MovementTileSpriteScript GetMovementTile()
     {
         MovementTileSpriteScript moveTile = null;
         
         foreach ( GameObject element in elements)
         {
             moveTile = element.GetComponent<MovementTileSpriteScript>();
-
-
         }
-
-        if (moveTile != null)
-        {
-            return moveTile;
-        }
-
-       
- 
-
-
+        return moveTile;
     }
 
     

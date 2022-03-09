@@ -11,7 +11,8 @@ public class PathScript : MonoBehaviour, IDragOver
     public NewTown town1, town2;
 
     private GridManager gridManager;
-
+ 
+    
     void Start()
     {
         gridManager = GetComponentInChildren<GridManager>();
@@ -29,5 +30,10 @@ public class PathScript : MonoBehaviour, IDragOver
         //GetComponent<SpriteRenderer>().color = new Color(1.0f, 1.0f, 1.0f, 0.0f);
         Color curColor = GetComponent<SpriteRenderer>().color;
         GetComponent<SpriteRenderer>().color = new Color(curColor.r, curColor.g, curColor.b, GameConstants.pathColoringAlpha);
+    }
+
+    public MovementTileSpriteScript GetMovementTile()
+    {
+        return gridManager.GetMovementTile();
     }
 }
