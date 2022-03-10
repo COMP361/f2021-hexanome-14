@@ -33,11 +33,14 @@ public class Game
     private const string pCUR_ROUND = "CUR_ROUND";
     private const string pCUR_PHASE = "CUR_PHASE";
     private const string pMAX_ROUNDS = "MAX_ROUNDS";
+    private const string pPLAYER_COLOR = "COLOR_AVAIL";
 
     private const string pPASSED_PLAYERS = "PASSED_PLAYERS";
     private const string pPATH_TILE = "PATH_TILE";
 
     public static Game currentGame = new Game();
+
+    public Dictionary<PlayerColor, string> availableColors = new Dictionary<PlayerColor, string>();
 
     private List<CardEnum> deck;
     private List<MovementTile> pile;
@@ -144,6 +147,12 @@ public class Game
         // TODO: Update visualization of Visible tiles
     }
 
+    public void ClaimColor(PlayerColor c)
+    {
+        if (availableColors[c] == "" && GameConstants.networkManager) GameConstants.networkManager.SetGameProperty($"{pPLAYER_COLOR}{Enum.GetName(typeof(PlayerColor), c)}", Player.GetLocalPlayer().userName);
+        Player.GetLocalPlayer().playerColor = c;
+    }
+
     public void Init(int maxRnds)
     {
         Debug.Log("Game Init Called");
@@ -151,6 +160,11 @@ public class Game
 	    InitDeck();
         InitPlayersList();
         InitPile();
+
+        for (int i = 0; i < 6; ++i)
+        {
+            availableColors[(PlayerColor)i] = "";
+        }
 
         curPhase = GamePhase.HiddenCounter;
 
@@ -323,6 +337,18 @@ public class Game
         {
             UpdateVisible(((MovementTile[])data).ToList());
 	    }
+        else
+        {
+            for (int i = 0; i < 6; ++i)
+            {
+                PlayerColor c = (PlayerColor)i;
+                if (key == $"{pPLAYER_COLOR}{Enum.GetName(typeof(PlayerColor), c)}")
+                {
+                    availableColors[c] = (string)data;
+                    if (GameConstants.mainUIManager) GameConstants.mainUIManager.UpdateColorOptions();
+                }
+            }
+        }
     }
 
     public void RemoveVisibleTile(MovementTile movementTile)

@@ -14,6 +14,9 @@ public class MainUIManager : MonoBehaviour
     private GameObject pausePanel;
 
     [SerializeField]
+    private GameObject chooseColorPanel;
+
+    [SerializeField]
     public GameObject playerPrefab;
 
     [SerializeField]
@@ -38,7 +41,7 @@ public class MainUIManager : MonoBehaviour
     public GameObject tokenDisplayPrefab;
 
     [SerializeField]
-    public GameObject endTurnButton;
+    public Button endTurnButton;
 
     [SerializeField]
     private TextMeshProUGUI roundInfo;
@@ -55,10 +58,14 @@ public class MainUIManager : MonoBehaviour
     [SerializeField]
     public GameObject mainCanvas;
 
+    [SerializeField]
+    public TMP_Dropdown colorSelectionDD;
+
     public Dictionary<MovementTile, MovementTileSO> mTileDict;
 
     private bool isPaused = false;
     private bool isViewingCards = false;
+    private List<string> elfNames = new List<string> { "Blue", "Cyan", "Red", "Orange", "Pink", "Green" };
     // Start is called before the first frame update
     void Start()
     {
@@ -85,6 +92,23 @@ public class MainUIManager : MonoBehaviour
         {
             town.DisplayVisited();
 	    }
+
+        chooseColorPanel.SetActive(true);
+        UpdateColorOptions();
+    }
+
+    public void UpdateColorOptions()
+    {
+        colorSelectionDD.ClearOptions();
+        List<TMP_Dropdown.OptionData> newOptions = new List<TMP_Dropdown.OptionData>();
+        for (int i = 0; i<6; ++i)
+        {
+            if (Game.currentGame.availableColors[(PlayerColor)i] == "")
+            {
+                newOptions.Add(new TMP_Dropdown.OptionData(elfNames[i], ((PlayerColor)i).GetSprite()));
+            }
+        }
+        colorSelectionDD.AddOptions(newOptions);
     }
 
     public void InitPlayer(string username)
@@ -118,6 +142,13 @@ public class MainUIManager : MonoBehaviour
         isPaused = !isPaused;
 
         pausePanel.SetActive(isPaused);
+    }
+
+    public void OnConfirmColor()
+    {
+        int index = elfNames.IndexOf(colorSelectionDD.options[colorSelectionDD.value].text);
+        Game.currentGame.ClaimColor((PlayerColor)index);
+        chooseColorPanel.SetActive(false);
     }
 
     public void exitGameClicked()
