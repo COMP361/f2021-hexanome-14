@@ -2940,7 +2940,7 @@ MonoBehaviour:
   gameOptionButtonsView: {fileID: 236037641}
   gameCreatorOptionsView: {fileID: 467176695}
   gameJoinedOptionsView: {fileID: 1943217868}
-  version: {fileID: 518506907}
+  variationDD: {fileID: 518506907}
   numRounds: {fileID: 1180623171}
 --- !u!114 &1163413573
 MonoBehaviour:

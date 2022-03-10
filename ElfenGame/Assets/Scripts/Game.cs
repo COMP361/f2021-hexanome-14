@@ -419,6 +419,17 @@ public class Game
 
     public void GameOver()
     {
+        List<Player> winners = new List<Player>();
+        foreach (Player p in Player.GetAllPlayers()){
+            winners.Add(p);
+        }
+
+        if (gameVariation == "standard")
+        {
+            winners = winners.OrderBy(o => o.nPoints * 1000 + o.mCards.Count).ToList();
+        }
+
+
 
     }
 
