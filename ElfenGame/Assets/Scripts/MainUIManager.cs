@@ -150,6 +150,8 @@ public class MainUIManager : MonoBehaviour
         p.SetTile(tile);
         elf.LinkToPlayer(p);
 
+        if (!p.GetVisibleTokens().Contains(MovementTile.RoadObstacle)) p.AddVisibleTile(MovementTile.RoadObstacle);
+
         p.UpdateDisplayer();
     }
 
