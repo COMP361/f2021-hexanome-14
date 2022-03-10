@@ -74,7 +74,7 @@ public class MainMenuUIManager : MonoBehaviour, GameSessionsReceivedInterface, O
         if (currentSelectedSession != null)
         {
             Debug.LogError($"num rounds: {numRounds.value}");
-            currentSelectedSession.inGame = (true);
+            Lobby.LaunchSession();
             Game.currentGame.Init(numRoundOptions[numRounds.value]);
             GameConstants.networkManager.LoadArena();
 

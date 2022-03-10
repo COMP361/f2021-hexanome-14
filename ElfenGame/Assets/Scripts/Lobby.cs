@@ -51,7 +51,7 @@ public class Lobby : MonoBehaviour
     {
         public string session_ID { get; set; }
 
-        public bool inGame = true; 
+        public bool inGame {get; set;}
 
         public List<string> players { get; set; }
 
@@ -200,6 +200,23 @@ public class Lobby : MonoBehaviour
         }
     }
 
+    public static async Task LaunchSession()
+    {
+        using (var httpClient = new HttpClient())
+        {
+            using (var request = new HttpRequestMessage(new HttpMethod("POST"), $"{GameConstants.lobbyServiceUrl}/api/sessions?location=18.116.53.177&access_token={accessToken}"))
+            {
+                request.Content = new StringContent("{\"game\":\"ElfenGame\", \"creator\":\""+ myUsername + "\", \"launched\":\""+true+"}");
+                request.Content.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json");
+
+                var response = await httpClient.SendAsync(request);
+
+
+                Debug.Log(response);
+            }
+        }
+    }
+
     public static bool SessionListUpdated(List<GameSession> list1, List<GameSession> list2)
     {
         bool updated = false;
@@ -265,9 +282,10 @@ public class Lobby : MonoBehaviour
                     //Debug.Log(property);
                     //Debug.Log(property.Value["creator"]);
                     //Debug.Log(property.Value["players"]);
+                    Debug.Log(property.Value["launched"]);
 
 
-                    GameSession gameSession = new GameSession() { session_ID = property.Name, inGame = property.value["inGame"], players = property.Value["players"].ToObject<List<string>>(), createdBy = property.Value["creator"].ToString()};
+                    GameSession gameSession = new GameSession() { session_ID = property.Name, inGame = (bool) property.Value["launched"], players = property.Value["players"].ToObject<List<string>>(), createdBy = property.Value["creator"].ToString()};
                     
                     if (gameSession.inGame)
                     {
