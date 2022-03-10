@@ -184,9 +184,9 @@ public class Game
 
         curPhase = GamePhase.HiddenCounter;
 
-        for (int i = 0; i < players.Count; i++)
+        foreach (string playerName in players)
         {
-            Player p = Player.GetOrCreatePlayer(players[i]);
+            Player p = Player.GetOrCreatePlayer(playerName);
 
             p.AddVisibleTile(MovementTile.RoadObstacle);
             
