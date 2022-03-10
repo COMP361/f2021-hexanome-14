@@ -16,6 +16,10 @@ public class MainMenuUIManager : MonoBehaviour, GameSessionsReceivedInterface, O
     [SerializeField] private GameObject gameCreatorOptionsView;
     [SerializeField] private GameObject gameJoinedOptionsView;
 
+    [SerializeField] private Dropdown version;
+    [SerializeField] private Dropdown numRounds;
+    private List<int> numRoundOptions = new List<int> { 3, 4, 5 };
+
 
     private Lobby.GameSession currentSelectedSession;
 
@@ -66,7 +70,8 @@ public class MainMenuUIManager : MonoBehaviour, GameSessionsReceivedInterface, O
         {
             p.Reset();
 	    }
-        Game.currentGame.Init(4); //TODO: Select max rounds
+        Debug.LogError($"num rounds: {numRounds.value}");
+        Game.currentGame.Init(numRoundOptions[numRounds.value]);
         GameConstants.networkManager.LoadArena();
     }
 
