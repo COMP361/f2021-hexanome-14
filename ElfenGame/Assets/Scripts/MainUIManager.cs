@@ -41,6 +41,9 @@ public class MainUIManager : MonoBehaviour
     public GameObject tokenDisplayPrefab;
 
     [SerializeField]
+    public GameObject tokenToKeepSelectionWindow;
+
+    [SerializeField]
     public Button endTurnButton;
 
     [SerializeField]
@@ -207,6 +210,28 @@ public class MainUIManager : MonoBehaviour
         Game.currentGame.nextPlayer();
     }
 
+    private TileHolderScript GetSelectedTokenToKeep()
+    { 
+        foreach (TileHolderScript thscript in tokenToKeepSelectionWindow.GetComponentsInChildren<TileHolderScript>())
+        {
+            if (thscript.selected) return thscript;
+	    }
+        return null;
+    }
+
+    public void SelectTokenToKeepPressed()
+    {
+        Player localPlayer = Player.GetLocalPlayer();
+        if (!localPlayer.IsMyTurn()) return;
+
+        TileHolderScript thscript = GetSelectedTokenToKeep();
+        if (thscript == null) return;
+
+
+        localPlayer.SetOnlyToken(thscript.tile.mTile, thscript.GetInVisibleTokens());
+        Game.currentGame.nextPlayer();
+    }
+
     public void SelectCardsPressed()
     {
         cardPanel.SetActive(false);
@@ -252,6 +277,35 @@ public class MainUIManager : MonoBehaviour
         endTurnButton.enabled = true;
     }
 
+    public void UpdateTokenToKeep()
+    {
+        GridLayoutGroup gridGroup = tokenToKeepSelectionWindow.GetComponentInChildren<GridLayoutGroup>();
+        foreach (TileHolderScript thscript in gridGroup.GetComponentsInChildren<TileHolderScript>() )
+        {
+            Destroy(thscript.gameObject);
+	    }
+
+        foreach (MovementTile tile in Player.GetLocalPlayer().GetVisibleTokens())
+        {
+            GameObject g = Instantiate(tilePrefab, gridGroup.transform);
+
+            TileHolderScript thscript = g.GetComponent<TileHolderScript>();
+            thscript.SetTile(mTileDict[tile]);
+            thscript.SetIsSelectable(true);
+            thscript.SetInVisibleTokens(true);
+	    }
+
+        foreach (MovementTile tile in Player.GetLocalPlayer().GetHiddenTokens())
+        { 
+	        GameObject g = Instantiate(tilePrefab, gridGroup.transform);
+
+            TileHolderScript thscript = g.GetComponent<TileHolderScript>();
+            thscript.SetTile(mTileDict[tile]);
+            thscript.SetIsSelectable(true);
+            thscript.SetInVisibleTokens(false);      
+	    }
+    }
+
     public void UpdateAvailableTokens()
     {
         foreach (TileHolderScript thscript in tileGroup.GetComponentsInChildren<TileHolderScript>() )
@@ -272,6 +326,12 @@ public class MainUIManager : MonoBehaviour
     public void SetTokensNotSelected()
     {
         foreach (TileHolderScript thscript in tileGroup.GetComponentsInChildren<TileHolderScript>())
+        {
+            thscript.selected = false;
+            thscript.SetBackGroundColor();
+	    }
+
+        foreach (TileHolderScript thscript in tokenToKeepSelectionWindow.GetComponentsInChildren<TileHolderScript>())
         {
             thscript.selected = false;
             thscript.SetBackGroundColor();

@@ -250,6 +250,27 @@ public class Player
         if (GameConstants.networkManager) GameConstants.networkManager.SetPlayerPropertyByPlayerName(_userName, pVISIBLE_TILES, mVisibleTiles.ToArray());
     }
 
+    internal void SetOnlyToken(MovementTile tile, bool inVisibleTokens)
+    {
+        mVisibleTiles = new List<MovementTile>();
+        mHiddenTiles = new List<MovementTile>();
+        if (inVisibleTokens)
+        {
+            mVisibleTiles.Add(tile);    
+        } else
+        {
+            mHiddenTiles.Add(tile);
+	    }
+
+        UpdateVisibleTiles(mVisibleTiles);
+        UpdateHiddenTiles(mHiddenTiles);
+        if (GameConstants.networkManager)
+        {
+            GameConstants.networkManager.SetPlayerPropertyByPlayerName(_userName, pVISIBLE_TILES, mVisibleTiles.ToArray());
+            GameConstants.networkManager.SetPlayerPropertyByPlayerName(_userName, pHIDDEN_TILES, mHiddenTiles.ToArray());
+	    }
+    }
+
     public void AddHiddenTile(MovementTile tile)
     {
         mHiddenTiles.Add(tile);
@@ -372,6 +393,16 @@ public class Player
         this.tile = tile;
         tile.UpdateStats(userName, nCoins, nPoints, mCards.Count, mTiles.Count, playerColor);
         UpdateTiles();
+    }
+
+    public List<MovementTile> GetVisibleTokens()
+    {
+        return mVisibleTiles;
+    }
+
+    public List<MovementTile> GetHiddenTokens()
+    {
+        return mHiddenTiles;
     }
 
     #region static methods
