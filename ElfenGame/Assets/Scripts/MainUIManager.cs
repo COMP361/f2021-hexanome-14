@@ -157,11 +157,13 @@ public class MainUIManager : MonoBehaviour
 
     public void showTokenSelection()
     {
+        //TODO: Trigger this
         tileWindow.SetActive(true);
     }
 
     public void hideTokenSelection()
     {
+        //TODO: Trigger this
         tileWindow.SetActive(false);
     }
 
