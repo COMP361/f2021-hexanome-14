@@ -71,9 +71,15 @@ public class MainMenuUIManager : MonoBehaviour, GameSessionsReceivedInterface, O
         {
             p.Reset();
 	    }
-        Debug.LogError($"num rounds: {numRounds.value}");
-        Game.currentGame.Init(numRoundOptions[numRounds.value]);
-        GameConstants.networkManager.LoadArena();
+        if (currentSelectedSession != null)
+        {
+            Debug.LogError($"num rounds: {numRounds.value}");
+            currentSelectedSession.inGame = (true);
+            Game.currentGame.Init(numRoundOptions[numRounds.value]);
+            GameConstants.networkManager.LoadArena();
+
+        }
+        
     }
 
     public async void OnJoinGameClicked()

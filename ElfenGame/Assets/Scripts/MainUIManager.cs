@@ -175,15 +175,15 @@ public class MainUIManager : MonoBehaviour
     public void showTokenSelection()
     {
         tileWindow.SetActive(true);
-        endTurnButton.interactable = false;
-        endTurnButton.enabled = false;
+        //endTurnButton.interactable = false;
+        //endTurnButton.enabled = false;
     }
 
     public void hideTokenSelection()
     {
         tileWindow.SetActive(false);
-        endTurnButton.interactable = true;
-        endTurnButton.enabled = true;
+        //endTurnButton.interactable = true;
+        //endTurnButton.enabled = true;
     }
 
     public void UpdateAvailableTokens()

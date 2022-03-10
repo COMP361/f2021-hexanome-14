@@ -51,11 +51,14 @@ public class Lobby : MonoBehaviour
     {
         public string session_ID { get; set; }
 
+        public bool inGame = true; 
+
         public List<string> players { get; set; }
 
         public string createdBy { get; set; }
 
         public string ToString()
+        
         {
             return $"Id: {this.session_ID}, N players {this.players.Count}, createdby: {this.createdBy}";
         }
@@ -264,11 +267,16 @@ public class Lobby : MonoBehaviour
                     //Debug.Log(property.Value["players"]);
 
 
-                    GameSession gameSession = new GameSession() { session_ID = property.Name, players = property.Value["players"].ToObject<List<string>>(), createdBy = property.Value["creator"].ToString()};
+                    GameSession gameSession = new GameSession() { session_ID = property.Name, inGame = property.value["inGame"], players = property.Value["players"].ToObject<List<string>>(), createdBy = property.Value["creator"].ToString()};
                     
-                    availableGames.Add(gameSession);
-                    //Debug.Log(gameSession.ToString());
-                    // Debug.Log(allGames);
+                    if (gameSession.inGame)
+                    {
+                        availableGames.Add(gameSession);
+                        //Debug.Log(gameSession.ToString());
+                        // Debug.Log(allGames);
+
+                    }
+                    
                 }
                 //Debug.Log(availableGames);
 
