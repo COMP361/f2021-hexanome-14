@@ -34,6 +34,7 @@ public class Game
     private const string pCUR_PHASE = "CUR_PHASE";
     private const string pMAX_ROUNDS = "MAX_ROUNDS";
     private const string pPLAYER_COLOR = "COLOR_AVAIL";
+    private const string pGAME_VARIATION = "GAME_VARIATION";
 
     private const string pPASSED_PLAYERS = "PASSED_PLAYERS";
     private const string pPATH_TILE = "PATH_TILE";
@@ -52,8 +53,22 @@ public class Game
     private int _curPlayerIndex;
     private int _curRound;
     private int _maxRounds;
+    private string _gameVariation;
     private int _passedPlayers;
     private GamePhase _curPhase;
+
+    public string gameVariation
+    {
+        get
+        {
+            return _gameVariation;
+        }
+        set
+        {
+            if (_gameVariation != value && GameConstants.networkManager) GameConstants.networkManager.SetGameProperty(pGAME_VARIATION, value);
+            _gameVariation = value;
+        }
+    }
 
     public int curPlayerIndex
     {
@@ -153,7 +168,7 @@ public class Game
         Player.GetLocalPlayer().playerColor = c;
     }
 
-    public void Init(int maxRnds)
+    public void Init(int maxRnds, string variation)
     {
         Debug.Log("Game Init Called");
         onRoad = new Hashtable();
@@ -328,7 +343,11 @@ public class Game
         else if (key == pVISIBLE)
         {
             UpdateVisible(((MovementTile[])data).ToList());
-	    }
+        }
+        else if (key == pGAME_VARIATION)
+        {
+            _gameVariation = (string)data;
+        }
         else
         {
             for (int i = 0; i < 6; ++i)
@@ -368,6 +387,11 @@ public class Game
         pile.RemoveAt(0);
         SyncPile();
         return ret; 
+    }
+
+    public void GameOver()
+    {
+
     }
 
     public void nextPlayer(bool passed = false)

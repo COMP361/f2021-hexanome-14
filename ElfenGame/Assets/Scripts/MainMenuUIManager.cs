@@ -16,7 +16,7 @@ public class MainMenuUIManager : MonoBehaviour, GameSessionsReceivedInterface, O
     [SerializeField] private GameObject gameCreatorOptionsView;
     [SerializeField] private GameObject gameJoinedOptionsView;
 
-    [SerializeField] private Dropdown version;
+    [SerializeField] private Dropdown variationDD;
     [SerializeField] private Dropdown numRounds;
     private List<int> numRoundOptions = new List<int> { 3, 4, 5 };
 
@@ -71,8 +71,8 @@ public class MainMenuUIManager : MonoBehaviour, GameSessionsReceivedInterface, O
         {
             p.Reset();
 	    }
-        Debug.LogError($"num rounds: {numRounds.value}");
-        Game.currentGame.Init(numRoundOptions[numRounds.value]);
+        // Debug.LogError($"num rounds: {numRounds.value}");
+        Game.currentGame.Init(numRoundOptions[numRounds.value], variationDD[variationDD.value]);
         GameConstants.networkManager.LoadArena();
     }
 
