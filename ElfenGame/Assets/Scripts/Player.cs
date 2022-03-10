@@ -51,6 +51,7 @@ public class Player
         _playerColor = value;
         if (elf != null) elf.UpdateColor();
         if (tile != null) tile.SetColor(value);
+        UpdateAllPlayerPoints();
     }
 
     private void UpdateName(string value)
@@ -97,6 +98,14 @@ public class Player
         _mCards = cards;
         if (Lobby.myUsername == _userName && GameConstants.mainUIManager) GameConstants.mainUIManager.UpdateCardHand();
         if (tile != null) tile.SetCards(_mCards.Count);
+    }
+
+    private void UpdateAllPlayerPoints()
+    { 
+        foreach (NewTown town in GameConstants.townDict.Values)
+        { 
+            town.DisplayVisited();
+	    }
     }
 
     private void UpdateTiles()
