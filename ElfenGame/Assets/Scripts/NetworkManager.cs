@@ -247,7 +247,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback
             object[] data = (object[])photonEvent.CustomData;
             string roadName = (string)data[0];
             MovementTile movementTile = (MovementTile)data[1];
-            Debug.LogError($"Add Tile Event triggered for road {roadName} and Tile {Enum.GetName(typeof(MovementTile), movementTile)}");
+            //Debug.LogError($"Add Tile Event triggered for road {roadName} and Tile {Enum.GetName(typeof(MovementTile), movementTile)}");
 
             GameConstants.mainUIManager.AddTile(roadName, movementTile);
         }
@@ -363,7 +363,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback
 
     public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer)
     {
-        Debug.LogError($"Player {newPlayer.UserId} entered the room.");
+        //Debug.LogError($"Player {newPlayer.UserId} entered the room.");
 
         Player.GetOrCreatePlayer(newPlayer.UserId);
 
