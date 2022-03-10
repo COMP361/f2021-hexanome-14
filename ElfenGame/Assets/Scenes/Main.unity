@@ -11258,6 +11258,7 @@ MonoBehaviour:
   tileWindow: {fileID: 1589816822}
   cardPrefab: {fileID: 382647109788817177, guid: 43a10a912996f435793c972cbc8bf73d, type: 3}
   tilePrefab: {fileID: 2586788237553594906, guid: 6db846eb99f7d40bf87fc938b0c2c095, type: 3}
+  tokenDisplayPrefab: {fileID: 2947252748801959607, guid: 68f677b0b4fc8433887001d03fd146ba, type: 3}
   confirmButton: {fileID: 869195900}
   roundInfo: {fileID: 882909193}
   movementTileSpritePrefab: {fileID: 710000644895225578, guid: bae1bd41308d8427eb114e1101763928, type: 3}
@@ -11270,6 +11271,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 5ffb6bcf1977a405e9f6df41c925c08d, type: 2}
   - {fileID: 11400000, guid: 46335361afdff644ab7211fcad0e0e97, type: 2}
   movementTileUIPrefab: {fileID: 4131624656378400591, guid: d7f8e7b4263ed44ac98881b738a32700, type: 3}
+  mainCanvas: {fileID: 783978447}
 --- !u!1 &1589816822
 GameObject:
   m_ObjectHideFlags: 0

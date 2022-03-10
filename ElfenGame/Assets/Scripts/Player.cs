@@ -12,6 +12,7 @@ public class Player
     private PlayerColor _playerColor;
     private Elf elf;
     private PlayerTile tile;
+    private PlayerVisibleTokenDisplay tokenDisplay;
     private List<CardEnum> _mCards;
 
     private Dictionary<MovementTile, int> mTiles;
@@ -30,6 +31,7 @@ public class Player
     public const string pTOWN = "TOWN";
 
     private Dictionary<string, bool> visitedTown;
+
 
     #region Private Update Methods
     private void UpdateCoins(int value)
@@ -80,13 +82,14 @@ public class Player
     {
         mVisibleTiles = tiles;
         UpdateTiles();
-        //TODO: Update visible tile display for player
+        if (tokenDisplay != null) tokenDisplay.SetVisible(tiles);
     }
 
     private void UpdateHiddenTiles(List<MovementTile> tiles)
     {
         mHiddenTiles = tiles;
         UpdateTiles();
+        if (tokenDisplay != null) tokenDisplay.SetNumHidden(tiles.Count);
     }
 
     private void UpdateCards(List<CardEnum> cards)
@@ -325,7 +328,8 @@ public class Player
         }
         curTown = "TownElvenhold";
         UpdateTiles();
-        
+        UpdateVisibleTiles(mVisibleTiles);
+        UpdateHiddenTiles(mHiddenTiles);
     }
 
     public bool IsMyTurn()
@@ -338,9 +342,19 @@ public class Player
         return visitedTown[townName];
     }
 
+    public void OpenTokenDisplay()
+    {
+        if (tokenDisplay != null) tokenDisplay.openWindow();
+    }
+
     public void SetElf(Elf elf)
     {
         this.elf = elf;
+    }
+
+    public void SetTokenDisplay(PlayerVisibleTokenDisplay tokenDisplay)
+    {
+        this.tokenDisplay = tokenDisplay;
     }
 
     public void SetTile(PlayerTile tile)

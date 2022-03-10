@@ -367,6 +367,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback
 
     public override void OnLeftRoom()
     {
+        ResetPlayerProperties();
         if (SceneManager.GetActiveScene() == SceneManager.GetSceneByName("Main"))
         {
             SceneManager.LoadScene("MainMenu");
