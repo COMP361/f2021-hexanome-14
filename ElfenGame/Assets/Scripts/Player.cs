@@ -214,12 +214,13 @@ public class Player
 
     public void RemoveTile(MovementTile tile)
     {
-        if (mHiddenTiles.Contains(tile))
-        {
-            RemoveHiddenTile(tile);
-	    } else
+        if (mVisibleTiles.Contains(tile))
         {
             RemoveVisibleTile(tile);
+        }
+        else
+        {
+            RemoveHiddenTile(tile);
 	    }
     }
 

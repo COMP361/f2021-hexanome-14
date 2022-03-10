@@ -152,7 +152,7 @@ public class Game
         InitPlayersList();
         InitPile();
 
-        curPhase = GamePhase.HideCounter;
+        curPhase = GamePhase.HiddenCounter;
 
         for (int i = 0; i < players.Count; i++)
         {
@@ -250,6 +250,32 @@ public class Game
         }
     }
 
+    private void YourTurn()
+    {
+
+    }
+
+    private void HandlePlayerUpdate(int idx)
+    {
+        _curPlayerIndex = idx;
+        if (GameConstants.mainUIManager) GameConstants.mainUIManager.UpdateRoundInfo();
+        if (Player.GetLocalPlayer().IsMyTurn()) YourTurn();
+    }
+
+    private void HandlePhaseUpdate(GamePhase phase)
+    {
+        _curPhase = phase;
+        if (GameConstants.mainUIManager) GameConstants.mainUIManager.UpdateRoundInfo();
+        if (curPhase == GamePhase.DrawCounters1 || curPhase == GamePhase.DrawCounters2 || curPhase == GamePhase.DrawCounters3)
+        {
+            if (GameConstants.mainUIManager) GameConstants.mainUIManager.showTokenSelection();
+        } else
+        {
+            if (GameConstants.mainUIManager) GameConstants.mainUIManager.hideTokenSelection();
+        }
+        // Debug.LogError($"Cur Phase set to {Enum.GetName(typeof(GamePhase), curPhase)}");
+    }
+
     public void UpdateProperties(string key, object data)
     {
         if (key == pDECK)
@@ -266,9 +292,8 @@ public class Game
         }
         else if (key == pCUR_PLAYER)
         {
-            _curPlayerIndex = (int)data;
-            if (GameConstants.mainUIManager) GameConstants.mainUIManager.UpdateRoundInfo();
-            Debug.LogError($"The current Player is {Game.currentGame.GetCurPlayer()}");
+            HandlePlayerUpdate((int)data);
+            // Debug.LogError($"The current Player is {Game.currentGame.GetCurPlayer()}");
         }
         else if (key == pCUR_ROUND)
         {
@@ -281,9 +306,7 @@ public class Game
         }
         else if (key == pCUR_PHASE)
         {
-            curPhase = (GamePhase)data;
-            if (GameConstants.mainUIManager) GameConstants.mainUIManager.UpdateRoundInfo();
-            Debug.LogError($"Cur Phase set to {Enum.GetName(typeof(GamePhase), curPhase)}");
+            HandlePhaseUpdate((GamePhase)data);
         }
         else if (key == pMAX_ROUNDS)
         {
@@ -352,7 +375,7 @@ public class Game
                 else
                 {
                     if (GameConstants.mainUIManager) GameConstants.mainUIManager.ClearAllTiles();
-                    curPhase = GamePhase.HideCounter;
+                    curPhase = GamePhase.HiddenCounter;
                     curRound = curRound + 1;
                     curPlayerIndex = (curPlayerIndex + 1) % players.Count;
                 }

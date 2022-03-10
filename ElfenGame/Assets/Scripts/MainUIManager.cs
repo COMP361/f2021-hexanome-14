@@ -35,7 +35,7 @@ public class MainUIManager : MonoBehaviour
     public GameObject tilePrefab;
 
     [SerializeField]
-    public GameObject confirmButton;
+    public Button endTurnButton;
 
     [SerializeField]
     private TextMeshProUGUI roundInfo;
@@ -116,7 +116,7 @@ public class MainUIManager : MonoBehaviour
         cardPanel.SetActive(isViewingCards);
     }
 
-    public void DoneMove()
+    public void EndTurnTriggered()
     {
         if (!Player.GetLocalPlayer().IsMyTurn()) return;
         Game.currentGame.nextPlayer(passed : true);
@@ -130,7 +130,8 @@ public class MainUIManager : MonoBehaviour
     }
 
     public void SelectTokenPressed()
-    { 
+    {
+        if (!Player.GetLocalPlayer().IsMyTurn()) return;
         foreach (TileHolderScript thscript in tileGroup.GetComponentsInChildren<TileHolderScript>())
         { 
 	        if (thscript.selected)
@@ -140,14 +141,15 @@ public class MainUIManager : MonoBehaviour
                 break;
 	        }
 	    }
-        //TODO: Move to next player
+        Game.currentGame.nextPlayer();
     }
 
     public void SelectRandomTokenPressed()
     {
+        if (!Player.GetLocalPlayer().IsMyTurn()) return;
         MovementTile tile = Game.currentGame.RemoveTileFromPile();
         Player.GetLocalPlayer().AddVisibleTile(tile);
-        //TODO: Move to next player
+        Game.currentGame.nextPlayer();
     }
 
     public void SelectCardsPressed()
@@ -157,14 +159,16 @@ public class MainUIManager : MonoBehaviour
 
     public void showTokenSelection()
     {
-        //TODO: Trigger this
         tileWindow.SetActive(true);
+        endTurnButton.interactable = false;
+        endTurnButton.enabled = false;
     }
 
     public void hideTokenSelection()
     {
-        //TODO: Trigger this
         tileWindow.SetActive(false);
+        endTurnButton.interactable = true;
+        endTurnButton.enabled = true;
     }
 
     public void UpdateAvailableTokens()
