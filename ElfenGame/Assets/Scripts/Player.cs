@@ -252,6 +252,7 @@ public class Player
 
     internal void SetOnlyToken(MovementTile tile, bool inVisibleTokens)
     {
+        bool hasObstacle = mVisibleTiles.Contains(MovementTile.RoadObstacle);
         mVisibleTiles = new List<MovementTile>();
         mHiddenTiles = new List<MovementTile>();
         if (inVisibleTokens)
@@ -261,6 +262,8 @@ public class Player
         {
             mHiddenTiles.Add(tile);
 	    }
+
+        if (hasObstacle) mVisibleTiles.Add(MovementTile.RoadObstacle);
 
         UpdateVisibleTiles(mVisibleTiles);
         UpdateHiddenTiles(mHiddenTiles);
