@@ -14534,6 +14534,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pausePanel: {fileID: 1332174950}
   chooseColorPanel: {fileID: 1111657229}
+  gameOverScreen: {fileID: 430780725}
   playerPrefab: {fileID: 6058394782067960364, guid: 531d65c8912454387b14f3a36e791228, type: 3}
   elfPrefab: {fileID: 1688859528852203239, guid: e3307f8ab93e44b4e8defb4ef953ad53, type: 3}
   leftPane: {fileID: 926660644}
