@@ -13,11 +13,13 @@ public class TileHolderScript : MonoBehaviour
     public MovementTileSO tile;
     public bool selected;
     public bool isSelectable;
+    private bool inVisible;
     private Image background;
 
     public void Start()
     {
         selected = false;
+        inVisible = false;
         background = GetComponent<Image>();
         SetBackGroundColor();
     }
@@ -33,6 +35,16 @@ public class TileHolderScript : MonoBehaviour
         this.isSelectable = isSelectable;
     }
 
+    public void SetInVisibleTokens(bool inVisible)
+    {
+        this.inVisible = inVisible;
+    }
+
+    public bool GetInVisibleTokens()
+    {
+        return inVisible;
+    }
+
     public void SetBackGroundColor()
     {
         if (!isSelectable) return;
@@ -40,10 +52,14 @@ public class TileHolderScript : MonoBehaviour
         {
             background.color = GameConstants.green;
         }
+        else if (inVisible)
+        {
+            background.color = GameConstants.red;
+        }
         else
         {
             background.color = GameConstants.blue;
-        }
+	    }
     }
 
     public void ClickedOn()
