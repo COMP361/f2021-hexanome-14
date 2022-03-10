@@ -12,6 +12,7 @@ public class TileHolderScript : MonoBehaviour
 
     public MovementTileSO tile;
     public bool selected;
+    public bool isSelectable;
     private Image background;
 
     public void Start()
@@ -27,8 +28,14 @@ public class TileHolderScript : MonoBehaviour
         tileImage.sprite = tile.mImage; 
     }
 
+    public void SetIsSelectable(bool isSelectable)
+    {
+        this.isSelectable = isSelectable;
+    }
+
     public void SetBackGroundColor()
     {
+        if (!isSelectable) return;
         if (selected)
         {
             background.color = GameConstants.green;
@@ -41,6 +48,7 @@ public class TileHolderScript : MonoBehaviour
 
     public void ClickedOn()
     {
+        if (!isSelectable) return;
         if (GameConstants.mainUIManager) GameConstants.mainUIManager.SetTokensNotSelected();
         selected = true;
         SetBackGroundColor();

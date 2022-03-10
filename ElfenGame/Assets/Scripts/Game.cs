@@ -169,6 +169,8 @@ public class Game
 
             p.AddHiddenTile(RemoveTileFromPile());
             p.AddHiddenTile(RemoveTileFromPile());
+            p.AddVisibleTile(RemoveTileFromPile());
+            p.AddVisibleTile(RemoveTileFromPile());
         }
         _curPlayerIndex = -1;
         curPlayerIndex = 0;

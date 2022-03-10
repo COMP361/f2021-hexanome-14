@@ -35,7 +35,10 @@ public class MainUIManager : MonoBehaviour
     public GameObject tilePrefab;
 
     [SerializeField]
-    public Button endTurnButton;
+    public GameObject tokenDisplayPrefab;
+
+    [SerializeField]
+    public GameObject endTurnButton;
 
     [SerializeField]
     private TextMeshProUGUI roundInfo;
@@ -49,7 +52,10 @@ public class MainUIManager : MonoBehaviour
     [SerializeField]
     GameObject movementTileUIPrefab;
 
-    private Dictionary<MovementTile, MovementTileSO> mTileDict;
+    [SerializeField]
+    public GameObject mainCanvas;
+
+    public Dictionary<MovementTile, MovementTileSO> mTileDict;
 
     private bool isPaused = false;
     private bool isViewingCards = false;
@@ -91,6 +97,15 @@ public class MainUIManager : MonoBehaviour
 
         GameObject g = Instantiate(playerPrefab, leftPane.transform);
         PlayerTile tile = g.GetComponent<PlayerTile>();
+        tile.SetPlayer(p);
+
+        GameObject tokenDisplayObject = Instantiate(tokenDisplayPrefab, mainCanvas.transform);
+        PlayerVisibleTokenDisplay tokenDisplay = tokenDisplayObject.GetComponent<PlayerVisibleTokenDisplay>();
+        tokenDisplay.SetName(username);
+
+        tokenDisplayObject.transform.SetSiblingIndex(tokenDisplay.transform.GetSiblingIndex() - 1); // Ensure the pause menu is on top off view
+
+        p.SetTokenDisplay(tokenDisplay);
 
         p.SetTile(tile);
         elf.LinkToPlayer(p);

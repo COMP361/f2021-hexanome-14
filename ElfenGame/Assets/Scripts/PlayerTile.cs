@@ -11,6 +11,12 @@ public class PlayerTile : MonoBehaviour
     Image mPointImage;
 
 
+    Player player;
+
+    public void SetPlayer(Player player) {
+        this.player = player;
+    }
+
     public void UpdateStats(string userName, int nCoins, int nPoints, int nCards, int nTiles, PlayerColor color)
     {   
         if (Player.GetLocalPlayer().userName == userName)
@@ -26,6 +32,11 @@ public class PlayerTile : MonoBehaviour
         mCardText.text = nCards.ToString();
         mTileText.text = nTiles.ToString();
         mPointImage.color = color.GetColor(); 
+    }
+
+    public void OnClickToken()
+    {
+        player.OpenTokenDisplay(); 
     }
   
     public void SetColor(PlayerColor color) { mPointImage.color = color.GetColor(); } 
