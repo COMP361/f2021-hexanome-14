@@ -65,7 +65,7 @@ public class Player
         if (elf != null) elf.MoveToTown(value, _curTown);
         _curTown = value;
         visitedTown[_curTown] = true;
-        Debug.LogError($"Updating town {value} for player {_userName}");
+        //Debug.LogError($"Updating town {value} for player {_userName}");
         if (GameConstants.townDict.ContainsKey(_curTown))
         {
             NewTown town = GameConstants.townDict[_curTown];
@@ -299,34 +299,41 @@ public class Player
     {
         if (key == pCOINS)
         {
+            if (value == null) value = 0;
             UpdateCoins((int)value);
         }
         else if (key == pPOINTS)
         {
-            UpdatePoints((int)value);
+            if (value == null) value = 0;
+	        UpdatePoints((int)value);
         }
         else if (key == pCARDS)
         {
+            if (value == null) value = (object)(new List<CardEnum>()).ToArray();
             UpdateCards(((CardEnum[])value).ToList());
         }
         else if (key == pVISIBLE_TILES)
         {
+            if (value == null) value = (object)(new List<MovementTile>()).ToArray();
             UpdateVisibleTiles(((MovementTile[])value).ToList());	
 	    }
         else if (key == pHIDDEN_TILES)
         {
+            if (value == null) value = (object)(new List<MovementTile>()).ToArray();
             UpdateHiddenTiles(((MovementTile[])value).ToList());	
 	    }
         else if (key == pNAME)
         {
-            UpdateName((string)value);
+            if (value != null) UpdateName((string)value);
         }
         else if (key == pCOLOR)
         {
-            if (value != null) UpdateColor((PlayerColor)value);
+            if (value == null) value = PlayerColor.Blue;
+	        UpdateColor((PlayerColor)value);
         }
         else if (key == pTOWN)
         {
+            if (value == null) value = "TownElvenhold";
             UpdateTown((string)value);
         }
     }
@@ -350,6 +357,14 @@ public class Player
         
         if (GameConstants.networkManager) GameConstants.networkManager.SetPlayerPropertyByPlayerName(_userName, pHIDDEN_TILES, mHiddenTiles.ToArray());
         if (GameConstants.networkManager) GameConstants.networkManager.SetPlayerPropertyByPlayerName(_userName, pVISIBLE_TILES, mVisibleTiles.ToArray());
+    }
+
+    public void UpdateDisplayer()
+    { 
+        UpdateTiles();
+        UpdateVisibleTiles(mVisibleTiles);
+        UpdateHiddenTiles(mHiddenTiles);
+        if (elf != null) elf.MoveToTown(_curTown, _curTown);
     }
 
     public void Reset()
@@ -383,6 +398,10 @@ public class Player
 
     public bool visited(string townName)
     {
+        if (!visitedTown.ContainsKey(townName))
+        {
+            visitedTown[townName] = false;
+	    }
         return visitedTown[townName];
     }
 

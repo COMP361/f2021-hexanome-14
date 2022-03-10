@@ -179,14 +179,14 @@ public class Game
         for (int i = 0; i < 6; ++i)
         {
             availableColors[(PlayerColor)i] = "";
-	        GameConstants.networkManager.SetGameProperty($"{pPLAYER_COLOR}{Enum.GetName(typeof(PlayerColor), (PlayerColor)i)}", Player.GetLocalPlayer().userName);
+	        GameConstants.networkManager.SetGameProperty($"{pPLAYER_COLOR}{Enum.GetName(typeof(PlayerColor), (PlayerColor)i)}", "");
         }
 
         curPhase = GamePhase.HiddenCounter;
 
         for (int i = 0; i < players.Count; i++)
         {
-            Player p = Player.GetPlayer(players[i]);
+            Player p = Player.GetOrCreatePlayer(players[i]);
 
             p.AddVisibleTile(MovementTile.RoadObstacle);
             
@@ -462,7 +462,7 @@ public class Game
     {
         curPlayerIndex = (curPlayerIndex + 1) % players.Count;
         // Debug.LogError($"Current Player {GetCurPlayer()}");
-        Debug.LogError($"Current Player Index {curPlayerIndex}");
+        //Debug.LogError($"Current Player Index {curPlayerIndex}");
 
         if (checkAnyPlayerDone())
         {
@@ -497,7 +497,7 @@ public class Game
                 curPlayerIndex = (curRound - 1) % players.Count;
             }
 
-            Debug.LogError($"Cur Round is: {curRound}"); 
+            //Debug.LogError($"Cur Round is: {curRound}"); 
         }
     }
 
