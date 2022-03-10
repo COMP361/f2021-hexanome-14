@@ -72,7 +72,7 @@ public class MainMenuUIManager : MonoBehaviour, GameSessionsReceivedInterface, O
             p.Reset();
 	    }
         // Debug.LogError($"num rounds: {numRounds.value}");
-        Game.currentGame.Init(numRoundOptions[numRounds.value], variationDD[variationDD.value]);
+        Game.currentGame.Init(numRoundOptions[numRounds.value], variationDD.options[variationDD.value].text);
         GameConstants.networkManager.LoadArena();
     }
 

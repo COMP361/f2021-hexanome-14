@@ -61,6 +61,15 @@ public class MainUIManager : MonoBehaviour
     [SerializeField]
     public TMP_Dropdown colorSelectionDD;
 
+    [SerializeField]
+    public GameObject firstPlace, secondPlace, thirdPlace;
+
+    [SerializeField]
+    public TMP_Text firstPlaceText, secondPlaceText, thirdPlaceText;
+
+    [SerializeField]
+    public Image firstPlaceSprite, secondPlaceSprite, thirdPlaceSprite;
+
     public Dictionary<MovementTile, MovementTileSO> mTileDict;
 
     private bool isPaused = false;
