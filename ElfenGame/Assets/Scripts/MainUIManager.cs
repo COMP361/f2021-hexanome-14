@@ -280,6 +280,7 @@ public class MainUIManager : MonoBehaviour
     public void showAvailableTokensToKeep()
     {
         tokenToKeepSelectionWindow.SetActive(true);
+        UpdateTokenToKeep();
     }
 
     public void hideAvailableTokensToKeep()
