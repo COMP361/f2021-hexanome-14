@@ -39,6 +39,10 @@ public class MainMenuUIManager : MonoBehaviour, GameSessionsReceivedInterface, O
         homeView.gameObject.SetActive(false);
         OnUpdatedGameListReceived(Lobby.availableGames);
         InGameSelectView();
+        if (GameConstants.networkManager.isConnected())
+        {
+            GameConstants.networkManager.ResetPlayerProperties();
+	    }
     }
 
     public void InGameSelectView()

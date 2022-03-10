@@ -45,7 +45,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback
         else return null;
     }
 
-    private void ResetPlayerProperties()
+    public void ResetPlayerProperties()
     { 
 	    ExitGames.Client.Photon.Hashtable hashtable = new ExitGames.Client.Photon.Hashtable();
         hashtable.Add(Player.pCOINS, null);

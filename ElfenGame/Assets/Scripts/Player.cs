@@ -367,6 +367,13 @@ public class Player
         UpdateTiles();
         UpdateVisibleTiles(mVisibleTiles);
         UpdateHiddenTiles(mHiddenTiles);
+
+        if (GameConstants.networkManager)
+        {
+            GameConstants.networkManager.SetPlayerPropertyByPlayerName(_userName, pCARDS, mCards.ToArray());      
+            GameConstants.networkManager.SetPlayerPropertyByPlayerName(_userName, pVISIBLE_TILES, mVisibleTiles.ToArray());
+            GameConstants.networkManager.SetPlayerPropertyByPlayerName(_userName, pHIDDEN_TILES, mHiddenTiles.ToArray());
+	    }
     }
 
     public bool IsMyTurn()
