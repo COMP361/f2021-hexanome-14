@@ -230,7 +230,7 @@ public class MainUIManager : MonoBehaviour
         TileHolderScript thscript = GetSelectedTokenToKeep();
         if (thscript == null) return;
 
-
+        if (thscript.tile.mTile == MovementTile.RoadObstacle) return; // Select non obstacle tile
         localPlayer.SetOnlyToken(thscript.tile.mTile, thscript.GetInVisibleTokens());
         Game.currentGame.nextPlayer();
     }
@@ -278,6 +278,17 @@ public class MainUIManager : MonoBehaviour
         tileWindow.SetActive(false);
         endTurnButton.interactable = true;
         endTurnButton.enabled = true;
+    }
+
+    public void showAvailableTokensToKeep()
+    {
+        tokenToKeepSelectionWindow.SetActive(true);
+        UpdateTokenToKeep();
+    }
+
+    public void hideAvailableTokensToKeep()
+    {
+        tokenToKeepSelectionWindow.SetActive(false);
     }
 
     public void UpdateTokenToKeep()

@@ -191,6 +191,8 @@ public class Game
             {
                 p.AddCard(Draw());
             }
+
+            p.AddVisibleTile(MovementTile.RoadObstacle);
             
         }
         _curPlayerIndex = -1;
@@ -275,14 +277,40 @@ public class Game
 
     private void YourTurn()
     {
+        if (curPhase == GamePhase.SelectTokenToKeep) 
+        {
+            if (Player.GetLocalPlayer().GetVisibleTokens().Count == 0 && Player.GetLocalPlayer().GetHiddenTokens().Count == 0)
+            {
+                nextPlayer(); 
+	        } else if (GameConstants.mainUIManager)
+            {
+                GameConstants.mainUIManager.UpdateAvailableTokens();
+                GameConstants.mainUIManager.showAvailableTokensToKeep();
+	        }
+            // SelectTokenToKeep but no tokens remain
+	    }
+    }
 
+    private void NotYourTurn()
+    { 
+        if (GameConstants.mainUIManager)
+        {
+            GameConstants.mainUIManager.hideAvailableTokensToKeep();
+	    }
     }
 
     private void HandlePlayerUpdate(int idx)
     {
         _curPlayerIndex = idx;
         if (GameConstants.mainUIManager) GameConstants.mainUIManager.UpdateRoundInfo();
-        if (Player.GetLocalPlayer().IsMyTurn()) YourTurn();
+        if (Player.GetLocalPlayer().IsMyTurn())
+        {
+            YourTurn();
+        }
+        else
+        {
+            NotYourTurn();
+	    }
     }
 
     private void HandlePhaseUpdate(GamePhase phase)
@@ -408,11 +436,29 @@ public class Game
         if (GameConstants.mainUIManager) GameConstants.mainUIManager.GameOverTriggered(winners, points);
     }
 
+    public bool checkAnyPlayerDone()
+    { 
+        foreach(Player p in Player.GetAllPlayers())
+        { 
+	        if (p.nPoints == 20)
+            {
+                return true;
+	        }
+	    }
+        return false;
+    }
+
     public void nextPlayer(bool passed = false)
     {
         curPlayerIndex = (curPlayerIndex + 1) % players.Count;
         // Debug.LogError($"Current Player {GetCurPlayer()}");
         Debug.LogError($"Current Player Index {curPlayerIndex}");
+
+        if (checkAnyPlayerDone())
+        {
+            GameOver();
+            return;
+	    }
 
         if (curPhase == GamePhase.PlaceCounter && passed) 
         {
@@ -423,24 +469,21 @@ public class Game
         }
         if ((curPlayerIndex == (curRound-1) % players.Count && curPhase != GamePhase.PlaceCounter) || (passedPlayers == players.Count))
         {
-            if (curPhase == GamePhase.Travel)
+            if (curPhase == GamePhase.Travel && curRound == maxRounds)
             {
-                if (curRound == maxRounds)
-                {
-                    GameOver();
-                    Debug.LogError($"Game Over");
-                }
-                else
-                {
-                    if (GameConstants.mainUIManager) GameConstants.mainUIManager.ClearAllTiles();
-                    curPhase = GamePhase.HiddenCounter;
-                    curRound = curRound + 1;
-                    curPlayerIndex = (curPlayerIndex + 1) % players.Count;
-                }
+                GameOver();
+                return;
+            } else if (curPhase == GamePhase.SelectTokenToKeep)
+            {
+                if (GameConstants.mainUIManager) GameConstants.mainUIManager.ClearAllTiles();
+                curPhase = GamePhase.HiddenCounter;
+                curRound = curRound + 1;
+                curPlayerIndex = (curRound - 1) % players.Count;
             }
             else
             {
                 curPhase++;
+                curPlayerIndex = (curRound - 1) % players.Count;
             }
 
             Debug.LogError($"Cur Round is: {curRound}"); 

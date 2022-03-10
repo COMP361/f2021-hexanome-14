@@ -18,6 +18,7 @@ public class TileHolderScript : MonoBehaviour
 
     public void Start()
     {
+        isSelectable = true;
         selected = false;
         inVisible = false;
         background = GetComponent<Image>();
@@ -47,6 +48,7 @@ public class TileHolderScript : MonoBehaviour
 
     public void SetBackGroundColor()
     {
+        if (background == null) background = GetComponent<Image>();
         if (!isSelectable) return;
         if (selected)
         {
