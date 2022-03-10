@@ -66,6 +66,11 @@ public class KeyBoardInput : MonoBehaviour
             {
                 GameConstants.loginUIManager.QuickLogin("fynn");
             }
+
+            if (GameConstants.mainUIManager)
+            {
+                Game.currentGame.nextPlayer(passed: true); 
+	        }
         }
 
         if (Input.GetKeyDown("="))
@@ -75,6 +80,14 @@ public class KeyBoardInput : MonoBehaviour
                 GameConstants.loginUIManager.QuickLogin("maex");
 	        }
 	    }
+        if (Input.GetKeyDown("\\"))
+        {
+            if (GameConstants.loginUIManager)
+            {
+                GameConstants.loginUIManager.QuickLogin("luca");
+	        }
+	 
+        }
     }
 
 

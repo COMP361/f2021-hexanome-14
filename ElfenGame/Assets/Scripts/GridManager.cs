@@ -29,6 +29,22 @@ public class GridManager : MonoBehaviour
         PositionElements();
     }
 
+    public void AddNonObstacleTilesToDeck()
+    { 
+        foreach(GameObject go in elements)
+        {
+            MovementTileSpriteScript spriteScript = go.GetComponent<MovementTileSpriteScript>();
+            if (spriteScript == null) continue;
+
+            MovementTile tile = spriteScript.mTile.mTile;
+
+            if (tile != MovementTile.RoadObstacle)
+            {
+                Game.currentGame.AddTileToPile(tile);
+	        }
+	    }
+    }
+
     private void PositionElements()
     {
         int colsNeeded = Mathf.Min(nCols, elements.Count);
@@ -103,6 +119,38 @@ public class GridManager : MonoBehaviour
     }
 
     public bool checkHasDoubleTok(PathScript p){
+        return false;
+    }
+
+    public MovementTileSpriteScript GetMovementTile()
+    {
+        MovementTileSpriteScript moveTile = null;
+        
+        foreach ( GameObject element in elements)
+        {
+
+            moveTile = element.GetComponent<MovementTileSpriteScript>();
+            MovementTile tile = moveTile.mTile.mTile;
+            if (tile != MovementTile.RoadObstacle)
+            {
+                return moveTile;
+            }
+        }
+        return null;
+    }
+
+    public bool HasObstacle()
+    {
+        foreach( GameObject element in elements)
+        {
+            MovementTileSpriteScript moveTile = element.GetComponent<MovementTileSpriteScript>();
+            MovementTile tile = moveTile.mTile.mTile;
+            if (tile == MovementTile.RoadObstacle)
+            {
+                return true;
+            }
+            
+        }
         return false;
     }
 

@@ -64,6 +64,7 @@ public class MainMenuUIManager : MonoBehaviour, GameSessionsReceivedInterface, O
         }
     }
 
+
     public void OnStartGameClicked()
     {
         foreach (Player p in Player.GetAllPlayers())
@@ -117,7 +118,7 @@ public class MainMenuUIManager : MonoBehaviour, GameSessionsReceivedInterface, O
         {
             AddGameSession(game);
 
-            if (game.createdBy == Lobby.myUsername)
+            if (game.createdBy == Lobby.myUsername && !GameConstants.networkManager.inGame())
             {
                 GameConstants.networkManager.CreateRoom(game.session_ID);
             }

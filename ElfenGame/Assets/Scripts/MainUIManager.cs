@@ -26,7 +26,13 @@ public class MainUIManager : MonoBehaviour
     public GameObject cardPanel;
 
     [SerializeField]
+    public GameObject tileGroup, tileWindow;
+
+    [SerializeField]
     public GameObject cardPrefab;
+
+    [SerializeField]
+    public GameObject tilePrefab;
 
     [SerializeField]
     public GameObject confirmButton;
@@ -68,6 +74,7 @@ public class MainUIManager : MonoBehaviour
         }
 
         UpdateRoundInfo();
+        UpdateAvailableTokens();
         foreach (NewTown town in GameConstants.townDict.Values)
         {
             town.DisplayVisited();
@@ -88,8 +95,7 @@ public class MainUIManager : MonoBehaviour
         p.SetTile(tile);
         elf.LinkToPlayer(p);
 
-        p.curTown = "TownElvenhold";
-
+        p.Reset();
     }
 
     public void OnPausePressed()
@@ -113,7 +119,7 @@ public class MainUIManager : MonoBehaviour
     public void DoneMove()
     {
         if (!Player.GetLocalPlayer().IsMyTurn()) return;
-        Game.currentGame.nextPlayer(Game.currentGame.curPhase == GamePhase.PlaceCounter);
+        Game.currentGame.nextPlayer(passed : true);
     }
 
     public void UpdateRoundInfo()
@@ -123,11 +129,73 @@ public class MainUIManager : MonoBehaviour
             $"Turn: {Game.currentGame.GetCurPlayer()}";
     }
 
+    public void SelectTokenPressed()
+    { 
+        foreach (TileHolderScript thscript in tileGroup.GetComponentsInChildren<TileHolderScript>())
+        { 
+	        if (thscript.selected)
+            {
+                Game.currentGame.RemoveVisibleTile(thscript.tile.mTile);
+                Player.GetLocalPlayer().AddVisibleTile(thscript.tile.mTile);
+                break;
+	        }
+	    }
+        //TODO: Move to next player
+    }
+
+    public void SelectRandomTokenPressed()
+    {
+        MovementTile tile = Game.currentGame.RemoveTileFromPile();
+        Player.GetLocalPlayer().AddVisibleTile(tile);
+        //TODO: Move to next player
+    }
+
+    public void SelectCardsPressed()
+    { 
+        //TODO: Implement this
+    }
+
+    public void showTokenSelection()
+    {
+        //TODO: Trigger this
+        tileWindow.SetActive(true);
+    }
+
+    public void hideTokenSelection()
+    {
+        //TODO: Trigger this
+        tileWindow.SetActive(false);
+    }
+
+    public void UpdateAvailableTokens()
+    {
+        foreach (TileHolderScript thscript in tileGroup.GetComponentsInChildren<TileHolderScript>() )
+        {
+            Destroy(thscript.gameObject);
+	    }
+
+        foreach (MovementTile tile in Game.currentGame.GetVisible())
+        {
+            GameObject g = Instantiate(tilePrefab, tileGroup.transform);
+
+            TileHolderScript thscript = g.GetComponent<TileHolderScript>();
+            thscript.SetTile(mTileDict[tile]);
+	    }
+    }
+
+    public void SetTokensNotSelected()
+    {
+        foreach (TileHolderScript thscript in tileGroup.GetComponentsInChildren<TileHolderScript>())
+        {
+            thscript.selected = false;
+            thscript.SetBackGroundColor();
+	    }
+    }
 
     public void UpdateCardHand()
-    { 
-   
-	    foreach (Card card in cardPanel.GetComponentsInChildren<Card>())
+    {
+
+        foreach (Card card in cardPanel.GetComponentsInChildren<Card>())
         {
             Destroy(card.gameObject);
 		}
@@ -139,7 +207,6 @@ public class MainUIManager : MonoBehaviour
             Card card = g.GetComponent<Card>();
 
             card.Initialize(c);
-
         }
     }
 
@@ -149,6 +216,7 @@ public class MainUIManager : MonoBehaviour
         if (GameConstants.roadGroup == null) return;
         foreach (GridManager gm in GameConstants.roadGroup.GetComponentsInChildren<GridManager>())
         {
+            gm.AddNonObstacleTilesToDeck();
             gm.Clear();
         }
     }

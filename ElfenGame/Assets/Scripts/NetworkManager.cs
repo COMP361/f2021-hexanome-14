@@ -25,6 +25,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback
             PhotonPeer.RegisterType(typeof(PlayerColor), 254, PlayerColorExtension.Serialize, PlayerColorExtension.Deserialize);
             PhotonPeer.RegisterType(typeof(GamePhase), 253, GamePhaseExtension.Serialize, GamePhaseExtension.Deserialize);
             networkPlayers = new Dictionary<string, Photon.Realtime.Player>();
+            ResetPlayerProperties();
         }
     }
    
@@ -42,6 +43,22 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback
 
         if (networkPlayers.ContainsKey(playerId)) return networkPlayers[playerId];
         else return null;
+    }
+
+    private void ResetPlayerProperties()
+    { 
+	    ExitGames.Client.Photon.Hashtable hashtable = new ExitGames.Client.Photon.Hashtable();
+        hashtable.Add(Player.pCOINS, null);
+        hashtable.Add(Player.pCOLOR, null);
+        hashtable.Add(Player.pNAME, null);
+        hashtable.Add(Player.pPOINTS, null);
+        hashtable.Add(Player.pHIDDEN_TILES, null);
+        hashtable.Add(Player.pVISIBLE_TILES, null);
+        hashtable.Add(Player.pCARDS, null);
+        hashtable.Add(Player.pTOWN, null);
+        Photon.Realtime.Player p = PhotonNetwork.LocalPlayer;
+	    if (p != null) p.SetCustomProperties(hashtable);
+
     }
 
 
@@ -139,7 +156,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback
     {
         base.OnRoomPropertiesUpdate(propertiesThatChanged);
 
-        Debug.Log("Room properties updated");
+        //Debug.Log("Room properties updated");
         if (Game.currentGame != null)
         { 
 	        foreach (DictionaryEntry entry in propertiesThatChanged)
@@ -173,7 +190,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback
     {
         base.OnPlayerPropertiesUpdate(targetPlayer, changedProps);
 
-        Debug.Log($"{targetPlayer.UserId} properties updated");
+        //Debug.Log($"{targetPlayer.UserId} properties updated");
         Player pm = Player.GetOrCreatePlayer(targetPlayer.UserId);
         if (pm != null)
         {
