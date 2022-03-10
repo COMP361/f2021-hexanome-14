@@ -383,22 +383,26 @@ public class MainUIManager : MonoBehaviour
 
     public void GameOverTriggered(List<Player> winners, List<int> scores)
     {
+        Debug.LogError($"Num winners: {winners.Count}");
+        Debug.LogError($"Num scores: {scores.Count}");
         gameOverScreen.SetActive(true);
 
         firstPlace.SetActive(true);
-        firstPlaceSprite.sprite = winners[-1].playerColor.GetSprite();
-        firstPlaceText.text = $"{winners[-1].userName}\nScore: {scores[-1]}";
+        firstPlaceSprite.sprite = winners[0].playerColor.GetSprite();
+        firstPlaceText.text = $"{winners[0].userName}\nScore: {scores[0]}";
 
-
-        secondPlace.SetActive(true);
-        secondPlaceSprite.sprite = winners[-2].playerColor.GetSprite();
-        secondPlaceText.text = $"{winners[-2].userName}\nScore: {scores[-2]}";
+        if (winners.Count > 1)
+        {
+            secondPlace.SetActive(true);
+            secondPlaceSprite.sprite = winners[1].playerColor.GetSprite();
+            secondPlaceText.text = $"{winners[1].userName}\nScore: {scores[1]}";
+        }
 
         if (winners.Count > 2)
         {
             thirdPlace.SetActive(true);
-            thirdPlaceSprite.sprite = winners[-3].playerColor.GetSprite();
-            thirdPlaceText.text = $"{winners[-3].userName}\nScore: {scores[-3]}";
+            thirdPlaceSprite.sprite = winners[2].playerColor.GetSprite();
+            thirdPlaceText.text = $"{winners[2].userName}\nScore: {scores[2]}";
 
         }
     }

@@ -201,6 +201,7 @@ public class Game
         curRound = 1;
         _maxRounds = -1;
         maxRounds = maxRnds;
+        gameVariation = variation;
     }
 
     private void InitPile()
@@ -420,20 +421,20 @@ public class Game
     public void GameOver()
     {
         List<Player> winners = new List<Player>();
-        List<int> points = new List<int>();
+        List<int> scores = new List<int>();
         foreach (Player p in Player.GetAllPlayers()){
             winners.Add(p);
         }
-
-        if (gameVariation == "standard")
+        if (gameVariation == "Standard")
         {
-            winners = winners.OrderBy(o => o.nPoints * 1000 + o.mCards.Count).ToList();
+            Debug.Log("In Standard");
+            winners = winners.OrderByDescending(o => o.nPoints * 1000 + o.mCards.Count).ToList();
             foreach (Player p in winners)
             {
-                points.Add(p.nPoints);
+                scores.Add(p.nPoints);
             }
         }
-        if (GameConstants.mainUIManager) GameConstants.mainUIManager.GameOverTriggered(winners, points);
+        if (GameConstants.mainUIManager) GameConstants.mainUIManager.GameOverTriggered(winners, scores);
     }
 
     public bool checkAnyPlayerDone()
