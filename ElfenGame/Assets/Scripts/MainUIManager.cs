@@ -192,6 +192,7 @@ public class MainUIManager : MonoBehaviour
 
     public void SelectTokenPressed()
     {
+        bool foundSelected = false;
         if (!Player.GetLocalPlayer().IsMyTurn()) return;
         foreach (TileHolderScript thscript in tileGroup.GetComponentsInChildren<TileHolderScript>())
         { 
@@ -199,10 +200,11 @@ public class MainUIManager : MonoBehaviour
             {
                 Game.currentGame.RemoveVisibleTile(thscript.tile.mTile);
                 Player.GetLocalPlayer().AddVisibleTile(thscript.tile.mTile);
+                foundSelected = true;
                 break;
 	        }
 	    }
-        Game.currentGame.nextPlayer();
+        if (foundSelected) Game.currentGame.nextPlayer();
     }
 
     public void SelectRandomTokenPressed()

@@ -78,7 +78,7 @@ public class Game
         }
         set
         {
-            if (_curPlayerIndex != value && GameConstants.networkManager) GameConstants.networkManager.SetGameProperty(pCUR_PLAYER, value);
+            if (GameConstants.networkManager) GameConstants.networkManager.SetGameProperty(pCUR_PLAYER, value);
             _curPlayerIndex = value;
         }
     }
@@ -187,11 +187,6 @@ public class Game
         {
             Player p = Player.GetPlayer(players[i]);
 
-            for (int j = 0; j < 8; j++)
-            {
-                p.AddCard(Draw());
-            }
-
             p.AddVisibleTile(MovementTile.RoadObstacle);
             
         }
@@ -202,6 +197,22 @@ public class Game
         _maxRounds = -1;
         maxRounds = maxRnds;
         gameVariation = variation;
+        InitRound();
+    }
+
+    public void InitRound()
+    { 
+        for (int i = 0; i < players.Count;  i++)
+        {
+            Player p = Player.GetPlayer(players[i]);
+
+            while (p.mCards.Count < 8)
+            {
+                p.AddCard(Draw());
+	        }
+
+            p.AddHiddenTile(RemoveTileFromPile());
+	    }
     }
 
     private void InitPile()
@@ -478,6 +489,7 @@ public class Game
             {
                 if (GameConstants.mainUIManager) GameConstants.mainUIManager.ClearAllTiles();
                 curPhase = GamePhase.HiddenCounter;
+                InitRound();
                 curRound = curRound + 1;
                 curPlayerIndex = (curRound - 1) % players.Count;
             }

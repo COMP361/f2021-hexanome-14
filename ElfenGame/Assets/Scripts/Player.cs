@@ -347,6 +347,9 @@ public class Player
             tile.UpdateStats(username, nCoins, nPoints, mCards.Count, mTiles.Count, playerColor);
             UpdateTiles();
 	    }
+        
+        if (GameConstants.networkManager) GameConstants.networkManager.SetPlayerPropertyByPlayerName(_userName, pHIDDEN_TILES, mHiddenTiles.ToArray());
+        if (GameConstants.networkManager) GameConstants.networkManager.SetPlayerPropertyByPlayerName(_userName, pVISIBLE_TILES, mVisibleTiles.ToArray());
     }
 
     public void Reset()
