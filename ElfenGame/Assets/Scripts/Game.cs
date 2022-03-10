@@ -163,14 +163,6 @@ public class Game
                 p.AddCard(Draw());
             }
             
-            // Set Player Colors
-            // TODO: Remove Later
-            p.playerColor = (PlayerColor)i;
-
-            p.AddHiddenTile(RemoveTileFromPile());
-            p.AddHiddenTile(RemoveTileFromPile());
-            p.AddVisibleTile(RemoveTileFromPile());
-            p.AddVisibleTile(RemoveTileFromPile());
         }
         _curPlayerIndex = -1;
         curPlayerIndex = 0;

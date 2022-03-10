@@ -8966,7 +8966,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1111657230
 RectTransform:
   m_ObjectHideFlags: 0
@@ -12485,6 +12485,7 @@ MonoBehaviour:
   tileWindow: {fileID: 1589816822}
   cardPrefab: {fileID: 382647109788817177, guid: 43a10a912996f435793c972cbc8bf73d, type: 3}
   tilePrefab: {fileID: 2586788237553594906, guid: 6db846eb99f7d40bf87fc938b0c2c095, type: 3}
+  tokenDisplayPrefab: {fileID: 2947252748801959607, guid: 68f677b0b4fc8433887001d03fd146ba, type: 3}
   endTurnButton: {fileID: 9948182}
   roundInfo: {fileID: 882909193}
   movementTileSpritePrefab: {fileID: 710000644895225578, guid: bae1bd41308d8427eb114e1101763928, type: 3}

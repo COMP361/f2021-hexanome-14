@@ -7,7 +7,7 @@ using Photon.Pun;
 using UnityEngine.EventSystems;
 
 
-public static class MoveValidator
+public static class MovementValidator
 {
     // dictionary maps roadType to movementTile type and their required counts
     // iterate over cards, and check if there are enough cards that validate this move
@@ -55,70 +55,94 @@ public static class MoveValidator
         
     };
 
-    public static bool IsMoveValid(PathScript path, List<CardEnum> cards)
+    static Dictionary<MovementTile, CardEnum> tileToCard = new Dictionary<MovementTile, CardEnum>()
     {
-        MovementTileSpriteScript movementTileWrapper = path.GetMovementTile();
-        MovementTile movementTile = movementTileWrapper.mTile.mTile;
+        {MovementTile.Dragon, CardEnum.Dragon },
+        {MovementTile.Elfcycle, CardEnum.ElfCycle },
+        {MovementTile.GiantPig, CardEnum.GiantPig },
+        {MovementTile.MagicCloud, CardEnum.MagicCloud },
+        {MovementTile.TrollWagon, CardEnum.TrollWagon },
+        {MovementTile.Unicorn, CardEnum.Unicorn }
+    };
 
-        // There's no movementTile on path
-        if (movementTileWrapper == null)
+    public static bool IsMoveValid(NewTown startTown, PathScript path, List<CardEnum> cards)
+    {
+        // No cards given
+        if (cards.Count == 0)
         {
             return false;
         }
 
-
         // returns true if path is river and theres valid num of raft cards
         if (path.roadType == RoadType.River)
         {
-            int numOfRaftCards = NumOfRaftCards(cards);
-            return (numOfRaftCards >= 1);
+            if (CardsAreSame(cards) && cards[0] == CardEnum.Raft)
+            { 
+	            if (startTown.name == path.town1.name) // Downstream
+                {
+                    return (cards.Count == 1);
+		        } else { //Upstream
+                    return (cards.Count == 2);
+		        }
+	        } else
+            {
+                return false;
+	        }
+        }
+
+        if (path.roadType == RoadType.Lake)
+        { 
+	        if (CardsAreSame(cards) && cards[0] == CardEnum.Raft)
+            {
+                return cards.Count == 2;
+	        } else
+            {
+                return false;
+	        }
+	    }
+
+        MovementTileSpriteScript movementTileWrapper = path.GetMovementTile();
+
+        if (movementTileWrapper == null) return false;
+
+        MovementTile movementTile = movementTileWrapper.mTile.mTile;
+
+        if (transportationChart[path.roadType].ContainsKey(movementTile))
+        {
+            // Getting num of cards from dictionary
+            int requiredCount = transportationChart[path.roadType][movementTile];
+
+            // adding 1 to required num of cards if theres an obstacle
+            if (path.HasObstacle())
+            {
+                requiredCount++;
+            }
+
+            if (CardsAreSame(cards) && tileToCard[movementTile] == cards[0])
+            {
+                return cards.Count == requiredCount;
+            }
         }
 
 
-        // Getting num of cards from dictionary
-        int requiredCount = transportationChart[path.roadType][movementTile];
-
-
-        // adding 1 to required num of cards if theres an obstacle
+        // Caravaning
         if (path.HasObstacle())
         {
-            requiredCount++;
-        }
-
-
-        // count number of cards that match the movementTile type
-        int actualCount = NumberOfMovementType(cards, movementTile);
-
-        // return true if there are valid cards to make a move
-        if (actualCount >= requiredCount)
+            return cards.Count == 4;
+	    } else
         {
-            return true;
-        }
-
-
-        //// caravan check
-        //if (!CardsAreSame(cards) && cards.Count >= 3)
-        //{
-        //    if (!path.HasObstacle())
-        //    {
-        //        return true;
-        //    }
-        //    return (cards.Count >= 4);
-        //}
-
-        return false;
-
+            return cards.Count == 3;
+	    }
     }
 
 
     // returns true if all cards in list are of same type
     private static bool CardsAreSame(List<CardEnum> cards)
     {
-        String firstCardName = Enum.GetName(typeof(CardEnum), cards[0]);
+        CardEnum firstCard = cards[0];
         foreach(CardEnum cEnum in cards)
         {
-            String cName = Enum.GetName(typeof(CardEnum), cEnum);
-            if (cName != firstCardName)
+            if (cEnum != firstCard)
             {
                 return false;
             }
