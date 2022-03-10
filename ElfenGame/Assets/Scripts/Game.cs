@@ -392,6 +392,7 @@ public class Game
     public void GameOver()
     {
         List<Player> winners = new List<Player>();
+        List<int> points = new List<int>();
         foreach (Player p in Player.GetAllPlayers()){
             winners.Add(p);
         }
@@ -399,10 +400,12 @@ public class Game
         if (gameVariation == "standard")
         {
             winners = winners.OrderBy(o => o.nPoints * 1000 + o.mCards.Count).ToList();
+            foreach (Player p in winners)
+            {
+                points.Add(p.nPoints);
+            }
         }
-
-
-
+        if (GameConstants.mainUIManager) GameConstants.mainUIManager.GameOverTriggered(winners, points);
     }
 
     public void nextPlayer(bool passed = false)
@@ -424,7 +427,7 @@ public class Game
             {
                 if (curRound == maxRounds)
                 {
-                    // TODO: Game Over
+                    GameOver();
                     Debug.LogError($"Game Over");
                 }
                 else

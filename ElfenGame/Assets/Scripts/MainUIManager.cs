@@ -15,6 +15,9 @@ public class MainUIManager : MonoBehaviour
 
     [SerializeField]
     private GameObject chooseColorPanel;
+    
+    [SerializeField]
+    private GameObject gameOverScreen;
 
     [SerializeField]
     public GameObject playerPrefab;
@@ -364,6 +367,28 @@ public class MainUIManager : MonoBehaviour
         {
             gm.AddNonObstacleTilesToDeck();
             gm.Clear();
+        }
+    }
+
+    public void GameOverTriggered(List<Player> winners, List<int> scores)
+    {
+        gameOverScreen.SetActive(true);
+
+        firstPlace.SetActive(true);
+        firstPlaceSprite.sprite = winners[-1].playerColor.GetSprite();
+        firstPlaceText.text = $"{winners[-1].userName}\nScore: {scores[-1]}";
+
+
+        secondPlace.SetActive(true);
+        secondPlaceSprite.sprite = winners[-2].playerColor.GetSprite();
+        secondPlaceText.text = $"{winners[-2].userName}\nScore: {scores[-2]}";
+
+        if (winners.Count > 2)
+        {
+            thirdPlace.SetActive(true);
+            thirdPlaceSprite.sprite = winners[-3].playerColor.GetSprite();
+            thirdPlaceText.text = $"{winners[-3].userName}\nScore: {scores[-3]}";
+
         }
     }
 
