@@ -402,12 +402,9 @@ public class Game
         }
     }
 
-    public void RemoveVisibleTile(MovementTile movementTile)
+    public void RemoveVisibleTile(int index)
     {
-        int index = visibleTiles.IndexOf(movementTile);
-        if (index == -1) return;
-
-        pile.Add(movementTile);
+        pile.Add(visibleTiles[index]);
         visibleTiles[index] = pile[0];
         pile.RemoveAt(0);
         SyncPile();

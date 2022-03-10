@@ -180,6 +180,7 @@ public class MainUIManager : MonoBehaviour
     public void EndTurnTriggered()
     {
         if (!Player.GetLocalPlayer().IsMyTurn()) return;
+        if (Game.currentGame.curPhase == GamePhase.SelectTokenToKeep) return;
         Game.currentGame.nextPlayer(passed : true);
     }
 
@@ -193,16 +194,18 @@ public class MainUIManager : MonoBehaviour
     public void SelectTokenPressed()
     {
         bool foundSelected = false;
+        int index = 0;
         if (!Player.GetLocalPlayer().IsMyTurn()) return;
         foreach (TileHolderScript thscript in tileGroup.GetComponentsInChildren<TileHolderScript>())
         { 
 	        if (thscript.selected)
             {
-                Game.currentGame.RemoveVisibleTile(thscript.tile.mTile);
+                Game.currentGame.RemoveVisibleTile(index);
                 Player.GetLocalPlayer().AddVisibleTile(thscript.tile.mTile);
                 foundSelected = true;
                 break;
 	        }
+            index++;
 	    }
         if (foundSelected) Game.currentGame.nextPlayer();
     }
