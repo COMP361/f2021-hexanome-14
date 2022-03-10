@@ -12,6 +12,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback
     const byte SPAWN_PLAYER_CODE = 12;
     const byte EVENT_ADD_TILE_CODE = 3;
     const byte EVENT_REMOVE_ALL_TILES_CODE = 4;
+    const byte EVENT_GAME_OVER_CODE = 5;
 
     public void Connect()
     {
@@ -215,6 +216,13 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback
         RaiseEvent(EVENT_REMOVE_ALL_TILES_CODE, data);
     }
 
+    public void GameOver()
+    { 
+        object[] data = new object[] { };
+
+        RaiseEvent(EVENT_GAME_OVER_CODE, data);
+    }
+
     private void RaiseEvent(byte eventCode, object[] data)
     { 
         RaiseEventOptions raiseEventOptions = new RaiseEventOptions
@@ -247,6 +255,10 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback
         {
             GameConstants.mainUIManager.ClearAllTiles();
         }
+        else if (photonEvent.Code == EVENT_GAME_OVER_CODE)
+        {
+            Game.currentGame.GameOver();
+	    }
     }
 
 

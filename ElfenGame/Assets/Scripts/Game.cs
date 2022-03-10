@@ -467,6 +467,7 @@ public class Game
         if (checkAnyPlayerDone())
         {
             GameOver();
+            GameConstants.networkManager.GameOver();
             return;
 	    }
 
@@ -482,6 +483,7 @@ public class Game
             if (curPhase == GamePhase.Travel && curRound == maxRounds)
             {
                 GameOver();
+                GameConstants.networkManager.GameOver();
                 return;
             } else if (curPhase == GamePhase.SelectTokenToKeep)
             {
