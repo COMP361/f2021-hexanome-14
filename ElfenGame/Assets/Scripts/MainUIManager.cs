@@ -14,6 +14,9 @@ public class MainUIManager : MonoBehaviour
     private GameObject pausePanel;
 
     [SerializeField]
+    private GameObject chooseColorPanel;
+
+    [SerializeField]
     public GameObject playerPrefab;
 
     [SerializeField]
@@ -38,7 +41,7 @@ public class MainUIManager : MonoBehaviour
     public GameObject tokenDisplayPrefab;
 
     [SerializeField]
-    public GameObject endTurnButton;
+    public Button endTurnButton;
 
     [SerializeField]
     private TextMeshProUGUI roundInfo;
@@ -55,10 +58,14 @@ public class MainUIManager : MonoBehaviour
     [SerializeField]
     public GameObject mainCanvas;
 
+    [SerializeField]
+    public TMP_Dropdown colorSelectionDD;
+
     public Dictionary<MovementTile, MovementTileSO> mTileDict;
 
     private bool isPaused = false;
     private bool isViewingCards = false;
+    private List<string> elfNames = new List<string> { "Blue", "Cyan", "Red", "Orange", "Pink", "Green" };
     // Start is called before the first frame update
     void Start()
     {
@@ -85,6 +92,24 @@ public class MainUIManager : MonoBehaviour
         {
             town.DisplayVisited();
 	    }
+
+        chooseColorPanel.SetActive(true);
+        UpdateColorOptions();
+    }
+
+    public void UpdateColorOptions()
+    {
+        colorSelectionDD.ClearOptions();
+        List<TMP_Dropdown.OptionData> newOptions = new List<TMP_Dropdown.OptionData>();
+        for (int i = 0; i<6; ++i)
+        {
+            if (!Game.currentGame.availableColors.ContainsKey((PlayerColor)i)) Game.currentGame.availableColors[(PlayerColor)i] = "";
+            if (Game.currentGame.availableColors[(PlayerColor)i] == "")
+            {
+                newOptions.Add(new TMP_Dropdown.OptionData(elfNames[i], ((PlayerColor)i).GetSprite()));
+            }
+        }
+        colorSelectionDD.AddOptions(newOptions);
     }
 
     public void InitPlayer(string username)
@@ -120,6 +145,13 @@ public class MainUIManager : MonoBehaviour
         pausePanel.SetActive(isPaused);
     }
 
+    public void OnConfirmColor()
+    {
+        int index = elfNames.IndexOf(colorSelectionDD.options[colorSelectionDD.value].text);
+        Game.currentGame.ClaimColor((PlayerColor)index);
+        chooseColorPanel.SetActive(false);
+    }
+
     public void exitGameClicked()
     {
         GameConstants.networkManager.LeaveRoom();
@@ -127,8 +159,7 @@ public class MainUIManager : MonoBehaviour
 
     public void OnShowCardHandPressed()
     {
-        isViewingCards = !isViewingCards;
-        cardPanel.SetActive(isViewingCards);
+        cardPanel.SetActive(!cardPanel.activeSelf);
     }
 
     public void EndTurnTriggered()
@@ -168,8 +199,34 @@ public class MainUIManager : MonoBehaviour
     }
 
     public void SelectCardsPressed()
-    { 
-        //TODO: Implement this
+    {
+        cardPanel.SetActive(false);
+
+        if (Game.currentGame.curPhase != GamePhase.Travel) return;
+
+        foreach (PathScript path in GameConstants.roadDict.Values)
+        {
+            path.ColorByMoveValidity(GameConstants.townDict[Player.GetLocalPlayer().curTown], GetSelectedCards());
+	    }
+    }
+
+    public void ResetRoadColors()
+    {
+        foreach (PathScript path in GameConstants.roadDict.Values)
+        {
+            path.ResetColor();
+	    }
+    }
+
+    public List<CardEnum> GetSelectedCards()
+    {
+        List<CardEnum> cards = new List<CardEnum>();
+        foreach (Card cardScript in cardPanel.GetComponentsInChildren<Card>())
+        {
+            if (cardScript.selected) cards.Add(cardScript.cardType);
+        }
+
+        return cards;
     }
 
     public void showTokenSelection()
@@ -199,6 +256,7 @@ public class MainUIManager : MonoBehaviour
 
             TileHolderScript thscript = g.GetComponent<TileHolderScript>();
             thscript.SetTile(mTileDict[tile]);
+            thscript.SetIsSelectable(true);
 	    }
     }
 

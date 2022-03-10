@@ -39,7 +39,7 @@ public class MovementTileSpriteScript : MonoBehaviour
     {
         foreach (PathScript path in GameConstants.roadGroup.GetComponentsInChildren<PathScript>())
         {
-            if (isValid(path))
+            if (path.isValid(mTile))
             {
                 path.GetComponent<SpriteRenderer>().color = new Color(0.0f, 1.0f, 0.0f, GameConstants.pathColoringAlpha);
             } else
@@ -53,7 +53,7 @@ public class MovementTileSpriteScript : MonoBehaviour
     {
         foreach(PathScript path in GameConstants.roadGroup.GetComponentsInChildren<PathScript>())
         {
-            path.GetComponent<SpriteRenderer>().color = new Color(1.0f, 1.0f, 1.0f, 0.0f);
+            path.ResetColor();
         }
     }
 
@@ -70,23 +70,6 @@ public class MovementTileSpriteScript : MonoBehaviour
         }
     }
     
-    public bool isValid(PathScript p){
-        GridManager gm = p.GetComponentInChildren<GridManager>();
-        if (gm == null)
-        {
-            throw new System.Exception("Paths must have GridManagers in a child Element");
-        }
-
-        //if (gm.)
-        if (mTile.mValidRoads.Contains(p.roadType) && gm.checkNumMovTile(p) == 0){
-            //Debug.Log("Valid ");
-            return true;
-        } else {
-            //Debug.Log("Not Valid ");
-            return false;
-        }
-    }
-
     public bool EndDrag()
     {
         bool added = false;
@@ -97,7 +80,7 @@ public class MovementTileSpriteScript : MonoBehaviour
             Debug.Log("Dragging Tile Sprite. Done.");
             PathScript path = GameConstants.mouseActivityManager.EndDrag<PathScript>();
 
-            if (path == null || !isValid(path))
+            if (path == null || !path.isValid(mTile))
             {
                 Destroy(gameObject);
             } else

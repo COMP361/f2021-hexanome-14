@@ -76,28 +76,35 @@ public class Elf : MonoBehaviour
     {
         if (drag)
         {
+            drag = false;
             NewTown town = GameConstants.mouseActivityManager.EndDrag<NewTown>();
 
             transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
             GetComponent<SpriteRenderer>().color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
 
-            if (town == null)
+            if (town != null && GameConstants.mainUIManager)
             {
-                if (dragOriginManager != null)
+                List<CardEnum> cards = GameConstants.mainUIManager.GetSelectedCards();
+                foreach (PathScript pathScript in GameConstants.roadDict.Values)
                 {
-                    dragOriginManager.AddElement(gameObject);
-                } else
-                {
-                    transform.position = dragOrigin;
+                    if (pathScript.CanMoveOnPath(GameConstants.townDict[player.curTown], town, cards))
+                    {
+                        player.curTown = town.name;
+                        foreach (CardEnum card in cards)
+                        {
+                            player.RemoveCard(card);
+                        }
+
+                        GameConstants.mainUIManager.ResetRoadColors();
+                        return;
+                    }
                 }
-                
-            } else
+            }
+            if (dragOriginManager != null)
             {
-                //transform.position = new Vector3(town.gameObject.transform.position.x, town.gameObject.transform.position.y, dragOrigin.z);
-                player.curTown = town.name;
+                dragOriginManager.AddElement(gameObject);
             }
 
-            drag = false;
         }
     }
 
