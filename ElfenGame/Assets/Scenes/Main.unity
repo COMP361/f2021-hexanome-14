@@ -2125,7 +2125,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 709859055341044673, guid: 596d692525ed94d76910cd44cce397db, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: OnConfirmColor
+      value: exitGameClicked
       objectReference: {fileID: 0}
     - target: {fileID: 709859055341044673, guid: 596d692525ed94d76910cd44cce397db, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
@@ -6897,7 +6897,7 @@ PrefabInstance:
     - target: {fileID: 709859055341044673, guid: 596d692525ed94d76910cd44cce397db, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1562634290}
+      objectReference: {fileID: 1562634289}
     - target: {fileID: 709859055341044673, guid: 596d692525ed94d76910cd44cce397db, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
@@ -6912,7 +6912,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 709859055341044673, guid: 596d692525ed94d76910cd44cce397db, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: OnConfirmColor
+      value: QuitGame
       objectReference: {fileID: 0}
     - target: {fileID: 709859055341044673, guid: 596d692525ed94d76910cd44cce397db, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
@@ -6920,7 +6920,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 709859055341044673, guid: 596d692525ed94d76910cd44cce397db, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: MainUIManager, Assembly-CSharp
+      value: SceneLoader, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 709859055341044673, guid: 596d692525ed94d76910cd44cce397db, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
