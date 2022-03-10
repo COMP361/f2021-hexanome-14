@@ -268,6 +268,7 @@ public class MainUIManager : MonoBehaviour
             if (cardScript.selected) cards.Add(cardScript.cardType);
         }
 
+        Debug.Log($"{cards.Count} cards selected");
         return cards;
     }
 
