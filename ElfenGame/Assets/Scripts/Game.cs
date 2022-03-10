@@ -167,11 +167,8 @@ public class Game
             // TODO: Remove Later
             p.playerColor = (PlayerColor)i;
 
-            p.AddTile(MovementTile.GiantPig);
-            p.AddTile(MovementTile.GiantPig);
-            p.AddTile(MovementTile.GiantPig);
-            p.AddTile(MovementTile.TrollWagon);
-            p.AddTile(MovementTile.Unicorn);
+            p.AddHiddenTile(RemoveTileFromPile());
+            p.AddHiddenTile(RemoveTileFromPile());
         }
         _curPlayerIndex = -1;
         curPlayerIndex = 0;

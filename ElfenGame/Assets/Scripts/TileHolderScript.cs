@@ -23,6 +23,7 @@ public class TileHolderScript : MonoBehaviour
 
     public void SetTile(MovementTileSO tile)
     {
+        this.tile = tile;
         tileImage.sprite = tile.mImage; 
     }
 

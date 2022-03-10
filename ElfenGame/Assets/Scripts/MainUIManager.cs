@@ -131,12 +131,23 @@ public class MainUIManager : MonoBehaviour
 
     public void SelectTokenPressed()
     { 
-        //TODO: Implement this
+        foreach (TileHolderScript thscript in tileGroup.GetComponentsInChildren<TileHolderScript>())
+        { 
+	        if (thscript.selected)
+            {
+                Game.currentGame.RemoveVisibleTile(thscript.tile.mTile);
+                Player.GetLocalPlayer().AddVisibleTile(thscript.tile.mTile);
+                break;
+	        }
+	    }
+        //TODO: Move to next player
     }
 
     public void SelectRandomTokenPressed()
-    { 
-        //TODO: Implement this
+    {
+        MovementTile tile = Game.currentGame.RemoveTileFromPile();
+        Player.GetLocalPlayer().AddVisibleTile(tile);
+        //TODO: Move to next player
     }
 
     public void SelectCardsPressed()

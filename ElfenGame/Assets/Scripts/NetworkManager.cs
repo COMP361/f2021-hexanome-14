@@ -48,13 +48,14 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback
     private void ResetPlayerProperties()
     { 
 	    ExitGames.Client.Photon.Hashtable hashtable = new ExitGames.Client.Photon.Hashtable();
-        hashtable.Add("COINS", null);
-        hashtable.Add("POINTS", null);
-        hashtable.Add("NAME", null);
-        hashtable.Add("CARDS", null);
-        hashtable.Add("TILES", null);
-        hashtable.Add("COLOR", null);
-        hashtable.Add("TOWN", null);
+        hashtable.Add(Player.pCOINS, null);
+        hashtable.Add(Player.pCOLOR, null);
+        hashtable.Add(Player.pNAME, null);
+        hashtable.Add(Player.pPOINTS, null);
+        hashtable.Add(Player.pHIDDEN_TILES, null);
+        hashtable.Add(Player.pVISIBLE_TILES, null);
+        hashtable.Add(Player.pCARDS, null);
+        hashtable.Add(Player.pTOWN, null);
         Photon.Realtime.Player p = PhotonNetwork.LocalPlayer;
 	    if (p != null) p.SetCustomProperties(hashtable);
 
