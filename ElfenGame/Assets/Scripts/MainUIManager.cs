@@ -103,6 +103,7 @@ public class MainUIManager : MonoBehaviour
         List<TMP_Dropdown.OptionData> newOptions = new List<TMP_Dropdown.OptionData>();
         for (int i = 0; i<6; ++i)
         {
+            if (!Game.currentGame.availableColors.ContainsKey((PlayerColor)i)) Game.currentGame.availableColors[(PlayerColor)i] = "";
             if (Game.currentGame.availableColors[(PlayerColor)i] == "")
             {
                 newOptions.Add(new TMP_Dropdown.OptionData(elfNames[i], ((PlayerColor)i).GetSprite()));
