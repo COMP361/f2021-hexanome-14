@@ -323,7 +323,7 @@ public class Player
         }
         else if (key == pCOLOR)
         {
-            UpdateColor((PlayerColor)value);
+            if (value != null) UpdateColor((PlayerColor)value);
         }
         else if (key == pTOWN)
         {

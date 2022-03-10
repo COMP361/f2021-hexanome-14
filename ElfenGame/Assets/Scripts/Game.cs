@@ -179,6 +179,7 @@ public class Game
         for (int i = 0; i < 6; ++i)
         {
             availableColors[(PlayerColor)i] = "";
+	        GameConstants.networkManager.SetGameProperty($"{pPLAYER_COLOR}{Enum.GetName(typeof(PlayerColor), (PlayerColor)i)}", Player.GetLocalPlayer().userName);
         }
 
         curPhase = GamePhase.HiddenCounter;
