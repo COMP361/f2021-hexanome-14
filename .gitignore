@@ -11,7 +11,11 @@ crash.log
 
 .idea/
 
+.vscode/
+
 ElfenGame/.vsconfig
+
+DesignModel.md
 
 ############ Unity Stuff #########
 
