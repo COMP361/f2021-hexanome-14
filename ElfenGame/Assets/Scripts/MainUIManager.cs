@@ -104,8 +104,8 @@ public class MainUIManager : MonoBehaviour
             InitPlayer(playerName);
         }
 
-        UpdateRoundInfo();
-        UpdateAvailableTokens();
+        Game.currentGame.UpdateDisplay();
+
         foreach (NewTown town in GameConstants.townDict.Values)
         {
             town.DisplayVisited();
@@ -304,8 +304,8 @@ public class MainUIManager : MonoBehaviour
 
     public void showAvailableTokensToKeep()
     {
-        tokenToKeepSelectionWindow.SetActive(true);
         UpdateTokenToKeep();
+        tokenToKeepSelectionWindow.SetActive(true);
     }
 
     public void hideAvailableTokensToKeep()
@@ -331,7 +331,7 @@ public class MainUIManager : MonoBehaviour
             thscript.SetInVisibleTokens(true);
         }
 
-        foreach (MovementTile tile in Player.GetLocalPlayer().mVisibleTiles)
+        foreach (MovementTile tile in Player.GetLocalPlayer().mHiddenTiles)
         {
             GameObject g = Instantiate(tilePrefab, gridGroup.transform);
 

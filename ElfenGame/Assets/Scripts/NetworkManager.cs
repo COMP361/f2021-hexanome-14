@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 using ExitGames.Client.Photon;
 using System;
 
-public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback
+public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback, IInRoomCallbacks
 {
     const byte SPAWN_PLAYER_CODE = 12;
     const byte EVENT_ADD_TILE_CODE = 3;
@@ -81,6 +81,13 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback
         }
     }
 
+    public void JoinOrCreateRoom(string roomName)
+    {
+        if (PhotonNetwork.IsConnectedAndReady && !PhotonNetwork.InRoom)
+        {
+            PhotonNetwork.JoinOrCreateRoom(roomName, new RoomOptions { MaxPlayers = 6, IsVisible = true, PublishUserId = true }, null);
+        }
+    }
 
 
     public void JoinRoom(string roomName)
@@ -153,6 +160,11 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback
 
     }
 
+    public override void OnMasterClientSwitched(Photon.Realtime.Player newMasterClient)
+    {
+        Debug.Log($"{newMasterClient.UserId} is now the master client");
+    }
+
     public override void OnRoomPropertiesUpdate(ExitGames.Client.Photon.Hashtable propertiesThatChanged)
     {
         base.OnRoomPropertiesUpdate(propertiesThatChanged);
@@ -190,6 +202,11 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback
         }
     }
 
+    public void SetLocalPlayerStats(ExitGames.Client.Photon.Hashtable hashtable)
+    {
+        PhotonNetwork.LocalPlayer.SetCustomProperties(hashtable);
+    }
+
     public void SetPlayerPropertyByPlayerName(string playerName, object key, object value)
     {
         ExitGames.Client.Photon.Hashtable hashtable = new ExitGames.Client.Photon.Hashtable();
@@ -205,17 +222,11 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback
 
     public override void OnPlayerPropertiesUpdate(Photon.Realtime.Player targetPlayer, ExitGames.Client.Photon.Hashtable changedProps)
     {
-        base.OnPlayerPropertiesUpdate(targetPlayer, changedProps);
-
         //Debug.Log($"{targetPlayer.UserId} properties updated");
         Player pm = Player.GetOrCreatePlayer(targetPlayer.UserId);
         if (pm != null)
         {
             pm.UpdatePlayerStats(changedProps);
-            // foreach (DictionaryEntry entry in changedProps)
-            // {
-            //     pm.updatePropertiesCallback((string)entry.Key, entry.Value);
-            // }
         }
     }
 
@@ -278,34 +289,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback
         }
     }
 
-
-
-    //public void SpawnPlayer(string username, PhotonView photonView)
-    //{
-    //    if (PhotonNetwork.AllocateRoomViewID(photonView))
-    //    {
-    //        object[] data = new object[] { username, photonView.ViewID };
-
-    //        RaiseEventOptions raiseEventOptions = new RaiseEventOptions
-    //        {
-    //            Receivers = ReceiverGroup.Others,
-    //            CachingOption = EventCaching.AddToRoomCache
-    //        };
-
-    //        SendOptions sendOptions = new SendOptions
-    //        {
-    //            Reliability = true
-    //        };
-
-    //        PhotonNetwork.RaiseEvent(SPAWN_PLAYER_CODE, data, raiseEventOptions, sendOptions);
-
-    //    }
-    //    else
-    //    {
-    //        Debug.LogError("Failed to allocate ViewId");
-    //    }
-    //}
-
     public void LoadArena()
     {
         if (!PhotonNetwork.InRoom)
@@ -333,12 +316,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback
         Debug.Log($"Connected to server.");
     }
 
-    //public override void OnJoinRandomFailed(short returnCode, string message)
-    //{
-    //    Debug.Log($"Joining random room failed because of {message}. Creating a new one.");
-    //    PhotonNetwork.CreateRoom(null, new RoomOptions { MaxPlayers = 6, IsVisible = true });
-    //}
-
 
     public void CreateRoom(string roomName)
     {
@@ -348,17 +325,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback
         }
     }
 
-    //public override void OnRoomListUpdate(List<RoomInfo> roomList)
-    //{
-    //    List<string> roomNames = new List<string>();
-
-    //    foreach (RoomInfo roomInfo in roomList)
-    //    {
-    //        roomNames.Add(roomInfo.Name);
-    //    }
-
-    //    uiManager.UpdateAvailableRoomList(roomNames);
-    //}
 
     public override void OnCreateRoomFailed(short returnCode, string message)
     {
@@ -373,22 +339,17 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback
         if (GameConstants.mainMenuUIManager != null)
         {
             GameConstants.mainMenuUIManager.InGameSelectView();
+
         }
 
-        _ = Player.GetOrCreatePlayer(Lobby.myUsername);
+        Player.GetLocalPlayer().SyncPlayerStats();
     }
 
     public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer)
     {
-        //Debug.LogError($"Player {newPlayer.UserId} entered the room.");
-
-        Player.GetOrCreatePlayer(newPlayer.UserId);
-
-        if (PhotonNetwork.IsMasterClient)
+        if (PhotonNetwork.IsMasterClient && GameConstants.mainMenuUIManager && GameConstants.mainMenuUIManager.GetLoadedOwner() == newPlayer.UserId)
         {
-            Debug.Log("OnPlayerEnteredRoom IsMasterClient");
-
-            //LoadArena();
+            PhotonNetwork.SetMasterClient(newPlayer);
         }
 
     }

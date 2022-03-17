@@ -16,7 +16,7 @@ public class TileHolderScript : MonoBehaviour
     private bool inVisible;
     private Image background;
 
-    public void Start()
+    public void Awake()
     {
         isSelectable = true;
         selected = false;
@@ -28,7 +28,7 @@ public class TileHolderScript : MonoBehaviour
     public void SetTile(MovementTileSO tile)
     {
         this.tile = tile;
-        tileImage.sprite = tile.mImage; 
+        tileImage.sprite = tile.mImage;
     }
 
     public void SetIsSelectable(bool isSelectable)
@@ -39,6 +39,7 @@ public class TileHolderScript : MonoBehaviour
     public void SetInVisibleTokens(bool inVisible)
     {
         this.inVisible = inVisible;
+        SetBackGroundColor();
     }
 
     public bool GetInVisibleTokens()
@@ -50,6 +51,7 @@ public class TileHolderScript : MonoBehaviour
     {
         if (background == null) background = GetComponent<Image>();
         if (!isSelectable) return;
+
         if (selected)
         {
             background.color = GameConstants.green;
@@ -58,10 +60,10 @@ public class TileHolderScript : MonoBehaviour
         {
             background.color = GameConstants.red;
         }
-        else
+        else if (!inVisible)
         {
             background.color = GameConstants.blue;
-	    }
+        }
     }
 
     public void ClickedOn()

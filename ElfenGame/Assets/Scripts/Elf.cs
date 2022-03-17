@@ -89,7 +89,7 @@ public class Elf : MonoBehaviour
                     if (pathScript.CanMoveOnPath(GameConstants.townDict[player.curTown], town, cards))
                     {
                         player.curTown = town.name;
-                        player.RemoveCard(cards.ToArray());
+                        player.RemoveCards(cards.ToArray());
 
                         GameConstants.mainUIManager.ResetRoadColors();
                         return;
@@ -107,11 +107,11 @@ public class Elf : MonoBehaviour
     public void SetTown(string destination)
     {
         NewTown destinationTown = GameConstants.townDict[destination];
-        NewTown sourceTown = GetComponentInParent<NewTown>();
+        GridManager sourceTown = GetComponentInParent<GridManager>();
 
-        if (sourceTown != null && sourceTown != destinationTown)
+        if (sourceTown != null)
         {
-            sourceTown.GetComponent<GridManager>().RemoveElement(gameObject);
+            sourceTown.RemoveElement(gameObject);
         }
 
         if (destinationTown != null)

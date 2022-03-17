@@ -28,16 +28,20 @@ public class Game
     private const string pDISCARD = "DISCARD";
     private const string pPILE = "PILE";
     private const string pVISIBLE = "VISIBLE";
-    private const string pPOINTER = "POINTER";
     private const string pPLAYERS = "PLAYERS";
     private const string pCUR_PLAYER = "CUR_PLAYER";
     private const string pCUR_ROUND = "CUR_ROUND";
     private const string pCUR_PHASE = "CUR_PHASE";
     private const string pMAX_ROUNDS = "MAX_ROUNDS";
-    private const string pCOLOR_AVAIL_PREFIX = "COLOR_AVAIL";
     private const string pGAME_VARIATION = "GAME_VARIATION";
 
     private const string pPASSED_PLAYERS = "PASSED_PLAYERS";
+
+    private static string[] pPLAYER_PROPS = {
+        pDECK, pDISCARD, pPILE, pVISIBLE, pPLAYERS, pCUR_PLAYER, pCUR_ROUND, pCUR_PHASE, pMAX_ROUNDS, pGAME_VARIATION, pPASSED_PLAYERS
+    };
+
+    private const string pCOLOR_AVAIL_PREFIX = "COLOR_AVAIL";
 
     public static Game currentGame = new Game();
 
@@ -55,7 +59,6 @@ public class Game
         set
         {
             _gameProperties[pGAME_VARIATION] = value;
-            SyncGameProperties();
         }
     }
 
@@ -68,7 +71,6 @@ public class Game
         set
         {
             _gameProperties[pCUR_PLAYER] = value;
-            SyncGameProperties();
         }
     }
 
@@ -81,7 +83,6 @@ public class Game
         set
         {
             _gameProperties[pPASSED_PLAYERS] = value;
-            SyncGameProperties();
         }
     }
 
@@ -94,7 +95,6 @@ public class Game
         set
         {
             _gameProperties[pMAX_ROUNDS] = value;
-            SyncGameProperties();
         }
     }
 
@@ -107,7 +107,6 @@ public class Game
         set
         {
             _gameProperties[pCUR_PHASE] = value;
-            SyncGameProperties();
         }
     }
 
@@ -120,7 +119,6 @@ public class Game
         set
         {
             _gameProperties[pCUR_ROUND] = value;
-            SyncGameProperties();
         }
     }
 
@@ -160,7 +158,7 @@ public class Game
         get
         {
             List<PlayerColor> colors = new List<PlayerColor>();
-            for (int i = 0; i < Enum.GetNames(typeof(PlayerColor)).Length; i++)
+            for (int i = 0; i < 6; i++)
             {
                 if ((string)_colorProperties[getColorKey((PlayerColor)i)] == "")
                 {
@@ -206,11 +204,11 @@ public class Game
         }
     }
 
-    private Game()
+    public Game()
     {
         _gameProperties = new ExitGames.Client.Photon.Hashtable();
         _colorProperties = new ExitGames.Client.Photon.Hashtable();
-        for (int i = 0; i < Enum.GetNames(typeof(PlayerColor)).Length; i++)
+        for (int i = 0; i < 6; i++)
         {
             _colorProperties[getColorKey((PlayerColor)i)] = "";
         }
@@ -221,8 +219,6 @@ public class Game
     {
         UpdateDisplay();
         if (GameConstants.networkManager) GameConstants.networkManager.SetGameProperties(_gameProperties);
-        HandlePhaseUpdate();
-        HandlePlayerUpdate();
     }
 
     private void HandleColorUpdate(PlayerColor color, string value)
@@ -232,6 +228,8 @@ public class Game
         if (Player.GetLocalPlayer().userName == value)
         {
             Player.GetLocalPlayer().playerColor = color;
+            if (GameConstants.mainUIManager)
+                GameConstants.mainUIManager.CloseColorSelection();
         }
         if (GameConstants.mainUIManager)
         {
@@ -241,7 +239,7 @@ public class Game
 
     public void UpdateGameProperties(ExitGames.Client.Photon.Hashtable properties)
     {
-        for (int i = 0; i < Enum.GetNames(typeof(PlayerColor)).Length; i++)
+        for (int i = 0; i < 6; i++)
         {
             string key = getColorKey((PlayerColor)i);
             if (properties.ContainsKey(key))
@@ -249,17 +247,15 @@ public class Game
                 HandleColorUpdate((PlayerColor)i, (string)properties[key]);
                 return;
             }
-
         }
 
-        foreach (string key in _gameProperties.Keys)
+        foreach (string key in pPLAYER_PROPS)
         {
-            if (!properties.ContainsKey(key))
+            if (properties.ContainsKey(key))
             {
-                return; // If hashtable not complete, don't update
+                _gameProperties[key] = properties[key];
             }
         }
-        _gameProperties = properties;
         UpdateDisplay();
     }
 
@@ -267,6 +263,7 @@ public class Game
     {
         if (GameConstants.mainUIManager)
         {
+            HandlePhaseUpdate();
             GameConstants.mainUIManager.UpdateAvailableTokens();
             GameConstants.mainUIManager.UpdateRoundInfo(); // TODO: pass info as argument?
         }
@@ -277,8 +274,8 @@ public class Game
 
         Debug.Log("Game Init Called");
         _gameProperties[pCUR_PLAYER] = 0;
-        _gameProperties[pCUR_ROUND] = 0;
-        _gameProperties[pCUR_PHASE] = GamePhase.HiddenCounter;
+        _gameProperties[pCUR_ROUND] = 1;
+        _gameProperties[pCUR_PHASE] = GamePhase.DrawCardsAndCounters;
         _gameProperties[pMAX_ROUNDS] = maxRnds;
         _gameProperties[pGAME_VARIATION] = variation;
         _gameProperties[pPASSED_PLAYERS] = 0;
@@ -289,32 +286,34 @@ public class Game
         _gameProperties[pDISCARD] = new CardEnum[0];
         _gameProperties[pDECK] = new CardEnum[0];
 
-
         InitPlayersList();
         InitPile();
         InitDeck();
 
-        InitRound();
+        if (GameConstants.networkManager)
+        {
+            GameConstants.networkManager.SetGameProperties(_colorProperties);
+        }
 
         SyncGameProperties();
     }
 
-    public void InitRound()
-    {
-        //TODO: Stop using this function (players should get their own cards)
-        for (int i = 0; i < mPlayers.Count; i++)
-        {
-            Player p = Player.GetPlayer(mPlayers[i]);
+    // public void InitRound()
+    // {
+    //     //TODO: Stop using this function (players should get their own cards)
+    //     for (int i = 0; i < mPlayers.Count; i++)
+    //     {
+    //         Player p = Player.GetPlayer(mPlayers[i]);
 
 
-            if (p.mCards.Count < 8)
-            {
-                p.AddCards(Draw(8 - p.mCards.Count));
-            }
+    //         if (p.mCards.Count < 8)
+    //         {
+    //             p.AddCards(Draw(8 - p.mCards.Count));
+    //         }
 
-            p.AddHiddenTile(RemoveTileFromPile());
-        }
-    }
+    //         p.AddHiddenTile(RemoveTileFromPile());
+    //     }
+    // }
 
     private void InitPile()
     {
@@ -343,7 +342,7 @@ public class Game
 
     public void InitPlayersList()
     {
-        List<string> playersInGame = mPlayers;
+        List<string> playersInGame = new List<string>();
         foreach (Photon.Realtime.Player p in GameConstants.networkManager.GetPlayers())
         {
             playersInGame.Add(p.UserId);
@@ -373,56 +372,83 @@ public class Game
         _gameProperties[pDECK] = deck.ToArray();
     }
 
-    private void YourTurn()
-    {
-        Player local = Player.GetLocalPlayer();
-        if (curPhase == GamePhase.SelectTokenToKeep)
-        {
-            if (local.mHiddenTiles.Count == 0 && (local.mVisibleTiles.Count == 0 ||
-             (local.mVisibleTiles.Count == 1 && local.mVisibleTiles[0] == MovementTile.RoadObstacle)))
-            {
-                nextPlayer();
-            }
-            else if (GameConstants.mainUIManager)
-            {
-                GameConstants.mainUIManager.UpdateAvailableTokens();
-                GameConstants.mainUIManager.showAvailableTokensToKeep();
-            }
-            // SelectTokenToKeep but no tokens remain
-        }
-    }
+    // private void YourTurn()
+    // {
+    //     Player local = Player.GetLocalPlayer();
+    //     if (curPhase == GamePhase.SelectTokenToKeep)
+    //     {
+    //         if (local.mHiddenTiles.Count == 0 && (local.mVisibleTiles.Count == 0 ||
+    //          (local.mVisibleTiles.Count == 1 && local.mVisibleTiles[0] == MovementTile.RoadObstacle)))
+    //         {
+    //             nextPlayer();
+    //         }
+    //         else if (GameConstants.mainUIManager)
+    //         {
+    //             GameConstants.mainUIManager.UpdateAvailableTokens();
+    //             GameConstants.mainUIManager.showAvailableTokensToKeep();
+    //         }
+    //         // SelectTokenToKeep but no tokens remain
+    //     }
+    // }
 
-    private void NotYourTurn()
-    {
-        if (GameConstants.mainUIManager)
-        {
-            GameConstants.mainUIManager.hideAvailableTokensToKeep();
-        }
-    }
+    // private void NotYourTurn()
+    // {
+    //     if (GameConstants.mainUIManager)
+    //     {
+    //         GameConstants.mainUIManager.hideAvailableTokensToKeep();
+    //     }
+    // }
 
-    private void HandlePlayerUpdate()
-    {
-        if (GameConstants.mainUIManager) GameConstants.mainUIManager.UpdateRoundInfo();
-        if (Player.GetLocalPlayer().IsMyTurn())
-        {
-            YourTurn();
-        }
-        else
-        {
-            NotYourTurn();
-        }
-    }
+    // private void HandlePlayerUpdate()
+    // {
+    //     if (Player.GetLocalPlayer().IsMyTurn())
+    //     {
+    //         YourTurn();
+    //     }
+    //     else
+    //     {
+    //         NotYourTurn();
+    //     }
+    // }
 
     private void HandlePhaseUpdate()
     {
-        if (GameConstants.mainUIManager) GameConstants.mainUIManager.UpdateRoundInfo();
+        if (!GameConstants.mainUIManager)
+        {
+            Debug.LogError("No mainUIManager");
+            return;
+        }
+        GameConstants.mainUIManager.UpdateRoundInfo();
         if (curPhase == GamePhase.DrawCounters1 || curPhase == GamePhase.DrawCounters2 || curPhase == GamePhase.DrawCounters3)
         {
-            if (GameConstants.mainUIManager) GameConstants.mainUIManager.showTokenSelection();
+            GameConstants.mainUIManager.showTokenSelection();
         }
         else
         {
-            if (GameConstants.mainUIManager) GameConstants.mainUIManager.hideTokenSelection();
+            GameConstants.mainUIManager.hideTokenSelection();
+        }
+
+        Player local = Player.GetLocalPlayer();
+        if (curPhase == GamePhase.SelectTokenToKeep && local.IsMyTurn())
+        {
+            if (local.mHiddenTiles.Count == 0 && (local.mVisibleTiles.Count == 0 ||
+                         (local.mVisibleTiles.Count == 1 && local.mVisibleTiles[0] == MovementTile.RoadObstacle)))
+            {
+                nextPlayer();
+            }
+            else
+            {
+                GameConstants.mainUIManager.showAvailableTokensToKeep();
+            }
+        }
+        else
+        {
+            GameConstants.mainUIManager.hideAvailableTokensToKeep();
+        }
+
+        if (curPhase == GamePhase.DrawCardsAndCounters && local.IsMyTurn())
+        {
+            local.SelfInitRound();
         }
         // Debug.LogError($"Cur Phase set to {Enum.GetName(typeof(GamePhase), curPhase)}");
     }
@@ -588,8 +614,7 @@ public class Game
             {
                 if (GameConstants.mainUIManager) GameConstants.mainUIManager.ClearAllTiles();
                 if (GameConstants.networkManager) GameConstants.networkManager.ClearAllTiles();
-                curPhase = GamePhase.HiddenCounter;
-                InitRound();
+                curPhase = GamePhase.DrawCardsAndCounters;
                 curRound = curRound + 1;
                 curPlayerIndex = (curRound - 1) % mPlayers.Count;
             }
@@ -601,17 +626,19 @@ public class Game
 
             //Debug.LogError($"Cur Round is: {curRound}"); 
         }
+        SyncGameProperties();
     }
 
     public CardEnum[] Draw(int n)
     {
+        //TODO: reshuffle deck with empty (use discard pile)
         List<CardEnum> deck = mDeck;
         CardEnum[] ret = new CardEnum[n];
         for (int i = 0; i < n; ++i)
         {
             ret[i] = deck[0];
             deck.RemoveAt(0);
-        } //TODO: Synce updates across clients
+        } //TODO: Synce updates across clients (this might be covered now by sync at end of turn)
         _gameProperties[pDECK] = deck.ToArray();
         return ret;
     }

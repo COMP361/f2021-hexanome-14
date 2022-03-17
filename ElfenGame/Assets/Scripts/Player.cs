@@ -22,9 +22,12 @@ public class Player
 
     public Dictionary<MovementTile, int> mTiles;
 
+    private int lastInitializedround = 0;
+
 
     public void UpdateDisplay()
     {
+        UpdateTiles();
         if (tile != null)
             tile.UpdateStats(userName, nCoins, nPoints, mCards.Count, mVisibleTiles.Count + mHiddenTiles.Count, playerColor);
 
@@ -34,36 +37,29 @@ public class Player
             elf.SetTown(curTown);
         }
 
-        if (GameConstants.townDict.ContainsKey(curTown))
+        if (tokenDisplay != null)
         {
-            NewTown town = GameConstants.townDict[curTown];
-            if (town != null) town.DisplayVisited();
+            tokenDisplay.SetVisible(mVisibleTiles);
+            tokenDisplay.SetNumHidden(mHiddenTiles.Count);
         }
 
-        if (playerColor != PlayerColor.None && GameConstants.mainUIManager)
+        if (GameConstants.mainUIManager)
         {
-            GameConstants.mainUIManager.CloseColorSelection();
             GameConstants.mainUIManager.UpdatePlayerPointDisplay();
+
+            if (IsLocalPlayer())
+            {
+                GameConstants.mainUIManager.UpdateMovementTileCounts();
+                GameConstants.mainUIManager.UpdateCardHand();
+            }
         }
     }
 
     #region Private Update Methods
 
 
-    private void HandleTownChange(string newTown)
+    private void HandleTownChange()
     {
-        Dictionary<string, bool> visited = _properties[pVISITED] as Dictionary<string, bool>;
-        visited[newTown] = true;
-        _properties[pVISITED] = visited;
-
-        int nVisited = 0;
-        foreach (bool b in visited.Values)
-        {
-            if (b) nVisited++;
-        }
-
-        if (elf)
-            elf.SetTown(newTown);
     }
     // private void UpdateTown(string value)
     // {
@@ -104,6 +100,24 @@ public class Player
     //     if (Lobby.myUsername == _userName && GameConstants.mainUIManager) GameConstants.mainUIManager.UpdateCardHand();
     //     if (tile != null) tile.SetCards(_mCards.Count);
     // }
+
+    public void SelfInitRound()
+    {
+        if (Game.currentGame.curRound <= lastInitializedround)
+        {
+            Debug.Log($"Already initialized round {Game.currentGame.curRound} for player {userName}");
+            return;
+        }
+        List<CardEnum> cards = mCards;
+        if (cards.Count < 8)
+        {
+            AddCards(Game.currentGame.Draw(8 - cards.Count));
+        }
+
+        AddHiddenTile(Game.currentGame.RemoveTileFromPile());
+
+        lastInitializedround = Game.currentGame.curRound;
+    }
 
     private void UpdateTiles()
     {
@@ -209,6 +223,20 @@ public class Player
         }
         set
         {
+            // Update visited
+            Dictionary<string, bool> visited = mVisited;
+            visited[value] = true;
+            _properties[pVISITED] = visited;
+
+            // Update points
+            int nVisited = 0;
+            foreach (bool b in visited.Values)
+            {
+                if (b) nVisited++;
+            }
+            _properties[pPOINTS] = nVisited - 1;
+
+            // Update town
             _properties[pTOWN] = value;
             SyncPlayerStats();
         }
@@ -228,9 +256,14 @@ public class Player
 
     public void SyncPlayerStats()
     {
+        if (!IsLocalPlayer())
+        {
+            Debug.LogError("Trying to sync stats for non-local player");
+            return;
+        }
         if (GameConstants.networkManager)
         {
-            GameConstants.networkManager.SetPlayerStatsByPlayerName(userName, _properties);
+            GameConstants.networkManager.SetLocalPlayerStats(_properties);
         }
         UpdateDisplay();
     }
@@ -243,7 +276,7 @@ public class Player
         SyncPlayerStats();
     }
 
-    public void RemoveCard(CardEnum[] cards)
+    public void RemoveCards(CardEnum[] cards)
     {
         List<CardEnum> hand = mCards;
         foreach (CardEnum card in cards)
@@ -259,7 +292,6 @@ public class Player
         List<MovementTile> visibleTiles = mVisibleTiles;
         visibleTiles.Add(tile);
         _properties[pVISIBLE_TILES] = visibleTiles.ToArray();
-        UpdateTiles();
         SyncPlayerStats();
     }
     public void AddHiddenTile(MovementTile tile)
@@ -267,7 +299,6 @@ public class Player
         List<MovementTile> hiddenTiles = mHiddenTiles;
         hiddenTiles.Add(tile);
         _properties[pHIDDEN_TILES] = hiddenTiles.ToArray();
-        UpdateTiles();
         SyncPlayerStats();
     }
     public void RemoveTile(MovementTile tile)
@@ -280,7 +311,6 @@ public class Player
         {
             RemoveHiddenTile(tile);
         }
-        UpdateTiles();
         SyncPlayerStats();
     }
 
@@ -316,7 +346,6 @@ public class Player
 
         _properties[pVISIBLE_TILES] = visibleTiles.ToArray();
         _properties[pHIDDEN_TILES] = hiddenTiles.ToArray();
-        UpdateTiles();
         SyncPlayerStats();
     }
 
@@ -338,7 +367,6 @@ public class Player
             }
         }
         _properties = hashtable;
-        UpdateTiles();
         UpdateDisplay();
     }
 
@@ -403,6 +431,8 @@ public class Player
 
         InitVisited();
 
+        lastInitializedround = 0;
+
     }
 
     private void InitVisited()
@@ -454,6 +484,11 @@ public class Player
         return (Game.currentGame != null) && (Game.currentGame.GetCurPlayer() == userName);
     }
 
+    public bool IsLocalPlayer()
+    {
+        return userName == Lobby.myUsername;
+    }
+
     public bool isVisited(string townName)
     {
         Dictionary<string, bool> visitedTowns = _properties[pVISITED] as Dictionary<string, bool>;
@@ -475,7 +510,7 @@ public class Player
 
     #region static methods
 
-    private static Dictionary<string, Player> _players = new Dictionary<string, Player>();
+    private static Dictionary<string, Player> _players;
 
     public static Player GetLocalPlayer()
     {
@@ -484,21 +519,21 @@ public class Player
 
     public static List<Player> GetAllPlayers()
     {
-        if (GameConstants.networkManager)
-        {
-            List<string> toRemove = new List<string>();
-            foreach (string pName in _players.Keys)
-            {
-                if (GameConstants.networkManager.GetPlayer(pName) == null)
-                {
-                    toRemove.Add(pName);
-                }
-            }
-            foreach (string pName in toRemove)
-            {
-                _players.Remove(pName);
-            }
-        }
+        // if (GameConstants.networkManager)
+        // {
+        //     List<string> toRemove = new List<string>();
+        //     foreach (string pName in _players.Keys)
+        //     {
+        //         if (GameConstants.networkManager.GetPlayer(pName) == null)
+        //         {
+        //             toRemove.Add(pName);
+        //         }
+        //     }
+        //     foreach (string pName in toRemove)
+        //     {
+        //         _players.Remove(pName);
+        //     }
+        // }
         return _players.Values.ToList();
     }
 
@@ -522,6 +557,12 @@ public class Player
         }
 
         return _players[p];
+    }
+
+    public static void ResetPlayers()
+    {
+        _players = new Dictionary<string, Player>();
+        _players[Lobby.myUsername] = new Player(Lobby.myUsername);
     }
 
     #endregion
