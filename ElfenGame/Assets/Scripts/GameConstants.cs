@@ -35,6 +35,8 @@ public static class GameConstants
     private static Dictionary<string, NewTown> _townDict;
     private static Dictionary<string, PathScript> _roadDict;
 
+    private static List<string> _townNames;
+
     private static GameObject _roadGroup;
     private static GameObject _townGroup;
     private static GameObject _tileGroup;
@@ -83,6 +85,24 @@ public static class GameConstants
                 _tileGroup = GameObject.Find("TileArea");
             }
             return _tileGroup;
+        }
+    }
+
+    public static List<string> townNames
+    {
+        get
+        {
+            if (_townNames == null)
+            {
+                _townNames = new List<string>();
+                TextAsset textAsset = Resources.Load("TownList") as TextAsset;
+                string[] lines = textAsset.text.Split('\n');
+                foreach (string line in lines)
+                {
+                    _townNames.Add(line);
+                }
+            }
+            return _townNames;
         }
     }
     public static Dictionary<string, NewTown> townDict

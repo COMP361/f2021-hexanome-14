@@ -8,7 +8,7 @@ public class NewTown : MonoBehaviour, IDragOver
 
     public void Awake()
     {
-        pointsHolder = (GameObject) Instantiate(Resources.Load("PointsHolder"), transform);
+        pointsHolder = (GameObject)Instantiate(Resources.Load("PointsHolder"), transform);
     }
 
     public GameObject pointPrefab;
@@ -33,21 +33,21 @@ public class NewTown : MonoBehaviour, IDragOver
         GridManager pointsManager = pointsHolder.GetComponent<GridManager>();
         pointsManager.Clear();
 
-        foreach(Player p in Player.GetAllPlayers())
+        foreach (Player p in Player.GetAllPlayers())
         {
-            bool isVisited = p.visited(name); // if true don't display, if false display indicator that player still needs to visit town
-                                 //p.playerColor.GetColor() returns a Color object corresponding to the players color
+            bool isVisited = p.isVisited(name); // if true don't display, if false display indicator that player still needs to visit town
+                                                //p.playerColor.GetColor() returns a Color object corresponding to the players color
 
-			//Debug.Log("here");
+            //Debug.Log("here");
             if (!isVisited)
             {
-                
+
                 GameObject g = Instantiate(pointPrefab);
                 SpriteRenderer gs = g.transform.GetComponent<SpriteRenderer>();
                 gs.color = p.playerColor.GetColor();
                 g.transform.localScale = new Vector3(0.25f, 0.25f, 0.25f);
                 pointsManager.AddElement(g);
-	        }
+            }
         }
     }
 }

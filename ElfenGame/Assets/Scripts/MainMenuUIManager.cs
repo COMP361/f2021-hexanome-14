@@ -42,7 +42,7 @@ public class MainMenuUIManager : MonoBehaviour, GameSessionsReceivedInterface, O
         if (GameConstants.networkManager.isConnected())
         {
             GameConstants.networkManager.ResetPlayerProperties();
-	    }
+        }
     }
 
     public void InGameSelectView()
@@ -53,13 +53,15 @@ public class MainMenuUIManager : MonoBehaviour, GameSessionsReceivedInterface, O
             gameOptionButtonsView.SetActive(false);
             gameJoinedOptionsView.SetActive(false);
             SetGameActive(false);
-        } else if (GameConstants.networkManager.inGame())
+        }
+        else if (GameConstants.networkManager.inGame())
         {
             gameCreatorOptionsView.SetActive(false);
             gameOptionButtonsView.SetActive(false);
             gameJoinedOptionsView.SetActive(true);
             SetGameActive(false);
-        } else
+        }
+        else
         {
             gameCreatorOptionsView.SetActive(false);
             gameOptionButtonsView.SetActive(true);
@@ -71,10 +73,6 @@ public class MainMenuUIManager : MonoBehaviour, GameSessionsReceivedInterface, O
 
     public void OnStartGameClicked()
     {
-        foreach (Player p in Player.GetAllPlayers())
-        {
-            p.Reset();
-	    }
         //Debug.LogError($"num rounds: {numRoundOptions[numRounds.value]}");
         //Debug.LogError($"variation: {variationDD.options[variationDD.value].text}");
         Game.currentGame.Init(numRoundOptions[numRounds.value], variationDD.options[variationDD.value].text);
@@ -151,7 +149,8 @@ public class MainMenuUIManager : MonoBehaviour, GameSessionsReceivedInterface, O
             if (active)
             {
                 sessionScript.activate();
-            }else
+            }
+            else
             {
                 sessionScript.deactivate();
             }
