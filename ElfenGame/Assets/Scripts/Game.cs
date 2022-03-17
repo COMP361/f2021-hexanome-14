@@ -41,10 +41,9 @@ public class Game
 
     public static Game currentGame = new Game();
 
-    private int curCardPointer;
-
 
     private ExitGames.Client.Photon.Hashtable _gameProperties;
+    private ExitGames.Client.Photon.Hashtable _colorProperties;
 
     #region Properties
     public string gameVariation
@@ -163,7 +162,7 @@ public class Game
             List<PlayerColor> colors = new List<PlayerColor>();
             for (int i = 0; i < Enum.GetNames(typeof(PlayerColor)).Length; i++)
             {
-                if ((string)_gameProperties[getColorKey((PlayerColor)i)] == "")
+                if ((string)_colorProperties[getColorKey((PlayerColor)i)] == "")
                 {
                     colors.Add((PlayerColor)i);
                 }
@@ -183,29 +182,6 @@ public class Game
 
     #endregion
 
-    // public void SyncPile()
-    // {
-    //     if (GameConstants.networkManager) GameConstants.networkManager.SetGameProperty(pPILE, pile.ToArray());
-    // }
-
-    // public void SyncVisible()
-    // {
-    //     if (GameConstants.networkManager) GameConstants.networkManager.SetGameProperty(pVISIBLE, visibleTiles.ToArray());
-    // }
-
-    // public void UpdatePile(List<MovementTile> newPile)
-    // {
-    //     pile = newPile;
-    //     // TODO: Update visualization of pile 
-    // }
-
-    // public void UpdateVisible(List<MovementTile> newVisible)
-    // {
-    //     visibleTiles = newVisible;
-    //     if (GameConstants.mainUIManager) GameConstants.mainUIManager.UpdateAvailableTokens();
-    //     // TODO: Update visualization of Visible tiles
-    // }
-
     private string getColorKey(PlayerColor color)
     {
         return $"{pCOLOR_AVAIL_PREFIX}{Enum.GetName(typeof(PlayerColor), color)}";
@@ -214,7 +190,7 @@ public class Game
     public void ClaimColor(PlayerColor c)
     {
         string key = getColorKey(c);
-        if (_gameProperties.ContainsKey(key) && (string)_gameProperties[key] == "")
+        if (_colorProperties.ContainsKey(key) && (string)_colorProperties[key] == "")
         {
             //TODO: Attempt to claim color
             ExitGames.Client.Photon.Hashtable newProperties = new ExitGames.Client.Photon.Hashtable();
@@ -233,6 +209,11 @@ public class Game
     private Game()
     {
         _gameProperties = new ExitGames.Client.Photon.Hashtable();
+        _colorProperties = new ExitGames.Client.Photon.Hashtable();
+        for (int i = 0; i < Enum.GetNames(typeof(PlayerColor)).Length; i++)
+        {
+            _colorProperties[getColorKey((PlayerColor)i)] = "";
+        }
     }
 
 
@@ -244,34 +225,37 @@ public class Game
         HandlePlayerUpdate();
     }
 
-    private void CheckForColorUpdates(ExitGames.Client.Photon.Hashtable properties)
+    private void HandleColorUpdate(PlayerColor color, string value)
     {
-        for (int i = 0; i < 6; ++i)
+        string key = getColorKey(color);
+        _colorProperties[key] = value;
+        if (Player.GetLocalPlayer().userName == value)
         {
-            string key = getColorKey((PlayerColor)i);
-            if (properties.ContainsKey(key))
-            {
-                string player_name = (string)properties[key];
-                _gameProperties[key] = player_name;
-                if (Player.GetLocalPlayer().userName == player_name)
-                {
-                    Player.GetLocalPlayer().playerColor = (PlayerColor)i;
-                }
-                if (GameConstants.mainUIManager)
-                {
-                    GameConstants.mainUIManager.UpdateColorOptions();
-                }
-            }
+            Player.GetLocalPlayer().playerColor = color;
+        }
+        if (GameConstants.mainUIManager)
+        {
+            GameConstants.mainUIManager.UpdateColorOptions();
         }
     }
 
     public void UpdateGameProperties(ExitGames.Client.Photon.Hashtable properties)
     {
+        for (int i = 0; i < Enum.GetNames(typeof(PlayerColor)).Length; i++)
+        {
+            string key = getColorKey((PlayerColor)i);
+            if (properties.ContainsKey(key))
+            {
+                HandleColorUpdate((PlayerColor)i, (string)properties[key]);
+                return;
+            }
+
+        }
+
         foreach (string key in _gameProperties.Keys)
         {
             if (!properties.ContainsKey(key))
             {
-                CheckForColorUpdates(properties);
                 return; // If hashtable not complete, don't update
             }
         }
@@ -284,7 +268,6 @@ public class Game
         if (GameConstants.mainUIManager)
         {
             GameConstants.mainUIManager.UpdateAvailableTokens();
-            // GameConstants.mainUIManager.UpdateColorOptions(); TODO: Handle separately
             GameConstants.mainUIManager.UpdateRoundInfo(); // TODO: pass info as argument?
         }
     }
@@ -310,11 +293,6 @@ public class Game
         InitPlayersList();
         InitPile();
         InitDeck();
-
-        for (int i = 0; i < 6; ++i)
-        {
-            _gameProperties[getColorKey((PlayerColor)i)] = "";
-        }
 
         InitRound();
 
