@@ -235,6 +235,8 @@ public class Game
         {
             GameConstants.mainUIManager.UpdateColorOptions();
         }
+
+        Debug.LogError($"{value} claimed {color}");
     }
 
     public void UpdateGameProperties(ExitGames.Client.Photon.Hashtable properties)
@@ -245,16 +247,21 @@ public class Game
             if (properties.ContainsKey(key))
             {
                 HandleColorUpdate((PlayerColor)i, (string)properties[key]);
-                return;
             }
         }
 
+        bool updatedProps = false;
         foreach (string key in pPLAYER_PROPS)
         {
             if (properties.ContainsKey(key))
             {
                 _gameProperties[key] = properties[key];
+                updatedProps = true;
             }
+        }
+        if (updatedProps)
+        {
+            Debug.LogError("Game properties updated");
         }
         UpdateDisplay();
     }

@@ -359,6 +359,7 @@ public class Player
 
     public void UpdatePlayerStats(ExitGames.Client.Photon.Hashtable hashtable)
     {
+        if (IsLocalPlayer()) return; // Don't update local player stats (they should already be up to date)
         foreach (string key in _properties.Keys)
         {
             if (!hashtable.ContainsKey(key))
@@ -433,6 +434,7 @@ public class Player
 
         lastInitializedround = 0;
 
+        Debug.LogError("Player created: " + userName);
     }
 
     private void InitVisited()

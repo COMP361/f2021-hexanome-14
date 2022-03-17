@@ -352,6 +352,12 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback, IInRo
             PhotonNetwork.SetMasterClient(newPlayer);
         }
 
+        if (GameConstants.mainMenuUIManager && GameConstants.mainMenuUIManager.GetLoadedOwner() == Lobby.myUsername)
+        {
+            Game.currentGame.SyncGameProperties();
+        }
+        Player.GetLocalPlayer().SyncPlayerStats();
+
     }
 
 
