@@ -325,6 +325,17 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback, IInRo
         }
     }
 
+    public override void OnCreatedRoom()
+    {
+        if (PhotonNetwork.IsMasterClient)
+        {
+            if (GameConstants.playfabManager)
+            {
+                GameConstants.playfabManager.CreateGroup(PhotonNetwork.CurrentRoom.Name);
+            }
+        }
+    }
+
 
     public override void OnCreateRoomFailed(short returnCode, string message)
     {
@@ -343,6 +354,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback, IInRo
         }
 
         Player.GetLocalPlayer().SyncPlayerStats();
+
     }
 
     public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer)

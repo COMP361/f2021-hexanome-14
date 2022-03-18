@@ -37,8 +37,12 @@ public class Game
 
     private const string pPASSED_PLAYERS = "PASSED_PLAYERS";
 
+    private const string pGAME_ID = "GAME_ID";
+
+    private const string pPLAYFAB_ID = "PLAYFAB_ID";
+
     private static string[] pPLAYER_PROPS = {
-        pDECK, pDISCARD, pPILE, pVISIBLE, pPLAYERS, pCUR_PLAYER, pCUR_ROUND, pCUR_PHASE, pMAX_ROUNDS, pGAME_VARIATION, pPASSED_PLAYERS
+        pDECK, pDISCARD, pPILE, pVISIBLE, pPLAYERS, pCUR_PLAYER, pCUR_ROUND, pCUR_PHASE, pMAX_ROUNDS, pGAME_VARIATION, pPASSED_PLAYERS, pGAME_ID, pPLAYFAB_ID
     };
 
     private const string pCOLOR_AVAIL_PREFIX = "COLOR_AVAIL";
@@ -50,6 +54,22 @@ public class Game
     private ExitGames.Client.Photon.Hashtable _colorProperties;
 
     #region Properties
+
+    public string gameId
+    {
+        get
+        {
+            return (string)_gameProperties[pGAME_ID];
+        }
+    }
+
+    public string playfabId
+    {
+        get
+        {
+            return (string)_gameProperties[pPLAYFAB_ID];
+        }
+    }
     public string gameVariation
     {
         get
@@ -270,13 +290,25 @@ public class Game
     {
         if (GameConstants.mainUIManager)
         {
+            HandlePlayFabGroupUpdate();
             HandlePhaseUpdate();
             GameConstants.mainUIManager.UpdateAvailableTokens();
             GameConstants.mainUIManager.UpdateRoundInfo(); // TODO: pass info as argument?
         }
     }
 
-    public void Init(int maxRnds, string variation)
+    private void HandlePlayFabGroupUpdate()
+    {
+        if (playfabId != "")
+        {
+            if (GameConstants.playfabManager)
+            {
+                GameConstants.playfabManager.CheckInGroup(playfabId);
+            }
+        }
+    }
+
+    public void Init(int maxRnds, string variation, string gameId, string playfabId)
     {
 
         Debug.Log("Game Init Called");
@@ -286,6 +318,8 @@ public class Game
         _gameProperties[pMAX_ROUNDS] = maxRnds;
         _gameProperties[pGAME_VARIATION] = variation;
         _gameProperties[pPASSED_PLAYERS] = 0;
+        _gameProperties[pGAME_ID] = gameId;
+        _gameProperties[pPLAYFAB_ID] = playfabId;
 
         _gameProperties[pPLAYERS] = new string[] { };
         _gameProperties[pPILE] = new MovementTile[0];

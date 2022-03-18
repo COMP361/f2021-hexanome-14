@@ -82,7 +82,6 @@ public class MainUIManager : MonoBehaviour
     public Dictionary<MovementTile, MovementTileSO> mTileDict;
 
     private bool isPaused = false;
-    private bool isViewingCards = false;
     private List<string> elfNames = new List<string> { "Blue", "Cyan", "Red", "Orange", "Pink", "Green" };
     // Start is called before the first frame update
     void Start()
