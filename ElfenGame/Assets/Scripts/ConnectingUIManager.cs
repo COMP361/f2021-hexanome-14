@@ -15,6 +15,11 @@ public class ConnectingUIManager : MonoBehaviour
         {
             GameConstants.networkManager.Connect();
         }
+
+        if (GameConstants.playfabManager)
+        {
+            GameConstants.playfabManager.Login(Lobby.myUsername);
+        }
     }
 
     // Update is called once per frame
