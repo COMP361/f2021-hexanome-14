@@ -239,6 +239,19 @@ public class Lobby : MonoBehaviour
         return updated;
     }
 
+    public static async Task DeleteSession(string sessionID)
+    {
+        using (var httpClient = new HttpClient())
+        {
+            using (var request = new HttpRequestMessage(new HttpMethod("DELETE"), $"{GameConstants.lobbyServiceUrl}/api/sessions/{sessionID}?access_token={accessToken}"))
+            {
+                var base64authorization = Convert.ToBase64String(Encoding.ASCII.GetBytes("bgp-client-name:bgp-client-pw"));
+                request.Headers.TryAddWithoutValidation("authorization", $"Basic {base64authorization}");
+                var response = await httpClient.SendAsync(request);
+            }
+        }
+    }
+
     public static async Task GetSessions(GameSessionsReceivedInterface callbackTarget)
     {
         using (var httpClient = new HttpClient())

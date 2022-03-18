@@ -124,7 +124,10 @@ public class MainMenuUIManager : MonoBehaviour, GameSessionsReceivedInterface, O
 
     public void OnDeleteGameClicked()
     {
+        Debug.Log("Delete Game!!!!!");
+        _ = Lobby.DeleteSession(currentSelectedSession.session_ID);
         GameConstants.networkManager.LeaveRoom();
+        currentSelectedSession = null;
         InGameSelectView();
     }
 
