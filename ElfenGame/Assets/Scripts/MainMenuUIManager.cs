@@ -108,17 +108,13 @@ public class MainMenuUIManager : MonoBehaviour, GameSessionsReceivedInterface, O
 
     public async void OnCreateGameClicked()
     {
-        gameOptionButtonsView.SetActive(false);
-        gameCreatorOptionsView.SetActive(true);
-
         await Lobby.CreateSession();
-
-        //GetComponent<PhotonView>().RPC(nameof(RPC_ListUpdated), RpcTarget.AllBuffered, new object[] { });
     }
 
     public void OnLeaveGameClicked()
     {
         GameConstants.networkManager.LeaveRoom();
+        _ = Lobby.LeaveSession(currentSelectedSession.session_ID);
         InGameSelectView();
     }
 
