@@ -91,7 +91,7 @@ public class MainMenuUIManager : MonoBehaviour, GameSessionsReceivedInterface, O
     {
         //Debug.LogError($"num rounds: {numRoundOptions[numRounds.value]}");
         //Debug.LogError($"variation: {variationDD.options[variationDD.value].text}");
-        Game.currentGame.Init(numRoundOptions[numRounds.value], variationDD.options[variationDD.value].text);
+        Game.currentGame.Init(numRoundOptions[numRounds.value], variationDD.options[variationDD.value].text, loadedSession.session_ID, GameConstants.playfabManager.GetGroupId());
         GameConstants.networkManager.LoadArena();
     }
 
