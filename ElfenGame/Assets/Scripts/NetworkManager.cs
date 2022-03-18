@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 using ExitGames.Client.Photon;
 using System;
 
-public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback
+public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback, IInRoomCallbacks
 {
     const byte SPAWN_PLAYER_CODE = 12;
     const byte EVENT_ADD_TILE_CODE = 3;
@@ -29,26 +29,26 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback
             ResetPlayerProperties();
         }
     }
-   
-     
+
+
     private Dictionary<string, Photon.Realtime.Player> networkPlayers;
     public Photon.Realtime.Player GetPlayer(string playerId)
-    { 
+    {
         if (!networkPlayers.ContainsKey(playerId))
-        { 
-	        foreach (Photon.Realtime.Player p in PhotonNetwork.CurrentRoom.Players.Values)
+        {
+            foreach (Photon.Realtime.Player p in PhotonNetwork.CurrentRoom.Players.Values)
             {
                 networkPlayers[p.UserId] = p;
-	        }
-	    }
+            }
+        }
 
         if (networkPlayers.ContainsKey(playerId)) return networkPlayers[playerId];
         else return null;
     }
 
     public void ResetPlayerProperties()
-    { 
-	    ExitGames.Client.Photon.Hashtable hashtable = new ExitGames.Client.Photon.Hashtable();
+    {
+        ExitGames.Client.Photon.Hashtable hashtable = new ExitGames.Client.Photon.Hashtable();
         hashtable.Add(Player.pCOINS, null);
         hashtable.Add(Player.pCOLOR, null);
         hashtable.Add(Player.pNAME, null);
@@ -58,7 +58,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback
         hashtable.Add(Player.pCARDS, null);
         hashtable.Add(Player.pTOWN, null);
         Photon.Realtime.Player p = PhotonNetwork.LocalPlayer;
-	    if (p != null) p.SetCustomProperties(hashtable);
+        if (p != null) p.SetCustomProperties(hashtable);
 
     }
 
@@ -81,6 +81,13 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback
         }
     }
 
+    public void JoinOrCreateRoom(string roomName)
+    {
+        if (PhotonNetwork.IsConnectedAndReady && !PhotonNetwork.InRoom)
+        {
+            PhotonNetwork.JoinOrCreateRoom(roomName, new RoomOptions { MaxPlayers = 6, IsVisible = true, PublishUserId = true }, null);
+        }
+    }
 
 
     public void JoinRoom(string roomName)
@@ -97,7 +104,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback
         {
             List<Photon.Realtime.Player> players = new List<Photon.Realtime.Player>();
 
-            foreach(Photon.Realtime.Player p in PhotonNetwork.CurrentRoom.Players.Values)
+            foreach (Photon.Realtime.Player p in PhotonNetwork.CurrentRoom.Players.Values)
             {
                 players.Add(p);
             }
@@ -107,11 +114,11 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback
     }
 
     public void verifyAllPlayersExist()
-    { 
+    {
         foreach (Photon.Realtime.Player p in GetPlayers())
         {
             _ = Player.GetOrCreatePlayer(p.UserId);
-	    }
+        }
     }
 
     public string getNetworkState()
@@ -140,7 +147,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback
         {
             PhotonNetwork.LeaveRoom();
         }
-        
+
     }
 
     public override void OnPlayerLeftRoom(Photon.Realtime.Player otherPlayer)
@@ -153,18 +160,20 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback
 
     }
 
+    public override void OnMasterClientSwitched(Photon.Realtime.Player newMasterClient)
+    {
+        Debug.Log($"{newMasterClient.UserId} is now the master client");
+    }
+
     public override void OnRoomPropertiesUpdate(ExitGames.Client.Photon.Hashtable propertiesThatChanged)
     {
         base.OnRoomPropertiesUpdate(propertiesThatChanged);
 
         //Debug.Log("Room properties updated");
         if (Game.currentGame != null)
-        { 
-	        foreach (DictionaryEntry entry in propertiesThatChanged)
-            {
-                Game.currentGame.UpdateProperties((string)entry.Key, entry.Value);
-	        }
-	    }
+        {
+            Game.currentGame.UpdateGameProperties(propertiesThatChanged);
+        }
     }
 
     public void SetGameProperty(object key, object value)
@@ -174,8 +183,32 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback
         _ = PhotonNetwork.CurrentRoom.SetCustomProperties(hashtable);
     }
 
+    public void SetGameProperties(ExitGames.Client.Photon.Hashtable properties)
+    {
+        _ = PhotonNetwork.CurrentRoom.SetCustomProperties(properties);
+    }
+
+    public void SetGamePropertiesWithCheck(ExitGames.Client.Photon.Hashtable properties, ExitGames.Client.Photon.Hashtable expectedProperties)
+    {
+        _ = PhotonNetwork.CurrentRoom.SetCustomProperties(properties, expectedProperties);
+    }
+
+    public void SetPlayerStatsByPlayerName(string playerName, ExitGames.Client.Photon.Hashtable hashtable)
+    {
+        Photon.Realtime.Player p = GetPlayer(playerName);
+        if (p != null)
+        {
+            p.SetCustomProperties(hashtable);
+        }
+    }
+
+    public void SetLocalPlayerStats(ExitGames.Client.Photon.Hashtable hashtable)
+    {
+        PhotonNetwork.LocalPlayer.SetCustomProperties(hashtable);
+    }
+
     public void SetPlayerPropertyByPlayerName(string playerName, object key, object value)
-    { 
+    {
         ExitGames.Client.Photon.Hashtable hashtable = new ExitGames.Client.Photon.Hashtable();
         hashtable.Add(key, value);
         Photon.Realtime.Player p = GetPlayer(playerName);
@@ -189,16 +222,11 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback
 
     public override void OnPlayerPropertiesUpdate(Photon.Realtime.Player targetPlayer, ExitGames.Client.Photon.Hashtable changedProps)
     {
-        base.OnPlayerPropertiesUpdate(targetPlayer, changedProps);
-
         //Debug.Log($"{targetPlayer.UserId} properties updated");
         Player pm = Player.GetOrCreatePlayer(targetPlayer.UserId);
         if (pm != null)
         {
-            foreach (DictionaryEntry entry in changedProps)
-            {
-                pm.updatePropertiesCallback((string) entry.Key, entry.Value);
-            }
+            pm.UpdatePlayerStats(changedProps);
         }
     }
 
@@ -217,14 +245,14 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback
     }
 
     public void GameOver()
-    { 
+    {
         object[] data = new object[] { };
 
         RaiseEvent(EVENT_GAME_OVER_CODE, data);
     }
 
     private void RaiseEvent(byte eventCode, object[] data)
-    { 
+    {
         RaiseEventOptions raiseEventOptions = new RaiseEventOptions
         {
             Receivers = ReceiverGroup.Others,
@@ -258,36 +286,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback
         else if (photonEvent.Code == EVENT_GAME_OVER_CODE)
         {
             Game.currentGame.GameOver();
-	    }
+        }
     }
-
-
-
-    //public void SpawnPlayer(string username, PhotonView photonView)
-    //{
-    //    if (PhotonNetwork.AllocateRoomViewID(photonView))
-    //    {
-    //        object[] data = new object[] { username, photonView.ViewID };
-
-    //        RaiseEventOptions raiseEventOptions = new RaiseEventOptions
-    //        {
-    //            Receivers = ReceiverGroup.Others,
-    //            CachingOption = EventCaching.AddToRoomCache
-    //        };
-
-    //        SendOptions sendOptions = new SendOptions
-    //        {
-    //            Reliability = true
-    //        };
-
-    //        PhotonNetwork.RaiseEvent(SPAWN_PLAYER_CODE, data, raiseEventOptions, sendOptions);
-
-    //    }
-    //    else
-    //    {
-    //        Debug.LogError("Failed to allocate ViewId");
-    //    }
-    //}
 
     public void LoadArena()
     {
@@ -316,12 +316,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback
         Debug.Log($"Connected to server.");
     }
 
-    //public override void OnJoinRandomFailed(short returnCode, string message)
-    //{
-    //    Debug.Log($"Joining random room failed because of {message}. Creating a new one.");
-    //    PhotonNetwork.CreateRoom(null, new RoomOptions { MaxPlayers = 6, IsVisible = true });
-    //}
-
 
     public void CreateRoom(string roomName)
     {
@@ -331,19 +325,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback
         }
     }
 
-    //public override void OnRoomListUpdate(List<RoomInfo> roomList)
-    //{
-    //    List<string> roomNames = new List<string>();
 
-    //    foreach (RoomInfo roomInfo in roomList)
-    //    {
-    //        roomNames.Add(roomInfo.Name);
-    //    }
-
-    //    uiManager.UpdateAvailableRoomList(roomNames);
-    //}
-
-        public override void OnCreateRoomFailed(short returnCode, string message)
+    public override void OnCreateRoomFailed(short returnCode, string message)
     {
         Debug.Log(message);
     }
@@ -356,23 +339,24 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback
         if (GameConstants.mainMenuUIManager != null)
         {
             GameConstants.mainMenuUIManager.InGameSelectView();
+
         }
 
-        _ = Player.GetOrCreatePlayer(Lobby.myUsername);
+        Player.GetLocalPlayer().SyncPlayerStats();
     }
 
     public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer)
     {
-        //Debug.LogError($"Player {newPlayer.UserId} entered the room.");
-
-        Player.GetOrCreatePlayer(newPlayer.UserId);
-
-        if (PhotonNetwork.IsMasterClient)
+        if (PhotonNetwork.IsMasterClient && GameConstants.mainMenuUIManager && GameConstants.mainMenuUIManager.GetLoadedOwner() == newPlayer.UserId)
         {
-            Debug.Log("OnPlayerEnteredRoom IsMasterClient");
-
-            //LoadArena();
+            PhotonNetwork.SetMasterClient(newPlayer);
         }
+
+        if (GameConstants.mainMenuUIManager && GameConstants.mainMenuUIManager.GetLoadedOwner() == Lobby.myUsername)
+        {
+            Game.currentGame.SyncGameProperties();
+        }
+        Player.GetLocalPlayer().SyncPlayerStats();
 
     }
 
@@ -383,7 +367,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback
         if (SceneManager.GetActiveScene() == SceneManager.GetSceneByName("Main"))
         {
             SceneManager.LoadScene("MainMenu");
-        } else if (GameConstants.mainMenuUIManager != null)
+        }
+        else if (GameConstants.mainMenuUIManager != null)
         {
             GameConstants.mainMenuUIManager.InGameSelectView();
         }

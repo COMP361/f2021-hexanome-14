@@ -23,43 +23,61 @@ public class MainMenuUIManager : MonoBehaviour, GameSessionsReceivedInterface, O
 
     private Lobby.GameSession currentSelectedSession;
 
+    private Lobby.GameSession loadedSession;
+
     public void Update()
     {
     }
 
+    /// <summary>
+    /// Called when MainMenuUIManager is created
+    /// </summary>
     public async void Start()
     {
         await Lobby.LongPollForUpdates(this);
+
+        Game.currentGame = new Game();
     }
 
+
+    public string GetLoadedOwner()
+    {
+        return loadedSession.createdBy;
+    }
+
+    /// <summary>
+    /// Called when Start Button is clicked
+    /// </summary>
     public void OnStartClicked()
     {
-        //connectionStatusText.gameObject.SetActive(true);
+        Player.ResetPlayers();
         gameSelectView.gameObject.SetActive(true);
         homeView.gameObject.SetActive(false);
         OnUpdatedGameListReceived(Lobby.availableGames);
         InGameSelectView();
-        if (GameConstants.networkManager.isConnected())
-        {
-            GameConstants.networkManager.ResetPlayerProperties();
-	    }
+        // if (GameConstants.networkManager.isConnected())
+        // {
+        //     GameConstants.networkManager.ResetPlayerProperties();
+        // }
     }
 
     public void InGameSelectView()
     {
-        if (GameConstants.networkManager.inGameMaster())
+        if (GameConstants.networkManager.inGame() && GetLoadedOwner() == Lobby.myUsername)
         {
             gameCreatorOptionsView.SetActive(true);
             gameOptionButtonsView.SetActive(false);
             gameJoinedOptionsView.SetActive(false);
             SetGameActive(false);
-        } else if (GameConstants.networkManager.inGame())
+        }
+        else if (GameConstants.networkManager.inGame())
         {
             gameCreatorOptionsView.SetActive(false);
             gameOptionButtonsView.SetActive(false);
             gameJoinedOptionsView.SetActive(true);
             SetGameActive(false);
-        } else
+        }
+        else
         {
             gameCreatorOptionsView.SetActive(false);
             gameOptionButtonsView.SetActive(true);
@@ -71,10 +89,6 @@ public class MainMenuUIManager : MonoBehaviour, GameSessionsReceivedInterface, O
 
     public void OnStartGameClicked()
     {
-        foreach (Player p in Player.GetAllPlayers())
-        {
-            p.Reset();
-	    }
         //Debug.LogError($"num rounds: {numRoundOptions[numRounds.value]}");
         //Debug.LogError($"variation: {variationDD.options[variationDD.value].text}");
         Game.currentGame.Init(numRoundOptions[numRounds.value], variationDD.options[variationDD.value].text);
@@ -87,31 +101,29 @@ public class MainMenuUIManager : MonoBehaviour, GameSessionsReceivedInterface, O
         {
             Debug.Log($"Attempting to join Game {currentSelectedSession.session_ID} as user {Lobby.myUsername}");
             await Lobby.JoinSession(currentSelectedSession.session_ID);
-            GameConstants.networkManager.JoinRoom(currentSelectedSession.session_ID);
-            //GetComponent<PhotonView>().RPC(nameof(RPC_ListUpdated), RpcTarget.AllBuffered, new object[] { });
+            loadedSession = currentSelectedSession;
+            GameConstants.networkManager.JoinOrCreateRoom(currentSelectedSession.session_ID);
         }
-
     }
 
     public async void OnCreateGameClicked()
     {
-        gameOptionButtonsView.SetActive(false);
-        gameCreatorOptionsView.SetActive(true);
-
         await Lobby.CreateSession();
-
-        //GetComponent<PhotonView>().RPC(nameof(RPC_ListUpdated), RpcTarget.AllBuffered, new object[] { });
     }
 
     public void OnLeaveGameClicked()
     {
         GameConstants.networkManager.LeaveRoom();
+        _ = Lobby.LeaveSession(currentSelectedSession.session_ID);
         InGameSelectView();
     }
 
     public void OnDeleteGameClicked()
     {
+        Debug.Log("Delete Game!!!!!");
+        _ = Lobby.DeleteSession(currentSelectedSession.session_ID);
         GameConstants.networkManager.LeaveRoom();
+        currentSelectedSession = null;
         InGameSelectView();
     }
 
@@ -122,11 +134,6 @@ public class MainMenuUIManager : MonoBehaviour, GameSessionsReceivedInterface, O
         foreach (Lobby.GameSession game in gameSessions)
         {
             AddGameSession(game);
-
-            if (game.createdBy == Lobby.myUsername && !GameConstants.networkManager.inGame())
-            {
-                GameConstants.networkManager.CreateRoom(game.session_ID);
-            }
         }
     }
 
@@ -151,7 +158,8 @@ public class MainMenuUIManager : MonoBehaviour, GameSessionsReceivedInterface, O
             if (active)
             {
                 sessionScript.activate();
-            }else
+            }
+            else
             {
                 sessionScript.deactivate();
             }

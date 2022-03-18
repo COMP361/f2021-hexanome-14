@@ -29,7 +29,7 @@ public class Lobby : MonoBehaviour
 
 
     // Start is called before the first frame update
-    async void Start()
+    void Start()
     {
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("user", "bgp-client-name:bgp-client-pw");
         // Debug.Log(AuthenticateAsync());
@@ -55,7 +55,7 @@ public class Lobby : MonoBehaviour
 
         public string createdBy { get; set; }
 
-        public string ToString()
+        public override string ToString()
         {
             return $"Id: {this.session_ID}, N players {this.players.Count}, createdby: {this.createdBy}";
         }
@@ -70,7 +70,7 @@ public class Lobby : MonoBehaviour
                 var base64authorization = Convert.ToBase64String(Encoding.ASCII.GetBytes("bgp-client-name:bgp-client-pw"));
                 request.Headers.TryAddWithoutValidation("Authorization", $"Basic {base64authorization}");
 
-                request.Content = new StringContent(String.Format("grant_type=password&username={0}&password={1}",username, password));
+                request.Content = new StringContent(String.Format("grant_type=password&username={0}&password={1}", username, password));
                 request.Content.Headers.ContentType = MediaTypeHeaderValue.Parse("application/x-www-form-urlencoded");
 
                 var response = await httpClient.SendAsync(request);
@@ -172,12 +172,12 @@ public class Lobby : MonoBehaviour
                     }
                 }
 
-                
-                
+
+
             }
         }
 
-        LongPollForUpdates(callbackTarget);
+        await LongPollForUpdates(callbackTarget);
     }
 
     public static async Task CreateSession()
@@ -186,7 +186,7 @@ public class Lobby : MonoBehaviour
         {
             using (var request = new HttpRequestMessage(new HttpMethod("POST"), $"{GameConstants.lobbyServiceUrl}/api/sessions?location=18.116.53.177&access_token={accessToken}"))
             {
-                request.Content = new StringContent("{\"game\":\"ElfenGame\", \"creator\":\""+ myUsername + "\", \"savegame\":\"\"}");
+                request.Content = new StringContent("{\"game\":\"ElfenGame\", \"creator\":\"" + myUsername + "\", \"savegame\":\"\"}");
                 request.Content.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json");
 
                 var response = await httpClient.SendAsync(request);
@@ -239,6 +239,32 @@ public class Lobby : MonoBehaviour
         return updated;
     }
 
+    public static async Task LeaveSession(string sessionID)
+    {
+        using (var httpClient = new HttpClient())
+        {
+            using (var request = new HttpRequestMessage(new HttpMethod("DELETE"), $"{GameConstants.lobbyServiceUrl}/api/sessions/{sessionID}/players/{myUsername}?access_token={accessToken}"))
+            {
+                var base64authorization = Convert.ToBase64String(Encoding.ASCII.GetBytes("bgp-client-name:bgp-client-pw"));
+                request.Headers.TryAddWithoutValidation("authorization", $"Basic {base64authorization}");
+                var response = await httpClient.SendAsync(request);
+            }
+        }
+    }
+
+    public static async Task DeleteSession(string sessionID)
+    {
+        using (var httpClient = new HttpClient())
+        {
+            using (var request = new HttpRequestMessage(new HttpMethod("DELETE"), $"{GameConstants.lobbyServiceUrl}/api/sessions/{sessionID}?access_token={accessToken}"))
+            {
+                var base64authorization = Convert.ToBase64String(Encoding.ASCII.GetBytes("bgp-client-name:bgp-client-pw"));
+                request.Headers.TryAddWithoutValidation("authorization", $"Basic {base64authorization}");
+                var response = await httpClient.SendAsync(request);
+            }
+        }
+    }
+
     public static async Task GetSessions(GameSessionsReceivedInterface callbackTarget)
     {
         using (var httpClient = new HttpClient())
@@ -264,8 +290,8 @@ public class Lobby : MonoBehaviour
                     //Debug.Log(property.Value["players"]);
 
 
-                    GameSession gameSession = new GameSession() { session_ID = property.Name, players = property.Value["players"].ToObject<List<string>>(), createdBy = property.Value["creator"].ToString()};
-                    
+                    GameSession gameSession = new GameSession() { session_ID = property.Name, players = property.Value["players"].ToObject<List<string>>(), createdBy = property.Value["creator"].ToString() };
+
                     availableGames.Add(gameSession);
                     //Debug.Log(gameSession.ToString());
                     // Debug.Log(allGames);
@@ -277,7 +303,7 @@ public class Lobby : MonoBehaviour
                 //if (SessionListUpdated(newGames, availableGames))
                 //{
                 //    availableGames = newGames;
-                    
+
                 //}
 
             }
@@ -324,13 +350,13 @@ public class Lobby : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    async void Update()
     {
         if ((DateTime.Now - lastRenew).Milliseconds > 100000)
         {
             Debug.Log("Renewing Token Automatically");
             lastRenew = DateTime.Now;
-            RenewToken();
+            await RenewToken();
         }
     }
 }

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
@@ -67,9 +65,10 @@ public class MovementTileUIScript : MonoBehaviour, IDragHandler, IBeginDragHandl
         if (nTiles == 0)
         {
             GetComponent<Image>().color = GameConstants.grey;
-	    } else
+        }
+        else
         {
             GetComponent<Image>().color = GameConstants.white;
-	    }
+        }
     }
 }

@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -6,21 +5,9 @@ using UnityEngine.UI;
 
 public class Player
 {
-    private int _nCoins = 0;
-    private int _nPoints = 0;
-
-    private PlayerColor _playerColor;
-    private Elf elf;
-    private PlayerTile tile;
-    private PlayerVisibleTokenDisplay tokenDisplay;
-    private List<CardEnum> _mCards;
-
-    private Dictionary<MovementTile, int> mTiles;
-    private List<MovementTile> mHiddenTiles, mVisibleTiles;
-
-    private string _userName;
-    private string _curTown;
-
+    public Elf elf { set; private get; }
+    public PlayerTile tile { set; private get; }
+    public PlayerVisibleTokenDisplay tokenDisplay { set; private get; }
     public const string pCOINS = "COINS";
     public const string pPOINTS = "POINTS";
     public const string pNAME = "NAME";
@@ -30,82 +17,106 @@ public class Player
     public const string pCOLOR = "COLOR";
     public const string pTOWN = "TOWN";
 
-    private Dictionary<string, bool> visitedTown;
+    public const string pVISITED = "VISITED";
+    private ExitGames.Client.Photon.Hashtable _properties;
 
+    public Dictionary<MovementTile, int> mTiles;
+
+    private int lastInitializedround = 0;
+
+
+    public void UpdateDisplay()
+    {
+        UpdateTiles();
+        if (tile != null)
+            tile.UpdateStats(userName, nCoins, nPoints, mCards.Count, mVisibleTiles.Count + mHiddenTiles.Count, playerColor);
+
+        if (elf != null)
+        {
+            elf.UpdateColor();
+            elf.SetTown(curTown);
+        }
+
+        if (tokenDisplay != null)
+        {
+            tokenDisplay.SetVisible(mVisibleTiles);
+            tokenDisplay.SetNumHidden(mHiddenTiles.Count);
+        }
+
+        if (GameConstants.mainUIManager)
+        {
+            GameConstants.mainUIManager.UpdatePlayerPointDisplay();
+
+            if (IsLocalPlayer())
+            {
+                GameConstants.mainUIManager.UpdateMovementTileCounts();
+                GameConstants.mainUIManager.UpdateCardHand();
+            }
+        }
+    }
 
     #region Private Update Methods
-    private void UpdateCoins(int value)
-    {
-        _nCoins = value;
-        if (tile != null) tile.SetCoins(_nCoins);
-    }
 
-    private void UpdatePoints(int value)
-    {
-        _nPoints = value;
-        if (tile != null) tile.SetPoints(_nPoints);
-    }
 
-    private void UpdateColor(PlayerColor value)
+    private void HandleTownChange()
     {
-        _playerColor = value;
-        if (elf != null) elf.UpdateColor();
-        if (tile != null) tile.SetColor(value);
-        UpdateAllPlayerPoints();
     }
+    // private void UpdateTown(string value)
+    // {
+    //     if (elf != null) elf.MoveToTown(value, _curTown);
+    //     _curTown = value;
+    //     visitedTown[_curTown] = true;
+    //     //Debug.LogError($"Updating town {value} for player {_userName}");
+    //     if (GameConstants.townDict.ContainsKey(_curTown))
+    //     {
+    //         NewTown town = GameConstants.townDict[_curTown];
+    //         if (town != null) town.DisplayVisited();
+    //     }
+    //     int nVisited = 0;
+    //     foreach (bool b in visitedTown.Values)
+    //     {
+    //         if (b) nVisited++;
+    //     }
+    //     nPoints = nVisited - 1;
+    // }
 
-    private void UpdateName(string value)
-    {
-        _userName = value;
-        if (tile != null) tile.SetName(_userName);
-    }
+    // private void UpdateVisibleTiles(List<MovementTile> tiles)
+    // {
+    //     mVisibleTiles = tiles;
+    //     UpdateTiles();
+    //     if (tokenDisplay != null) tokenDisplay.SetVisible(tiles);
+    // }
 
-    private void UpdateTown(string value)
+    // private void UpdateHiddenTiles(List<MovementTile> tiles)
+    // {
+    //     mHiddenTiles = tiles;
+    //     UpdateTiles();
+    //     if (tokenDisplay != null) tokenDisplay.SetNumHidden(tiles.Count);
+    // }
+
+    // private void UpdateCards(List<CardEnum> cards)
+    // {
+    //     _mCards = cards;
+    //     if (Lobby.myUsername == _userName && GameConstants.mainUIManager) GameConstants.mainUIManager.UpdateCardHand();
+    //     if (tile != null) tile.SetCards(_mCards.Count);
+    // }
+
+    public void SelfInitRound()
     {
-        if (elf != null) elf.MoveToTown(value, _curTown);
-        _curTown = value;
-        visitedTown[_curTown] = true;
-        //Debug.LogError($"Updating town {value} for player {_userName}");
-        if (GameConstants.townDict.ContainsKey(_curTown))
+        if (Game.currentGame.curRound <= lastInitializedround)
         {
-            NewTown town = GameConstants.townDict[_curTown];
-            if (town != null) town.DisplayVisited();
+            Debug.Log($"Already initialized round {Game.currentGame.curRound} for player {userName}");
+            return;
         }
-        int nVisited = 0;
-        foreach (bool b in visitedTown.Values)
+        List<CardEnum> cards = mCards;
+        if (cards.Count < 8)
         {
-            if (b) nVisited++;
+            AddCards(Game.currentGame.Draw(8 - cards.Count));
         }
-        nPoints = nVisited - 1;
-    }
 
-    private void UpdateVisibleTiles(List<MovementTile> tiles)
-    {
-        mVisibleTiles = tiles;
-        UpdateTiles();
-        if (tokenDisplay != null) tokenDisplay.SetVisible(tiles);
-    }
+        AddHiddenTile(Game.currentGame.RemoveTileFromPile());
 
-    private void UpdateHiddenTiles(List<MovementTile> tiles)
-    {
-        mHiddenTiles = tiles;
-        UpdateTiles();
-        if (tokenDisplay != null) tokenDisplay.SetNumHidden(tiles.Count);
-    }
-
-    private void UpdateCards(List<CardEnum> cards)
-    {
-        _mCards = cards;
-        if (Lobby.myUsername == _userName && GameConstants.mainUIManager) GameConstants.mainUIManager.UpdateCardHand();
-        if (tile != null) tile.SetCards(_mCards.Count);
-    }
-
-    private void UpdateAllPlayerPoints()
-    { 
-        foreach (NewTown town in GameConstants.townDict.Values)
-        { 
-            town.DisplayVisited();
-	    }
+        lastInitializedround = Game.currentGame.curRound;
     }
 
     private void UpdateTiles()
@@ -117,22 +128,12 @@ public class Player
 
             mTiles[tile]++;
         }
-        
-	    foreach (MovementTile tile in mHiddenTiles)
+
+        foreach (MovementTile tile in mHiddenTiles)
         {
             if (!mTiles.ContainsKey(tile)) mTiles[tile] = 0;
 
             mTiles[tile]++;
-	    }
-
-        if (GameConstants.tileGroup != null)
-        {
-            foreach (MovementTileUIScript mtScript in GameConstants.tileGroup.GetComponentsInChildren<MovementTileUIScript>())
-            {
-                mtScript.UpdateText();
-            }
-
-            if (tile != null) tile.SetTiles(mVisibleTiles.Count + mHiddenTiles.Count);
         }
     }
 
@@ -143,24 +144,24 @@ public class Player
     {
         get
         {
-            return _nCoins;
+            return (int)_properties[pCOINS];
         }
         set
         {
-            if (_nCoins != value && GameConstants.networkManager) GameConstants.networkManager.SetPlayerPropertyByPlayerName(_userName, pCOINS, value);
-            UpdateCoins(value);
+            _properties[pCOINS] = value;
+            SyncPlayerStats();
         }
     }
     public int nPoints
     {
         get
         {
-            return _nPoints;
+            return (int)_properties[pPOINTS];
         }
         set
         {
-            if (_nPoints != value && GameConstants.networkManager) GameConstants.networkManager.SetPlayerPropertyByPlayerName(_userName, pPOINTS, value);
-            UpdatePoints(value);
+            _properties[pPOINTS] = value;
+            SyncPlayerStats();
         }
     }
 
@@ -168,12 +169,12 @@ public class Player
     {
         get
         {
-            return _playerColor;
+            return (PlayerColor)_properties[pCOLOR];
         }
         set
         {
-            if (_playerColor != value && GameConstants.networkManager) GameConstants.networkManager.SetPlayerPropertyByPlayerName(_userName, pCOLOR, value);
-            UpdateColor(value);
+            _properties[pCOLOR] = value;
+            SyncPlayerStats();
         }
     }
 
@@ -181,7 +182,23 @@ public class Player
     {
         get
         {
-            return _mCards;
+            return new List<CardEnum>((CardEnum[])_properties[pCARDS]);
+        }
+    }
+
+    public List<MovementTile> mVisibleTiles
+    {
+        get
+        {
+            return new List<MovementTile>((MovementTile[])_properties[pVISIBLE_TILES]);
+        }
+    }
+
+    public List<MovementTile> mHiddenTiles
+    {
+        get
+        {
+            return new List<MovementTile>((MovementTile[])_properties[pHIDDEN_TILES]);
         }
     }
 
@@ -189,22 +206,47 @@ public class Player
     {
         get
         {
-            return _userName;
+            return (string)_properties[pNAME];
         }
         set
         {
-            if (_userName != value && GameConstants.networkManager) GameConstants.networkManager.SetPlayerPropertyByPlayerName(_userName, pNAME, value);
-            UpdateName(value);
+            _properties[pNAME] = value;
+            SyncPlayerStats();
         }
     }
 
     public string curTown
     {
-        get { return _curTown; }
+        get
+        {
+            return (string)_properties[pTOWN];
+        }
         set
         {
-            if (_curTown != value && GameConstants.networkManager) GameConstants.networkManager.SetPlayerPropertyByPlayerName(_userName, pTOWN, value);
-            UpdateTown(value);
+            // Update visited
+            Dictionary<string, bool> visited = mVisited;
+            visited[value] = true;
+            _properties[pVISITED] = visited;
+
+            // Update points
+            int nVisited = 0;
+            foreach (bool b in visited.Values)
+            {
+                if (b) nVisited++;
+            }
+            _properties[pPOINTS] = nVisited - 1;
+
+            // Update town
+            _properties[pTOWN] = value;
+            SyncPlayerStats();
+        }
+    }
+
+    public Dictionary<string, bool> mVisited
+    {
+        get
+        {
+            return _properties[pVISITED] as Dictionary<string, bool>;
         }
     }
 
@@ -212,18 +254,53 @@ public class Player
 
     #region stat syncing
 
-    public void AddCard(CardEnum card)
+    public void SyncPlayerStats()
     {
-        _mCards.Add(card);
-        if (GameConstants.networkManager) GameConstants.networkManager.SetPlayerPropertyByPlayerName(_userName, pCARDS, mCards.ToArray());
+        if (!IsLocalPlayer())
+        {
+            Debug.LogError("Trying to sync stats for non-local player");
+            return;
+        }
+        if (GameConstants.networkManager)
+        {
+            GameConstants.networkManager.SetLocalPlayerStats(_properties);
+        }
+        UpdateDisplay();
     }
 
-    public void RemoveCard(CardEnum card)
+    public void AddCards(CardEnum[] cards)
     {
-        _mCards.Remove(card);
-        if (GameConstants.networkManager) GameConstants.networkManager.SetPlayerPropertyByPlayerName(_userName, pCARDS, mCards.ToArray());
+        List<CardEnum> hand = mCards;
+        hand.AddRange(cards);
+        _properties[pCARDS] = hand.ToArray();
+        SyncPlayerStats();
     }
 
+    public void RemoveCards(CardEnum[] cards)
+    {
+        List<CardEnum> hand = mCards;
+        foreach (CardEnum card in cards)
+        {
+            hand.Remove(card);
+        }
+        _properties[pCARDS] = hand.ToArray();
+        SyncPlayerStats();
+    }
+
+    public void AddVisibleTile(MovementTile tile)
+    {
+        List<MovementTile> visibleTiles = mVisibleTiles;
+        visibleTiles.Add(tile);
+        _properties[pVISIBLE_TILES] = visibleTiles.ToArray();
+        SyncPlayerStats();
+    }
+    public void AddHiddenTile(MovementTile tile)
+    {
+        List<MovementTile> hiddenTiles = mHiddenTiles;
+        hiddenTiles.Add(tile);
+        _properties[pHIDDEN_TILES] = hiddenTiles.ToArray();
+        SyncPlayerStats();
+    }
     public void RemoveTile(MovementTile tile)
     {
         if (mVisibleTiles.Contains(tile))
@@ -233,176 +310,199 @@ public class Player
         else
         {
             RemoveHiddenTile(tile);
-	    }
+        }
+        SyncPlayerStats();
     }
-
-    public void AddVisibleTile(MovementTile tile)
-    {
-        mVisibleTiles.Add(tile);
-        UpdateVisibleTiles(mVisibleTiles);
-        if (GameConstants.networkManager) GameConstants.networkManager.SetPlayerPropertyByPlayerName(_userName, pVISIBLE_TILES, mVisibleTiles.ToArray());
-	}
 
     public void RemoveVisibleTile(MovementTile tile)
     {
-        mVisibleTiles.Remove(tile);
-        UpdateVisibleTiles(mVisibleTiles);
-        if (GameConstants.networkManager) GameConstants.networkManager.SetPlayerPropertyByPlayerName(_userName, pVISIBLE_TILES, mVisibleTiles.ToArray());
-    }
-
-    internal void SetOnlyToken(MovementTile tile, bool inVisibleTokens)
-    {
-        bool hasObstacle = mVisibleTiles.Contains(MovementTile.RoadObstacle);
-        mVisibleTiles = new List<MovementTile>();
-        mHiddenTiles = new List<MovementTile>();
-        if (inVisibleTokens)
-        {
-            mVisibleTiles.Add(tile);    
-        } else
-        {
-            mHiddenTiles.Add(tile);
-	    }
-
-        if (hasObstacle) mVisibleTiles.Add(MovementTile.RoadObstacle);
-
-        UpdateVisibleTiles(mVisibleTiles);
-        UpdateHiddenTiles(mHiddenTiles);
-        if (GameConstants.networkManager)
-        {
-            GameConstants.networkManager.SetPlayerPropertyByPlayerName(_userName, pVISIBLE_TILES, mVisibleTiles.ToArray());
-            GameConstants.networkManager.SetPlayerPropertyByPlayerName(_userName, pHIDDEN_TILES, mHiddenTiles.ToArray());
-	    }
-    }
-
-    public void AddHiddenTile(MovementTile tile)
-    {
-        mHiddenTiles.Add(tile);
-        UpdateHiddenTiles(mHiddenTiles);
-        if (GameConstants.networkManager) GameConstants.networkManager.SetPlayerPropertyByPlayerName(_userName, pHIDDEN_TILES, mHiddenTiles.ToArray());
+        List<MovementTile> visibleTiles = mVisibleTiles;
+        visibleTiles.Remove(tile);
+        _properties[pVISIBLE_TILES] = visibleTiles.ToArray();
     }
 
     public void RemoveHiddenTile(MovementTile tile)
     {
-        mHiddenTiles.Remove(tile);
-        UpdateHiddenTiles(mHiddenTiles);
-        if (GameConstants.networkManager) GameConstants.networkManager.SetPlayerPropertyByPlayerName(_userName, pHIDDEN_TILES, mHiddenTiles.ToArray());
+        List<MovementTile> hiddenTiles = mHiddenTiles;
+        hiddenTiles.Remove(tile);
+        _properties[pHIDDEN_TILES] = hiddenTiles.ToArray();
     }
 
-    internal int GetNumTilesOfType(MovementTile tile)
+    public void SetOnlyTile(MovementTile tile, bool inVisibleTiles)
     {
-        if (!mTiles.ContainsKey(tile)) mTiles[tile] = 0;
-        return mTiles[tile];
+        bool hasObstacle = mVisibleTiles.Contains(MovementTile.RoadObstacle);
+        List<MovementTile> hiddenTiles = new List<MovementTile>();
+        List<MovementTile> visibleTiles = new List<MovementTile>();
+        if (inVisibleTiles)
+        {
+            visibleTiles.Add(tile);
+        }
+        else
+        {
+            hiddenTiles.Add(tile);
+        }
+
+        if (hasObstacle) visibleTiles.Add(MovementTile.RoadObstacle);
+
+        _properties[pVISIBLE_TILES] = visibleTiles.ToArray();
+        _properties[pHIDDEN_TILES] = hiddenTiles.ToArray();
+        SyncPlayerStats();
     }
 
-
-    public void updatePropertiesCallback(string key, object value)
+    public int GetNumTilesOfType(MovementTile tile)
     {
-        if (key == pCOINS)
-        {
-            if (value == null) value = 0;
-            UpdateCoins((int)value);
-        }
-        else if (key == pPOINTS)
-        {
-            if (value == null) value = 0;
-	        UpdatePoints((int)value);
-        }
-        else if (key == pCARDS)
-        {
-            if (value == null) value = (object)(new List<CardEnum>()).ToArray();
-            UpdateCards(((CardEnum[])value).ToList());
-        }
-        else if (key == pVISIBLE_TILES)
-        {
-            if (value == null) value = (object)(new List<MovementTile>()).ToArray();
-            UpdateVisibleTiles(((MovementTile[])value).ToList());	
-	    }
-        else if (key == pHIDDEN_TILES)
-        {
-            if (value == null) value = (object)(new List<MovementTile>()).ToArray();
-            UpdateHiddenTiles(((MovementTile[])value).ToList());	
-	    }
-        else if (key == pNAME)
-        {
-            if (value != null) UpdateName((string)value);
-        }
-        else if (key == pCOLOR)
-        {
-            if (value == null) value = PlayerColor.Blue;
-	        UpdateColor((PlayerColor)value);
-        }
-        else if (key == pTOWN)
-        {
-            if (value == null) value = "TownElvenhold";
-            UpdateTown((string)value);
-        }
+        if (!mTiles.ContainsKey(tile))
+            return 0;
+        else
+            return mTiles[tile];
     }
+
+    public void UpdatePlayerStats(ExitGames.Client.Photon.Hashtable hashtable)
+    {
+        if (IsLocalPlayer()) return; // Don't update local player stats (they should already be up to date)
+        foreach (string key in _properties.Keys)
+        {
+            if (!hashtable.ContainsKey(key))
+            {
+                return; // If hashtable not complete, don't update
+            }
+        }
+        _properties = hashtable;
+        UpdateDisplay();
+    }
+
+    // public void updatePropertiesCallback(string key, object value)
+    // {
+    //     if (key == pCOINS)
+    //     {
+    //         if (value == null) value = 0;
+    //         UpdateCoins((int)value);
+    //     }
+    //     else if (key == pPOINTS)
+    //     {
+    //         if (value == null) value = 0;
+    //         UpdatePoints((int)value);
+    //     }
+    //     else if (key == pCARDS)
+    //     {
+    //         if (value == null) value = (object)(new List<CardEnum>()).ToArray();
+    //         UpdateCards(((CardEnum[])value).ToList());
+    //     }
+    //     else if (key == pVISIBLE_TILES)
+    //     {
+    //         if (value == null) value = (object)(new List<MovementTile>()).ToArray();
+    //         UpdateVisibleTiles(((MovementTile[])value).ToList());
+    //     }
+    //     else if (key == pHIDDEN_TILES)
+    //     {
+    //         if (value == null) value = (object)(new List<MovementTile>()).ToArray();
+    //         UpdateHiddenTiles(((MovementTile[])value).ToList());
+    //     }
+    //     else if (key == pNAME)
+    //     {
+    //         if (value != null) UpdateName((string)value);
+    //     }
+    //     else if (key == pCOLOR)
+    //     {
+    //         if (value == null) value = PlayerColor.Blue;
+    //         UpdateColor((PlayerColor)value);
+    //     }
+    //     else if (key == pTOWN)
+    //     {
+    //         if (value == null) value = "TownElvenhold";
+    //         UpdateTown((string)value);
+    //     }
+    // }
 
 
     #endregion
 
-    public Player(string username)
+    public Player(string userName)
     {
-        _userName = username;
-        mHiddenTiles = new List<MovementTile>();
-        mVisibleTiles = new List<MovementTile>();
-        mTiles = new Dictionary<MovementTile, int>();
+        _properties = new ExitGames.Client.Photon.Hashtable();
+        _properties[pNAME] = userName;
+        _properties[pCOINS] = 0;
+        _properties[pPOINTS] = 0;
+        _properties[pCOLOR] = PlayerColor.None;
+        _properties[pTOWN] = "TownElvenhold";
+        _properties[pCARDS] = new CardEnum[] { };
+        _properties[pVISIBLE_TILES] = new MovementTile[] { MovementTile.RoadObstacle }; // TODO: Update for Elvengold
+        _properties[pHIDDEN_TILES] = new MovementTile[] { };
+        _properties[pVISITED] = new Dictionary<string, bool>();
 
-        Reset();
-        if (tile != null)
-        {
-            tile.UpdateStats(username, nCoins, nPoints, mCards.Count, mTiles.Count, playerColor);
-            UpdateTiles();
-	    }
-        
-        if (GameConstants.networkManager) GameConstants.networkManager.SetPlayerPropertyByPlayerName(_userName, pHIDDEN_TILES, mHiddenTiles.ToArray());
-        if (GameConstants.networkManager) GameConstants.networkManager.SetPlayerPropertyByPlayerName(_userName, pVISIBLE_TILES, mVisibleTiles.ToArray());
+        InitVisited();
+
+        lastInitializedround = 0;
+
+        Debug.LogError("Player created: " + userName);
     }
 
-    public void UpdateDisplayer()
-    { 
-        UpdateTiles();
-        UpdateVisibleTiles(mVisibleTiles);
-        UpdateHiddenTiles(mHiddenTiles);
-        if (elf != null) elf.MoveToTown(_curTown, _curTown);
-    }
-
-    public void Reset()
+    private void InitVisited()
     {
-        Debug.Log($"Resetting Player {_userName}");
-        nPoints = 0;
-        nCoins = 0;
-        _mCards = new List<CardEnum>();
-        visitedTown = new Dictionary<string, bool>();
-        foreach (string townName in GameConstants.townDict.Keys)
+        Dictionary<string, bool> visited = mVisited;
+        foreach (string townName in GameConstants.townNames)
         {
-            visitedTown[townName] = false;
+            visited[townName] = false;
         }
-        curTown = "TownElvenhold";
-        UpdateTiles();
-        UpdateVisibleTiles(mVisibleTiles);
-        UpdateHiddenTiles(mHiddenTiles);
 
-        if (GameConstants.networkManager)
-        {
-            GameConstants.networkManager.SetPlayerPropertyByPlayerName(_userName, pCARDS, mCards.ToArray());      
-            GameConstants.networkManager.SetPlayerPropertyByPlayerName(_userName, pVISIBLE_TILES, mVisibleTiles.ToArray());
-            GameConstants.networkManager.SetPlayerPropertyByPlayerName(_userName, pHIDDEN_TILES, mHiddenTiles.ToArray());
-	    }
+        visited["TownElvenhold"] = true;
+        _properties[pVISITED] = visited;
     }
+
+    // public void UpdateDisplayer()
+    // {
+    //     UpdateTiles();
+    //     UpdateVisibleTiles(mVisibleTiles);
+    //     UpdateHiddenTiles(mHiddenTiles);
+    //     if (elf != null) elf.MoveToTown(_curTown, _curTown);
+    // }
+
+    // public void Reset()
+    // {
+    //     Debug.Log($"Resetting Player {_userName}");
+    //     nPoints = 0;
+    //     nCoins = 0;
+    //     _mCards = new List<CardEnum>();
+    //     visitedTown = new Dictionary<string, bool>();
+    //     foreach (string townName in GameConstants.townDict.Keys)
+    //     {
+    //         visitedTown[townName] = false;
+    //     }
+    //     curTown = "TownElvenhold";
+    //     UpdateTiles();
+    //     UpdateVisibleTiles(mVisibleTiles);
+    //     UpdateHiddenTiles(mHiddenTiles);
+
+    //     if (GameConstants.networkManager)
+    //     {
+    //         GameConstants.networkManager.SetPlayerPropertyByPlayerName(_userName, pCARDS, mCards.ToArray());
+    //         GameConstants.networkManager.SetPlayerPropertyByPlayerName(_userName, pVISIBLE_TILES, mVisibleTiles.ToArray());
+    //         GameConstants.networkManager.SetPlayerPropertyByPlayerName(_userName, pHIDDEN_TILES, mHiddenTiles.ToArray());
+    //     }
+    // }
 
     public bool IsMyTurn()
     {
-        return (Game.currentGame != null) && (Game.currentGame.GetCurPlayer() == _userName);
+        return (Game.currentGame != null) && (Game.currentGame.GetCurPlayer() == userName);
     }
 
-    public bool visited(string townName)
+    public bool IsLocalPlayer()
     {
-        if (!visitedTown.ContainsKey(townName))
+        return userName == Lobby.myUsername;
+    }
+
+    public bool isVisited(string townName)
+    {
+        Dictionary<string, bool> visitedTowns = _properties[pVISITED] as Dictionary<string, bool>;
+        if (visitedTowns.ContainsKey(townName))
         {
-            visitedTown[townName] = false;
-	    }
-        return visitedTown[townName];
+            return visitedTowns[townName];
+        }
+        else
+        {
+            Debug.LogError("Town " + townName + " not found in visitedTowns");
+        }
+        return false;
     }
 
     public void OpenTokenDisplay()
@@ -410,36 +510,9 @@ public class Player
         if (tokenDisplay != null) tokenDisplay.openWindow();
     }
 
-    public void SetElf(Elf elf)
-    {
-        this.elf = elf;
-    }
-
-    public void SetTokenDisplay(PlayerVisibleTokenDisplay tokenDisplay)
-    {
-        this.tokenDisplay = tokenDisplay;
-    }
-
-    public void SetTile(PlayerTile tile)
-    {
-        this.tile = tile;
-        tile.UpdateStats(userName, nCoins, nPoints, mCards.Count, mTiles.Count, playerColor);
-        UpdateTiles();
-    }
-
-    public List<MovementTile> GetVisibleTokens()
-    {
-        return mVisibleTiles;
-    }
-
-    public List<MovementTile> GetHiddenTokens()
-    {
-        return mHiddenTiles;
-    }
-
     #region static methods
 
-    private static Dictionary<string, Player> _players = new Dictionary<string, Player>();
+    private static Dictionary<string, Player> _players;
 
     public static Player GetLocalPlayer()
     {
@@ -448,21 +521,21 @@ public class Player
 
     public static List<Player> GetAllPlayers()
     {
-        if (GameConstants.networkManager)
-        {
-            List<string> toRemove = new List<string>();
-            foreach (string pName in _players.Keys)
-            { 
-	           if (GameConstants.networkManager.GetPlayer(pName) == null)
-                {
-                    toRemove.Add(pName);
-                }
-            }
-            foreach (string pName in toRemove)
-            {
-                _players.Remove(pName);
-            }
-        }
+        // if (GameConstants.networkManager)
+        // {
+        //     List<string> toRemove = new List<string>();
+        //     foreach (string pName in _players.Keys)
+        //     {
+        //         if (GameConstants.networkManager.GetPlayer(pName) == null)
+        //         {
+        //             toRemove.Add(pName);
+        //         }
+        //     }
+        //     foreach (string pName in toRemove)
+        //     {
+        //         _players.Remove(pName);
+        //     }
+        // }
         return _players.Values.ToList();
     }
 
@@ -486,6 +559,12 @@ public class Player
         }
 
         return _players[p];
+    }
+
+    public static void ResetPlayers()
+    {
+        _players = new Dictionary<string, Player>();
+        _players[Lobby.myUsername] = new Player(Lobby.myUsername);
     }
 
     #endregion

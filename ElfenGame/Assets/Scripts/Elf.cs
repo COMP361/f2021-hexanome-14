@@ -4,7 +4,7 @@ using Photon.Pun;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class Elf : MonoBehaviour 
+public class Elf : MonoBehaviour
 {
     private Vector3 dragOrigin;
     private GridManager dragOriginManager;
@@ -15,7 +15,6 @@ public class Elf : MonoBehaviour
     public void LinkToPlayer(Player p)
     {
         player = p;
-        p.SetElf(this);
         GetComponent<SpriteRenderer>().sprite = p.playerColor.GetSprite();
         name = p.userName;
     }
@@ -90,10 +89,7 @@ public class Elf : MonoBehaviour
                     if (pathScript.CanMoveOnPath(GameConstants.townDict[player.curTown], town, cards))
                     {
                         player.curTown = town.name;
-                        foreach (CardEnum card in cards)
-                        {
-                            player.RemoveCard(card);
-                        }
+                        player.RemoveCards(cards.ToArray());
 
                         GameConstants.mainUIManager.ResetRoadColors();
                         return;
@@ -108,23 +104,40 @@ public class Elf : MonoBehaviour
         }
     }
 
-    public void MoveToTown(string destination, string source)
+    public void SetTown(string destination)
     {
-        NewTown sourceTown = GameConstants.townDict[source];
+        NewTown destinationTown = GameConstants.townDict[destination];
+        GridManager sourceTown = GetComponentInParent<GridManager>();
+
         if (sourceTown != null)
         {
-            sourceTown.GetComponent<GridManager>().RemoveElement(gameObject);
-	    }
-
-        NewTown destinationTown = GameConstants.townDict[destination];
-        if (destinationTown == null)
-        {
-            GameConstants.townDict = null;
-            destinationTown = GameConstants.townDict[destination];
+            sourceTown.RemoveElement(gameObject);
         }
-        Debug.Log($"Elf {player.userName} moved to {destination}");
-        destinationTown.GetComponent<GridManager>().AddElement(gameObject);
 
+        if (destinationTown != null)
+        {
+            destinationTown.GetComponent<GridManager>().AddElement(gameObject);
+        }
+        Debug.Log($"{player.userName} moved to {destination}");
     }
+
+    // public void MoveToTown(string destination, string source)
+    // {
+    //     NewTown sourceTown = GameConstants.townDict[source];
+    //     if (sourceTown != null)
+    //     {
+    //         sourceTown.GetComponent<GridManager>().RemoveElement(gameObject);
+    //     }
+
+    //     NewTown destinationTown = GameConstants.townDict[destination];
+    //     if (destinationTown == null)
+    //     {
+    //         GameConstants.townDict = null;
+    //         destinationTown = GameConstants.townDict[destination];
+    //     }
+    //     Debug.Log($"Elf {player.userName} moved to {destination}");
+    //     destinationTown.GetComponent<GridManager>().AddElement(gameObject);
+
+    // }
 
 }

@@ -21,42 +21,45 @@ public class GridManager : MonoBehaviour
 
     public void Clear()
     {
-        foreach(GameObject go in elements)
+        foreach (GameObject go in elements)
         {
             Destroy(go);
-	    }
+        }
         elements.Clear();
         PositionElements();
     }
 
-    public void AddNonObstacleTilesToDeck()
-    { 
-        foreach(GameObject go in elements)
+    public List<MovementTile> GetNonObstacleTiles()
+    {
+        List<MovementTile> nonObstacleTiles = new List<MovementTile>();
+        foreach (GameObject go in elements)
         {
             MovementTileSpriteScript spriteScript = go.GetComponent<MovementTileSpriteScript>();
-            if (spriteScript == null) continue;
+            if (spriteScript == null) continue; // Not a movement tile
 
             MovementTile tile = spriteScript.mTile.mTile;
 
             if (tile != MovementTile.RoadObstacle)
             {
-                Game.currentGame.AddTileToPile(tile);
-	        }
-	    }
+                nonObstacleTiles.Add(tile);
+            }
+        }
+
+        return nonObstacleTiles;
     }
 
     private void PositionElements()
     {
         int colsNeeded = Mathf.Min(nCols, elements.Count);
-        int rowsNeeded = (elements.Count-1) / nCols + 1;
+        int rowsNeeded = (elements.Count - 1) / nCols + 1;
         int index = 0;
         foreach (GameObject gm in elements)
         {
             int row = index / nCols;
             int col = index % nCols;
 
-            float posX = col * tileSize - ((colsNeeded-1) * tileSize / 2);
-            float posY = row * -tileSize + ((rowsNeeded-1) * tileSize / 2);
+            float posX = col * tileSize - ((colsNeeded - 1) * tileSize / 2);
+            float posY = row * -tileSize + ((rowsNeeded - 1) * tileSize / 2);
 
             gm.transform.SetParent(gameObject.transform);
             gm.transform.localPosition = new Vector3(posX, posY, GameConstants.gridItemRelativeZ);
@@ -102,31 +105,35 @@ public class GridManager : MonoBehaviour
     }
     */
 
-    public int checkNumMovTile(PathScript p){
+    public int checkNumMovTile(PathScript p)
+    {
         int n = 0;
-        foreach ( GameObject el in elements)
+        foreach (GameObject el in elements)
         {
             MovementTileSpriteScript mvts = el.GetComponent<MovementTileSpriteScript>();
-            if (mvts != null){
+            if (mvts != null)
+            {
                 n++;
-            } 
+            }
         }
         return n;
     }
 
-    public bool checkHasSpecial(PathScript p){
+    public bool checkHasSpecial(PathScript p)
+    {
         return false;
     }
 
-    public bool checkHasDoubleTok(PathScript p){
+    public bool checkHasDoubleTok(PathScript p)
+    {
         return false;
     }
 
     public MovementTileSpriteScript GetMovementTile()
     {
         MovementTileSpriteScript moveTile = null;
-        
-        foreach ( GameObject element in elements)
+
+        foreach (GameObject element in elements)
         {
 
             moveTile = element.GetComponent<MovementTileSpriteScript>();
@@ -141,7 +148,7 @@ public class GridManager : MonoBehaviour
 
     public bool HasObstacle()
     {
-        foreach( GameObject element in elements)
+        foreach (GameObject element in elements)
         {
             MovementTileSpriteScript moveTile = element.GetComponent<MovementTileSpriteScript>();
             MovementTile tile = moveTile.mTile.mTile;
@@ -149,10 +156,10 @@ public class GridManager : MonoBehaviour
             {
                 return true;
             }
-            
+
         }
         return false;
     }
 
-    
+
 }

@@ -10,12 +10,13 @@ using UnityEngine.UI;
 
 public class MainUIManager : MonoBehaviour
 {
+    #region Serialized Fields
     [SerializeField]
     private GameObject pausePanel;
 
     [SerializeField]
     private GameObject chooseColorPanel;
-    
+
     [SerializeField]
     private GameObject gameOverScreen;
 
@@ -76,6 +77,8 @@ public class MainUIManager : MonoBehaviour
     [SerializeField]
     public Image firstPlaceSprite, secondPlaceSprite, thirdPlaceSprite;
 
+    #endregion
+
     public Dictionary<MovementTile, MovementTileSO> mTileDict;
 
     private bool isPaused = false;
@@ -93,20 +96,20 @@ public class MainUIManager : MonoBehaviour
         }
         UpdateCardHand();
 
-        if (GameConstants.networkManager) GameConstants.networkManager.verifyAllPlayersExist();
+        if (GameConstants.networkManager) GameConstants.networkManager.verifyAllPlayersExist(); // TODO: Remove this line
         GameConstants.townDict = null; // Force reset of town Dict
         GameConstants.roadDict = null;
-        foreach (string playerName in Game.currentGame.GetPlayerList())
+        foreach (string playerName in Game.currentGame.mPlayers)
         {
             InitPlayer(playerName);
         }
 
-        UpdateRoundInfo();
-        UpdateAvailableTokens();
+        Game.currentGame.UpdateDisplay();
+
         foreach (NewTown town in GameConstants.townDict.Values)
         {
             town.DisplayVisited();
-	    }
+        }
 
         chooseColorPanel.SetActive(true);
         UpdateColorOptions();
@@ -116,43 +119,50 @@ public class MainUIManager : MonoBehaviour
     {
         colorSelectionDD.ClearOptions();
         List<TMP_Dropdown.OptionData> newOptions = new List<TMP_Dropdown.OptionData>();
-        for (int i = 0; i<6; ++i)
+
+        foreach (PlayerColor c in Game.currentGame.mAvailableColors)
         {
-            if (!Game.currentGame.availableColors.ContainsKey((PlayerColor)i)) Game.currentGame.availableColors[(PlayerColor)i] = "";
-            if (Game.currentGame.availableColors[(PlayerColor)i] == "")
-            {
-                newOptions.Add(new TMP_Dropdown.OptionData(elfNames[i], ((PlayerColor)i).GetSprite()));
-            }
+            newOptions.Add(new TMP_Dropdown.OptionData(elfNames[(int)c], c.GetSprite()));
         }
         colorSelectionDD.AddOptions(newOptions);
     }
 
+    public void UpdatePlayerPointDisplay()
+    {
+        foreach (NewTown town in GameConstants.townDict.Values)
+        {
+            town.DisplayVisited();
+        }
+    }
+
+
     public void InitPlayer(string username)
     {
         //Debug.LogError($"Creating Player {username}, Local Username = {Lobby.myUsername}");
+
+        Player p = Player.GetOrCreatePlayer(username); //TODO: remove this line
+
+        //Elf
         GameObject elfObject = Instantiate(elfPrefab);
-
-        Player p = Player.GetOrCreatePlayer(username);
         Elf elf = elfObject.GetComponent<Elf>();
+        elf.LinkToPlayer(p);
+        p.elf = elf;
 
+        //Player Tile
         GameObject g = Instantiate(playerPrefab, leftPane.transform);
         PlayerTile tile = g.GetComponent<PlayerTile>();
         tile.SetPlayer(p);
+        p.tile = tile;
 
+        // Token Display
         GameObject tokenDisplayObject = Instantiate(tokenDisplayPrefab, mainCanvas.transform);
         PlayerVisibleTokenDisplay tokenDisplay = tokenDisplayObject.GetComponent<PlayerVisibleTokenDisplay>();
         tokenDisplay.SetName(username);
+        tokenDisplayObject.transform.SetSiblingIndex(tokenDisplay.transform.GetSiblingIndex() - 1); // Ensure the pause menu is on top of view
+        p.tokenDisplay = tokenDisplay;
 
-        tokenDisplayObject.transform.SetSiblingIndex(tokenDisplay.transform.GetSiblingIndex() - 1); // Ensure the pause menu is on top off view
-
-        p.SetTokenDisplay(tokenDisplay);
-
-        p.SetTile(tile);
-        elf.LinkToPlayer(p);
-
-        if (!p.GetVisibleTokens().Contains(MovementTile.RoadObstacle)) p.AddVisibleTile(MovementTile.RoadObstacle);
-
-        p.UpdateDisplayer();
+        // Update ALL UI with current player stats
+        p.UpdateDisplay();
     }
 
     public void OnPausePressed()
@@ -166,6 +176,10 @@ public class MainUIManager : MonoBehaviour
     {
         int index = elfNames.IndexOf(colorSelectionDD.options[colorSelectionDD.value].text);
         Game.currentGame.ClaimColor((PlayerColor)index);
+    }
+
+    public void CloseColorSelection()
+    {
         chooseColorPanel.SetActive(false);
     }
 
@@ -183,7 +197,7 @@ public class MainUIManager : MonoBehaviour
     {
         if (!Player.GetLocalPlayer().IsMyTurn()) return;
         if (Game.currentGame.curPhase == GamePhase.SelectTokenToKeep) return;
-        Game.currentGame.nextPlayer(passed : true);
+        Game.currentGame.nextPlayer(passed: true);
     }
 
     public void UpdateRoundInfo()
@@ -199,16 +213,16 @@ public class MainUIManager : MonoBehaviour
         int index = 0;
         if (!Player.GetLocalPlayer().IsMyTurn()) return;
         foreach (TileHolderScript thscript in tileGroup.GetComponentsInChildren<TileHolderScript>())
-        { 
-	        if (thscript.selected)
+        {
+            if (thscript.selected)
             {
-                Game.currentGame.RemoveVisibleTile(index);
-                Player.GetLocalPlayer().AddVisibleTile(thscript.tile.mTile);
+                MovementTile movementTile = Game.currentGame.RemoveVisibleTile(index);
+                Player.GetLocalPlayer().AddVisibleTile(movementTile);
                 foundSelected = true;
                 break;
-	        }
+            }
             index++;
-	    }
+        }
         if (foundSelected) Game.currentGame.nextPlayer();
     }
 
@@ -221,11 +235,11 @@ public class MainUIManager : MonoBehaviour
     }
 
     private TileHolderScript GetSelectedTokenToKeep()
-    { 
+    {
         foreach (TileHolderScript thscript in tokenToKeepSelectionWindow.GetComponentsInChildren<TileHolderScript>())
         {
             if (thscript.selected) return thscript;
-	    }
+        }
         return null;
     }
 
@@ -238,7 +252,7 @@ public class MainUIManager : MonoBehaviour
         if (thscript == null) return;
 
         if (thscript.tile.mTile == MovementTile.RoadObstacle) return; // Select non obstacle tile
-        localPlayer.SetOnlyToken(thscript.tile.mTile, thscript.GetInVisibleTokens());
+        localPlayer.SetOnlyTile(thscript.tile.mTile, thscript.GetInVisibleTokens());
         Game.currentGame.nextPlayer();
     }
 
@@ -251,7 +265,7 @@ public class MainUIManager : MonoBehaviour
         foreach (PathScript path in GameConstants.roadDict.Values)
         {
             path.ColorByMoveValidity(GameConstants.townDict[Player.GetLocalPlayer().curTown], GetSelectedCards());
-	    }
+        }
     }
 
     public void ResetRoadColors()
@@ -259,7 +273,7 @@ public class MainUIManager : MonoBehaviour
         foreach (PathScript path in GameConstants.roadDict.Values)
         {
             path.ResetColor();
-	    }
+        }
     }
 
     public List<CardEnum> GetSelectedCards()
@@ -290,8 +304,8 @@ public class MainUIManager : MonoBehaviour
 
     public void showAvailableTokensToKeep()
     {
-        tokenToKeepSelectionWindow.SetActive(true);
         UpdateTokenToKeep();
+        tokenToKeepSelectionWindow.SetActive(true);
     }
 
     public void hideAvailableTokensToKeep()
@@ -302,12 +316,12 @@ public class MainUIManager : MonoBehaviour
     public void UpdateTokenToKeep()
     {
         GridLayoutGroup gridGroup = tokenToKeepSelectionWindow.GetComponentInChildren<GridLayoutGroup>();
-        foreach (TileHolderScript thscript in gridGroup.GetComponentsInChildren<TileHolderScript>() )
+        foreach (TileHolderScript thscript in gridGroup.GetComponentsInChildren<TileHolderScript>())
         {
             Destroy(thscript.gameObject);
-	    }
+        }
 
-        foreach (MovementTile tile in Player.GetLocalPlayer().GetVisibleTokens())
+        foreach (MovementTile tile in Player.GetLocalPlayer().mVisibleTiles)
         {
             GameObject g = Instantiate(tilePrefab, gridGroup.transform);
 
@@ -315,34 +329,42 @@ public class MainUIManager : MonoBehaviour
             thscript.SetTile(mTileDict[tile]);
             thscript.SetIsSelectable(true);
             thscript.SetInVisibleTokens(true);
-	    }
+        }
 
-        foreach (MovementTile tile in Player.GetLocalPlayer().GetHiddenTokens())
-        { 
-	        GameObject g = Instantiate(tilePrefab, gridGroup.transform);
+        foreach (MovementTile tile in Player.GetLocalPlayer().mHiddenTiles)
+        {
+            GameObject g = Instantiate(tilePrefab, gridGroup.transform);
 
             TileHolderScript thscript = g.GetComponent<TileHolderScript>();
             thscript.SetTile(mTileDict[tile]);
             thscript.SetIsSelectable(true);
-            thscript.SetInVisibleTokens(false);      
-	    }
+            thscript.SetInVisibleTokens(false);
+        }
+    }
+
+    public void UpdateMovementTileCounts()
+    {
+        foreach (MovementTileUIScript mtScript in GameConstants.tileGroup.GetComponentsInChildren<MovementTileUIScript>())
+        {
+            mtScript.UpdateText();
+        }
     }
 
     public void UpdateAvailableTokens()
     {
-        foreach (TileHolderScript thscript in tileGroup.GetComponentsInChildren<TileHolderScript>() )
+        foreach (TileHolderScript thscript in tileGroup.GetComponentsInChildren<TileHolderScript>())
         {
             Destroy(thscript.gameObject);
-	    }
+        }
 
-        foreach (MovementTile tile in Game.currentGame.GetVisible())
+        foreach (MovementTile tile in Game.currentGame.mVisibleTiles)
         {
             GameObject g = Instantiate(tilePrefab, tileGroup.transform);
 
             TileHolderScript thscript = g.GetComponent<TileHolderScript>();
             thscript.SetTile(mTileDict[tile]);
             thscript.SetIsSelectable(true);
-	    }
+        }
     }
 
     public void SetTokensNotSelected()
@@ -351,13 +373,13 @@ public class MainUIManager : MonoBehaviour
         {
             thscript.selected = false;
             thscript.SetBackGroundColor();
-	    }
+        }
 
         foreach (TileHolderScript thscript in tokenToKeepSelectionWindow.GetComponentsInChildren<TileHolderScript>())
         {
             thscript.selected = false;
             thscript.SetBackGroundColor();
-	    }
+        }
     }
 
     public void UpdateCardHand()
@@ -366,10 +388,10 @@ public class MainUIManager : MonoBehaviour
         foreach (Card card in cardPanel.GetComponentsInChildren<Card>())
         {
             Destroy(card.gameObject);
-		}
+        }
 
-        Transform cardGroup = cardPanel.GetComponentInChildren<GridLayoutGroup>().transform;	
-	    foreach (CardEnum c in Player.GetLocalPlayer().mCards)
+        Transform cardGroup = cardPanel.GetComponentInChildren<GridLayoutGroup>().transform;
+        foreach (CardEnum c in Player.GetLocalPlayer().mCards)
         {
             GameObject g = Instantiate(cardPrefab, cardGroup);
             Card card = g.GetComponent<Card>();
@@ -382,11 +404,14 @@ public class MainUIManager : MonoBehaviour
     public void ClearAllTiles()
     {
         if (GameConstants.roadGroup == null) return;
+        List<MovementTile> tiles = new List<MovementTile>();
         foreach (GridManager gm in GameConstants.roadGroup.GetComponentsInChildren<GridManager>())
         {
-            gm.AddNonObstacleTilesToDeck();
+            tiles.AddRange(gm.GetNonObstacleTiles());
             gm.Clear();
         }
+
+        Game.currentGame.AddTilesToPile(tiles.ToArray());
     }
 
     public void GameOverTriggered(List<Player> winners, List<int> scores)
