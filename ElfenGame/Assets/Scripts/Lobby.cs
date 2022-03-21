@@ -49,11 +49,21 @@ public class Lobby : MonoBehaviour
 
     public class GameSession
     {
-        public string session_ID { get; set; }
 
-        public List<string> players { get; set; }
+        public GameSession(string session_ID, List<string> players, string createdBy, string saveID)
+        {
+            this.session_ID = session_ID;
+            this.players = players;
+            this.createdBy = createdBy;
+            this.saveID = saveID;
+        }
+        public string session_ID { get; private set; }
 
-        public string createdBy { get; set; }
+        public List<string> players { get; private set; }
+
+        public string createdBy { get; private set; }
+
+        public string saveID { get; private set; }
 
         public override string ToString()
         {
@@ -153,7 +163,7 @@ public class Lobby : MonoBehaviour
                             //Debug.Log(property.Value["players"]);
 
 
-                            GameSession gameSession = new GameSession() { session_ID = property.Name, players = property.Value["players"].ToObject<List<string>>(), createdBy = property.Value["creator"].ToString() };
+                            GameSession gameSession = new GameSession(session_ID: property.Name, players: property.Value["players"].ToObject<List<string>>(), createdBy: property.Value["creator"].ToString(), saveID: property.Value["savegameid"].ToString());
 
                             availableGames.Add(gameSession);
                             //Debug.Log(gameSession.ToString());
@@ -180,14 +190,15 @@ public class Lobby : MonoBehaviour
         await LongPollForUpdates(callbackTarget);
     }
 
-    public static async Task CreateSession()
+    public static async Task CreateSession(string savegameID = "")
     {
         using (var httpClient = new HttpClient())
         {
             using (var request = new HttpRequestMessage(new HttpMethod("POST"), $"{GameConstants.lobbyServiceUrl}/api/sessions?location=18.116.53.177&access_token={accessToken}"))
             {
-                request.Content = new StringContent("{\"game\":\"ElfenGame\", \"creator\":\"" + myUsername + "\", \"savegame\":\"\"}");
-                request.Content.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json");
+                request.Content = new StringContent("{\"game\":\"ElfenGame\", \"creator\":\"" + myUsername + "\", \"savegame\":\"" + savegameID + "\"}");
+                Debug.Log($"Creating session: {request.Content.ToString()}");
+                request.Content.Headers.ContentType = MediaTypeHeaderValue.Parse("application / json");
 
                 var response = await httpClient.SendAsync(request);
 
@@ -197,47 +208,53 @@ public class Lobby : MonoBehaviour
         }
     }
 
-    public static bool SessionListUpdated(List<GameSession> list1, List<GameSession> list2)
-    {
-        bool updated = false;
+    // public static async Task CreateSaveGame(string savegameID = "")
+    // {
+    //     using (var httpClient = new HttpClient())
+    //     {
+    //         using (var request = new HttpRequestMessage(new HttpMethod("POST"), $"{GameConstants.lobbyServiceUrl}/api/savegames?location=
 
-        foreach (GameSession game1 in list1)
-        {
-            bool foundMatch = false;
-            foreach (GameSession game2 in list2)
-            {
-                if (game1.session_ID == game2.session_ID)
-                {
-                    foundMatch = true;
-                }
-            }
+    // public static bool SessionListUpdated(List<GameSession> list1, List<GameSession> list2)
+    // {
+    //     bool updated = false;
 
-            if (!foundMatch)
-            {
-                updated = true;
-            }
-        }
+    //     foreach (GameSession game1 in list1)
+    //     {
+    //         bool foundMatch = false;
+    //         foreach (GameSession game2 in list2)
+    //         {
+    //             if (game1.session_ID == game2.session_ID)
+    //             {
+    //                 foundMatch = true;
+    //             }
+    //         }
 
-        foreach (GameSession game1 in list2)
-        {
-            bool foundMatch = false;
-            foreach (GameSession game2 in list1)
-            {
-                if (game1.session_ID == game2.session_ID)
-                {
-                    foundMatch = true;
-                }
-            }
+    //         if (!foundMatch)
+    //         {
+    //             updated = true;
+    //         }
+    //     }
 
-            if (!foundMatch)
-            {
-                updated = true;
-            }
-        }
+    //     foreach (GameSession game1 in list2)
+    //     {
+    //         bool foundMatch = false;
+    //         foreach (GameSession game2 in list1)
+    //         {
+    //             if (game1.session_ID == game2.session_ID)
+    //             {
+    //                 foundMatch = true;
+    //             }
+    //         }
+
+    //         if (!foundMatch)
+    //         {
+    //             updated = true;
+    //         }
+    //     }
 
 
-        return updated;
-    }
+    //     return updated;
+    // }
 
     public static async Task LeaveSession(string sessionID)
     {
@@ -265,50 +282,50 @@ public class Lobby : MonoBehaviour
         }
     }
 
-    public static async Task GetSessions(GameSessionsReceivedInterface callbackTarget)
-    {
-        using (var httpClient = new HttpClient())
-        {
-            using (var request = new HttpRequestMessage(new HttpMethod("GET"), $"{GameConstants.lobbyServiceUrl}/api/sessions"))
-            {
-                var response = await httpClient.SendAsync(request);
+    // public static async Task GetSessions(GameSessionsReceivedInterface callbackTarget)
+    // {
+    //     using (var httpClient = new HttpClient())
+    //     {
+    //         using (var request = new HttpRequestMessage(new HttpMethod("GET"), $"{GameConstants.lobbyServiceUrl}/api/sessions"))
+    //         {
+    //             var response = await httpClient.SendAsync(request);
 
-                var responseString = await response.Content.ReadAsStringAsync();
+    //             var responseString = await response.Content.ReadAsStringAsync();
 
-                JObject json = JsonConvert.DeserializeObject<JObject>(responseString);
-                //Debug.Log("Access Token Retreived: " + json["access_token"]);
+    //             JObject json = JsonConvert.DeserializeObject<JObject>(responseString);
+    //             //Debug.Log("Access Token Retreived: " + json["access_token"]);
 
-                availableGames = new List<GameSession>();
-
-
-                // List<GameSession> allGames = new List<GameSession>();
-                foreach (var game in json["sessions"].Children())
-                {
-                    var property = game as JProperty;
-                    //Debug.Log(property);
-                    //Debug.Log(property.Value["creator"]);
-                    //Debug.Log(property.Value["players"]);
+    //             availableGames = new List<GameSession>();
 
 
-                    GameSession gameSession = new GameSession() { session_ID = property.Name, players = property.Value["players"].ToObject<List<string>>(), createdBy = property.Value["creator"].ToString() };
+    //             // List<GameSession> allGames = new List<GameSession>();
+    //             foreach (var game in json["sessions"].Children())
+    //             {
+    //                 var property = game as JProperty;
+    //                 //Debug.Log(property);
+    //                 //Debug.Log(property.Value["creator"]);
+    //                 //Debug.Log(property.Value["players"]);
 
-                    availableGames.Add(gameSession);
-                    //Debug.Log(gameSession.ToString());
-                    // Debug.Log(allGames);
-                }
-                //Debug.Log(availableGames);
 
-                callbackTarget.OnUpdatedGameListReceived(availableGames);
+    //                 GameSession gameSession = new GameSession() { session_ID = property.Name, players = property.Value["players"].ToObject<List<string>>(), createdBy = property.Value["creator"].ToString() };
 
-                //if (SessionListUpdated(newGames, availableGames))
-                //{
-                //    availableGames = newGames;
+    //                 availableGames.Add(gameSession);
+    //                 //Debug.Log(gameSession.ToString());
+    //                 // Debug.Log(allGames);
+    //             }
+    //             //Debug.Log(availableGames);
 
-                //}
+    //             callbackTarget.OnUpdatedGameListReceived(availableGames);
 
-            }
-        }
-    }
+    //             //if (SessionListUpdated(newGames, availableGames))
+    //             //{
+    //             //    availableGames = newGames;
+
+    //             //}
+
+    //         }
+    //     }
+    // }
 
 
     public static async Task JoinSession(string sessionID)

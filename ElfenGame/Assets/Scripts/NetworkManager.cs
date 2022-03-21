@@ -329,10 +329,10 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback, IInRo
     {
         if (PhotonNetwork.IsMasterClient)
         {
-            if (GameConstants.playfabManager)
-            {
-                GameConstants.playfabManager.CreateGroup(PhotonNetwork.CurrentRoom.Name);
-            }
+            // if (GameConstants.playfabManager)
+            // {
+            //     GameConstants.playfabManager.CreateGroup(PhotonNetwork.CurrentRoom.Name);
+            // }
         }
     }
 

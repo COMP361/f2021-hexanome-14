@@ -69,6 +69,10 @@ public class Game
         {
             return (string)_gameProperties[pPLAYFAB_ID];
         }
+        set
+        {
+            _gameProperties[pPLAYFAB_ID] = value;
+        }
     }
     public string gameVariation
     {
@@ -290,21 +294,9 @@ public class Game
     {
         if (GameConstants.mainUIManager)
         {
-            HandlePlayFabGroupUpdate();
             HandlePhaseUpdate();
             GameConstants.mainUIManager.UpdateAvailableTokens();
             GameConstants.mainUIManager.UpdateRoundInfo(); // TODO: pass info as argument?
-        }
-    }
-
-    private void HandlePlayFabGroupUpdate()
-    {
-        if (playfabId != "")
-        {
-            if (GameConstants.playfabManager)
-            {
-                GameConstants.playfabManager.CheckInGroup(playfabId);
-            }
         }
     }
 
@@ -337,6 +329,12 @@ public class Game
         }
 
         SyncGameProperties();
+
+
+        if (GameConstants.playfabManager)
+        {
+            GameConstants.playfabManager.CreateGroup();
+        }
     }
 
     // public void InitRound()

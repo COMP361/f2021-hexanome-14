@@ -102,13 +102,18 @@ public class MainMenuUIManager : MonoBehaviour, GameSessionsReceivedInterface, O
             Debug.Log($"Attempting to join Game {currentSelectedSession.session_ID} as user {Lobby.myUsername}");
             await Lobby.JoinSession(currentSelectedSession.session_ID);
             loadedSession = currentSelectedSession;
+
+            // if (GameConstants.playfabManager)
+            // {
+            //     GameConstants.playfabManager.CheckInGroup(loadedSession.saveID);
+            // }
             GameConstants.networkManager.JoinOrCreateRoom(currentSelectedSession.session_ID);
         }
     }
 
     public async void OnCreateGameClicked()
     {
-        await Lobby.CreateSession();
+        await Lobby.CreateSession(savegameID: "");
     }
 
     public void OnLeaveGameClicked()
