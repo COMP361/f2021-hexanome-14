@@ -15,9 +15,14 @@ public class MainMenuUIManager : MonoBehaviour, GameSessionsReceivedInterface, O
     [SerializeField] private GameObject gameOptionButtonsView;
     [SerializeField] private GameObject gameCreatorOptionsView;
     [SerializeField] private GameObject gameJoinedOptionsView;
+    [SerializeField] private GameObject gameCreationMenu;
 
+    [SerializeField] private Dropdown gameModeDD;
     [SerializeField] private Dropdown variationDD;
     [SerializeField] private Dropdown numRounds;
+    [SerializeField] private Button endTownButton;
+    [SerializeField] private Button witchButton;
+    [SerializeField] private Button randGoldButton;
     private List<int> numRoundOptions = new List<int> { 3, 4, 5 };
 
 
@@ -86,12 +91,17 @@ public class MainMenuUIManager : MonoBehaviour, GameSessionsReceivedInterface, O
         }
     }
 
+    public void OnGameModeChange()
+    {
+        witchButton.gameObject.SetActive((gameModeDD.options[gameModeDD.value].text == "Elfengold"));
+        randGoldButton.gameObject.SetActive((gameModeDD.options[gameModeDD.value].text == "Elfengold"));
+    }
 
     public void OnStartGameClicked()
     {
         //Debug.LogError($"num rounds: {numRoundOptions[numRounds.value]}");
         //Debug.LogError($"variation: {variationDD.options[variationDD.value].text}");
-        Game.currentGame.Init(numRoundOptions[numRounds.value], variationDD.options[variationDD.value].text, loadedSession.session_ID, GameConstants.playfabManager.GetGroupId());
+        Game.currentGame.Init(numRoundOptions[numRounds.value], gameModeDD.options[gameModeDD.value].text, endTownButton.GetComponent<VariationButton>().isSelected, witchButton.GetComponent<VariationButton>().isSelected, randGoldButton.GetComponent<VariationButton>().isSelected);
         GameConstants.networkManager.LoadArena();
     }
 
@@ -111,9 +121,29 @@ public class MainMenuUIManager : MonoBehaviour, GameSessionsReceivedInterface, O
         }
     }
 
-    public async void OnCreateGameClicked()
+    public void OnCreateGameClicked()
     {
-        await Lobby.CreateSession(savegameID: "");
+        gameOptionButtonsView.SetActive(false);
+        gameCreationMenu.SetActive(true);
+
+        //        await Lobby.CreateSession();
+
+        //GetComponent<PhotonView>().RPC(nameof(RPC_ListUpdated), RpcTarget.AllBuffered, new object[] { });
+    }
+
+    public void OnCancelCreateClicked()
+    {
+        gameOptionButtonsView.SetActive(true);
+        gameCreationMenu.SetActive(false);
+    }
+
+    public async void OnConfirmCreateClicked()
+    {
+
+        gameCreationMenu.SetActive(false);
+        gameCreatorOptionsView.SetActive(true);
+
+        await Lobby.CreateSession();
     }
 
     public void OnLeaveGameClicked()

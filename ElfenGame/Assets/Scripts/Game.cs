@@ -300,9 +300,10 @@ public class Game
         }
     }
 
-    public void Init(int maxRnds, string variation, string gameId, string playfabId)
+    public void Init(int maxRnds, string variation, bool endTown, bool whitchVar, bool randGoldVar)
     {
-
+        // TODO: sync endTown, whitchVar, randGoldVar
+        Debug.Log($"max rnds {maxRnds}, endTown {endTown}, whitchVar {whitchVar}, randGoldVar {randGoldVar}");
         Debug.Log("Game Init Called");
         _gameProperties[pCUR_PLAYER] = 0;
         _gameProperties[pCUR_ROUND] = 1;
