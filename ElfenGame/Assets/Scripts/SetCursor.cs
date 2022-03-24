@@ -8,7 +8,7 @@ public class SetCursor : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Vector2 cursorOffset = new Vector2(glove.width / 2, glove.height / 2);
+        Vector2 cursorOffset = new Vector2(0, 0);
 
         Cursor.SetCursor(glove, cursorOffset, CursorMode.Auto);
     }
