@@ -16,6 +16,7 @@ public class Player
     public const string pHIDDEN_TILES = "HIDDEN_TILES";
     public const string pCOLOR = "COLOR";
     public const string pTOWN = "TOWN";
+    public const string pEND_TOWN = "END_TOWN";
 
     public const string pVISITED = "VISITED";
     private ExitGames.Client.Photon.Hashtable _properties;
@@ -101,6 +102,15 @@ public class Player
     //     if (tile != null) tile.SetCards(_mCards.Count);
     // }
 
+    public void SelfInitFirstRound()
+    {
+       if (endTown == "")
+       {
+
+       } 
+
+    }
+
     public void SelfInitRound()
     {
         if (Game.currentGame.curRound <= lastInitializedround)
@@ -108,6 +118,16 @@ public class Player
             Debug.Log($"Already initialized round {Game.currentGame.curRound} for player {userName}");
             return;
         }
+
+        //TODO: Initialize player endTowns in first round
+        if (Game.currentGame.curRound == 1)
+        {
+            if (GameConstants.mainUIManager)
+            {
+                SelfInitFirstRound();
+            }
+        }
+
         List<CardEnum> cards = mCards;
         if (cards.Count < 8)
         {
@@ -178,6 +198,18 @@ public class Player
         }
     }
 
+    public string endTown 
+    {
+        get
+        {
+            return (string)_properties[pEND_TOWN];
+        }
+        set
+        {
+            _properties[pEND_TOWN] = value;
+            SyncPlayerStats();
+        }
+    }
     public List<CardEnum> mCards
     {
         get
@@ -429,12 +461,19 @@ public class Player
         _properties[pVISIBLE_TILES] = new MovementTile[] { MovementTile.RoadObstacle }; // TODO: Update for Elvengold
         _properties[pHIDDEN_TILES] = new MovementTile[] { };
         _properties[pVISITED] = new Dictionary<string, bool>();
+        _properties[pEND_TOWN] = "Elfenhold"; //TODO: Choose random town
 
         InitVisited();
 
         lastInitializedround = 0;
 
         Debug.LogError("Player created: " + userName);
+    }
+
+    public void setEndTown(string town)
+    {
+        _properties[pEND_TOWN] = town;
+        SyncPlayerStats();
     }
 
     private void InitVisited()

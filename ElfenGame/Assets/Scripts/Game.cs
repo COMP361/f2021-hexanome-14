@@ -355,6 +355,20 @@ public class Game
             GameConstants.networkManager.SetGameProperties(_colorProperties);
         }
 
+        var random = new System.Random();
+        List<int> endTownIds = new List<int>();
+        foreach (Player p in Player.GetAllPlayers())
+        {
+            int idx = random.Next(0, GameConstants.townNames.Count);
+            while (endTownIds.Contains(idx))
+            {
+                idx = random.Next(0, GameConstants.townNames.Count);
+            }
+            // set end town for player
+            p.setEndTown(GameConstants.townNames[idx]);
+            endTownIds.Add(idx);
+        }
+
         SyncGameProperties();
 
     }

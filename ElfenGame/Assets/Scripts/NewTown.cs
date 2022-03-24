@@ -5,6 +5,7 @@ using UnityEngine;
 public class NewTown : MonoBehaviour, IDragOver
 {
     private GameObject pointsHolder;
+    private GameObject endTownMarker;
 
     public void Awake()
     {
@@ -24,6 +25,11 @@ public class NewTown : MonoBehaviour, IDragOver
         transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
     }
 
+    public void DisplayEndTown()
+    {
+        endTownMarker = (GameObject)Instantiate(Resources.Load("EndTownMarker"), transform);
+    }
+
     public void DisplayVisited()
     {
         GridManager pointsManager = pointsHolder.GetComponent<GridManager>();
@@ -32,7 +38,7 @@ public class NewTown : MonoBehaviour, IDragOver
         foreach (Player p in Player.GetAllPlayers())
         {
             bool isVisited = p.isVisited(name); // if true don't display, if false display indicator that player still needs to visit town
-                                                //p.playerColor.GetColor() returns a Color object corresponding to the players color
+                                                // p.playerColor.GetColor() returns a Color object corresponding to the players color
 
             if (!isVisited)
             {
