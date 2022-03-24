@@ -21,7 +21,7 @@ public class LoginUIManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     public async void OnLoginClicked()
@@ -42,7 +42,8 @@ public class LoginUIManager : MonoBehaviour
         if (usernameInput.isFocused)
         {
             passwordInput.Select();
-        } else
+        }
+        else
         {
             usernameInput.Select();
         }

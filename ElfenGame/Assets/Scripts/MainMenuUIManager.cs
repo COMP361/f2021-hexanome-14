@@ -4,8 +4,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using Photon.Pun;
+using System;
 
-public class MainMenuUIManager : MonoBehaviour, GameSessionsReceivedInterface, OnGameSessionClickedHandler
+public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
 {
     [SerializeField] private GameObject availableGamesView;
     [SerializeField] private GameObject sessionPrefab;
@@ -37,9 +38,9 @@ public class MainMenuUIManager : MonoBehaviour, GameSessionsReceivedInterface, O
     /// <summary>
     /// Called when MainMenuUIManager is created
     /// </summary>
-    public async void Start()
+    public void Start()
     {
-        await Lobby.LongPollForUpdates(this);
+        // await Lobby.LongPollForUpdates(this);
 
         Game.currentGame = new Game();
     }
@@ -230,5 +231,12 @@ public class MainMenuUIManager : MonoBehaviour, GameSessionsReceivedInterface, O
     {
         resetColors();
         currentSelectedSession = gameSession;
+    }
+
+    internal void OnGameCreated(Lobby.GameSession gs)
+    {
+        Debug.Log($"Game created with ID {gs.session_ID}");
+        loadedSession = gs;
+        GameConstants.networkManager.JoinOrCreateRoom(gs.session_ID);
     }
 }

@@ -1027,6 +1027,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9990334fdc4ea4c52ab690e5fe62a070, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _playfabId: 
+  _groupID: 
 --- !u!4 &954026983
 Transform:
   m_ObjectHideFlags: 0

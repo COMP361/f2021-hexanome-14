@@ -23,19 +23,25 @@ public class Lobby : MonoBehaviour
     static string resetToken;
     static List<string> sessionIDs;
     public static List<GameSession> availableGames = new List<GameSession>();
+
+    public static HashSet<string> gameSessions = new HashSet<string>();
+
+    private static bool waitingForCreateSession = false;
+
     public static string myUsername;
     public static DateTime lastRenew;
     public static string lastHash = "-";
 
 
     // Start is called before the first frame update
-    void Start()
+    async void Start()
     {
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("user", "bgp-client-name:bgp-client-pw");
         // Debug.Log(AuthenticateAsync());
         // await AuthenticateAsync("maex", "abc123_ABC123");
         // await RenewToken();
         //GetToken();
+        await LongPollForUpdates();
     }
 
     public class Token
@@ -127,7 +133,7 @@ public class Lobby : MonoBehaviour
         return sb.ToString();
     }
 
-    public static async Task LongPollForUpdates(GameSessionsReceivedInterface callbackTarget)
+    public static async Task LongPollForUpdates()
     {
         var url = $"{GameConstants.lobbyServiceUrl}/api/sessions/?hash={lastHash}&location=18.116.53.177&access_token={accessToken}";
         //Debug.Log(lastHash);
@@ -166,14 +172,22 @@ public class Lobby : MonoBehaviour
                             GameSession gameSession = new GameSession(session_ID: property.Name, players: property.Value["players"].ToObject<List<string>>(), createdBy: property.Value["creator"].ToString(), saveID: property.Value["savegameid"].ToString());
 
                             availableGames.Add(gameSession);
+
+                            if (waitingForCreateSession && !gameSessions.Contains(gameSession.session_ID) && gameSession.createdBy == myUsername)
+                            {
+                                waitingForCreateSession = false;
+                                gameSessions.Add(gameSession.session_ID);
+                                Debug.Log("New Game Session: " + gameSession.ToString());
+                                HandleLocalPlayerGameCreated(gameSession);
+                            }
                             //Debug.Log(gameSession.ToString());
                             // Debug.Log(allGames);
                         }
                         //Debug.Log(availableGames);
 
-                        if (callbackTarget != null)
+                        if (GameConstants.mainMenuUIManager != null)
                         {
-                            callbackTarget.OnUpdatedGameListReceived(availableGames);
+                            GameConstants.mainMenuUIManager.OnUpdatedGameListReceived(availableGames);
                         }
                     }
                     catch (JsonReaderException)
@@ -181,13 +195,18 @@ public class Lobby : MonoBehaviour
                         Debug.LogError($"Failed to parse json: {responseString}");
                     }
                 }
-
-
-
             }
         }
 
-        await LongPollForUpdates(callbackTarget);
+        await LongPollForUpdates();
+    }
+
+    private static void HandleLocalPlayerGameCreated(GameSession gs)
+    {
+        if (GameConstants.mainMenuUIManager != null)
+        {
+            GameConstants.mainMenuUIManager.OnGameCreated(gs);
+        }
     }
 
     public static async Task CreateSession(string savegameID = "")
@@ -200,10 +219,11 @@ public class Lobby : MonoBehaviour
                 Debug.Log($"Creating session: {request.Content.ToString()}");
                 request.Content.Headers.ContentType = MediaTypeHeaderValue.Parse("application / json");
 
+                waitingForCreateSession = true;
                 var response = await httpClient.SendAsync(request);
 
-
                 Debug.Log(response);
+
             }
         }
     }
