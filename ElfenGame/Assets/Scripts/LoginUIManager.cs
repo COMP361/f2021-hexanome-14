@@ -7,6 +7,23 @@ using UnityEngine.UI;
 
 public class LoginUIManager : MonoBehaviour
 {
+    #region singleton 
+
+    private static LoginUIManager _instance;
+
+    public static LoginUIManager manager
+    {
+        get
+        {
+            if (_instance == null)
+            {
+                _instance = FindObjectOfType<LoginUIManager>();
+            }
+            return _instance;
+        }
+    }
+
+    #endregion   
 
     [SerializeField] InputField usernameInput;
     [SerializeField] InputField passwordInput;
@@ -15,13 +32,15 @@ public class LoginUIManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Texture2D glove = Resources.Load("glovecursor") as Texture2D;
+        Cursor.SetCursor(glove, new Vector2(0, 0), CursorMode.Auto);
         LobbyService.initGameService();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     public async void OnLoginClicked()
@@ -42,7 +61,8 @@ public class LoginUIManager : MonoBehaviour
         if (usernameInput.isFocused)
         {
             passwordInput.Select();
-        } else
+        }
+        else
         {
             usernameInput.Select();
         }

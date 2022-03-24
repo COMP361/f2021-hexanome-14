@@ -52,7 +52,7 @@ public class Elf : MonoBehaviour
                         parentGrid.RemoveElement(gameObject);
                     }
                     dragOriginManager = parentGrid;
-                    GameConstants.mouseActivityManager.BeginDrag<NewTown>();
+                    MouseActivityManager.manager.BeginDrag<NewTown>();
 
                 }
             }
@@ -67,7 +67,7 @@ public class Elf : MonoBehaviour
             Vector2 MousePosition = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
             Vector2 objPosition = GameConstants.mainCamera.ScreenToWorldPoint(MousePosition);
             transform.position = new Vector3(objPosition.x, objPosition.y, dragOrigin.z);
-            GameConstants.mouseActivityManager.WhileDrag<NewTown>();
+            MouseActivityManager.manager.WhileDrag<NewTown>();
         }
     }
 
@@ -76,14 +76,14 @@ public class Elf : MonoBehaviour
         if (drag)
         {
             drag = false;
-            NewTown town = GameConstants.mouseActivityManager.EndDrag<NewTown>();
+            NewTown town = MouseActivityManager.manager.EndDrag<NewTown>();
 
             transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
             GetComponent<SpriteRenderer>().color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
 
-            if (town != null && GameConstants.mainUIManager)
+            if (town != null && MainUIManager.manager)
             {
-                List<CardEnum> cards = GameConstants.mainUIManager.GetSelectedCards();
+                List<CardEnum> cards = MainUIManager.manager.GetSelectedCards();
                 foreach (PathScript pathScript in GameConstants.roadDict.Values)
                 {
                     if (pathScript.CanMoveOnPath(GameConstants.townDict[player.curTown], town, cards))
@@ -91,7 +91,7 @@ public class Elf : MonoBehaviour
                         player.curTown = town.name;
                         player.RemoveCards(cards.ToArray());
 
-                        GameConstants.mainUIManager.ResetRoadColors();
+                        MainUIManager.manager.ResetRoadColors();
                         return;
                     }
                 }

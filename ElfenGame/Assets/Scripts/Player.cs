@@ -44,14 +44,14 @@ public class Player
             tokenDisplay.SetNumHidden(mHiddenTiles.Count);
         }
 
-        if (GameConstants.mainUIManager)
+        if (MainUIManager.manager)
         {
-            GameConstants.mainUIManager.UpdatePlayerPointDisplay();
+            MainUIManager.manager.UpdatePlayerPointDisplay();
 
             if (IsLocalPlayer())
             {
-                GameConstants.mainUIManager.UpdateMovementTileCounts();
-                GameConstants.mainUIManager.UpdateCardHand();
+                MainUIManager.manager.UpdateMovementTileCounts();
+                MainUIManager.manager.UpdateCardHand();
             }
         }
     }
@@ -98,7 +98,7 @@ public class Player
     // private void UpdateCards(List<CardEnum> cards)
     // {
     //     _mCards = cards;
-    //     if (Lobby.myUsername == _userName && GameConstants.mainUIManager) GameConstants.mainUIManager.UpdateCardHand();
+    //     if (Lobby.myUsername == _userName && MainUIManager.manager) MainUIManager.manager.UpdateCardHand();
     //     if (tile != null) tile.SetCards(_mCards.Count);
     // }
 
@@ -293,9 +293,9 @@ public class Player
             Debug.LogError("Trying to sync stats for non-local player");
             return;
         }
-        if (GameConstants.networkManager)
+        if (NetworkManager.manager)
         {
-            GameConstants.networkManager.SetLocalPlayerStats(_properties);
+            NetworkManager.manager.SetLocalPlayerStats(_properties);
         }
         UpdateDisplay();
     }
@@ -512,11 +512,11 @@ public class Player
     //     UpdateVisibleTiles(mVisibleTiles);
     //     UpdateHiddenTiles(mHiddenTiles);
 
-    //     if (GameConstants.networkManager)
+    //     if (NetworkManager.nm)
     //     {
-    //         GameConstants.networkManager.SetPlayerPropertyByPlayerName(_userName, pCARDS, mCards.ToArray());
-    //         GameConstants.networkManager.SetPlayerPropertyByPlayerName(_userName, pVISIBLE_TILES, mVisibleTiles.ToArray());
-    //         GameConstants.networkManager.SetPlayerPropertyByPlayerName(_userName, pHIDDEN_TILES, mHiddenTiles.ToArray());
+    //         NetworkManager.nm.SetPlayerPropertyByPlayerName(_userName, pCARDS, mCards.ToArray());
+    //         NetworkManager.nm.SetPlayerPropertyByPlayerName(_userName, pVISIBLE_TILES, mVisibleTiles.ToArray());
+    //         NetworkManager.nm.SetPlayerPropertyByPlayerName(_userName, pHIDDEN_TILES, mHiddenTiles.ToArray());
     //     }
     // }
 
@@ -560,12 +560,12 @@ public class Player
 
     public static List<Player> GetAllPlayers()
     {
-        // if (GameConstants.networkManager)
+        // if (NetworkManager.nm)
         // {
         //     List<string> toRemove = new List<string>();
         //     foreach (string pName in _players.Keys)
         //     {
-        //         if (GameConstants.networkManager.GetPlayer(pName) == null)
+        //         if (NetworkManager.nm.GetPlayer(pName) == null)
         //         {
         //             toRemove.Add(pName);
         //         }

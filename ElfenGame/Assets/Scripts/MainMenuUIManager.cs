@@ -4,9 +4,28 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using Photon.Pun;
+using System;
 
-public class MainMenuUIManager : MonoBehaviour, GameSessionsReceivedInterface, OnGameSessionClickedHandler
+public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
 {
+    #region singleton 
+
+    private static MainMenuUIManager _instance;
+
+    public static MainMenuUIManager manager
+    {
+        get
+        {
+            if (_instance == null)
+            {
+                _instance = FindObjectOfType<MainMenuUIManager>();
+            }
+            return _instance;
+        }
+    }
+
+    #endregion   
+
     [SerializeField] private GameObject availableGamesView;
     [SerializeField] private GameObject sessionPrefab;
     [SerializeField] private GameObject gameSelectView;
@@ -28,7 +47,6 @@ public class MainMenuUIManager : MonoBehaviour, GameSessionsReceivedInterface, O
 
     private Lobby.GameSession currentSelectedSession;
 
-    private Lobby.GameSession loadedSession;
 
     public void Update()
     {
@@ -37,9 +55,9 @@ public class MainMenuUIManager : MonoBehaviour, GameSessionsReceivedInterface, O
     /// <summary>
     /// Called when MainMenuUIManager is created
     /// </summary>
-    public async void Start()
+    public void Start()
     {
-        await Lobby.LongPollForUpdates(this);
+        // await Lobby.LongPollForUpdates(this);
 
         Game.currentGame = new Game();
     }
@@ -47,7 +65,7 @@ public class MainMenuUIManager : MonoBehaviour, GameSessionsReceivedInterface, O
 
     public string GetLoadedOwner()
     {
-        return loadedSession.createdBy;
+        return Game.currentGame.gameCreator;
     }
 
     /// <summary>
@@ -60,22 +78,22 @@ public class MainMenuUIManager : MonoBehaviour, GameSessionsReceivedInterface, O
         homeView.gameObject.SetActive(false);
         OnUpdatedGameListReceived(Lobby.availableGames);
         InGameSelectView();
-        // if (GameConstants.networkManager.isConnected())
+        // if (NetworkManager.nm.isConnected())
         // {
-        //     GameConstants.networkManager.ResetPlayerProperties();
+        //     NetworkManager.nm.ResetPlayerProperties();
         // }
     }
 
     public void InGameSelectView()
     {
-        if (GameConstants.networkManager.inGame() && GetLoadedOwner() == Lobby.myUsername)
+        if (NetworkManager.manager.inGame() && GetLoadedOwner() == Lobby.myUsername)
         {
             gameCreatorOptionsView.SetActive(true);
             gameOptionButtonsView.SetActive(false);
             gameJoinedOptionsView.SetActive(false);
             SetGameActive(false);
         }
-        else if (GameConstants.networkManager.inGame())
+        else if (NetworkManager.manager.inGame())
         {
             gameCreatorOptionsView.SetActive(false);
             gameOptionButtonsView.SetActive(false);
@@ -97,12 +115,11 @@ public class MainMenuUIManager : MonoBehaviour, GameSessionsReceivedInterface, O
         randGoldButton.gameObject.SetActive((gameModeDD.options[gameModeDD.value].text == "Elfengold"));
     }
 
-    public void OnStartGameClicked()
+    public async void OnStartGameClicked()
     {
         //Debug.LogError($"num rounds: {numRoundOptions[numRounds.value]}");
         //Debug.LogError($"variation: {variationDD.options[variationDD.value].text}");
-        Game.currentGame.Init(numRoundOptions[numRounds.value], gameModeDD.options[gameModeDD.value].text, endTownButton.GetComponent<VariationButton>().isSelected, witchButton.GetComponent<VariationButton>().isSelected, randGoldButton.GetComponent<VariationButton>().isSelected);
-        GameConstants.networkManager.LoadArena();
+        await Lobby.LaunchSession(Game.currentGame.gameId);
     }
 
     public async void OnJoinGameClicked()
@@ -111,13 +128,13 @@ public class MainMenuUIManager : MonoBehaviour, GameSessionsReceivedInterface, O
         {
             Debug.Log($"Attempting to join Game {currentSelectedSession.session_ID} as user {Lobby.myUsername}");
             await Lobby.JoinSession(currentSelectedSession.session_ID);
-            loadedSession = currentSelectedSession;
+            Game.currentGame.SetSession(currentSelectedSession);
 
             // if (GameConstants.playfabManager)
             // {
             //     GameConstants.playfabManager.CheckInGroup(loadedSession.saveID);
             // }
-            GameConstants.networkManager.JoinOrCreateRoom(currentSelectedSession.session_ID);
+            NetworkManager.manager.JoinOrCreateRoom(currentSelectedSession.session_ID);
         }
     }
 
@@ -148,7 +165,7 @@ public class MainMenuUIManager : MonoBehaviour, GameSessionsReceivedInterface, O
 
     public void OnLeaveGameClicked()
     {
-        GameConstants.networkManager.LeaveRoom();
+        NetworkManager.manager.LeaveRoom();
         _ = Lobby.LeaveSession(currentSelectedSession.session_ID);
         InGameSelectView();
     }
@@ -157,7 +174,7 @@ public class MainMenuUIManager : MonoBehaviour, GameSessionsReceivedInterface, O
     {
         Debug.Log("Delete Game!!!!!");
         _ = Lobby.DeleteSession(currentSelectedSession.session_ID);
-        GameConstants.networkManager.LeaveRoom();
+        NetworkManager.manager.LeaveRoom();
         currentSelectedSession = null;
         InGameSelectView();
     }
@@ -170,6 +187,18 @@ public class MainMenuUIManager : MonoBehaviour, GameSessionsReceivedInterface, O
         {
             AddGameSession(game);
         }
+    }
+
+    internal void CreateGameWithOptions()
+    {
+        Game.currentGame.Init(
+            numRoundOptions[numRounds.value],
+            gameModeDD.options[gameModeDD.value].text,
+            endTownButton.GetComponent<VariationButton>().isSelected,
+            witchButton.GetComponent<VariationButton>().isSelected,
+            randGoldButton.GetComponent<VariationButton>().isSelected
+        );
+        NetworkManager.manager.LoadArena();
     }
 
     public void ForceUpdateList()
@@ -214,7 +243,7 @@ public class MainMenuUIManager : MonoBehaviour, GameSessionsReceivedInterface, O
     {
         gameSelectView.gameObject.SetActive(false);
         homeView.gameObject.SetActive(true);
-        GameConstants.networkManager.LeaveRoom();
+        NetworkManager.manager.LeaveRoom();
     }
 
 
@@ -230,5 +259,12 @@ public class MainMenuUIManager : MonoBehaviour, GameSessionsReceivedInterface, O
     {
         resetColors();
         currentSelectedSession = gameSession;
+    }
+
+    internal void OnGameCreated(Lobby.GameSession gs)
+    {
+        Debug.Log($"Game created with ID {gs.session_ID}");
+        Game.currentGame.SetSession(gs);
+        NetworkManager.manager.JoinOrCreateRoom(gs.session_ID);
     }
 }

@@ -31,7 +31,7 @@ public class MovementTileSpriteScript : MonoBehaviour
         Debug.Log("Dragging Tile Sprite.");
         this.dragOrigin = dragOrigin;
         drag = true;
-        GameConstants.mouseActivityManager.BeginDrag<PathScript>();
+        MouseActivityManager.manager.BeginDrag<PathScript>();
         ColorPathsByValidity();
     }
 
@@ -42,7 +42,8 @@ public class MovementTileSpriteScript : MonoBehaviour
             if (path.isValid(mTile))
             {
                 path.GetComponent<SpriteRenderer>().color = new Color(0.0f, 1.0f, 0.0f, GameConstants.pathColoringAlpha);
-            } else
+            }
+            else
             {
                 path.GetComponent<SpriteRenderer>().color = new Color(1.0f, 0.0f, 0.0f, GameConstants.pathColoringAlpha);
             }
@@ -51,7 +52,7 @@ public class MovementTileSpriteScript : MonoBehaviour
 
     public void ResetPathColor()
     {
-        foreach(PathScript path in GameConstants.roadGroup.GetComponentsInChildren<PathScript>())
+        foreach (PathScript path in GameConstants.roadGroup.GetComponentsInChildren<PathScript>())
         {
             path.ResetColor();
         }
@@ -60,16 +61,16 @@ public class MovementTileSpriteScript : MonoBehaviour
 
     public void OnMouseDrag()
     {
-        
+
         if (drag)
         {
             Vector2 MousePosition = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
             Vector2 objPosition = GameConstants.mainCamera.ScreenToWorldPoint(MousePosition);
             transform.position = new Vector3(objPosition.x, objPosition.y, GameConstants.dragZ);
-            GameConstants.mouseActivityManager.WhileDrag<PathScript>();
+            MouseActivityManager.manager.WhileDrag<PathScript>();
         }
     }
-    
+
     public bool EndDrag()
     {
         bool added = false;
@@ -78,12 +79,13 @@ public class MovementTileSpriteScript : MonoBehaviour
             drag = false;
 
             Debug.Log("Dragging Tile Sprite. Done.");
-            PathScript path = GameConstants.mouseActivityManager.EndDrag<PathScript>();
+            PathScript path = MouseActivityManager.manager.EndDrag<PathScript>();
 
             if (path == null || !path.isValid(mTile))
             {
                 Destroy(gameObject);
-            } else
+            }
+            else
             {
                 GridManager gm = path.GetComponentInChildren<GridManager>();
                 if (gm == null)
@@ -95,13 +97,14 @@ public class MovementTileSpriteScript : MonoBehaviour
                 if (!added)
                 {
                     Destroy(gameObject);
-                } else
+                }
+                else
                 {
-                    if (GameConstants.networkManager) GameConstants.networkManager.AddTileToRoad(path.name, mTile.mTile);
-		        }
+                    if (NetworkManager.manager) NetworkManager.manager.AddTileToRoad(path.name, mTile.mTile);
+                }
             }
             ResetPathColor();
         }
         return added;
-    }    
+    }
 }

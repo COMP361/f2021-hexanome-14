@@ -69,7 +69,7 @@ public class TileHolderScript : MonoBehaviour
     public void ClickedOn()
     {
         if (!isSelectable) return;
-        if (GameConstants.mainUIManager) GameConstants.mainUIManager.SetTokensNotSelected();
+        if (MainUIManager.manager) MainUIManager.manager.SetTokensNotSelected();
         selected = true;
         SetBackGroundColor();
     }

@@ -30,7 +30,29 @@ public class LobbyService : MonoBehaviour
         // Debug.Log(AuthenticateAsync());
         await AuthenticateAsync("ElfenGame", "abc123_ABC123");
 
-        await RegisterGame();
+        // await DeleteGame();
+        await RegisterGame(); //TODO: reset this to 2
+    }
+
+    private static async Task DeleteGame()
+    {
+        using (var httpClient = new HttpClient())
+        {
+            using (var request = new HttpRequestMessage(new HttpMethod("DELETE"), $"{GameConstants.lobbyServiceUrl}/api/gameservices/ElfenGame?access_token={accessToken}"))
+            {
+                using (var response = await httpClient.SendAsync(request))
+                {
+                    if (response.IsSuccessStatusCode)
+                    {
+                        Debug.Log("Game deleted");
+                    }
+                    else
+                    {
+                        Debug.Log("Game not deleted");
+                    }
+                }
+            }
+        }
     }
 
     public class Token
@@ -49,12 +71,22 @@ public class LobbyService : MonoBehaviour
             using (var request = new HttpRequestMessage(new HttpMethod("PUT"), $"{GameConstants.lobbyServiceUrl}/api/gameservices/ElfenGame?access_token={accessToken}"))
             {
 
-                request.Content = new StringContent("{\"location\": \"\", \"maxSessionPlayers\": \"6\",\"minSessionPlayers\": \"2\",\"name\": \"ElfenGame\",\"displayName\": \"ElfenGame\",\"webSupport\": \"true\"}");
+                request.Content = new StringContent("{\"location\": \"\", \"maxSessionPlayers\": \"6\",\"minSessionPlayers\": \"2\",\"name\": \"ElfenGame\",\"displayName\": \"ElfenGame\",\"webSupport\": \"false\"}");
                 request.Content.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json");
 
                 var response = await httpClient.SendAsync(request);
 
-                Debug.Log(response);
+                if (response.IsSuccessStatusCode)
+                {
+                    Debug.Log("Game registered");
+                }
+                else
+                {
+                    // Get error message
+                    var content = await response.Content.ReadAsStringAsync();
+                    Debug.Log($"Game not registered: {content}");
+                }
+
             }
         }
     }

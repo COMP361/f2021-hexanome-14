@@ -11,24 +11,24 @@ public class ConnectingUIManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        if (GameConstants.networkManager)
+        if (NetworkManager.manager)
         {
-            GameConstants.networkManager.Connect();
+            NetworkManager.manager.Connect();
         }
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (GameConstants.networkManager)
+        if (NetworkManager.manager)
         {
-            connectionStatus.text = GameConstants.networkManager.getNetworkState();
+            connectionStatus.text = NetworkManager.manager.getNetworkState();
             //Debug.Log(connectionStatus.text);
-            if (!GameConstants.networkManager.isConnected())
-                GameConstants.networkManager.Connect();
+            if (!NetworkManager.manager.isConnected())
+                NetworkManager.manager.Connect();
         }
 
-        if (GameConstants.networkManager && GameConstants.networkManager.getNetworkState() == "ConnectedToMasterServer")
+        if (NetworkManager.manager && NetworkManager.manager.getNetworkState() == "ConnectedToMasterServer")
             SceneManager.LoadScene("MainMenu");
     }
 }
