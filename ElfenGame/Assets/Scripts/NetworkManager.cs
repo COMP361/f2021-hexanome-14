@@ -373,7 +373,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback, IInRo
     }
 
 
-    public override void OnLeftRoom()
+    public async override void OnLeftRoom()
     {
         ResetPlayerProperties();
         if (SceneManager.GetActiveScene() == SceneManager.GetSceneByName("Main"))
@@ -384,6 +384,13 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback, IInRo
         {
             GameConstants.mainMenuUIManager.InGameSelectView();
         }
+
+        if (Game.currentGame.gameCreator == Lobby.myUsername)
+        {
+            await Lobby.DeleteSession(Game.currentGame.gameId);
+        }
+
+        Game.currentGame = new Game();
     }
 
     #endregion

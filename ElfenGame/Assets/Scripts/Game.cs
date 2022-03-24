@@ -24,25 +24,27 @@ static public class ListExtension
 
 public class Game
 {
-    private const string pDECK = "DECK";
-    private const string pDISCARD = "DISCARD";
-    private const string pPILE = "PILE";
-    private const string pVISIBLE = "VISIBLE";
-    private const string pPLAYERS = "PLAYERS";
-    private const string pCUR_PLAYER = "CUR_PLAYER";
-    private const string pCUR_ROUND = "CUR_ROUND";
-    private const string pCUR_PHASE = "CUR_PHASE";
-    private const string pMAX_ROUNDS = "MAX_ROUNDS";
-    private const string pGAME_MODE = "GAME_MODE";
-    private const string pEND_TOWN = "END_TOWN";
-    private const string pWITCH_CARD = "WITCH_CARD";
-    private const string pRAND_GOLD = "RAND_GOLD";
+    public const string pDECK = "DECK";
+    public const string pDISCARD = "DISCARD";
+    public const string pPILE = "PILE";
+    public const string pVISIBLE = "VISIBLE";
+    public const string pPLAYERS = "PLAYERS";
+    public const string pCUR_PLAYER = "CUR_PLAYER";
+    public const string pCUR_ROUND = "CUR_ROUND";
+    public const string pCUR_PHASE = "CUR_PHASE";
+    public const string pMAX_ROUNDS = "MAX_ROUNDS";
+    public const string pGAME_MODE = "GAME_MODE";
+    public const string pEND_TOWN = "END_TOWN";
+    public const string pWITCH_CARD = "WITCH_CARD";
+    public const string pRAND_GOLD = "RAND_GOLD";
 
-    private const string pPASSED_PLAYERS = "PASSED_PLAYERS";
+    public const string pPASSED_PLAYERS = "PASSED_PLAYERS";
 
-    private const string pGAME_ID = "GAME_ID";
+    public const string pGAME_ID = "GAME_ID";
 
-    private static string[] pPLAYER_PROPS = {
+    public const string pGAME_CREATOR = "GAME_CREATOR";
+
+    public static string[] pGAME_PROPS = {
         pDECK, pDISCARD, pPILE, pVISIBLE, pPLAYERS, pCUR_PLAYER, pCUR_ROUND, pCUR_PHASE, pMAX_ROUNDS, pPASSED_PLAYERS, pGAME_ID, pGAME_MODE, pEND_TOWN, pWITCH_CARD, pRAND_GOLD
     };
 
@@ -54,13 +56,52 @@ public class Game
     private ExitGames.Client.Photon.Hashtable _gameProperties;
     private ExitGames.Client.Photon.Hashtable _colorProperties;
 
+    private void PropertyNotFoundWarning(string property)
+    {
+        Debug.LogWarning("Property " + property + " not found in game properties");
+    }
+
     #region Properties
+
+    public ExitGames.Client.Photon.Hashtable gameProperties
+    {
+        get
+        {
+            return _gameProperties;
+        }
+    }
 
     public string gameId
     {
         get
         {
+            if (!_gameProperties.ContainsKey(pGAME_ID))
+            {
+                PropertyNotFoundWarning(pGAME_ID);
+                return "";
+            }
             return (string)_gameProperties[pGAME_ID];
+        }
+        set
+        {
+            _gameProperties[pGAME_ID] = value;
+        }
+    }
+
+    public string gameCreator
+    {
+        get
+        {
+            if (!_gameProperties.ContainsKey(pGAME_CREATOR))
+            {
+                PropertyNotFoundWarning(pGAME_CREATOR);
+                return "";
+            }
+            return (string)_gameProperties[pGAME_CREATOR];
+        }
+        set
+        {
+            _gameProperties[pGAME_CREATOR] = value;
         }
     }
 
@@ -68,6 +109,11 @@ public class Game
     {
         get
         {
+            if (!_gameProperties.ContainsKey(pCUR_PLAYER))
+            {
+                PropertyNotFoundWarning(pCUR_PLAYER);
+                return -1;
+            }
             return (int)_gameProperties[pCUR_PLAYER];
         }
         set
@@ -76,10 +122,39 @@ public class Game
         }
     }
 
+    internal void SetFromGameData(SaveAndLoad.GameData data)
+    {
+        gameMode = data.gameMode;
+        maxRounds = data.numRounds;
+        endTown = data.endTown;
+        witchCard = data.witch;
+        randGold = data.randGold;
+        mDeck = data.deck;
+        mDiscardPile = data.discard;
+        mVisibleTiles = data.visible;
+        mPile = data.pile;
+        curPlayerIndex = data.curPlayerIndex;
+        mPlayers = data.players;
+        gameId = data.gameId;
+        curPhase = data.curPhase;
+        curRound = data.curRound;
+        passedPlayers = data.passedPlayers;
+
+        SyncGameProperties();
+
+    }
+
+
+
     public int passedPlayers
     {
         get
         {
+            if (!_gameProperties.ContainsKey(pPASSED_PLAYERS))
+            {
+                PropertyNotFoundWarning(pPASSED_PLAYERS);
+                return -1;
+            }
             return (int)_gameProperties[pPASSED_PLAYERS];
         }
         set
@@ -92,6 +167,11 @@ public class Game
     {
         get
         {
+            if (!_gameProperties.ContainsKey(pMAX_ROUNDS))
+            {
+                PropertyNotFoundWarning(pMAX_ROUNDS);
+                return -1;
+            }
             return (int)_gameProperties[pMAX_ROUNDS];
         }
         set
@@ -104,6 +184,11 @@ public class Game
     {
         get
         {
+            if (!_gameProperties.ContainsKey(pCUR_PHASE))
+            {
+                PropertyNotFoundWarning(pCUR_PHASE);
+                return GamePhase.DrawCardsAndCounters;
+            }
             return (GamePhase)_gameProperties[pCUR_PHASE];
         }
         set
@@ -116,6 +201,11 @@ public class Game
     {
         get
         {
+            if (!_gameProperties.ContainsKey(pCUR_ROUND))
+            {
+                PropertyNotFoundWarning(pCUR_ROUND);
+                return -1;
+            }
             return (int)_gameProperties[pCUR_ROUND];
         }
         set
@@ -128,6 +218,11 @@ public class Game
     {
         get
         {
+            if (!_gameProperties.ContainsKey(pGAME_MODE))
+            {
+                PropertyNotFoundWarning(pGAME_MODE);
+                return "";
+            }
             return (string)_gameProperties[pGAME_MODE];
         }
         set
@@ -139,6 +234,11 @@ public class Game
     {
         get
         {
+            if (!_gameProperties.ContainsKey(pEND_TOWN))
+            {
+                PropertyNotFoundWarning(pEND_TOWN);
+                return false;
+            }
             return (bool)_gameProperties[pEND_TOWN];
         }
         set
@@ -150,6 +250,11 @@ public class Game
     {
         get
         {
+            if (!_gameProperties.ContainsKey(pWITCH_CARD))
+            {
+                PropertyNotFoundWarning(pWITCH_CARD);
+                return false;
+            }
             return (bool)_gameProperties[pWITCH_CARD];
         }
         set
@@ -162,6 +267,11 @@ public class Game
     {
         get
         {
+            if (!_gameProperties.ContainsKey(pRAND_GOLD))
+            {
+                PropertyNotFoundWarning(pRAND_GOLD);
+                return false;
+            }
             return (bool)_gameProperties[pRAND_GOLD];
         }
         set
@@ -174,7 +284,16 @@ public class Game
     {
         get
         {
+            if (!_gameProperties.ContainsKey(pPLAYERS))
+            {
+                PropertyNotFoundWarning(pPLAYERS);
+                return new List<string>();
+            }
             return new List<string>((string[])_gameProperties[pPLAYERS]);
+        }
+        set
+        {
+            _gameProperties[pPLAYERS] = value.ToArray();
         }
     }
 
@@ -182,7 +301,17 @@ public class Game
     {
         get
         {
+            if (!_gameProperties.ContainsKey(pDECK))
+            {
+                PropertyNotFoundWarning(pDECK);
+                return new List<CardEnum>();
+            }
             return new List<CardEnum>((CardEnum[])_gameProperties[pDECK]);
+        }
+
+        set
+        {
+            _gameProperties[pDECK] = value.ToArray();
         }
     }
 
@@ -190,14 +319,32 @@ public class Game
     {
         get
         {
+            if (!_gameProperties.ContainsKey(pDISCARD))
+            {
+                PropertyNotFoundWarning(pDISCARD);
+                return new List<CardEnum>();
+            }
             return new List<CardEnum>((CardEnum[])_gameProperties[pDISCARD]);
+        }
+        set
+        {
+            _gameProperties[pDISCARD] = value.ToArray();
         }
     }
     public List<MovementTile> mPile
     {
         get
         {
+            if (!_gameProperties.ContainsKey(pPILE))
+            {
+                PropertyNotFoundWarning(pPILE);
+                return new List<MovementTile>();
+            }
             return new List<MovementTile>((MovementTile[])_gameProperties[pPILE]);
+        }
+        set
+        {
+            _gameProperties[pPILE] = value.ToArray();
         }
     }
 
@@ -221,7 +368,16 @@ public class Game
     {
         get
         {
+            if (!_gameProperties.ContainsKey(pVISIBLE))
+            {
+                PropertyNotFoundWarning(pVISIBLE);
+                return new List<MovementTile>();
+            }
             return new List<MovementTile>((MovementTile[])_gameProperties[pVISIBLE]);
+        }
+        set
+        {
+            _gameProperties[pVISIBLE] = value.ToArray();
         }
     }
 
@@ -299,7 +455,7 @@ public class Game
         }
 
         bool updatedProps = false;
-        foreach (string key in pPLAYER_PROPS)
+        foreach (string key in pGAME_PROPS)
         {
             if (properties.ContainsKey(key))
             {
@@ -322,6 +478,9 @@ public class Game
             GameConstants.mainUIManager.UpdateAvailableTokens();
             GameConstants.mainUIManager.UpdateRoundInfo(); // TODO: pass info as argument?
         }
+
+        SaveAndLoad.SaveGame();
+
     }
 
     public void Init(int maxRnds, string gameMode, bool endTown, bool witchVar, bool randGoldVar)
@@ -339,6 +498,7 @@ public class Game
         _gameProperties[pRAND_GOLD] = randGoldVar;
         _gameProperties[pPASSED_PLAYERS] = 0;
         _gameProperties[pGAME_ID] = gameId;
+        _gameProperties[pGAME_CREATOR] = gameCreator;
 
         _gameProperties[pPLAYERS] = new string[] { };
         _gameProperties[pPILE] = new MovementTile[0];
@@ -707,7 +867,11 @@ public class Game
         _gameProperties[pDECK] = deck.ToArray();
         return ret;
     }
-
+    internal void SetSession(Lobby.GameSession currentSelectedSession)
+    {
+        gameCreator = currentSelectedSession.createdBy;
+        gameId = currentSelectedSession.session_ID;
+    }
     // public CardEnum Draw()
     // {
     //     if (curCardPointer >= deck.Count)

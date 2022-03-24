@@ -29,7 +29,6 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
 
     private Lobby.GameSession currentSelectedSession;
 
-    private Lobby.GameSession loadedSession;
 
     public void Update()
     {
@@ -48,7 +47,7 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
 
     public string GetLoadedOwner()
     {
-        return loadedSession.createdBy;
+        return Game.currentGame.gameCreator;
     }
 
     /// <summary>
@@ -102,7 +101,7 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
     {
         //Debug.LogError($"num rounds: {numRoundOptions[numRounds.value]}");
         //Debug.LogError($"variation: {variationDD.options[variationDD.value].text}");
-        await Lobby.LaunchSession(loadedSession.session_ID);
+        await Lobby.LaunchSession(Game.currentGame.gameId);
     }
 
     public async void OnJoinGameClicked()
@@ -111,7 +110,7 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
         {
             Debug.Log($"Attempting to join Game {currentSelectedSession.session_ID} as user {Lobby.myUsername}");
             await Lobby.JoinSession(currentSelectedSession.session_ID);
-            loadedSession = currentSelectedSession;
+            Game.currentGame.SetSession(currentSelectedSession);
 
             // if (GameConstants.playfabManager)
             // {
@@ -174,7 +173,13 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
 
     internal void CreateGameWithOptions()
     {
-        Game.currentGame.Init(numRoundOptions[numRounds.value], gameModeDD.options[gameModeDD.value].text, endTownButton.GetComponent<VariationButton>().isSelected, witchButton.GetComponent<VariationButton>().isSelected, randGoldButton.GetComponent<VariationButton>().isSelected);
+        Game.currentGame.Init(
+            numRoundOptions[numRounds.value],
+            gameModeDD.options[gameModeDD.value].text,
+            endTownButton.GetComponent<VariationButton>().isSelected,
+            witchButton.GetComponent<VariationButton>().isSelected,
+            randGoldButton.GetComponent<VariationButton>().isSelected
+        );
         GameConstants.networkManager.LoadArena();
     }
 
@@ -241,7 +246,7 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
     internal void OnGameCreated(Lobby.GameSession gs)
     {
         Debug.Log($"Game created with ID {gs.session_ID}");
-        loadedSession = gs;
+        Game.currentGame.SetSession(gs);
         GameConstants.networkManager.JoinOrCreateRoom(gs.session_ID);
     }
 }

@@ -313,6 +313,9 @@ public class Lobby : MonoBehaviour
                 var base64authorization = Convert.ToBase64String(Encoding.ASCII.GetBytes("bgp-client-name:bgp-client-pw"));
                 request.Headers.TryAddWithoutValidation("authorization", $"Basic {base64authorization}");
                 var response = await httpClient.SendAsync(request);
+
+                string responseString = await response.Content.ReadAsStringAsync();
+                Debug.Log(responseString);
             }
         }
     }
@@ -326,6 +329,10 @@ public class Lobby : MonoBehaviour
                 var base64authorization = Convert.ToBase64String(Encoding.ASCII.GetBytes("bgp-client-name:bgp-client-pw"));
                 request.Headers.TryAddWithoutValidation("authorization", $"Basic {base64authorization}");
                 var response = await httpClient.SendAsync(request);
+
+                // Display content
+                string responseString = await response.Content.ReadAsStringAsync();
+                Debug.Log(responseString);
             }
         }
     }
