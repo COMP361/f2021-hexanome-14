@@ -121,6 +121,34 @@ public class Lobby : MonoBehaviour
         }
     }
 
+    public static async Task LaunchSession(string sessionID)
+    {
+        Debug.Log("Launching session: " + sessionID);
+        using (var httpClient = new HttpClient())
+        {
+            using (var request = new HttpRequestMessage(new HttpMethod("POST"), $"{GameConstants.lobbyServiceUrl}/api/sessions/{sessionID}?access_token={accessToken}"))
+            {
+                var base64authorization = Convert.ToBase64String(Encoding.ASCII.GetBytes("bgp-client-name:bgp-client-pw"));
+                request.Headers.TryAddWithoutValidation("Authorization", $"Basic {base64authorization}");
+                var response = await httpClient.SendAsync(request);
+                // response.EnsureSuccessStatusCode();
+                var responseString = await response.Content.ReadAsStringAsync();
+                if (response.IsSuccessStatusCode)
+                {
+                    Debug.Log("Session Launched: " + responseString);
+                    GameConstants.mainMenuUIManager.CreateGameWithOptions();
+                }
+                else
+                {
+                    Debug.Log("Session Launch Failed: " + responseString);
+
+                    GameConstants.mainMenuUIManager.CreateGameWithOptions(); // This probably failed because not enough players joined during debugging
+                    //TODO: Remove this
+                }
+            }
+        }
+    }
+
     private static string createMd5Hex(string data)
     {
         MD5CryptoServiceProvider md5 = new MD5CryptoServiceProvider();
@@ -355,7 +383,10 @@ public class Lobby : MonoBehaviour
             using (var request = new HttpRequestMessage(new HttpMethod("PUT"), $"{GameConstants.lobbyServiceUrl}/api/sessions/{sessionID}/players/{myUsername}?access_token={accessToken}&location=18.116.53.177"))
             {
                 var response = await httpClient.SendAsync(request);
-                Debug.Log(response);
+
+                // Log response content
+                var responseString = await response.Content.ReadAsStringAsync();
+                Debug.Log(responseString);
             }
         }
     }
@@ -379,7 +410,7 @@ public class Lobby : MonoBehaviour
                 Debug.Log("Access Token Retreived: " + json["access_token"]);
                 accessToken = json["access_token"].ToString().Replace("+", "%2B");
                 resetToken = json["refresh_token"].ToString().Replace("+", "%2B");
-                Debug.Log(response);
+                Debug.Log(responseString);
             }
         }
 

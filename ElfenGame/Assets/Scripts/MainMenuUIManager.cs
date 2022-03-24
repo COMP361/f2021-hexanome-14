@@ -98,12 +98,11 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
         randGoldButton.gameObject.SetActive((gameModeDD.options[gameModeDD.value].text == "Elfengold"));
     }
 
-    public void OnStartGameClicked()
+    public async void OnStartGameClicked()
     {
         //Debug.LogError($"num rounds: {numRoundOptions[numRounds.value]}");
         //Debug.LogError($"variation: {variationDD.options[variationDD.value].text}");
-        Game.currentGame.Init(numRoundOptions[numRounds.value], gameModeDD.options[gameModeDD.value].text, endTownButton.GetComponent<VariationButton>().isSelected, witchButton.GetComponent<VariationButton>().isSelected, randGoldButton.GetComponent<VariationButton>().isSelected);
-        GameConstants.networkManager.LoadArena();
+        await Lobby.LaunchSession(loadedSession.session_ID);
     }
 
     public async void OnJoinGameClicked()
@@ -171,6 +170,12 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
         {
             AddGameSession(game);
         }
+    }
+
+    internal void CreateGameWithOptions()
+    {
+        Game.currentGame.Init(numRoundOptions[numRounds.value], gameModeDD.options[gameModeDD.value].text, endTownButton.GetComponent<VariationButton>().isSelected, witchButton.GetComponent<VariationButton>().isSelected, randGoldButton.GetComponent<VariationButton>().isSelected);
+        GameConstants.networkManager.LoadArena();
     }
 
     public void ForceUpdateList()

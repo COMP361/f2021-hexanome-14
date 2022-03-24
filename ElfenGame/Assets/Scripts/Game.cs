@@ -284,7 +284,7 @@ public class Game
             GameConstants.mainUIManager.UpdateColorOptions();
         }
 
-        Debug.LogError($"{value} claimed {color}");
+        // Debug.LogError($"{value} claimed {color}");
     }
 
     public void UpdateGameProperties(ExitGames.Client.Photon.Hashtable properties)
