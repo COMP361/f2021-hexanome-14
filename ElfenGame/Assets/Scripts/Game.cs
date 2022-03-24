@@ -33,7 +33,10 @@ public class Game
     private const string pCUR_ROUND = "CUR_ROUND";
     private const string pCUR_PHASE = "CUR_PHASE";
     private const string pMAX_ROUNDS = "MAX_ROUNDS";
-    private const string pGAME_VARIATION = "GAME_VARIATION";
+    private const string pGAME_MODE = "GAME_MODE";
+    private const string  pEND_TOWN = "END_TOWN";
+    private const string pWITCH_CARD = "WITCH_CARD";
+    private const string pRAND_GOLD = "RAND_GOLD";
 
     private const string pPASSED_PLAYERS = "PASSED_PLAYERS";
 
@@ -42,7 +45,7 @@ public class Game
     private const string pPLAYFAB_ID = "PLAYFAB_ID";
 
     private static string[] pPLAYER_PROPS = {
-        pDECK, pDISCARD, pPILE, pVISIBLE, pPLAYERS, pCUR_PLAYER, pCUR_ROUND, pCUR_PHASE, pMAX_ROUNDS, pGAME_VARIATION, pPASSED_PLAYERS, pGAME_ID, pPLAYFAB_ID
+        pDECK, pDISCARD, pPILE, pVISIBLE, pPLAYERS, pCUR_PLAYER, pCUR_ROUND, pCUR_PHASE, pMAX_ROUNDS, pPASSED_PLAYERS, pGAME_ID, pPLAYFAB_ID, pGAME_MODE, pEND_TOWN, pWITCH_CARD, pRAND_GOLD
     };
 
     private const string pCOLOR_AVAIL_PREFIX = "COLOR_AVAIL";
@@ -72,17 +75,6 @@ public class Game
         set
         {
             _gameProperties[pPLAYFAB_ID] = value;
-        }
-    }
-    public string gameVariation
-    {
-        get
-        {
-            return (string)_gameProperties[pGAME_VARIATION];
-        }
-        set
-        {
-            _gameProperties[pGAME_VARIATION] = value;
         }
     }
 
@@ -143,6 +135,52 @@ public class Game
         set
         {
             _gameProperties[pCUR_ROUND] = value;
+        }
+    }
+
+    public string gameMode
+    {
+        get
+        {
+            return (string)_gameProperties[pGAME_MODE];
+        }
+        set
+        {
+            _gameProperties[pGAME_MODE] = value;
+        }
+    }
+    public bool endTown
+    {
+        get
+        {
+            return (bool)_gameProperties[pEND_TOWN];
+        }
+        set
+        {
+            _gameProperties[pEND_TOWN] = value;
+        }
+    }
+    public bool witchCard
+    {
+        get
+        {
+            return (bool)_gameProperties[pWITCH_CARD];
+        }
+        set
+        {
+            _gameProperties[pWITCH_CARD] = value;
+        }
+    }
+
+    public bool randGold
+    {
+        get
+        {
+            return (bool)_gameProperties[pRAND_GOLD];
+        }
+        set
+        {
+            _gameProperties[pRAND_GOLD] = value;
         }
     }
 
@@ -300,7 +338,7 @@ public class Game
         }
     }
 
-    public void Init(int maxRnds, string variation, bool endTown, bool whitchVar, bool randGoldVar)
+    public void Init(int maxRnds, string gameMode, bool endTown, bool whitchVar, bool randGoldVar)
     {
         // TODO: sync endTown, whitchVar, randGoldVar
         Debug.Log($"max rnds {maxRnds}, endTown {endTown}, whitchVar {whitchVar}, randGoldVar {randGoldVar}");
@@ -309,7 +347,10 @@ public class Game
         _gameProperties[pCUR_ROUND] = 1;
         _gameProperties[pCUR_PHASE] = GamePhase.DrawCardsAndCounters;
         _gameProperties[pMAX_ROUNDS] = maxRnds;
-        _gameProperties[pGAME_VARIATION] = variation;
+        _gameProperties[pGAME_MODE] = gameMode;
+        _gameProperties[pEND_TOWN] = endTown;
+        _gameProperties[pWITCH_CARD] = whitchVar;
+        _gameProperties[pRAND_GOLD] = randGoldVar;
         _gameProperties[pPASSED_PLAYERS] = 0;
         _gameProperties[pGAME_ID] = gameId;
         _gameProperties[pPLAYFAB_ID] = playfabId;
@@ -597,14 +638,17 @@ public class Game
         {
             winners.Add(p);
         }
-        if (gameVariation == "Standard")
+        if (gameMode == "Elfenland")
         {
-            Debug.Log("In Standard");
+            Debug.Log("In Elfenland");
             winners = winners.OrderByDescending(o => o.nPoints * 1000 + o.mCards.Count).ToList();
             foreach (Player p in winners)
             {
                 scores.Add(p.nPoints);
             }
+        } else if (gameMode == "Elfengold"){
+            Debug.Log("In Elfengold");
+            //TODO: Implement Elfengold Ending
         }
         if (GameConstants.mainUIManager) GameConstants.mainUIManager.GameOverTriggered(winners, scores);
     }
