@@ -10,6 +10,24 @@ using UnityEngine.UI;
 
 public class MainUIManager : MonoBehaviour
 {
+    #region singleton 
+
+    private static MainUIManager _instance;
+
+    public static MainUIManager manager
+    {
+        get
+        {
+            if (_instance == null)
+            {
+                _instance = FindObjectOfType<MainUIManager>();
+            }
+            return _instance;
+        }
+    }
+
+    #endregion   
+
     #region Serialized Fields
     [SerializeField]
     private GameObject pausePanel;
@@ -95,7 +113,7 @@ public class MainUIManager : MonoBehaviour
         }
         UpdateCardHand();
 
-        if (GameConstants.networkManager) GameConstants.networkManager.verifyAllPlayersExist(); // TODO: Remove this line
+        if (NetworkManager.manager) NetworkManager.manager.verifyAllPlayersExist(); // TODO: Remove this line
         GameConstants.townDict = null; // Force reset of town Dict
         GameConstants.roadDict = null;
         foreach (string playerName in Game.currentGame.mPlayers)
@@ -184,7 +202,7 @@ public class MainUIManager : MonoBehaviour
 
     public void exitGameClicked()
     {
-        GameConstants.networkManager.LeaveRoom();
+        NetworkManager.manager.LeaveRoom();
     }
 
     public void OnShowCardHandPressed()

@@ -8,6 +8,23 @@ using UnityEngine.UI;
 
 public class ChatManager : MonoBehaviour, IChatClientListener
 {
+    #region singleton 
+
+    private static ChatManager _instance;
+
+    public static ChatManager manager
+    {
+        get
+        {
+            if (_instance == null)
+            {
+                _instance = FindObjectOfType<ChatManager>();
+            }
+            return _instance;
+        }
+    }
+
+    #endregion   
 
     ChatClient chatClient;
 
@@ -107,7 +124,8 @@ public class ChatManager : MonoBehaviour, IChatClientListener
         if (recipient == "")
         {
             chatClient.PublishMessage("General", msg);
-        } else
+        }
+        else
         {
             chatClient.SendPrivateMessage(recipient, msg);
         }
@@ -147,7 +165,8 @@ public class ChatManager : MonoBehaviour, IChatClientListener
         {
             toInputField.Select();
             //toInputField
-        } else
+        }
+        else
         {
             msgInputField.Select();
         }

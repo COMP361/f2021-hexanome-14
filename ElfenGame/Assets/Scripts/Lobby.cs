@@ -110,9 +110,9 @@ public class Lobby : MonoBehaviour
                 }
                 else
                 {
-                    if (GameConstants.loginUIManager != null)
+                    if (LoginUIManager.manager != null)
                     {
-                        GameConstants.loginUIManager.OnLoginFailed();
+                        LoginUIManager.manager.OnLoginFailed();
                     }
                 }
 
@@ -136,13 +136,13 @@ public class Lobby : MonoBehaviour
                 if (response.IsSuccessStatusCode)
                 {
                     Debug.Log("Session Launched: " + responseString);
-                    GameConstants.mainMenuUIManager.CreateGameWithOptions();
+                    MainMenuUIManager.manager.CreateGameWithOptions();
                 }
                 else
                 {
                     Debug.Log("Session Launch Failed: " + responseString);
 
-                    GameConstants.mainMenuUIManager.CreateGameWithOptions(); // This probably failed because not enough players joined during debugging
+                    MainMenuUIManager.manager.CreateGameWithOptions(); // This probably failed because not enough players joined during debugging
                     //TODO: Remove this
                 }
             }
@@ -213,9 +213,9 @@ public class Lobby : MonoBehaviour
                         }
                         //Debug.Log(availableGames);
 
-                        if (GameConstants.mainMenuUIManager != null)
+                        if (MainMenuUIManager.manager != null)
                         {
-                            GameConstants.mainMenuUIManager.OnUpdatedGameListReceived(availableGames);
+                            MainMenuUIManager.manager.OnUpdatedGameListReceived(availableGames);
                         }
                     }
                     catch (JsonReaderException)
@@ -231,9 +231,9 @@ public class Lobby : MonoBehaviour
 
     private static void HandleLocalPlayerGameCreated(GameSession gs)
     {
-        if (GameConstants.mainMenuUIManager != null)
+        if (MainMenuUIManager.manager != null)
         {
-            GameConstants.mainMenuUIManager.OnGameCreated(gs);
+            MainMenuUIManager.manager.OnGameCreated(gs);
         }
     }
 

@@ -5,6 +5,23 @@ using UnityEngine.EventSystems;
 
 public class MouseActivityManager : MonoBehaviour
 {
+    #region singleton 
+
+    private static MouseActivityManager _instance;
+
+    public static MouseActivityManager manager
+    {
+        get
+        {
+            if (_instance == null)
+            {
+                _instance = FindObjectOfType<MouseActivityManager>();
+            }
+            return _instance;
+        }
+    }
+
+    #endregion   
 
     [SerializeField]
     public Camera cam;

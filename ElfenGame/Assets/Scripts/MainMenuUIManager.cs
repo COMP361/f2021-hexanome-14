@@ -8,6 +8,24 @@ using System;
 
 public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
 {
+    #region singleton 
+
+    private static MainMenuUIManager _instance;
+
+    public static MainMenuUIManager manager
+    {
+        get
+        {
+            if (_instance == null)
+            {
+                _instance = FindObjectOfType<MainMenuUIManager>();
+            }
+            return _instance;
+        }
+    }
+
+    #endregion   
+
     [SerializeField] private GameObject availableGamesView;
     [SerializeField] private GameObject sessionPrefab;
     [SerializeField] private GameObject gameSelectView;
@@ -60,22 +78,22 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
         homeView.gameObject.SetActive(false);
         OnUpdatedGameListReceived(Lobby.availableGames);
         InGameSelectView();
-        // if (GameConstants.networkManager.isConnected())
+        // if (NetworkManager.nm.isConnected())
         // {
-        //     GameConstants.networkManager.ResetPlayerProperties();
+        //     NetworkManager.nm.ResetPlayerProperties();
         // }
     }
 
     public void InGameSelectView()
     {
-        if (GameConstants.networkManager.inGame() && GetLoadedOwner() == Lobby.myUsername)
+        if (NetworkManager.manager.inGame() && GetLoadedOwner() == Lobby.myUsername)
         {
             gameCreatorOptionsView.SetActive(true);
             gameOptionButtonsView.SetActive(false);
             gameJoinedOptionsView.SetActive(false);
             SetGameActive(false);
         }
-        else if (GameConstants.networkManager.inGame())
+        else if (NetworkManager.manager.inGame())
         {
             gameCreatorOptionsView.SetActive(false);
             gameOptionButtonsView.SetActive(false);
@@ -116,7 +134,7 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
             // {
             //     GameConstants.playfabManager.CheckInGroup(loadedSession.saveID);
             // }
-            GameConstants.networkManager.JoinOrCreateRoom(currentSelectedSession.session_ID);
+            NetworkManager.manager.JoinOrCreateRoom(currentSelectedSession.session_ID);
         }
     }
 
@@ -147,7 +165,7 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
 
     public void OnLeaveGameClicked()
     {
-        GameConstants.networkManager.LeaveRoom();
+        NetworkManager.manager.LeaveRoom();
         _ = Lobby.LeaveSession(currentSelectedSession.session_ID);
         InGameSelectView();
     }
@@ -156,7 +174,7 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
     {
         Debug.Log("Delete Game!!!!!");
         _ = Lobby.DeleteSession(currentSelectedSession.session_ID);
-        GameConstants.networkManager.LeaveRoom();
+        NetworkManager.manager.LeaveRoom();
         currentSelectedSession = null;
         InGameSelectView();
     }
@@ -180,7 +198,7 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
             witchButton.GetComponent<VariationButton>().isSelected,
             randGoldButton.GetComponent<VariationButton>().isSelected
         );
-        GameConstants.networkManager.LoadArena();
+        NetworkManager.manager.LoadArena();
     }
 
     public void ForceUpdateList()
@@ -225,7 +243,7 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
     {
         gameSelectView.gameObject.SetActive(false);
         homeView.gameObject.SetActive(true);
-        GameConstants.networkManager.LeaveRoom();
+        NetworkManager.manager.LeaveRoom();
     }
 
 
@@ -247,6 +265,6 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
     {
         Debug.Log($"Game created with ID {gs.session_ID}");
         Game.currentGame.SetSession(gs);
-        GameConstants.networkManager.JoinOrCreateRoom(gs.session_ID);
+        NetworkManager.manager.JoinOrCreateRoom(gs.session_ID);
     }
 }

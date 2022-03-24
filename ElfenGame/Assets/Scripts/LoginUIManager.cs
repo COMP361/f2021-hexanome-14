@@ -7,6 +7,23 @@ using UnityEngine.UI;
 
 public class LoginUIManager : MonoBehaviour
 {
+    #region singleton 
+
+    private static LoginUIManager _instance;
+
+    public static LoginUIManager manager
+    {
+        get
+        {
+            if (_instance == null)
+            {
+                _instance = FindObjectOfType<LoginUIManager>();
+            }
+            return _instance;
+        }
+    }
+
+    #endregion   
 
     [SerializeField] InputField usernameInput;
     [SerializeField] InputField passwordInput;

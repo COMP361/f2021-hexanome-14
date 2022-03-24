@@ -13,80 +13,83 @@ public class KeyBoardInput : MonoBehaviour
     {
         if (Input.GetKeyDown("p"))
         {
-            if (GameConstants.mainUIManager != null && (!GameConstants.chatManager || !GameConstants.chatManager.isActive()))
+            if (MainUIManager.manager != null && (!ChatManager.manager || !ChatManager.manager.isActive()))
             {
-                GameConstants.mainUIManager.OnPausePressed();
+                MainUIManager.manager.OnPausePressed();
             }
         }
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            if (GameConstants.chatManager != null && GameConstants.chatManager.isActive())
+            if (ChatManager.manager != null && ChatManager.manager.isActive())
             {
-                GameConstants.chatManager.SetChatInvisible();
-            } else if (GameConstants.mainMenuUIManager != null)
+                ChatManager.manager.SetChatInvisible();
+            }
+            else if (MainMenuUIManager.manager != null)
             {
-                GameConstants.mainMenuUIManager.OnEscapePressed();
+                MainMenuUIManager.manager.OnEscapePressed();
             }
         }
 
         if (Input.GetKeyDown(KeyCode.Tab))
         {
-            if (GameConstants.chatManager && GameConstants.chatManager.isActive())
+            if (ChatManager.manager && ChatManager.manager.isActive())
             {
-                GameConstants.chatManager.OnTabPressed();
-            } else if (GameConstants.loginUIManager)
+                ChatManager.manager.OnTabPressed();
+            }
+            else if (LoginUIManager.manager)
             {
-                GameConstants.loginUIManager.OnTabPressed();
+                LoginUIManager.manager.OnTabPressed();
             }
         }
 
         if (Input.GetKeyDown(KeyCode.Return))
         {
-            if (GameConstants.chatManager != null && GameConstants.chatManager.isActive())
+            if (ChatManager.manager != null && ChatManager.manager.isActive())
             {
-                GameConstants.chatManager.OnEnterPressed();
-            } else if (GameConstants.loginUIManager != null)
+                ChatManager.manager.OnEnterPressed();
+            }
+            else if (LoginUIManager.manager != null)
             {
-                GameConstants.loginUIManager.OnEnterPressed();
+                LoginUIManager.manager.OnEnterPressed();
             }
         }
 
         if (Input.GetKeyDown("t"))
         {
-            if (GameConstants.chatManager != null && !GameConstants.chatManager.isActive())
+            if (ChatManager.manager != null && !ChatManager.manager.isActive())
             {
-                GameConstants.chatManager.setChatVisible();
+                ChatManager.manager.setChatVisible();
             }
         }
 
         if (Input.GetKeyDown("`"))
         {
-            if (GameConstants.loginUIManager)
+            if (LoginUIManager.manager)
             {
-                GameConstants.loginUIManager.QuickLogin("fynn");
+                LoginUIManager.manager.QuickLogin("fynn");
             }
 
-            if (GameConstants.mainUIManager)
+            if (MainUIManager.manager)
             {
-                Game.currentGame.nextPlayer(passed: true); 
-	        }
+                Game.currentGame.nextPlayer(passed: true);
+            }
         }
 
         if (Input.GetKeyDown("="))
-        { 
-	        if (GameConstants.loginUIManager)
+        {
+            if (LoginUIManager.manager)
             {
-                GameConstants.loginUIManager.QuickLogin("maex");
-	        }
-	    }
+                LoginUIManager.manager.QuickLogin("maex");
+            }
+        }
         if (Input.GetKeyDown("\\"))
         {
-            if (GameConstants.loginUIManager)
+            if (LoginUIManager.manager)
             {
-                GameConstants.loginUIManager.QuickLogin("luca");
-	        }
-	 
+                LoginUIManager.manager.QuickLogin("luca");
+            }
+
         }
     }
 

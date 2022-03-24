@@ -9,7 +9,23 @@ using System;
 
 public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback, IInRoomCallbacks
 {
-    const byte SPAWN_PLAYER_CODE = 12;
+    #region singleton 
+
+    private static NetworkManager _instance;
+
+    public static NetworkManager manager
+    {
+        get
+        {
+            if (_instance == null)
+            {
+                _instance = FindObjectOfType<NetworkManager>();
+            }
+            return _instance;
+        }
+    }
+
+    #endregion   
     const byte EVENT_ADD_TILE_CODE = 3;
     const byte EVENT_REMOVE_ALL_TILES_CODE = 4;
     const byte EVENT_GAME_OVER_CODE = 5;
@@ -270,18 +286,18 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback, IInRo
 
     public void OnEvent(EventData photonEvent)
     {
-        if (photonEvent.Code == EVENT_ADD_TILE_CODE && GameConstants.mainUIManager)
+        if (photonEvent.Code == EVENT_ADD_TILE_CODE && MainUIManager.manager)
         {
             object[] data = (object[])photonEvent.CustomData;
             string roadName = (string)data[0];
             MovementTile movementTile = (MovementTile)data[1];
             //Debug.LogError($"Add Tile Event triggered for road {roadName} and Tile {Enum.GetName(typeof(MovementTile), movementTile)}");
 
-            GameConstants.mainUIManager.AddTile(roadName, movementTile);
+            MainUIManager.manager.AddTile(roadName, movementTile);
         }
-        else if (photonEvent.Code == EVENT_REMOVE_ALL_TILES_CODE && GameConstants.mainUIManager)
+        else if (photonEvent.Code == EVENT_REMOVE_ALL_TILES_CODE && MainUIManager.manager)
         {
-            GameConstants.mainUIManager.ClearAllTiles();
+            MainUIManager.manager.ClearAllTiles();
         }
         else if (photonEvent.Code == EVENT_GAME_OVER_CODE)
         {
@@ -347,9 +363,9 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback, IInRo
     {
         //Debug.LogError($"Local Player {PhotonNetwork.LocalPlayer.UserId} joined the room");
 
-        if (GameConstants.mainMenuUIManager != null)
+        if (MainMenuUIManager.manager != null)
         {
-            GameConstants.mainMenuUIManager.InGameSelectView();
+            MainMenuUIManager.manager.InGameSelectView();
 
         }
 
@@ -359,12 +375,12 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback, IInRo
 
     public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer)
     {
-        if (PhotonNetwork.IsMasterClient && GameConstants.mainMenuUIManager && GameConstants.mainMenuUIManager.GetLoadedOwner() == newPlayer.UserId)
+        if (PhotonNetwork.IsMasterClient && MainMenuUIManager.manager && MainMenuUIManager.manager.GetLoadedOwner() == newPlayer.UserId)
         {
             PhotonNetwork.SetMasterClient(newPlayer);
         }
 
-        if (GameConstants.mainMenuUIManager && GameConstants.mainMenuUIManager.GetLoadedOwner() == Lobby.myUsername)
+        if (MainMenuUIManager.manager && MainMenuUIManager.manager.GetLoadedOwner() == Lobby.myUsername)
         {
             Game.currentGame.SyncGameProperties();
         }
@@ -380,9 +396,9 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback, IInRo
         {
             SceneManager.LoadScene("MainMenu");
         }
-        else if (GameConstants.mainMenuUIManager != null)
+        else if (MainMenuUIManager.manager != null)
         {
-            GameConstants.mainMenuUIManager.InGameSelectView();
+            MainMenuUIManager.manager.InGameSelectView();
         }
 
         if (Game.currentGame.gameCreator == Lobby.myUsername)
@@ -394,4 +410,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback, IInRo
     }
 
     #endregion
+
+
 }

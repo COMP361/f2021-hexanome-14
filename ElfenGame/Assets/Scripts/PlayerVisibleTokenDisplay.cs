@@ -24,16 +24,16 @@ public class PlayerVisibleTokenDisplay : MonoBehaviour
         foreach (TileHolderScript thscript in tileGroup.GetComponentsInChildren<TileHolderScript>())
         {
             Destroy(thscript.gameObject);
-	    }
+        }
 
         foreach (MovementTile mt in visibleTiles)
         {
             GameObject go = Instantiate(tileHolderPrefab, tileGroup.transform);
             TileHolderScript thscript = go.GetComponent<TileHolderScript>();
             thscript.SetIsSelectable(false);
-            if (GameConstants.mainUIManager && GameConstants.mainUIManager.mTileDict != null && GameConstants.mainUIManager.mTileDict.ContainsKey(mt))
-                thscript.SetTile(GameConstants.mainUIManager.mTileDict[mt]);
-	    }
+            if (MainUIManager.manager && MainUIManager.manager.mTileDict != null && MainUIManager.manager.mTileDict.ContainsKey(mt))
+                thscript.SetTile(MainUIManager.manager.mTileDict[mt]);
+        }
     }
 
     public void SetNumHidden(int numHidden)
@@ -48,7 +48,7 @@ public class PlayerVisibleTokenDisplay : MonoBehaviour
 
     public void openWindow()
     {
-        gameObject.SetActive(true);    
+        gameObject.SetActive(true);
     }
 
 }

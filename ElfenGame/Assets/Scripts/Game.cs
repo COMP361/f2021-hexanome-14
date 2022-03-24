@@ -401,9 +401,9 @@ public class Game
             ExitGames.Client.Photon.Hashtable oldProperties = new ExitGames.Client.Photon.Hashtable();
             oldProperties[key] = "";
 
-            if (GameConstants.networkManager)
+            if (NetworkManager.manager)
             {
-                GameConstants.networkManager.SetGamePropertiesWithCheck(newProperties, oldProperties);
+                NetworkManager.manager.SetGamePropertiesWithCheck(newProperties, oldProperties);
             }
         }
     }
@@ -422,7 +422,7 @@ public class Game
     public void SyncGameProperties()
     {
         UpdateDisplay();
-        if (GameConstants.networkManager) GameConstants.networkManager.SetGameProperties(_gameProperties);
+        if (NetworkManager.manager) NetworkManager.manager.SetGameProperties(_gameProperties);
     }
 
     private void HandleColorUpdate(PlayerColor color, string value)
@@ -432,12 +432,12 @@ public class Game
         if (Player.GetLocalPlayer().userName == value)
         {
             Player.GetLocalPlayer().playerColor = color;
-            if (GameConstants.mainUIManager)
-                GameConstants.mainUIManager.CloseColorSelection();
+            if (MainUIManager.manager)
+                MainUIManager.manager.CloseColorSelection();
         }
-        if (GameConstants.mainUIManager)
+        if (MainUIManager.manager)
         {
-            GameConstants.mainUIManager.UpdateColorOptions();
+            MainUIManager.manager.UpdateColorOptions();
         }
 
         // Debug.LogError($"{value} claimed {color}");
@@ -472,11 +472,11 @@ public class Game
 
     public void UpdateDisplay()
     {
-        if (GameConstants.mainUIManager)
+        if (MainUIManager.manager)
         {
             HandlePhaseUpdate();
-            GameConstants.mainUIManager.UpdateAvailableTokens();
-            GameConstants.mainUIManager.UpdateRoundInfo(); // TODO: pass info as argument?
+            MainUIManager.manager.UpdateAvailableTokens();
+            MainUIManager.manager.UpdateRoundInfo(); // TODO: pass info as argument?
         }
 
         SaveAndLoad.SaveGame();
@@ -510,9 +510,9 @@ public class Game
         InitPile();
         InitDeck();
 
-        if (GameConstants.networkManager)
+        if (NetworkManager.manager)
         {
-            GameConstants.networkManager.SetGameProperties(_colorProperties);
+            NetworkManager.manager.SetGameProperties(_colorProperties);
         }
 
         SyncGameProperties();
@@ -563,7 +563,7 @@ public class Game
     public void InitPlayersList()
     {
         List<string> playersInGame = new List<string>();
-        foreach (Photon.Realtime.Player p in GameConstants.networkManager.GetPlayers())
+        foreach (Photon.Realtime.Player p in NetworkManager.manager.GetPlayers())
         {
             playersInGame.Add(p.UserId);
         }
@@ -602,10 +602,10 @@ public class Game
     //         {
     //             nextPlayer();
     //         }
-    //         else if (GameConstants.mainUIManager)
+    //         else if (MainUIManager.manager)
     //         {
-    //             GameConstants.mainUIManager.UpdateAvailableTokens();
-    //             GameConstants.mainUIManager.showAvailableTokensToKeep();
+    //             MainUIManager.manager.UpdateAvailableTokens();
+    //             MainUIManager.manager.showAvailableTokensToKeep();
     //         }
     //         // SelectTokenToKeep but no tokens remain
     //     }
@@ -613,9 +613,9 @@ public class Game
 
     // private void NotYourTurn()
     // {
-    //     if (GameConstants.mainUIManager)
+    //     if (MainUIManager.manager)
     //     {
-    //         GameConstants.mainUIManager.hideAvailableTokensToKeep();
+    //         MainUIManager.manager.hideAvailableTokensToKeep();
     //     }
     // }
 
@@ -633,19 +633,19 @@ public class Game
 
     private void HandlePhaseUpdate()
     {
-        if (!GameConstants.mainUIManager)
+        if (!MainUIManager.manager)
         {
             Debug.LogError("No mainUIManager");
             return;
         }
-        GameConstants.mainUIManager.UpdateRoundInfo();
+        MainUIManager.manager.UpdateRoundInfo();
         if (curPhase == GamePhase.DrawCounters1 || curPhase == GamePhase.DrawCounters2 || curPhase == GamePhase.DrawCounters3)
         {
-            GameConstants.mainUIManager.showTokenSelection();
+            MainUIManager.manager.showTokenSelection();
         }
         else
         {
-            GameConstants.mainUIManager.hideTokenSelection();
+            MainUIManager.manager.hideTokenSelection();
         }
 
         Player local = Player.GetLocalPlayer();
@@ -658,12 +658,12 @@ public class Game
             }
             else
             {
-                GameConstants.mainUIManager.showAvailableTokensToKeep();
+                MainUIManager.manager.showAvailableTokensToKeep();
             }
         }
         else
         {
-            GameConstants.mainUIManager.hideAvailableTokensToKeep();
+            MainUIManager.manager.hideAvailableTokensToKeep();
         }
 
         if (curPhase == GamePhase.DrawCardsAndCounters && local.IsMyTurn())
@@ -696,7 +696,7 @@ public class Game
     //     else if (key == pCUR_ROUND)
     //     {
     //         _curRound = (int)data;
-    //         if (GameConstants.mainUIManager) GameConstants.mainUIManager.UpdateRoundInfo();
+    //         if (MainUIManager.manager) MainUIManager.manager.UpdateRoundInfo();
     //     }
     //     else if (key == pPASSED_PLAYERS)
     //     {
@@ -709,7 +709,7 @@ public class Game
     //     else if (key == pMAX_ROUNDS)
     //     {
     //         _maxRounds = (int)data;
-    //         if (GameConstants.mainUIManager) GameConstants.mainUIManager.UpdateRoundInfo();
+    //         if (MainUIManager.manager) MainUIManager.manager.UpdateRoundInfo();
     //     }
     //     else if (key == pPILE)
     //     {
@@ -731,7 +731,7 @@ public class Game
     //             if (key == $"{pCOLOR_AVAIL_PREFIX}{Enum.GetName(typeof(PlayerColor), c)}")
     //             {
     //                 availableColors[c] = (string)data;
-    //                 if (GameConstants.mainUIManager) GameConstants.mainUIManager.UpdateColorOptions();
+    //                 if (MainUIManager.manager) MainUIManager.manager.UpdateColorOptions();
     //             }
     //         }
     //     }
@@ -791,7 +791,7 @@ public class Game
             Debug.Log("In Elfengold");
             //TODO: Implement Elfengold Ending
         }
-        if (GameConstants.mainUIManager) GameConstants.mainUIManager.GameOverTriggered(winners, scores);
+        if (MainUIManager.manager) MainUIManager.manager.GameOverTriggered(winners, scores);
     }
 
     public bool checkAnyPlayerDone()
@@ -815,7 +815,7 @@ public class Game
         if (checkAnyPlayerDone())
         {
             GameOver();
-            GameConstants.networkManager.GameOver();
+            NetworkManager.manager.GameOver();
             return;
         }
 
@@ -832,13 +832,13 @@ public class Game
             if (curPhase == GamePhase.Travel && curRound == maxRounds)
             {
                 GameOver();
-                GameConstants.networkManager.GameOver();
+                NetworkManager.manager.GameOver();
                 return;
             }
             else if (curPhase == GamePhase.SelectTokenToKeep)
             {
-                if (GameConstants.mainUIManager) GameConstants.mainUIManager.ClearAllTiles();
-                if (GameConstants.networkManager) GameConstants.networkManager.ClearAllTiles();
+                if (MainUIManager.manager) MainUIManager.manager.ClearAllTiles();
+                if (NetworkManager.manager) NetworkManager.manager.ClearAllTiles();
                 curPhase = GamePhase.DrawCardsAndCounters;
                 curRound = curRound + 1;
                 curPlayerIndex = (curRound - 1) % mPlayers.Count;
@@ -877,14 +877,14 @@ public class Game
     //     if (curCardPointer >= deck.Count)
     //     {
     //         deck.Shuffle();
-    //         if (GameConstants.networkManager) GameConstants.networkManager.SetGameProperty(pDECK, deck.ToArray());
+    //         if (NetworkManager.nm) NetworkManager.nm.SetGameProperty(pDECK, deck.ToArray());
     //         curCardPointer = 0;
     //     }
 
     //     CardEnum ret = deck[curCardPointer];
     //     curCardPointer++;
 
-    //     if (GameConstants.networkManager) GameConstants.networkManager.SetGameProperty(pPOINTER, curCardPointer);
+    //     if (NetworkManager.nm) NetworkManager.nm.SetGameProperty(pPOINTER, curCardPointer);
 
 
     //     return ret;
