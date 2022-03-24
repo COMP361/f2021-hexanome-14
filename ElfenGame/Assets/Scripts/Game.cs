@@ -34,7 +34,7 @@ public class Game
     private const string pCUR_PHASE = "CUR_PHASE";
     private const string pMAX_ROUNDS = "MAX_ROUNDS";
     private const string pGAME_MODE = "GAME_MODE";
-    private const string  pEND_TOWN = "END_TOWN";
+    private const string pEND_TOWN = "END_TOWN";
     private const string pWITCH_CARD = "WITCH_CARD";
     private const string pRAND_GOLD = "RAND_GOLD";
 
@@ -42,10 +42,8 @@ public class Game
 
     private const string pGAME_ID = "GAME_ID";
 
-    private const string pPLAYFAB_ID = "PLAYFAB_ID";
-
     private static string[] pPLAYER_PROPS = {
-        pDECK, pDISCARD, pPILE, pVISIBLE, pPLAYERS, pCUR_PLAYER, pCUR_ROUND, pCUR_PHASE, pMAX_ROUNDS, pPASSED_PLAYERS, pGAME_ID, pPLAYFAB_ID, pGAME_MODE, pEND_TOWN, pWITCH_CARD, pRAND_GOLD
+        pDECK, pDISCARD, pPILE, pVISIBLE, pPLAYERS, pCUR_PLAYER, pCUR_ROUND, pCUR_PHASE, pMAX_ROUNDS, pPASSED_PLAYERS, pGAME_ID, pGAME_MODE, pEND_TOWN, pWITCH_CARD, pRAND_GOLD
     };
 
     private const string pCOLOR_AVAIL_PREFIX = "COLOR_AVAIL";
@@ -63,18 +61,6 @@ public class Game
         get
         {
             return (string)_gameProperties[pGAME_ID];
-        }
-    }
-
-    public string playfabId
-    {
-        get
-        {
-            return (string)_gameProperties[pPLAYFAB_ID];
-        }
-        set
-        {
-            _gameProperties[pPLAYFAB_ID] = value;
         }
     }
 
@@ -353,7 +339,6 @@ public class Game
         _gameProperties[pRAND_GOLD] = randGoldVar;
         _gameProperties[pPASSED_PLAYERS] = 0;
         _gameProperties[pGAME_ID] = gameId;
-        _gameProperties[pPLAYFAB_ID] = playfabId;
 
         _gameProperties[pPLAYERS] = new string[] { };
         _gameProperties[pPILE] = new MovementTile[0];
@@ -372,13 +357,7 @@ public class Game
 
         SyncGameProperties();
 
-
-        if (GameConstants.playfabManager)
-        {
-            GameConstants.playfabManager.CreateGroup();
-        }
     }
-
     // public void InitRound()
     // {
     //     //TODO: Stop using this function (players should get their own cards)
@@ -646,7 +625,9 @@ public class Game
             {
                 scores.Add(p.nPoints);
             }
-        } else if (gameMode == "Elfengold"){
+        }
+        else if (gameMode == "Elfengold")
+        {
             Debug.Log("In Elfengold");
             //TODO: Implement Elfengold Ending
         }
