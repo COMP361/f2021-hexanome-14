@@ -338,10 +338,10 @@ public class Game
         }
     }
 
-    public void Init(int maxRnds, string gameMode, bool endTown, bool whitchVar, bool randGoldVar)
+    public void Init(int maxRnds, string gameMode, bool endTown, bool witchVar, bool randGoldVar)
     {
         // TODO: sync endTown, whitchVar, randGoldVar
-        Debug.Log($"max rnds {maxRnds}, endTown {endTown}, whitchVar {whitchVar}, randGoldVar {randGoldVar}");
+        Debug.Log($"max rnds {maxRnds}, endTown {endTown}, whitchVar {witchVar}, randGoldVar {randGoldVar}");
         Debug.Log("Game Init Called");
         _gameProperties[pCUR_PLAYER] = 0;
         _gameProperties[pCUR_ROUND] = 1;
@@ -349,7 +349,7 @@ public class Game
         _gameProperties[pMAX_ROUNDS] = maxRnds;
         _gameProperties[pGAME_MODE] = gameMode;
         _gameProperties[pEND_TOWN] = endTown;
-        _gameProperties[pWITCH_CARD] = whitchVar;
+        _gameProperties[pWITCH_CARD] = witchVar;
         _gameProperties[pRAND_GOLD] = randGoldVar;
         _gameProperties[pPASSED_PLAYERS] = 0;
         _gameProperties[pGAME_ID] = gameId;
