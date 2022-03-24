@@ -25,7 +25,6 @@ public static class GameConstants
     public static string lobbyServiceUrl = "http://18.223.185.13:4242";
     private static NetworkManager _networkManager;
 
-    private static PlayfabManager _playfabManager;
     private static ChatManager _chatManager;
     private static MouseActivityManager _mouseActivityManager;
     private static Camera _mainCamera;
@@ -163,18 +162,6 @@ public static class GameConstants
                 _networkManager = Object.FindObjectOfType<NetworkManager>();
             }
             return _networkManager;
-        }
-    }
-
-    public static PlayfabManager playfabManager
-    {
-        get
-        {
-            if (_playfabManager == null)
-            {
-                _playfabManager = Object.FindObjectOfType<PlayfabManager>();
-            }
-            return _playfabManager;
         }
     }
 
