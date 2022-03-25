@@ -36,8 +36,18 @@ public class GameSessionListItemScript : MonoBehaviour, IPointerClickHandler
     public void SetFields(Lobby.GameSession gameSession)
     {
         createdByText.text = $"CreatedBy: {gameSession.createdBy}";
-        nPlayersText.text = $"Players: {gameSession.players.Count}";
 
+        string players_string = "Players: ";
+
+        for (int i = 0; i < gameSession.players.Count; i++)
+        {
+            players_string += gameSession.players[i];
+            if (i != gameSession.players.Count - 1)
+            {
+                players_string += ", ";
+            }
+        }
+        nPlayersText.text = players_string;
         this.gameSession = gameSession;
         SetToDefaultColor();
         // EE6464

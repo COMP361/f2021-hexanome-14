@@ -25,8 +25,9 @@ public class Lobby
     private DateTime lastRenewed = DateTime.FromOADate(0);
     private List<Action> onRenewDone = new List<Action>();
 
-    private List<SavedGame> savedGames = new List<SavedGame>();
+    public List<SavedGame> savedGames = new List<SavedGame>();
 
+    [Serializable]
     public class GameSession
     {
         public GameSession(string session_ID, List<string> players, string createdBy, string saveID)
@@ -50,10 +51,12 @@ public class Lobby
         }
     }
 
-    public struct SavedGame
+    [Serializable]
+    public class SavedGame
     {
-        public string saveID;
-        public List<string> players;
+        public string[] players;
+        public string gamename;
+        public string savegameid;
     }
 
     public static void Init()
@@ -244,9 +247,9 @@ public class Lobby
                     availableGames.Add(gameSession);
                 }
 
-                if (MainMenuUIManager.manager != null)
+                if (MainMenuUIManager.manager != null && !MainMenuUIManager.manager.inLoadGameView)
                 {
-                    MainMenuUIManager.manager.OnUpdatedGameListReceived(availableGames);
+                    MainMenuUIManager.manager.UpdateSessionListView(availableGames);
                 }
             }
             else
@@ -337,7 +340,11 @@ public class Lobby
             }
         });
     }
-
+    string fixJson(string value)
+    {
+        value = "{\"Items\":" + value + "}";
+        return value;
+    }
     public void GetSavedGames()
     {
         string url = "/api/gameservices/ElfenGame/savegames";
@@ -346,20 +353,21 @@ public class Lobby
         {
             if (success)
             {
-                Debug.Log("Successfully retrieved saved games: " + msg);
-                JObject json = JsonConvert.DeserializeObject<JObject>(msg);
-                savedGames = new List<SavedGame>();
-                foreach (JToken game in json.Children())
+                SavedGame[] allSavedGames = JsonHelper.FromJson<SavedGame>(fixJson(msg));
+                foreach (SavedGame savedGame in allSavedGames)
                 {
-                    var property = game as JProperty;
-                    SavedGame savedGame = new SavedGame { saveID = property.Value["savegameid"].ToString(), players = property.Value["players"].ToObject<List<string>>() };
                     if (savedGame.players.Contains(GameConstants.username))
-                        savedGames.Add(savedGame); // Only add games that the user is in
+                    {
+                        savedGames.Add(savedGame);
+                    }
                 }
+
+                Debug.Log("Successfully retrieved saved games");
             }
             else
             {
                 Debug.Log("GetSavedGames failed: " + msg);
+
             }
         });
     }

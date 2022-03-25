@@ -28,6 +28,12 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
 
     [SerializeField] private GameObject availableGamesView;
     [SerializeField] private GameObject sessionPrefab;
+    [SerializeField] private GameObject savedGamePrefab;
+
+    [SerializeField] private Text gameSessionsText;
+
+
+    [Header("Views")]
     [SerializeField] private GameObject gameSelectView;
     [SerializeField] private GameObject homeView;
 
@@ -35,6 +41,9 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
     [SerializeField] private GameObject gameCreatorOptionsView;
     [SerializeField] private GameObject gameJoinedOptionsView;
     [SerializeField] private GameObject gameCreationMenu;
+    [SerializeField] private GameObject gameLoadOptionsView;
+
+    [Header("Create Game UI")]
 
     [SerializeField] private Dropdown gameModeDD;
     [SerializeField] private Dropdown variationDD;
@@ -46,6 +55,9 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
 
 
     private Lobby.GameSession currentSelectedSession;
+    private string savedGameID = "";
+
+    public bool inLoadGameView = false;
 
 
     /// <summary>
@@ -71,7 +83,7 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
         Player.ResetPlayers();
         gameSelectView.gameObject.SetActive(true);
         homeView.gameObject.SetActive(false);
-        OnUpdatedGameListReceived(Lobby.availableGames);
+        UpdateSessionListView(Lobby.availableGames);
         InGameSelectView();
     }
 
@@ -82,6 +94,7 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
             gameCreatorOptionsView.SetActive(true);
             gameOptionButtonsView.SetActive(false);
             gameJoinedOptionsView.SetActive(false);
+            gameLoadOptionsView.SetActive(false);
             SetGameActive(false);
         }
         else if (NetworkManager.manager.inGame())
@@ -89,14 +102,26 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
             gameCreatorOptionsView.SetActive(false);
             gameOptionButtonsView.SetActive(false);
             gameJoinedOptionsView.SetActive(true);
+            gameLoadOptionsView.SetActive(false);
             SetGameActive(false);
+        }
+        else if (inLoadGameView)
+        {
+            gameCreatorOptionsView.SetActive(false);
+            gameOptionButtonsView.SetActive(false);
+            gameJoinedOptionsView.SetActive(false);
+            gameLoadOptionsView.SetActive(true);
+            SetGameActive(false);
+            UpdateSavedGameListView(Lobby.user.savedGames);
         }
         else
         {
             gameCreatorOptionsView.SetActive(false);
             gameOptionButtonsView.SetActive(true);
             gameJoinedOptionsView.SetActive(false);
+            gameLoadOptionsView.SetActive(false);
             SetGameActive(true);
+            UpdateSessionListView(Lobby.availableGames);
         }
     }
 
@@ -104,6 +129,32 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
     {
         witchButton.gameObject.SetActive((gameModeDD.options[gameModeDD.value].text == "Elfengold"));
         randGoldButton.gameObject.SetActive((gameModeDD.options[gameModeDD.value].text == "Elfengold"));
+    }
+
+    public void OnLoadGameViewClicked()
+    {
+        inLoadGameView = true;
+        InGameSelectView();
+        gameSessionsText.text = "Saved Games:";
+    }
+
+    public void OnReturnToLobbyViewClicked()
+    {
+        inLoadGameView = false;
+        InGameSelectView();
+        gameSessionsText.text = "Game Sessions:";
+    }
+
+    public void OnLoadSavedGameClicked()
+    {
+        //TODO: load game
+        Debug.Log("Load Saved Game Clicked");
+    }
+
+    public void OnDeleteSavedGameClicked()
+    {
+        //TODO: delete game
+        Debug.Log("Delete Saved Game Clicked");
     }
 
     public void OnStartGameClicked()
@@ -163,13 +214,21 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
         InGameSelectView();
     }
 
-    public void OnUpdatedGameListReceived(List<Lobby.GameSession> gameSessions)
+    public void UpdateSessionListView(List<Lobby.GameSession> gameSessions)
     {
-        Debug.Log($"OnUpdatedGameListReceived with {gameSessions.Count} games");
         RemoveAllGameSessions();
         foreach (Lobby.GameSession game in gameSessions)
         {
             AddGameSession(game);
+        }
+    }
+
+    public void UpdateSavedGameListView(List<Lobby.SavedGame> savedGames)
+    {
+        RemoveAllGameSessions();
+        foreach (Lobby.SavedGame game in savedGames)
+        {
+            AddSavedGame(game);
         }
     }
 
@@ -186,10 +245,6 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
         NetworkManager.manager.LoadArena();
     }
 
-    public void ForceUpdateList()
-    {
-        OnUpdatedGameListReceived(Lobby.availableGames);
-    }
 
     private void RemoveAllGameSessions()
     {
@@ -231,20 +286,33 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
         NetworkManager.manager.LeaveRoom();
     }
 
-
-    private void resetColors()
+    public void OnGameSessionClicked(Lobby.GameSession gameSession)
     {
         foreach (GameSessionListItemScript sessionScript in availableGamesView.GetComponentsInChildren<GameSessionListItemScript>())
         {
             sessionScript.SetToDefaultColor();
         }
-    }
-
-    public void OnGameSessionClicked(Lobby.GameSession gameSession)
-    {
-        resetColors();
         currentSelectedSession = gameSession;
     }
+
+    private void AddSavedGame(Lobby.SavedGame savedGame)
+    {
+        GameObject savedGameObject = Instantiate(savedGamePrefab, availableGamesView.transform);
+
+        SavedGameListItemScript sessionScript = savedGameObject.GetComponent<SavedGameListItemScript>();
+        sessionScript.SetFields(savedGame.savegameid, savedGame.players);
+    }
+
+    internal void LoadGameItemSelected(string saveid)
+    {
+        foreach (SavedGameListItemScript savedScript in availableGamesView.GetComponentsInChildren<SavedGameListItemScript>())
+        {
+            savedScript.SetToDefaultColor();
+        }
+
+        savedGameID = saveid;
+    }
+
 
     internal void OnGameCreated(string sessionID)
     {
