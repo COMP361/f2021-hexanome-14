@@ -24,7 +24,7 @@ public static class GameConstants
     public static string lobbyServiceUrl = "http://18.223.185.13:4242";
     internal static readonly string service_username = "ElfenGame";
     internal static readonly string service_password = "abc123_ABC123";
-
+    internal static readonly double tokenResetRate = 600;
     private static MouseActivityManager _mouseActivityManager;
     private static Camera _mainCamera;
 
