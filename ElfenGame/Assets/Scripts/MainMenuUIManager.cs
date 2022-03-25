@@ -135,9 +135,6 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
         gameOptionButtonsView.SetActive(false);
         gameCreationMenu.SetActive(true);
 
-        //        await Lobby.CreateSession();
-
-        //GetComponent<PhotonView>().RPC(nameof(RPC_ListUpdated), RpcTarget.AllBuffered, new object[] { });
     }
 
     public void OnCancelCreateClicked()
