@@ -23,6 +23,7 @@ public class Lobby
 
     private bool renewingToken = false;
     private DateTime lastRenewed = DateTime.FromOADate(0);
+    private List<Action> onRenewDone = new List<Action>();
 
     public class GameSession
     {
@@ -119,11 +120,8 @@ public class Lobby
     {
         if (renewingToken)
         {
-            while (renewingToken)
-            {
-                Thread.Sleep(10);
-            }
-            onSucess();
+            if (onSucess != null)
+                onRenewDone.Add(onSucess);
             return;
         }
         renewingToken = true;
@@ -143,6 +141,12 @@ public class Lobby
                 {
                     onSucess();
                 }
+                foreach (Action action in onRenewDone)
+                {
+                    Debug.Log("Found Action in onRenewDone");
+                    action();
+                }
+                onRenewDone.Clear();
             }
             else
             {
