@@ -121,23 +121,4 @@ public class Elf : MonoBehaviour
         Debug.Log($"{player.userName} moved to {destination}");
     }
 
-    // public void MoveToTown(string destination, string source)
-    // {
-    //     NewTown sourceTown = GameConstants.townDict[source];
-    //     if (sourceTown != null)
-    //     {
-    //         sourceTown.GetComponent<GridManager>().RemoveElement(gameObject);
-    //     }
-
-    //     NewTown destinationTown = GameConstants.townDict[destination];
-    //     if (destinationTown == null)
-    //     {
-    //         GameConstants.townDict = null;
-    //         destinationTown = GameConstants.townDict[destination];
-    //     }
-    //     Debug.Log($"Elf {player.userName} moved to {destination}");
-    //     destinationTown.GetComponent<GridManager>().AddElement(gameObject);
-
-    // }
-
 }

@@ -14,7 +14,5 @@ public class SceneLoader : MonoBehaviour
     public void QuitGame()
     {
         Application.Quit();
-        //could potentially make it a log out button
-        //SceneManager.LoadScene("Login");
     }
 }

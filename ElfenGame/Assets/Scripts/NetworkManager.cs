@@ -343,13 +343,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback, IInRo
 
     public override void OnCreatedRoom()
     {
-        if (PhotonNetwork.IsMasterClient)
-        {
-            // if (GameConstants.playfabManager)
-            // {
-            //     GameConstants.playfabManager.CreateGroup(PhotonNetwork.CurrentRoom.Name);
-            // }
-        }
+        Debug.Log($"Room created successfully.");
     }
 
 

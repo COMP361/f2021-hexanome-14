@@ -78,10 +78,6 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
         homeView.gameObject.SetActive(false);
         OnUpdatedGameListReceived(Lobby.availableGames);
         InGameSelectView();
-        // if (NetworkManager.nm.isConnected())
-        // {
-        //     NetworkManager.nm.ResetPlayerProperties();
-        // }
     }
 
     public void InGameSelectView()
@@ -130,10 +126,6 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
             await Lobby.JoinSession(currentSelectedSession.session_ID);
             Game.currentGame.SetSession(currentSelectedSession);
 
-            // if (GameConstants.playfabManager)
-            // {
-            //     GameConstants.playfabManager.CheckInGroup(loadedSession.saveID);
-            // }
             NetworkManager.manager.JoinOrCreateRoom(currentSelectedSession.session_ID);
         }
     }
