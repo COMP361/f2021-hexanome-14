@@ -2641,7 +2641,6 @@ GameObject:
   m_Component:
   - component: {fileID: 242425815}
   - component: {fileID: 242425817}
-  - component: {fileID: 242425818}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -2676,20 +2675,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cam: {fileID: 1461493795}
---- !u!114 &242425818
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 242425813}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4fc17bbd2a4af41eb860492f9f8d0629, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Elvenhold: {fileID: 249634169}
-  mainCamera: {fileID: 1461493795}
 --- !u!1 &248821004
 GameObject:
   m_ObjectHideFlags: 0

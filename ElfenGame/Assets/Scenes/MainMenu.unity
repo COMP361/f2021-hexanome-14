@@ -3493,7 +3493,6 @@ GameObject:
   - component: {fileID: 875802335}
   - component: {fileID: 875802334}
   - component: {fileID: 875802333}
-  - component: {fileID: 875802337}
   m_Layer: 5
   m_Name: Main Menu
   m_TagString: Untagged
@@ -3585,19 +3584,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!114 &875802337
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 875802332}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1d109522781bf4cdf8d2f4bbb88acbbe, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  firstLevel: 
 --- !u!1 &920696859
 GameObject:
   m_ObjectHideFlags: 0
@@ -4354,7 +4340,6 @@ GameObject:
   - component: {fileID: 1163413571}
   - component: {fileID: 1163413572}
   - component: {fileID: 1163413573}
-  - component: {fileID: 1163413574}
   m_Layer: 0
   m_Name: EventSystem
   m_TagString: Untagged
@@ -4470,19 +4455,6 @@ MonoBehaviour:
   sceneViewId: 2
   InstantiationId: 0
   isRuntimeInstantiated: 0
---- !u!114 &1163413574
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1163413567}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d31490d975698264bb8b04f58fbb2577, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  glove: {fileID: 2800000, guid: 2f836754a05ae914cba0d98ddac8418a, type: 3}
 --- !u!1 &1164951852
 GameObject:
   m_ObjectHideFlags: 0
