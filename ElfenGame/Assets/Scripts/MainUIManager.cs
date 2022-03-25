@@ -155,7 +155,7 @@ public class MainUIManager : MonoBehaviour
 
     public void InitPlayer(string username)
     {
-        //Debug.LogError($"Creating Player {username}, Local Username = {Lobby.myUsername}");
+        //Debug.LogError($"Creating Player {username}, Local Username = {GameConstants.username}");
 
         Player p = Player.GetOrCreatePlayer(username); //TODO: remove this line
 

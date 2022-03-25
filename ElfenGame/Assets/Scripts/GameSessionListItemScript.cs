@@ -21,7 +21,7 @@ public class GameSessionListItemScript : MonoBehaviour, IPointerClickHandler
     public void SetToDefaultColor()
     {
         Image image = GetComponent<Image>();
-        if (gameSession.players.Contains(Lobby.myUsername))
+        if (gameSession.players.Contains(GameConstants.username))
         {
             image.color = GameConstants.blueFaded;
 
@@ -66,7 +66,7 @@ public class GameSessionListItemScript : MonoBehaviour, IPointerClickHandler
     public void deactivate()
     {
         Image image = GetComponent<Image>();
-        if (gameSession.players.Contains(Lobby.myUsername))
+        if (gameSession.players.Contains(GameConstants.username))
         {
             image.color = GameConstants.blueFaded;
 

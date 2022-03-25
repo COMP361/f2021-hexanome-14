@@ -372,7 +372,7 @@ public class Player
 
     public bool IsLocalPlayer()
     {
-        return userName == Lobby.myUsername;
+        return userName == GameConstants.username;
     }
 
     public bool isVisited(string townName)
@@ -400,7 +400,7 @@ public class Player
 
     public static Player GetLocalPlayer()
     {
-        return GetPlayer(Lobby.myUsername);
+        return GetPlayer(GameConstants.username);
     }
 
     public static List<Player> GetAllPlayers()
@@ -433,7 +433,7 @@ public class Player
     public static void ResetPlayers()
     {
         _players = new Dictionary<string, Player>();
-        _players[Lobby.myUsername] = new Player(Lobby.myUsername);
+        _players[GameConstants.username] = new Player(GameConstants.username);
     }
 
     #endregion

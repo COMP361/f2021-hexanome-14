@@ -748,10 +748,10 @@ public class Game
         _gameProperties[pDECK] = deck.ToArray();
         return ret;
     }
-    internal void SetSession(Lobby.GameSession currentSelectedSession)
+    internal void SetSession(string createdBy, string sessionId)
     {
-        gameCreator = currentSelectedSession.createdBy;
-        gameId = currentSelectedSession.session_ID;
+        gameCreator = createdBy;
+        gameId = sessionId;
     }
 
     public string GetCurPlayer()

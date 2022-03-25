@@ -115,11 +115,11 @@ public class SaveAndLoad
         string gameJson = JsonUtility.ToJson(new GameData(Game.currentGame), false);
         string playerJson = JsonUtility.ToJson(new PlayerData(Player.GetLocalPlayer()), false);
 
-        string gamePath = Application.persistentDataPath + "/" + Lobby.myUsername + "/" + Game.currentGame.gameId + ".json";
-        string playerPath = Application.persistentDataPath + "/" + Lobby.myUsername + "/" + Game.currentGame.gameId + "_player.json";
-        if (!Directory.Exists(Application.persistentDataPath + "/" + Lobby.myUsername))
+        string gamePath = Application.persistentDataPath + "/" + GameConstants.username + "/" + Game.currentGame.gameId + ".json";
+        string playerPath = Application.persistentDataPath + "/" + GameConstants.username + "/" + Game.currentGame.gameId + "_player.json";
+        if (!Directory.Exists(Application.persistentDataPath + "/" + GameConstants.username))
         {
-            Directory.CreateDirectory(Application.persistentDataPath + "/" + Lobby.myUsername);
+            Directory.CreateDirectory(Application.persistentDataPath + "/" + GameConstants.username);
         }
         Debug.Log("Saving game to " + gamePath);
         File.WriteAllText(gamePath, gameJson);

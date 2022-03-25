@@ -82,7 +82,7 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
 
     public void InGameSelectView()
     {
-        if (NetworkManager.manager.inGame() && GetLoadedOwner() == Lobby.myUsername)
+        if (NetworkManager.manager.inGame() && GetLoadedOwner() == GameConstants.username)
         {
             gameCreatorOptionsView.SetActive(true);
             gameOptionButtonsView.SetActive(false);
@@ -111,20 +111,20 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
         randGoldButton.gameObject.SetActive((gameModeDD.options[gameModeDD.value].text == "Elfengold"));
     }
 
-    public async void OnStartGameClicked()
+    public void OnStartGameClicked()
     {
         //Debug.LogError($"num rounds: {numRoundOptions[numRounds.value]}");
         //Debug.LogError($"variation: {variationDD.options[variationDD.value].text}");
-        await Lobby.LaunchSession(Game.currentGame.gameId);
+        Lobby.user.LaunchSession(Game.currentGame.gameId);
     }
 
-    public async void OnJoinGameClicked()
+    public void OnJoinGameClicked()
     {
         if (currentSelectedSession != null)
         {
-            Debug.Log($"Attempting to join Game {currentSelectedSession.session_ID} as user {Lobby.myUsername}");
-            await Lobby.JoinSession(currentSelectedSession.session_ID);
-            Game.currentGame.SetSession(currentSelectedSession);
+            Debug.Log($"Attempting to join Game {currentSelectedSession.session_ID} as user {GameConstants.username}");
+            Lobby.user.JoinSession(currentSelectedSession.session_ID);
+            Game.currentGame.SetSession(currentSelectedSession.createdBy, currentSelectedSession.session_ID);
 
             NetworkManager.manager.JoinOrCreateRoom(currentSelectedSession.session_ID);
         }
@@ -146,26 +146,26 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
         gameCreationMenu.SetActive(false);
     }
 
-    public async void OnConfirmCreateClicked()
+    public void OnConfirmCreateClicked()
     {
 
         gameCreationMenu.SetActive(false);
         gameCreatorOptionsView.SetActive(true);
 
-        await Lobby.CreateSession();
+        Lobby.user.CreateSession();
     }
 
     public void OnLeaveGameClicked()
     {
         NetworkManager.manager.LeaveRoom();
-        _ = Lobby.LeaveSession(currentSelectedSession.session_ID);
+        Lobby.user.LeaveSession(Game.currentGame.gameId);
         InGameSelectView();
     }
 
     public void OnDeleteGameClicked()
     {
         Debug.Log("Delete Game!!!!!");
-        _ = Lobby.DeleteSession(currentSelectedSession.session_ID);
+        Lobby.user.DeleteSession(Game.currentGame.gameId);
         NetworkManager.manager.LeaveRoom();
         currentSelectedSession = null;
         InGameSelectView();
@@ -253,10 +253,10 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
         currentSelectedSession = gameSession;
     }
 
-    internal void OnGameCreated(Lobby.GameSession gs)
+    internal void OnGameCreated(string sessionID)
     {
-        Debug.Log($"Game created with ID {gs.session_ID}");
-        Game.currentGame.SetSession(gs);
-        NetworkManager.manager.JoinOrCreateRoom(gs.session_ID);
+        Debug.Log($"Game created with ID {sessionID}");
+        Game.currentGame.SetSession(GameConstants.username, sessionID);
+        NetworkManager.manager.JoinOrCreateRoom(sessionID);
     }
 }

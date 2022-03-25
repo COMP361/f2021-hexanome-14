@@ -107,7 +107,7 @@ public class ChatManager : MonoBehaviour, IChatClientListener
     {
         DontDestroyOnLoad(gameObject);
         chatClient = new ChatClient(this);
-        chatClient.Connect(PhotonNetwork.PhotonServerSettings.AppSettings.AppIdChat, PhotonNetwork.AppVersion, new AuthenticationValues(Lobby.myUsername));
+        chatClient.Connect(PhotonNetwork.PhotonServerSettings.AppSettings.AppIdChat, PhotonNetwork.AppVersion, new AuthenticationValues(GameConstants.username));
     }
 
     // Update is called once per frame
