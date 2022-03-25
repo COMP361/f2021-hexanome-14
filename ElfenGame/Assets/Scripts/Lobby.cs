@@ -25,6 +25,8 @@ public class Lobby
     private DateTime lastRenewed = DateTime.FromOADate(0);
     private List<Action> onRenewDone = new List<Action>();
 
+    private List<SavedGame> savedGames = new List<SavedGame>();
+
     public class GameSession
     {
         public GameSession(string session_ID, List<string> players, string createdBy, string saveID)
@@ -48,6 +50,12 @@ public class Lobby
         }
     }
 
+    public struct SavedGame
+    {
+        public string saveID;
+        public List<string> players;
+    }
+
     public static void Init()
     {
         if (initWasRun)
@@ -57,10 +65,8 @@ public class Lobby
         user = new Lobby();
         gameservice = new Lobby();
 
-        //TODO: check if game service already registered
         gameservice.AuthenticateGameService();
-        gameservice.LongPollForUpdates();
-
+        gameservice.GetSessions();
     }
 
 
@@ -212,17 +218,17 @@ public class Lobby
         return sb.ToString();
     }
 
-    public void LongPollForUpdates()
+    public void GetSessions()
     {
         string url = "/api/sessions/";
         string q_params = "hash=" + lastHash;
-        Task task = LobbySendAsync(url, HttpMethod.Get, q_params: q_params, inf_timeout: true, use_token: false,
+        Task task = LobbySendAsync(url, HttpMethod.Get, q_params: q_params, long_poll: true, use_token: false,
         callback:
         (bool success, string msg) =>
         {
             if (success)
             {
-                Debug.Log("LongPollForUpdates: " + msg);
+                Debug.Log("GetSessions: " + msg);
                 JObject json = JsonConvert.DeserializeObject<JObject>(msg);
 
 
@@ -245,9 +251,9 @@ public class Lobby
             }
             else
             {
-                Debug.Log("LongPollForUpdates failed: " + msg);
+                Debug.Log("GetSessions failed: " + msg);
             }
-            LongPollForUpdates();
+            GetSessions();
         });
     }
 
@@ -341,7 +347,15 @@ public class Lobby
             if (success)
             {
                 Debug.Log("Successfully retrieved saved games: " + msg);
-                //TODO: Do something with the result
+                JObject json = JsonConvert.DeserializeObject<JObject>(msg);
+                savedGames = new List<SavedGame>();
+                foreach (JToken game in json.Children())
+                {
+                    var property = game as JProperty;
+                    SavedGame savedGame = new SavedGame { saveID = property.Value["savegameid"].ToString(), players = property.Value["players"].ToObject<List<string>>() };
+                    if (savedGame.players.Contains(GameConstants.username))
+                        savedGames.Add(savedGame); // Only add games that the user is in
+                }
             }
             else
             {
@@ -367,13 +381,12 @@ public class Lobby
         });
     }
 
-
     #endregion
 
-    public async Task LobbySendAsync(string url, HttpMethod method, Action<bool, string> callback = null, string q_params = "", string json = "", bool use_token = true, bool first_refresh = true, bool encode_media = false, bool auth = false, bool inf_timeout = false)
+    public async Task LobbySendAsync(string url, HttpMethod method, Action<bool, string> callback = null, string q_params = "", string json = "", bool use_token = true, bool first_refresh = true, bool encode_media = false, bool auth = false, bool long_poll = false)
     {
         HttpClient client = new HttpClient();
-        if (inf_timeout)
+        if (long_poll)
             client.Timeout = TimeSpan.FromMilliseconds(Timeout.Infinite);
 
         string endpoint = GameConstants.lobbyServiceUrl + url;
@@ -407,7 +420,7 @@ public class Lobby
                 RenewToken(onSucess:
                  () =>
                     {
-                        _ = LobbySendAsync(url, method, callback, q_params, json, use_token, false, encode_media, auth, inf_timeout);
+                        _ = LobbySendAsync(url, method, callback, q_params, json, use_token, false, encode_media, auth, long_poll);
                     });
             }
 

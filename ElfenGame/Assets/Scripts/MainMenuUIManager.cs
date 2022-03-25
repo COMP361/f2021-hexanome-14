@@ -48,18 +48,13 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
     private Lobby.GameSession currentSelectedSession;
 
 
-    public void Update()
-    {
-    }
-
     /// <summary>
     /// Called when MainMenuUIManager is created
     /// </summary>
     public void Start()
     {
-        // await Lobby.LongPollForUpdates(this);
-
         Game.currentGame = new Game();
+        Lobby.user.GetSavedGames();
     }
 
 
@@ -187,6 +182,7 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
             witchButton.GetComponent<VariationButton>().isSelected,
             randGoldButton.GetComponent<VariationButton>().isSelected
         );
+        Lobby.gameservice.PutSavedGame(Game.currentGame.gameId, Game.currentGame.mPlayers);
         NetworkManager.manager.LoadArena();
     }
 

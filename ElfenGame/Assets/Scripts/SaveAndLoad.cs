@@ -125,9 +125,6 @@ public class SaveAndLoad
         File.WriteAllText(gamePath, gameJson);
         Debug.Log("Saving player to " + playerPath);
         File.WriteAllText(playerPath, playerJson);
-
-        Lobby.gameservice.PutSavedGame(Game.currentGame.gameId, Game.currentGame.mPlayers);
-        Lobby.gameservice.GetSavedGames();
     }
 
 }

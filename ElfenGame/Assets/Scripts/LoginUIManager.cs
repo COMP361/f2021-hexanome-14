@@ -35,7 +35,6 @@ public class LoginUIManager : MonoBehaviour
         Lobby.Init();
         Texture2D glove = Resources.Load("glovecursor") as Texture2D;
         Cursor.SetCursor(glove, new Vector2(0, 0), CursorMode.Auto);
-        // LobbyService.initGameService();
     }
 
     // Update is called once per frame
