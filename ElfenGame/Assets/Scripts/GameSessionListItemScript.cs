@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using System;
 
 public class GameSessionListItemScript : MonoBehaviour, IPointerClickHandler
 {
@@ -12,7 +13,7 @@ public class GameSessionListItemScript : MonoBehaviour, IPointerClickHandler
     [SerializeField]
     private TextMeshProUGUI nPlayersText;
 
-    private Lobby.GameSession gameSession;
+    public Lobby.GameSession gameSession;
     private OnGameSessionClickedHandler handler;
 
     private bool active = true;
@@ -75,17 +76,6 @@ public class GameSessionListItemScript : MonoBehaviour, IPointerClickHandler
 
     public void deactivate()
     {
-        Image image = GetComponent<Image>();
-        if (gameSession.players.Contains(GameConstants.username))
-        {
-            image.color = GameConstants.blueFaded;
-
-        }
-        else
-        {
-            image.color = GameConstants.greyFaded;
-
-        }
         active = false;
     }
 
@@ -94,4 +84,16 @@ public class GameSessionListItemScript : MonoBehaviour, IPointerClickHandler
         active = true;
     }
 
+    internal void SetSelectedColor()
+    {
+        Image image = GetComponent<Image>();
+        image.color = GameConstants.greenFaded;
+    }
+
+    internal void SetUnselectedColor()
+    {
+        Image image = GetComponent<Image>();
+        image.color = GameConstants.greyFaded;
+
+    }
 }

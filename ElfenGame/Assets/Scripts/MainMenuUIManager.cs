@@ -66,7 +66,6 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
     public void Start()
     {
         Game.currentGame = new Game();
-        Lobby.user.GetSavedGames();
     }
 
 
@@ -107,6 +106,7 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
         }
         else if (inLoadGameView)
         {
+            savedGameID = "";
             gameCreatorOptionsView.SetActive(false);
             gameOptionButtonsView.SetActive(false);
             gameJoinedOptionsView.SetActive(false);
@@ -116,6 +116,7 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
         }
         else
         {
+            currentSelectedSession = null; //TODO: This might clear the session on session list updates
             gameCreatorOptionsView.SetActive(false);
             gameOptionButtonsView.SetActive(true);
             gameJoinedOptionsView.SetActive(false);
@@ -133,6 +134,7 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
 
     public void OnLoadGameViewClicked()
     {
+        Lobby.user.GetSavedGames();
         inLoadGameView = true;
         InGameSelectView();
         gameSessionsText.text = "Saved Games:";
@@ -147,14 +149,32 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
 
     public void OnLoadSavedGameClicked()
     {
-        //TODO: load game
         Debug.Log("Load Saved Game Clicked");
+        if (savedGameID == "") return;
+        foreach (Lobby.GameSession session in Lobby.availableGames)
+        {
+            if (session.saveID == savedGameID)
+            {
+                currentSelectedSession = session;
+                break;
+            }
+        }
+        if (currentSelectedSession != null)
+        {
+            Debug.Log("Session for saved game found");
+            OnJoinGameClicked();
+        }
+        else
+        {
+            Lobby.user.CreateSession(savedGameID);
+        }
+        OnReturnToLobbyViewClicked();
     }
 
     public void OnDeleteSavedGameClicked()
     {
-        //TODO: delete game
-        Debug.Log("Delete Saved Game Clicked");
+        if (savedGameID == "") return;
+        Lobby.gameservice.DeleteSavedGame(savedGameID);
     }
 
     public void OnStartGameClicked()
@@ -173,6 +193,7 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
             Game.currentGame.SetSession(currentSelectedSession.createdBy, currentSelectedSession.session_ID);
 
             NetworkManager.manager.JoinOrCreateRoom(currentSelectedSession.session_ID);
+            UpdateSessionListView(Lobby.availableGames);
         }
     }
 
@@ -202,6 +223,7 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
     {
         NetworkManager.manager.LeaveRoom();
         Lobby.user.LeaveSession(Game.currentGame.gameId);
+        Game.currentGame = new Game();
         InGameSelectView();
     }
 
@@ -209,6 +231,7 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
     {
         Debug.Log("Delete Game!!!!!");
         Lobby.user.DeleteSession(Game.currentGame.gameId);
+        Game.currentGame = new Game();
         NetworkManager.manager.LeaveRoom();
         currentSelectedSession = null;
         InGameSelectView();
@@ -266,6 +289,10 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
             else
             {
                 sessionScript.deactivate();
+                if (sessionScript.gameSession.session_ID != Game.currentGame.gameId)
+                {
+                    sessionScript.SetUnselectedColor();
+                }
             }
         }
     }
@@ -277,6 +304,10 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
         GameSessionListItemScript sessionScript = newSession.GetComponent<GameSessionListItemScript>();
         sessionScript.SetFields(gameSession);
         sessionScript.SetOnGameSessionClickedHandler(this);
+        if (Game.currentGame.gameId == gameSession.session_ID)
+        {
+            sessionScript.SetSelectedColor();
+        }
     }
 
     public void OnEscapePressed()
@@ -319,5 +350,6 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
         Debug.Log($"Game created with ID {sessionID}");
         Game.currentGame.SetSession(GameConstants.username, sessionID);
         NetworkManager.manager.JoinOrCreateRoom(sessionID);
+        UpdateSessionListView(Lobby.availableGames);
     }
 }

@@ -333,6 +333,7 @@ public class Lobby
             if (success)
             {
                 Debug.Log("Successfully saved game: " + saveid);
+                user.GetSavedGames();
             }
             else
             {
@@ -354,12 +355,18 @@ public class Lobby
             if (success)
             {
                 SavedGame[] allSavedGames = JsonHelper.FromJson<SavedGame>(fixJson(msg));
+                savedGames = new List<SavedGame>();
                 foreach (SavedGame savedGame in allSavedGames)
                 {
                     if (savedGame.players.Contains(GameConstants.username))
                     {
                         savedGames.Add(savedGame);
                     }
+                }
+
+                if (MainMenuUIManager.manager != null && MainMenuUIManager.manager.inLoadGameView)
+                {
+                    MainMenuUIManager.manager.UpdateSavedGameListView(savedGames);
                 }
 
                 Debug.Log("Successfully retrieved saved games");
@@ -381,6 +388,7 @@ public class Lobby
             if (success)
             {
                 Debug.Log("Successfully deleted saved game: " + saveid);
+                user.GetSavedGames();
             }
             else
             {
