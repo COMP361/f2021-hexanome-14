@@ -11,6 +11,7 @@ public class ConnectingUIManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        SaveAndLoad.UpdateLocalSavedIds();
         if (NetworkManager.manager)
         {
             NetworkManager.manager.Connect();

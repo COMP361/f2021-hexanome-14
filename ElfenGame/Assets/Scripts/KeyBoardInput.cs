@@ -91,6 +91,10 @@ public class KeyBoardInput : MonoBehaviour
             }
 
         }
+        if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown("G"))
+        {
+            Lobby.Init(force: true);
+        }
     }
 
 

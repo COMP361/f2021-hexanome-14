@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -226,6 +227,10 @@ public class Player
             NetworkManager.manager.SetLocalPlayerStats(_properties);
         }
         UpdateDisplay();
+        if (IsLocalPlayer())
+        {
+            SaveAndLoad.SaveLocalPlayerState();
+        }
     }
 
     public void AddCards(CardEnum[] cards)
@@ -352,6 +357,31 @@ public class Player
 
         Debug.LogError("Player created: " + userName);
     }
+    internal void SetFromPlayerData(SaveAndLoad.PlayerData data)
+    {
+        _properties[pNAME] = data.userName;
+        _properties[pCOINS] = data.nCoins;
+        _properties[pPOINTS] = data.nPoints;
+        _properties[pCOLOR] = data.playerColor;
+        _properties[pTOWN] = data.curTown;
+        _properties[pCARDS] = data.mCards.ToArray();
+        _properties[pVISIBLE_TILES] = data.mVisibleTiles.ToArray();
+        _properties[pHIDDEN_TILES] = data.mHiddenTiles.ToArray();
+        Dictionary<string, bool> visited = new Dictionary<string, bool>();
+        foreach (string town in GameConstants.townNames)
+        {
+            if (data.mVisited.Contains(town))
+            {
+                visited[town] = true;
+            }
+            else
+            {
+                visited[town] = false;
+            }
+        }
+        _properties[pVISITED] = visited;
+    }
+
 
     private void InitVisited()
     {

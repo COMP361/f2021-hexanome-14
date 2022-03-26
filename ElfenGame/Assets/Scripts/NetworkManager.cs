@@ -101,6 +101,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback, IInRo
     {
         if (PhotonNetwork.IsConnectedAndReady && !PhotonNetwork.InRoom)
         {
+            Debug.Log("Joining room: " + roomName);
             PhotonNetwork.JoinOrCreateRoom(roomName, new RoomOptions { MaxPlayers = 6, IsVisible = true, PublishUserId = true }, null);
         }
     }
@@ -176,16 +177,26 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback, IInRo
 
     }
 
-    public override void OnMasterClientSwitched(Photon.Realtime.Player newMasterClient)
-    {
-        Debug.Log($"{newMasterClient.UserId} is now the master client");
-    }
+    // public override void OnMasterClientSwitched(Photon.Realtime.Player newMasterClient)
+    // {
+    //     if (!PhotonNetwork.InRoom) return;
+    //     Debug.Log($"{newMasterClient.UserId} is now the master client");
+    //     if (newMasterClient.UserId == PhotonNetwork.LocalPlayer.UserId)
+    //     {
+    //         string roomName = PhotonNetwork.CurrentRoom.Name;
+    //         Debug.Log("I am the Captain Now!");
+    //         TaskRunner.runOnMainThread(() =>
+    //         {
+    //             MainMenuUIManager.manager.OnRoomCreated(roomName);
+    //         });
+    //     };
+    // }
 
     public override void OnRoomPropertiesUpdate(ExitGames.Client.Photon.Hashtable propertiesThatChanged)
     {
         base.OnRoomPropertiesUpdate(propertiesThatChanged);
 
-        //Debug.Log("Room properties updated");
+        Debug.Log("Room properties updated");
         if (Game.currentGame != null)
         {
             Game.currentGame.UpdateGameProperties(propertiesThatChanged);
@@ -201,7 +212,14 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback, IInRo
 
     public void SetGameProperties(ExitGames.Client.Photon.Hashtable properties)
     {
-        _ = PhotonNetwork.CurrentRoom.SetCustomProperties(properties);
+        if (PhotonNetwork.InRoom)
+        {
+            _ = PhotonNetwork.CurrentRoom.SetCustomProperties(properties);
+        }
+        else
+        {
+            Debug.LogError("Cannot set properties when not in room");
+        }
     }
 
     public void SetGamePropertiesWithCheck(ExitGames.Client.Photon.Hashtable properties, ExitGames.Client.Photon.Hashtable expectedProperties)
@@ -344,6 +362,19 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback, IInRo
     public override void OnCreatedRoom()
     {
         Debug.Log($"Room created successfully.");
+        string sessionId = PhotonNetwork.CurrentRoom.Name;
+        if (!Lobby.activeGames.ContainsKey(sessionId))
+        {
+            Debug.LogError("No lobby session found for room with id " + sessionId);
+            return;
+        }
+        if (Lobby.activeGames[sessionId].createdBy == GameConstants.username)
+        {
+            TaskRunner.runOnMainThread(() =>
+            {
+                MainMenuUIManager.manager.OnRoomCreated(sessionId);
+            });
+        }
     }
 
 
@@ -355,11 +386,10 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback, IInRo
 
     public override void OnJoinedRoom()
     {
-        //Debug.LogError($"Local Player {PhotonNetwork.LocalPlayer.UserId} joined the room");
 
         if (MainMenuUIManager.manager != null)
         {
-            MainMenuUIManager.manager.InGameSelectView();
+            MainMenuUIManager.manager.SwitchToCorrectView();
 
         }
 
@@ -369,17 +399,17 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback, IInRo
 
     public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer)
     {
+        Player.GetLocalPlayer().SyncPlayerStats();
         if (PhotonNetwork.IsMasterClient && MainMenuUIManager.manager && MainMenuUIManager.manager.GetLoadedOwner() == newPlayer.UserId)
         {
             PhotonNetwork.SetMasterClient(newPlayer);
+            return;
         }
 
-        if (MainMenuUIManager.manager && MainMenuUIManager.manager.GetLoadedOwner() == GameConstants.username)
+        if (PhotonNetwork.IsMasterClient)
         {
             Game.currentGame.SyncGameProperties();
         }
-        Player.GetLocalPlayer().SyncPlayerStats();
-
     }
 
 
@@ -392,12 +422,12 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback, IInRo
         }
         else if (MainMenuUIManager.manager != null)
         {
-            MainMenuUIManager.manager.InGameSelectView();
+            MainMenuUIManager.manager.SwitchToCorrectView();
         }
 
         if (Game.currentGame.gameCreator == GameConstants.username)
         {
-            Lobby.user.DeleteSession(Game.currentGame.gameId);
+            Lobby.gameservice.DeleteSession(Game.currentGame.gameId);
         }
 
         Game.currentGame = new Game();

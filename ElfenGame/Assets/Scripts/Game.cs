@@ -5,6 +5,8 @@ using System.Linq;
 
 static public class ListExtension
 {
+
+    //TODO: Move to a better place
     private static System.Random rng = new System.Random();
 
     public static void Shuffle<T>(this IList<T> list)
@@ -23,6 +25,8 @@ static public class ListExtension
 
 public class Game
 {
+
+    #region Fields
     public const string pDECK = "DECK";
     public const string pDISCARD = "DISCARD";
     public const string pPILE = "PILE";
@@ -36,18 +40,17 @@ public class Game
     public const string pEND_TOWN = "END_TOWN";
     public const string pWITCH_CARD = "WITCH_CARD";
     public const string pRAND_GOLD = "RAND_GOLD";
-
     public const string pPASSED_PLAYERS = "PASSED_PLAYERS";
-
     public const string pGAME_ID = "GAME_ID";
 
+    public const string pSAVE_ID = "SAVE_ID";
     public const string pGAME_CREATOR = "GAME_CREATOR";
-
     public static string[] pGAME_PROPS = {
-        pDECK, pDISCARD, pPILE, pVISIBLE, pPLAYERS, pCUR_PLAYER, pCUR_ROUND, pCUR_PHASE, pMAX_ROUNDS, pPASSED_PLAYERS, pGAME_ID, pGAME_MODE, pEND_TOWN, pWITCH_CARD, pRAND_GOLD
+        pDECK, pDISCARD, pPILE, pVISIBLE, pPLAYERS, pCUR_PLAYER, pCUR_ROUND, pCUR_PHASE, pMAX_ROUNDS, pPASSED_PLAYERS, pGAME_ID, pSAVE_ID,  pGAME_MODE, pEND_TOWN, pWITCH_CARD, pRAND_GOLD
     };
-
     private const string pCOLOR_AVAIL_PREFIX = "COLOR_AVAIL";
+
+    #endregion
 
     public static Game currentGame = new Game();
 
@@ -61,15 +64,6 @@ public class Game
     }
 
     #region Properties
-
-    public ExitGames.Client.Photon.Hashtable gameProperties
-    {
-        get
-        {
-            return _gameProperties;
-        }
-    }
-
     public string gameId
     {
         get
@@ -84,6 +78,23 @@ public class Game
         set
         {
             _gameProperties[pGAME_ID] = value;
+        }
+    }
+
+    public string saveId
+    {
+        get
+        {
+            if (!_gameProperties.ContainsKey(pSAVE_ID))
+            {
+                PropertyNotFoundWarning(pSAVE_ID);
+                return "";
+            }
+            return (string)_gameProperties[pSAVE_ID];
+        }
+        set
+        {
+            _gameProperties[pSAVE_ID] = value;
         }
     }
 
@@ -120,30 +131,6 @@ public class Game
             _gameProperties[pCUR_PLAYER] = value;
         }
     }
-
-    internal void SetFromGameData(SaveAndLoad.GameData data)
-    {
-        gameMode = data.gameMode;
-        maxRounds = data.numRounds;
-        endTown = data.endTown;
-        witchCard = data.witch;
-        randGold = data.randGold;
-        mDeck = data.deck;
-        mDiscardPile = data.discard;
-        mVisibleTiles = data.visible;
-        mPile = data.pile;
-        curPlayerIndex = data.curPlayerIndex;
-        mPlayers = data.players;
-        gameId = data.gameId;
-        curPhase = data.curPhase;
-        curRound = data.curRound;
-        passedPlayers = data.passedPlayers;
-
-        SyncGameProperties();
-
-    }
-
-
 
     public int passedPlayers
     {
@@ -380,7 +367,6 @@ public class Game
         }
     }
 
-
     #endregion
 
     private string getColorKey(PlayerColor color)
@@ -406,7 +392,28 @@ public class Game
             }
         }
     }
+    internal void SetFromGameData(SaveAndLoad.GameData data)
+    {
+        gameMode = data.gameMode;
+        maxRounds = data.numRounds;
+        endTown = data.endTown;
+        witchCard = data.witch;
+        randGold = data.randGold;
+        mDeck = data.deck;
+        mDiscardPile = data.discard;
+        mVisibleTiles = data.visible;
+        mPile = data.pile;
+        curPlayerIndex = data.curPlayerIndex;
+        mPlayers = data.players;
+        // gameId = data.gameId; // TODO: This should not be set (new session id should be kept)
+        curPhase = data.curPhase;
+        curRound = data.curRound;
+        passedPlayers = data.passedPlayers;
+        saveId = data.saveId;
 
+        SyncGameProperties();
+
+    }
     public Game()
     {
         _gameProperties = new ExitGames.Client.Photon.Hashtable();
@@ -478,15 +485,17 @@ public class Game
             MainUIManager.manager.UpdateRoundInfo(); // TODO: pass info as argument?
         }
 
-        SaveAndLoad.SaveGame();
+        SaveAndLoad.SaveGameState();
 
     }
 
     public void Init(int maxRnds, string gameMode, bool endTown, bool witchVar, bool randGoldVar)
     {
+        // FIXME: This function keeps crashing weirdly
         // TODO: sync endTown, whitchVar, randGoldVar
         Debug.Log($"max rnds {maxRnds}, endTown {endTown}, whitchVar {witchVar}, randGoldVar {randGoldVar}");
         Debug.Log("Game Init Called");
+
         _gameProperties[pCUR_PLAYER] = 0;
         _gameProperties[pCUR_ROUND] = 1;
         _gameProperties[pCUR_PHASE] = GamePhase.DrawCardsAndCounters;
@@ -505,15 +514,21 @@ public class Game
         _gameProperties[pDISCARD] = new CardEnum[0];
         _gameProperties[pDECK] = new CardEnum[0];
 
-        InitPlayersList();
+        // InitPlayersList(); // Can't be done until all players have joined
         InitPile();
         InitDeck();
+
+        //FIXME: Something isn't working with the Game constructor being called
+        _colorProperties = new ExitGames.Client.Photon.Hashtable();
+        for (int i = 0; i < 6; i++)
+        {
+            _colorProperties[getColorKey((PlayerColor)i)] = "";
+        }
 
         if (NetworkManager.manager)
         {
             NetworkManager.manager.SetGameProperties(_colorProperties);
         }
-
         SyncGameProperties();
 
     }
@@ -626,7 +641,6 @@ public class Game
         pile.RemoveAt(0);
         _gameProperties[pVISIBLE] = visible.ToArray();
         _gameProperties[pPILE] = pile.ToArray();
-        //TODO: Sync pile
         return ret;
     }
 
@@ -635,7 +649,6 @@ public class Game
         List<MovementTile> pile = mPile;
         pile.AddRange(tiles);
         _gameProperties[pPILE] = pile.ToArray();
-        //TODO: Sync pile
     }
 
 
@@ -645,7 +658,6 @@ public class Game
         MovementTile ret = pile[0];
         pile.RemoveAt(0);
         _gameProperties[pPILE] = pile.ToArray();
-        //TODO: Sync pile
         return ret;
     }
 

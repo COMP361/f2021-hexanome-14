@@ -17,7 +17,8 @@ public class Lobby
     public static Lobby user, gameservice;
     private static bool initWasRun = false;
     public static List<GameSession> availableGames = new List<GameSession>();
-
+    public static Dictionary<string, GameSession> activeGames = new Dictionary<string, GameSession>(); // Maps sessionIds to GameSessions
+    public static Dictionary<string, GameSession> activeSavedGames = new Dictionary<string, GameSession>(); // Maps saveGameIds to GameSessions
     private string accessToken, refreshToken;
     private string lastHash = "-";
 
@@ -27,23 +28,15 @@ public class Lobby
 
     public List<SavedGame> savedGames = new List<SavedGame>();
 
+
     [Serializable]
     public class GameSession
     {
-        public GameSession(string session_ID, List<string> players, string createdBy, string saveID)
-        {
-            this.session_ID = session_ID;
-            this.players = players;
-            this.createdBy = createdBy;
-            this.saveID = saveID;
-        }
-        public string session_ID { get; private set; }
-
-        public List<string> players { get; private set; }
-
-        public string createdBy { get; private set; }
-
-        public string saveID { get; private set; }
+        public string session_ID;
+        public List<string> players;
+        public string createdBy;
+        public string saveID;
+        public bool launched;
 
         public override string ToString()
         {
@@ -59,9 +52,9 @@ public class Lobby
         public string savegameid;
     }
 
-    public static void Init()
+    public static void Init(bool force = false)
     {
-        if (initWasRun)
+        if (!force && initWasRun)
             return;
 
         initWasRun = true;
@@ -180,7 +173,7 @@ public class Lobby
             if (success)
             {
                 Debug.Log("New Game Session: " + response);
-                HandleLocalPlayerGameCreated(response);
+                HandleLocalPlayerGameCreated(response, savegameID);
             }
             else
             {
@@ -190,24 +183,25 @@ public class Lobby
     }
     public void LaunchSession(string sessionID)
     {
-        string url = "/api/session/" + sessionID;
+        string url = "/api/sessions/" + sessionID;
         Task task = LobbySendAsync(url, HttpMethod.Post,
         callback:
         (bool success, string response) =>
         {
             if (success)
             {
-                Debug.Log("Successfully launched session");
-                MainMenuUIManager.manager.CreateGameWithOptions();
+                Debug.Log("Successfully launched session: " + response);
+                // MainMenuUIManager.manager.CreateGameWithOptions();
+                MainMenuUIManager.manager.OnSessionLaunched();
             }
             else
             {
-                Debug.LogError("Failed to launch session");
-                MainMenuUIManager.manager.CreateGameWithOptions(); // TODO: Remove when done debugging
+                Debug.LogError("Failed to launch session:" + response);
+                // MainMenuUIManager.manager.CreateGameWithOptions(); // TODO: Remove when done debugging
+                MainMenuUIManager.manager.OnSessionLaunched();
             }
         });
     }
-
 
     private static string createMd5Hex(string data)
     {
@@ -236,6 +230,7 @@ public class Lobby
 
 
                 availableGames = new List<GameSession>();
+                activeGames = new Dictionary<string, GameSession>();
 
                 lastHash = createMd5Hex(msg);
 
@@ -243,11 +238,26 @@ public class Lobby
                 {
                     var property = game as JProperty;
 
-                    GameSession gameSession = new GameSession(session_ID: property.Name, players: property.Value["players"].ToObject<List<string>>(), createdBy: property.Value["creator"].ToString(), saveID: property.Value["savegameid"].ToString());
-                    availableGames.Add(gameSession);
+                    GameSession gameSession = new GameSession
+                    {
+                        session_ID = property.Name,
+                        players = property.Value["players"].ToObject<List<string>>(),
+                        createdBy = property.Value["creator"].ToString(),
+                        saveID = property.Value["savegameid"].ToString(),
+                        launched = property.Value["launched"].ToObject<Boolean>()
+                    };
+                    if (!gameSession.launched)
+                    {
+                        availableGames.Add(gameSession);
+                    }
+                    activeGames[gameSession.session_ID] = gameSession;
+                    if (gameSession.saveID != "")
+                    {
+                        activeSavedGames[gameSession.saveID] = gameSession;
+                    }
                 }
 
-                if (MainMenuUIManager.manager != null && !MainMenuUIManager.manager.inLoadGameView)
+                if (MainMenuUIManager.manager != null)
                 {
                     MainMenuUIManager.manager.UpdateSessionListView(availableGames);
                 }
@@ -260,11 +270,23 @@ public class Lobby
         });
     }
 
-    private static void HandleLocalPlayerGameCreated(string sessionID)
+    private static void HandleLocalPlayerGameCreated(string sessionID, string saveId)
     {
+        activeGames[sessionID] = new GameSession
+        {
+            session_ID = sessionID,
+            players = new List<string> { GameConstants.username },
+            createdBy = GameConstants.username,
+            saveID = saveId,
+            launched = false
+        };
+        if (saveId != "")
+        {
+            activeSavedGames[saveId] = activeGames[sessionID];
+        }
         if (MainMenuUIManager.manager != null)
         {
-            MainMenuUIManager.manager.OnGameCreated(sessionID);
+            MainMenuUIManager.manager.OnSessionCreated(sessionID, saveId);
         }
     }
 
@@ -287,6 +309,7 @@ public class Lobby
 
     public void DeleteSession(string sessionID)
     {
+        GameSession session = activeGames[sessionID];
         string url = "/api/sessions/" + sessionID;
         Task task = LobbySendAsync(url, HttpMethod.Delete, auth: true, callback:
         (bool success, string msg) =>
@@ -294,6 +317,14 @@ public class Lobby
             if (success)
             {
                 Debug.Log("Successfully deleted session: " + sessionID);
+                if (activeGames.ContainsKey(sessionID))
+                {
+                    activeGames.Remove(sessionID);
+                }
+                if (activeSavedGames.ContainsKey(session.saveID))
+                {
+                    activeSavedGames.Remove(session.saveID);
+                }
             }
             else
             {
@@ -304,6 +335,19 @@ public class Lobby
 
     public void JoinSession(string sessionID)
     {
+        if (!activeGames.ContainsKey(sessionID))
+        {
+            Debug.LogError("Tried to join non-existing session: " + sessionID);
+            return;
+        }
+        GameSession session = activeGames[sessionID];
+        if (session.players.Contains(GameConstants.username))
+        {
+            Debug.Log("Already in session");
+            MainMenuUIManager.manager.OnSessionJoined(session);
+            return;
+        }
+
         string url = "/api/sessions/" + sessionID + "/players/" + GameConstants.username;
         string q_params = "location=0.0.0.0";
         Task task = LobbySendAsync(url, HttpMethod.Put, q_params: q_params, auth: true, callback:
@@ -312,6 +356,7 @@ public class Lobby
             if (success)
             {
                 Debug.Log("Successfully joined session: " + sessionID);
+                MainMenuUIManager.manager.OnSessionJoined(session);
             }
             else
             {
@@ -358,13 +403,14 @@ public class Lobby
                 savedGames = new List<SavedGame>();
                 foreach (SavedGame savedGame in allSavedGames)
                 {
-                    if (savedGame.players.Contains(GameConstants.username))
+                    if (savedGame.players.Contains(GameConstants.username) && SaveAndLoad.SaveAvail(savedGame.savegameid))
                     {
                         savedGames.Add(savedGame);
                     }
+                    SaveAndLoad.usedSaveIds.Add(savedGame.savegameid); // Store the used savegame ids
                 }
 
-                if (MainMenuUIManager.manager != null && MainMenuUIManager.manager.inLoadGameView)
+                if (MainMenuUIManager.manager != null)
                 {
                     MainMenuUIManager.manager.UpdateSavedGameListView(savedGames);
                 }
@@ -399,7 +445,17 @@ public class Lobby
 
     #endregion
 
-    public async Task LobbySendAsync(string url, HttpMethod method, Action<bool, string> callback = null, string q_params = "", string json = "", bool use_token = true, bool first_refresh = true, bool encode_media = false, bool auth = false, bool long_poll = false)
+    public async Task LobbySendAsync(
+        string url,
+        HttpMethod method,
+        Action<bool, string> callback = null,
+        string q_params = "",
+        string json = "",
+        bool use_token = true,
+        bool first_refresh = true,
+        bool encode_media = false,
+        bool auth = false,
+        bool long_poll = false)
     {
         HttpClient client = new HttpClient();
         if (long_poll)
@@ -444,7 +500,12 @@ public class Lobby
         else
         {
             if (callback != null)
-                callback(response.IsSuccessStatusCode, await response.Content.ReadAsStringAsync());
+            {
+                TaskRunner.runOnMainThread(() =>
+                {
+                    callback(response.IsSuccessStatusCode, response.Content.ReadAsStringAsync().Result);
+                });
+            }
         }
     }
 

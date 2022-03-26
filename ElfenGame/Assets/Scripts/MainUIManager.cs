@@ -128,7 +128,8 @@ public class MainUIManager : MonoBehaviour
             town.DisplayVisited();
         }
 
-        chooseColorPanel.SetActive(true);
+        if (Player.GetLocalPlayer().playerColor == PlayerColor.None)
+            chooseColorPanel.SetActive(true);
         UpdateColorOptions();
     }
 
