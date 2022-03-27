@@ -32,10 +32,13 @@ public class ChatManager : MonoBehaviour, IChatClientListener
 
     private string chatContent = "";
 
+    private int newMessages = 0;
+
     [SerializeField] private Canvas canvas;
     [SerializeField] InputField toInputField;
     [SerializeField] InputField msgInputField;
     [SerializeField] Text chatContentText;
+    
 
     public void DebugReturn(DebugLevel level, string message)
     {
@@ -63,6 +66,7 @@ public class ChatManager : MonoBehaviour, IChatClientListener
         for (int i = 0; i < senders.Length; ++i)
         {
             chatContent += $"({channelName}) {senders[i]}: {messages[i]}\n";
+            newMessages++;
         }
         updateContent();
     }
@@ -70,6 +74,7 @@ public class ChatManager : MonoBehaviour, IChatClientListener
     public void OnPrivateMessage(string sender, object message, string channelName)
     {
         chatContent += $"(private) {sender}: {message}\n";
+        newMessages++;
         updateContent();
     }
 
@@ -175,5 +180,15 @@ public class ChatManager : MonoBehaviour, IChatClientListener
     public void OnEnterPressed()
     {
         OnSendClicked();
+    }
+
+    public int newMessage()
+    {
+        return newMessages;
+    }
+
+    public void newReset()
+    {
+        newMessages = 0;
     }
 }

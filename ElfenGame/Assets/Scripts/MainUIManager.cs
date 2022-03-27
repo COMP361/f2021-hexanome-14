@@ -253,7 +253,7 @@ public class MainUIManager : MonoBehaviour
 
     public void OpenChat()
     {
-
+        ChatManager.manager.newReset();
         if (ChatManager.manager != null && !ChatManager.manager.isActive())
         {
             ChatManager.manager.setChatVisible();
