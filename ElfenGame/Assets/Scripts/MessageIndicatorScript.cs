@@ -30,6 +30,10 @@ public class MessageIndicatorScript : MonoBehaviour
             }
             messageIndicator.gameObject.SetActive(true);
         }
+        else
+        {
+            messageIndicator.gameObject.SetActive(false);
+        }
 
     }
 }
