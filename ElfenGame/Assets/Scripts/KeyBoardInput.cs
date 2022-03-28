@@ -23,6 +23,7 @@ public class KeyBoardInput : MonoBehaviour
         {
             if (ChatManager.manager != null && ChatManager.manager.isActive())
             {
+                ChatManager.manager.newReset();
                 ChatManager.manager.SetChatInvisible();
             }
             else if (MainMenuUIManager.manager != null)
@@ -57,6 +58,7 @@ public class KeyBoardInput : MonoBehaviour
 
         if (Input.GetKeyDown("t"))
         {
+            ChatManager.manager.newReset();
             if (ChatManager.manager != null && !ChatManager.manager.isActive())
             {
                 ChatManager.manager.setChatVisible();

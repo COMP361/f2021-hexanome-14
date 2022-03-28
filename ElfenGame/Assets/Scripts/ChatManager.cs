@@ -147,6 +147,8 @@ public class ChatManager : MonoBehaviour, IChatClientListener
 
     public void setChatVisible()
     {
+        ChatManager.manager.newReset();
+
         chatVisible = true;
 
         canvas.gameObject.SetActive(chatVisible);
@@ -154,6 +156,8 @@ public class ChatManager : MonoBehaviour, IChatClientListener
 
     public void SetChatInvisible()
     {
+        ChatManager.manager.newReset();
+
         chatVisible = false;
 
         canvas.gameObject.SetActive(chatVisible);
