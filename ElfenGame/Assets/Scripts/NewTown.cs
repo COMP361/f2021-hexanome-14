@@ -5,7 +5,6 @@ using UnityEngine;
 public class NewTown : MonoBehaviour, IDragOver
 {
     private GameObject pointsHolder;
-    private GameObject endTownMarker;
 
     public void Awake()
     {
@@ -23,11 +22,6 @@ public class NewTown : MonoBehaviour, IDragOver
     {
         //Not a built in method
         transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
-    }
-
-    public void DisplayEndTown()
-    {
-        endTownMarker = (GameObject)Instantiate(Resources.Load("EndTownMarker"), transform);
     }
 
     public void DisplayVisited()
