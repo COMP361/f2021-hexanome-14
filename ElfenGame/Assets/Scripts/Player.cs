@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -62,55 +63,6 @@ public class Player
     private void HandleTownChange()
     {
     }
-    // private void UpdateTown(string value)
-    // {
-    //     if (elf != null) elf.MoveToTown(value, _curTown);
-    //     _curTown = value;
-    //     visitedTown[_curTown] = true;
-    //     //Debug.LogError($"Updating town {value} for player {_userName}");
-    //     if (GameConstants.townDict.ContainsKey(_curTown))
-    //     {
-    //         NewTown town = GameConstants.townDict[_curTown];
-    //         if (town != null) town.DisplayVisited();
-    //     }
-    //     int nVisited = 0;
-    //     foreach (bool b in visitedTown.Values)
-    //     {
-    //         if (b) nVisited++;
-    //     }
-    //     nPoints = nVisited - 1;
-    // }
-
-    // private void UpdateVisibleTiles(List<MovementTile> tiles)
-    // {
-    //     mVisibleTiles = tiles;
-    //     UpdateTiles();
-    //     if (tokenDisplay != null) tokenDisplay.SetVisible(tiles);
-    // }
-
-    // private void UpdateHiddenTiles(List<MovementTile> tiles)
-    // {
-    //     mHiddenTiles = tiles;
-    //     UpdateTiles();
-    //     if (tokenDisplay != null) tokenDisplay.SetNumHidden(tiles.Count);
-    // }
-
-    // private void UpdateCards(List<CardEnum> cards)
-    // {
-    //     _mCards = cards;
-    //     if (Lobby.myUsername == _userName && MainUIManager.manager) MainUIManager.manager.UpdateCardHand();
-    //     if (tile != null) tile.SetCards(_mCards.Count);
-    // }
-
-    public void SelfInitFirstRound()
-    {
-       if (endTown == "")
-       {
-
-       } 
-
-    }
-
     public void SelfInitRound()
     {
         if (Game.currentGame.curRound <= lastInitializedround)
@@ -122,7 +74,7 @@ public class Player
         //TODO: Initialize player endTowns in first round
         if (Game.currentGame.curRound == 1)
         {
-            if (GameConstants.mainUIManager)
+            if (MainUIManager.manager)
             {
                 SelfInitFirstRound();
             }
@@ -137,6 +89,11 @@ public class Player
         AddHiddenTile(Game.currentGame.RemoveTileFromPile());
 
         lastInitializedround = Game.currentGame.curRound;
+    }
+
+    private void SelfInitFirstRound()
+    {
+        throw new NotImplementedException();
     }
 
     private void UpdateTiles()
@@ -403,50 +360,6 @@ public class Player
         UpdateDisplay();
     }
 
-    // public void updatePropertiesCallback(string key, object value)
-    // {
-    //     if (key == pCOINS)
-    //     {
-    //         if (value == null) value = 0;
-    //         UpdateCoins((int)value);
-    //     }
-    //     else if (key == pPOINTS)
-    //     {
-    //         if (value == null) value = 0;
-    //         UpdatePoints((int)value);
-    //     }
-    //     else if (key == pCARDS)
-    //     {
-    //         if (value == null) value = (object)(new List<CardEnum>()).ToArray();
-    //         UpdateCards(((CardEnum[])value).ToList());
-    //     }
-    //     else if (key == pVISIBLE_TILES)
-    //     {
-    //         if (value == null) value = (object)(new List<MovementTile>()).ToArray();
-    //         UpdateVisibleTiles(((MovementTile[])value).ToList());
-    //     }
-    //     else if (key == pHIDDEN_TILES)
-    //     {
-    //         if (value == null) value = (object)(new List<MovementTile>()).ToArray();
-    //         UpdateHiddenTiles(((MovementTile[])value).ToList());
-    //     }
-    //     else if (key == pNAME)
-    //     {
-    //         if (value != null) UpdateName((string)value);
-    //     }
-    //     else if (key == pCOLOR)
-    //     {
-    //         if (value == null) value = PlayerColor.Blue;
-    //         UpdateColor((PlayerColor)value);
-    //     }
-    //     else if (key == pTOWN)
-    //     {
-    //         if (value == null) value = "TownElvenhold";
-    //         UpdateTown((string)value);
-    //     }
-    // }
-
-
     #endregion
 
     public Player(string userName)
@@ -488,38 +401,6 @@ public class Player
         _properties[pVISITED] = visited;
     }
 
-    // public void UpdateDisplayer()
-    // {
-    //     UpdateTiles();
-    //     UpdateVisibleTiles(mVisibleTiles);
-    //     UpdateHiddenTiles(mHiddenTiles);
-    //     if (elf != null) elf.MoveToTown(_curTown, _curTown);
-    // }
-
-    // public void Reset()
-    // {
-    //     Debug.Log($"Resetting Player {_userName}");
-    //     nPoints = 0;
-    //     nCoins = 0;
-    //     _mCards = new List<CardEnum>();
-    //     visitedTown = new Dictionary<string, bool>();
-    //     foreach (string townName in GameConstants.townDict.Keys)
-    //     {
-    //         visitedTown[townName] = false;
-    //     }
-    //     curTown = "TownElvenhold";
-    //     UpdateTiles();
-    //     UpdateVisibleTiles(mVisibleTiles);
-    //     UpdateHiddenTiles(mHiddenTiles);
-
-    //     if (NetworkManager.nm)
-    //     {
-    //         NetworkManager.nm.SetPlayerPropertyByPlayerName(_userName, pCARDS, mCards.ToArray());
-    //         NetworkManager.nm.SetPlayerPropertyByPlayerName(_userName, pVISIBLE_TILES, mVisibleTiles.ToArray());
-    //         NetworkManager.nm.SetPlayerPropertyByPlayerName(_userName, pHIDDEN_TILES, mHiddenTiles.ToArray());
-    //     }
-    // }
-
     public bool IsMyTurn()
     {
         return (Game.currentGame != null) && (Game.currentGame.GetCurPlayer() == userName);
@@ -527,7 +408,7 @@ public class Player
 
     public bool IsLocalPlayer()
     {
-        return userName == Lobby.myUsername;
+        return userName == GameConstants.username;
     }
 
     public bool isVisited(string townName)
@@ -555,26 +436,11 @@ public class Player
 
     public static Player GetLocalPlayer()
     {
-        return GetPlayer(Lobby.myUsername);
+        return GetPlayer(GameConstants.username);
     }
 
     public static List<Player> GetAllPlayers()
     {
-        // if (NetworkManager.nm)
-        // {
-        //     List<string> toRemove = new List<string>();
-        //     foreach (string pName in _players.Keys)
-        //     {
-        //         if (NetworkManager.nm.GetPlayer(pName) == null)
-        //         {
-        //             toRemove.Add(pName);
-        //         }
-        //     }
-        //     foreach (string pName in toRemove)
-        //     {
-        //         _players.Remove(pName);
-        //     }
-        // }
         return _players.Values.ToList();
     }
 
@@ -603,7 +469,7 @@ public class Player
     public static void ResetPlayers()
     {
         _players = new Dictionary<string, Player>();
-        _players[Lobby.myUsername] = new Player(Lobby.myUsername);
+        _players[GameConstants.username] = new Player(GameConstants.username);
     }
 
     #endregion

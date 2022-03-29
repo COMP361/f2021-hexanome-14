@@ -28,6 +28,12 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
 
     [SerializeField] private GameObject availableGamesView;
     [SerializeField] private GameObject sessionPrefab;
+    [SerializeField] private GameObject savedGamePrefab;
+
+    [SerializeField] private Text gameSessionsText;
+
+
+    [Header("Views")]
     [SerializeField] private GameObject gameSelectView;
     [SerializeField] private GameObject homeView;
 
@@ -35,6 +41,9 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
     [SerializeField] private GameObject gameCreatorOptionsView;
     [SerializeField] private GameObject gameJoinedOptionsView;
     [SerializeField] private GameObject gameCreationMenu;
+    [SerializeField] private GameObject gameLoadOptionsView;
+
+    [Header("Create Game UI")]
 
     [SerializeField] private Dropdown gameModeDD;
     [SerializeField] private Dropdown variationDD;
@@ -46,19 +55,16 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
 
 
     private Lobby.GameSession currentSelectedSession;
+    private string savedGameID = "";
 
+    public bool inLoadGameView = false;
 
-    public void Update()
-    {
-    }
 
     /// <summary>
     /// Called when MainMenuUIManager is created
     /// </summary>
     public void Start()
     {
-        // await Lobby.LongPollForUpdates(this);
-
         Game.currentGame = new Game();
     }
 
@@ -76,21 +82,18 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
         Player.ResetPlayers();
         gameSelectView.gameObject.SetActive(true);
         homeView.gameObject.SetActive(false);
-        OnUpdatedGameListReceived(Lobby.availableGames);
+        UpdateSessionListView(Lobby.availableGames);
         InGameSelectView();
-        // if (NetworkManager.nm.isConnected())
-        // {
-        //     NetworkManager.nm.ResetPlayerProperties();
-        // }
     }
 
     public void InGameSelectView()
     {
-        if (NetworkManager.manager.inGame() && GetLoadedOwner() == Lobby.myUsername)
+        if (NetworkManager.manager.inGame() && GetLoadedOwner() == GameConstants.username)
         {
             gameCreatorOptionsView.SetActive(true);
             gameOptionButtonsView.SetActive(false);
             gameJoinedOptionsView.SetActive(false);
+            gameLoadOptionsView.SetActive(false);
             SetGameActive(false);
         }
         else if (NetworkManager.manager.inGame())
@@ -98,14 +101,28 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
             gameCreatorOptionsView.SetActive(false);
             gameOptionButtonsView.SetActive(false);
             gameJoinedOptionsView.SetActive(true);
+            gameLoadOptionsView.SetActive(false);
             SetGameActive(false);
+        }
+        else if (inLoadGameView)
+        {
+            savedGameID = "";
+            gameCreatorOptionsView.SetActive(false);
+            gameOptionButtonsView.SetActive(false);
+            gameJoinedOptionsView.SetActive(false);
+            gameLoadOptionsView.SetActive(true);
+            SetGameActive(false);
+            UpdateSavedGameListView(Lobby.user.savedGames);
         }
         else
         {
+            currentSelectedSession = null; //TODO: This might clear the session on session list updates
             gameCreatorOptionsView.SetActive(false);
             gameOptionButtonsView.SetActive(true);
             gameJoinedOptionsView.SetActive(false);
+            gameLoadOptionsView.SetActive(false);
             SetGameActive(true);
+            UpdateSessionListView(Lobby.availableGames);
         }
     }
 
@@ -115,26 +132,68 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
         randGoldButton.gameObject.SetActive((gameModeDD.options[gameModeDD.value].text == "Elfengold"));
     }
 
-    public async void OnStartGameClicked()
+    public void OnLoadGameViewClicked()
+    {
+        Lobby.user.GetSavedGames();
+        inLoadGameView = true;
+        InGameSelectView();
+        gameSessionsText.text = "Saved Games:";
+    }
+
+    public void OnReturnToLobbyViewClicked()
+    {
+        inLoadGameView = false;
+        InGameSelectView();
+        gameSessionsText.text = "Game Sessions:";
+    }
+
+    public void OnLoadSavedGameClicked()
+    {
+        Debug.Log("Load Saved Game Clicked");
+        if (savedGameID == "") return;
+        foreach (Lobby.GameSession session in Lobby.availableGames)
+        {
+            if (session.saveID == savedGameID)
+            {
+                currentSelectedSession = session;
+                break;
+            }
+        }
+        if (currentSelectedSession != null)
+        {
+            Debug.Log("Session for saved game found");
+            OnJoinGameClicked();
+        }
+        else
+        {
+            Lobby.user.CreateSession(savedGameID);
+        }
+        OnReturnToLobbyViewClicked();
+    }
+
+    public void OnDeleteSavedGameClicked()
+    {
+        if (savedGameID == "") return;
+        Lobby.gameservice.DeleteSavedGame(savedGameID);
+    }
+
+    public void OnStartGameClicked()
     {
         //Debug.LogError($"num rounds: {numRoundOptions[numRounds.value]}");
         //Debug.LogError($"variation: {variationDD.options[variationDD.value].text}");
-        await Lobby.LaunchSession(Game.currentGame.gameId);
+        Lobby.user.LaunchSession(Game.currentGame.gameId);
     }
 
-    public async void OnJoinGameClicked()
+    public void OnJoinGameClicked()
     {
         if (currentSelectedSession != null)
         {
-            Debug.Log($"Attempting to join Game {currentSelectedSession.session_ID} as user {Lobby.myUsername}");
-            await Lobby.JoinSession(currentSelectedSession.session_ID);
-            Game.currentGame.SetSession(currentSelectedSession);
+            Debug.Log($"Attempting to join Game {currentSelectedSession.session_ID} as user {GameConstants.username}");
+            Lobby.user.JoinSession(currentSelectedSession.session_ID);
+            Game.currentGame.SetSession(currentSelectedSession.createdBy, currentSelectedSession.session_ID);
 
-            // if (GameConstants.playfabManager)
-            // {
-            //     GameConstants.playfabManager.CheckInGroup(loadedSession.saveID);
-            // }
             NetworkManager.manager.JoinOrCreateRoom(currentSelectedSession.session_ID);
+            UpdateSessionListView(Lobby.availableGames);
         }
     }
 
@@ -143,9 +202,6 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
         gameOptionButtonsView.SetActive(false);
         gameCreationMenu.SetActive(true);
 
-        //        await Lobby.CreateSession();
-
-        //GetComponent<PhotonView>().RPC(nameof(RPC_ListUpdated), RpcTarget.AllBuffered, new object[] { });
     }
 
     public void OnCancelCreateClicked()
@@ -154,38 +210,48 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
         gameCreationMenu.SetActive(false);
     }
 
-    public async void OnConfirmCreateClicked()
+    public void OnConfirmCreateClicked()
     {
 
         gameCreationMenu.SetActive(false);
         gameCreatorOptionsView.SetActive(true);
 
-        await Lobby.CreateSession();
+        Lobby.user.CreateSession();
     }
 
     public void OnLeaveGameClicked()
     {
         NetworkManager.manager.LeaveRoom();
-        _ = Lobby.LeaveSession(currentSelectedSession.session_ID);
+        Lobby.user.LeaveSession(Game.currentGame.gameId);
+        Game.currentGame = new Game();
         InGameSelectView();
     }
 
     public void OnDeleteGameClicked()
     {
         Debug.Log("Delete Game!!!!!");
-        _ = Lobby.DeleteSession(currentSelectedSession.session_ID);
+        Lobby.user.DeleteSession(Game.currentGame.gameId);
+        Game.currentGame = new Game();
         NetworkManager.manager.LeaveRoom();
         currentSelectedSession = null;
         InGameSelectView();
     }
 
-    public void OnUpdatedGameListReceived(List<Lobby.GameSession> gameSessions)
+    public void UpdateSessionListView(List<Lobby.GameSession> gameSessions)
     {
-        Debug.Log($"OnUpdatedGameListReceived with {gameSessions.Count} games");
         RemoveAllGameSessions();
         foreach (Lobby.GameSession game in gameSessions)
         {
             AddGameSession(game);
+        }
+    }
+
+    public void UpdateSavedGameListView(List<Lobby.SavedGame> savedGames)
+    {
+        RemoveAllGameSessions();
+        foreach (Lobby.SavedGame game in savedGames)
+        {
+            AddSavedGame(game);
         }
     }
 
@@ -198,13 +264,10 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
             witchButton.GetComponent<VariationButton>().isSelected,
             randGoldButton.GetComponent<VariationButton>().isSelected
         );
+        Lobby.gameservice.PutSavedGame(Game.currentGame.gameId, Game.currentGame.mPlayers);
         NetworkManager.manager.LoadArena();
     }
 
-    public void ForceUpdateList()
-    {
-        OnUpdatedGameListReceived(Lobby.availableGames);
-    }
 
     private void RemoveAllGameSessions()
     {
@@ -226,6 +289,10 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
             else
             {
                 sessionScript.deactivate();
+                if (sessionScript.gameSession.session_ID != Game.currentGame.gameId)
+                {
+                    sessionScript.SetUnselectedColor();
+                }
             }
         }
     }
@@ -237,6 +304,10 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
         GameSessionListItemScript sessionScript = newSession.GetComponent<GameSessionListItemScript>();
         sessionScript.SetFields(gameSession);
         sessionScript.SetOnGameSessionClickedHandler(this);
+        if (Game.currentGame.gameId == gameSession.session_ID)
+        {
+            sessionScript.SetSelectedColor();
+        }
     }
 
     public void OnEscapePressed()
@@ -246,25 +317,39 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
         NetworkManager.manager.LeaveRoom();
     }
 
-
-    private void resetColors()
+    public void OnGameSessionClicked(Lobby.GameSession gameSession)
     {
         foreach (GameSessionListItemScript sessionScript in availableGamesView.GetComponentsInChildren<GameSessionListItemScript>())
         {
             sessionScript.SetToDefaultColor();
         }
-    }
-
-    public void OnGameSessionClicked(Lobby.GameSession gameSession)
-    {
-        resetColors();
         currentSelectedSession = gameSession;
     }
 
-    internal void OnGameCreated(Lobby.GameSession gs)
+    private void AddSavedGame(Lobby.SavedGame savedGame)
     {
-        Debug.Log($"Game created with ID {gs.session_ID}");
-        Game.currentGame.SetSession(gs);
-        NetworkManager.manager.JoinOrCreateRoom(gs.session_ID);
+        GameObject savedGameObject = Instantiate(savedGamePrefab, availableGamesView.transform);
+
+        SavedGameListItemScript sessionScript = savedGameObject.GetComponent<SavedGameListItemScript>();
+        sessionScript.SetFields(savedGame.savegameid, savedGame.players);
+    }
+
+    internal void LoadGameItemSelected(string saveid)
+    {
+        foreach (SavedGameListItemScript savedScript in availableGamesView.GetComponentsInChildren<SavedGameListItemScript>())
+        {
+            savedScript.SetToDefaultColor();
+        }
+
+        savedGameID = saveid;
+    }
+
+
+    internal void OnGameCreated(string sessionID)
+    {
+        Debug.Log($"Game created with ID {sessionID}");
+        Game.currentGame.SetSession(GameConstants.username, sessionID);
+        NetworkManager.manager.JoinOrCreateRoom(sessionID);
+        UpdateSessionListView(Lobby.availableGames);
     }
 }

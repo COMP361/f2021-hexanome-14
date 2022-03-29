@@ -35,7 +35,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback, IInRo
         if (!PhotonNetwork.IsConnected)
         {
             PhotonNetwork.AuthValues = new AuthenticationValues();
-            PhotonNetwork.AuthValues.UserId = Lobby.myUsername;
+            PhotonNetwork.AuthValues.UserId = GameConstants.username;
             _ = PhotonNetwork.ConnectUsingSettings();
             PhotonPeer.RegisterType(typeof(CardEnum), 255, CardEnumExtension.Serialize, CardEnumExtension.Deserialize);
             PhotonPeer.RegisterType(typeof(MovementTile), 252, MovementTileExtension.Serialize, MovementTileExtension.Deserialize);
@@ -233,7 +233,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback, IInRo
 
     public void SetPlayerProperty(object key, object value)
     {
-        SetPlayerPropertyByPlayerName(Lobby.myUsername, key, value);
+        SetPlayerPropertyByPlayerName(GameConstants.username, key, value);
     }
 
     public override void OnPlayerPropertiesUpdate(Photon.Realtime.Player targetPlayer, ExitGames.Client.Photon.Hashtable changedProps)
@@ -343,13 +343,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback, IInRo
 
     public override void OnCreatedRoom()
     {
-        if (PhotonNetwork.IsMasterClient)
-        {
-            // if (GameConstants.playfabManager)
-            // {
-            //     GameConstants.playfabManager.CreateGroup(PhotonNetwork.CurrentRoom.Name);
-            // }
-        }
+        Debug.Log($"Room created successfully.");
     }
 
 
@@ -380,7 +374,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback, IInRo
             PhotonNetwork.SetMasterClient(newPlayer);
         }
 
-        if (MainMenuUIManager.manager && MainMenuUIManager.manager.GetLoadedOwner() == Lobby.myUsername)
+        if (MainMenuUIManager.manager && MainMenuUIManager.manager.GetLoadedOwner() == GameConstants.username)
         {
             Game.currentGame.SyncGameProperties();
         }
@@ -389,7 +383,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback, IInRo
     }
 
 
-    public async override void OnLeftRoom()
+    public override void OnLeftRoom()
     {
         ResetPlayerProperties();
         if (SceneManager.GetActiveScene() == SceneManager.GetSceneByName("Main"))
@@ -401,9 +395,9 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback, IInRo
             MainMenuUIManager.manager.InGameSelectView();
         }
 
-        if (Game.currentGame.gameCreator == Lobby.myUsername)
+        if (Game.currentGame.gameCreator == GameConstants.username)
         {
-            await Lobby.DeleteSession(Game.currentGame.gameId);
+            Lobby.user.DeleteSession(Game.currentGame.gameId);
         }
 
         Game.currentGame = new Game();

@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using System;
 
 public class GameSessionListItemScript : MonoBehaviour, IPointerClickHandler
 {
@@ -12,7 +13,7 @@ public class GameSessionListItemScript : MonoBehaviour, IPointerClickHandler
     [SerializeField]
     private TextMeshProUGUI nPlayersText;
 
-    private Lobby.GameSession gameSession;
+    public Lobby.GameSession gameSession;
     private OnGameSessionClickedHandler handler;
 
     private bool active = true;
@@ -21,7 +22,7 @@ public class GameSessionListItemScript : MonoBehaviour, IPointerClickHandler
     public void SetToDefaultColor()
     {
         Image image = GetComponent<Image>();
-        if (gameSession.players.Contains(Lobby.myUsername))
+        if (gameSession.players.Contains(GameConstants.username))
         {
             image.color = GameConstants.blueFaded;
 
@@ -36,8 +37,18 @@ public class GameSessionListItemScript : MonoBehaviour, IPointerClickHandler
     public void SetFields(Lobby.GameSession gameSession)
     {
         createdByText.text = $"CreatedBy: {gameSession.createdBy}";
-        nPlayersText.text = $"Players: {gameSession.players.Count}";
 
+        string players_string = "Players: ";
+
+        for (int i = 0; i < gameSession.players.Count; i++)
+        {
+            players_string += gameSession.players[i];
+            if (i != gameSession.players.Count - 1)
+            {
+                players_string += ", ";
+            }
+        }
+        nPlayersText.text = players_string;
         this.gameSession = gameSession;
         SetToDefaultColor();
         // EE6464
@@ -65,17 +76,6 @@ public class GameSessionListItemScript : MonoBehaviour, IPointerClickHandler
 
     public void deactivate()
     {
-        Image image = GetComponent<Image>();
-        if (gameSession.players.Contains(Lobby.myUsername))
-        {
-            image.color = GameConstants.blueFaded;
-
-        }
-        else
-        {
-            image.color = GameConstants.greyFaded;
-
-        }
         active = false;
     }
 
@@ -84,4 +84,16 @@ public class GameSessionListItemScript : MonoBehaviour, IPointerClickHandler
         active = true;
     }
 
+    internal void SetSelectedColor()
+    {
+        Image image = GetComponent<Image>();
+        image.color = GameConstants.greenFaded;
+    }
+
+    internal void SetUnselectedColor()
+    {
+        Image image = GetComponent<Image>();
+        image.color = GameConstants.greyFaded;
+
+    }
 }

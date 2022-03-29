@@ -32,10 +32,13 @@ public class ChatManager : MonoBehaviour, IChatClientListener
 
     private string chatContent = "";
 
+    private int newMessages = 0;
+
     [SerializeField] private Canvas canvas;
     [SerializeField] InputField toInputField;
     [SerializeField] InputField msgInputField;
     [SerializeField] Text chatContentText;
+    
 
     public void DebugReturn(DebugLevel level, string message)
     {
@@ -63,6 +66,7 @@ public class ChatManager : MonoBehaviour, IChatClientListener
         for (int i = 0; i < senders.Length; ++i)
         {
             chatContent += $"({channelName}) {senders[i]}: {messages[i]}\n";
+            newMessages++;
         }
         updateContent();
     }
@@ -70,6 +74,7 @@ public class ChatManager : MonoBehaviour, IChatClientListener
     public void OnPrivateMessage(string sender, object message, string channelName)
     {
         chatContent += $"(private) {sender}: {message}\n";
+        newMessages++;
         updateContent();
     }
 
@@ -107,7 +112,7 @@ public class ChatManager : MonoBehaviour, IChatClientListener
     {
         DontDestroyOnLoad(gameObject);
         chatClient = new ChatClient(this);
-        chatClient.Connect(PhotonNetwork.PhotonServerSettings.AppSettings.AppIdChat, PhotonNetwork.AppVersion, new AuthenticationValues(Lobby.myUsername));
+        chatClient.Connect(PhotonNetwork.PhotonServerSettings.AppSettings.AppIdChat, PhotonNetwork.AppVersion, new AuthenticationValues(GameConstants.username));
     }
 
     // Update is called once per frame
@@ -142,6 +147,8 @@ public class ChatManager : MonoBehaviour, IChatClientListener
 
     public void setChatVisible()
     {
+        ChatManager.manager.newReset();
+
         chatVisible = true;
 
         canvas.gameObject.SetActive(chatVisible);
@@ -149,6 +156,8 @@ public class ChatManager : MonoBehaviour, IChatClientListener
 
     public void SetChatInvisible()
     {
+        ChatManager.manager.newReset();
+
         chatVisible = false;
 
         canvas.gameObject.SetActive(chatVisible);
@@ -175,5 +184,15 @@ public class ChatManager : MonoBehaviour, IChatClientListener
     public void OnEnterPressed()
     {
         OnSendClicked();
+    }
+
+    public int newMessage()
+    {
+        return newMessages;
+    }
+
+    public void newReset()
+    {
+        newMessages = 0;
     }
 }

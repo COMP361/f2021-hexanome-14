@@ -11,8 +11,8 @@ public class PathScript : MonoBehaviour, IDragOver
     public NewTown town1, town2;
 
     private GridManager gridManager;
- 
-    
+
+
     void Start()
     {
         gridManager = GetComponentInChildren<GridManager>();
@@ -20,14 +20,12 @@ public class PathScript : MonoBehaviour, IDragOver
 
     public void OnDragEnter()
     {
-        //GetComponent<SpriteRenderer>().color = new Color(0.0f, 1.0f, 0.0f, 0.65f);
         Color curColor = GetComponent<SpriteRenderer>().color;
         GetComponent<SpriteRenderer>().color = new Color(curColor.r, curColor.g, curColor.b, GameConstants.pathColoringHoverAlpha);
     }
 
     public void OnDragExit()
     {
-        //GetComponent<SpriteRenderer>().color = new Color(1.0f, 1.0f, 1.0f, 0.0f);
         Color curColor = GetComponent<SpriteRenderer>().color;
         GetComponent<SpriteRenderer>().color = new Color(curColor.r, curColor.g, curColor.b, GameConstants.pathColoringAlpha);
     }
@@ -35,11 +33,12 @@ public class PathScript : MonoBehaviour, IDragOver
     public void ColorByMoveValidity(NewTown startTown, List<CardEnum> cards)
     {
         if (startTown.name != town1.name && startTown.name != town2.name) return;
-        bool isValid = MovementValidator.IsMoveValid(startTown, this, cards); 
+        bool isValid = MovementValidator.IsMoveValid(startTown, this, cards);
         if (isValid)
         {
             GetComponent<SpriteRenderer>().color = new Color(0.0f, 1.0f, 0.0f, GameConstants.pathColoringAlpha);
-        } else
+        }
+        else
         {
             GetComponent<SpriteRenderer>().color = new Color(1.0f, 0.0f, 0.0f, GameConstants.pathColoringAlpha);
         }
@@ -75,14 +74,11 @@ public class PathScript : MonoBehaviour, IDragOver
 
         if (!movementTileSO.mValidRoads.Contains(roadType)) return false;
 
-        //if (gm.)
         if (movementTileSO.mTile != MovementTile.RoadObstacle && gm.GetMovementTile() == null)
         {
-            //Debug.Log("Valid ");
             return true;
         }
 
-        //Debug.Log("Not Valid ");
         if (movementTileSO.mTile == MovementTile.RoadObstacle && !gm.HasObstacle() && gm.GetMovementTile() != null) return true; // Place obstacle on path with 
         return false;
     }

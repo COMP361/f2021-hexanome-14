@@ -9,7 +9,6 @@ public static class GameConstants
 
     public const float pathColoringAlpha = 0.35f;
     public const float pathColoringHoverAlpha = 0.8f;
-
     public static Color greenFaded = new Color(102f / 255f, 236f / 255f, 77f / 255f, 74f / 255f);
     public static Color redFaded = new Color(238f / 255f, 100f / 255f, 100f / 255f, 74f / 255f);
     public static Color blueFaded = new Color(89f / 255f, 231f / 255f, 230f / 255f, 74f / 255f);
@@ -23,7 +22,9 @@ public static class GameConstants
     public static Color grey = new Color(107f / 255f, 107f / 255f, 107f / 255f);
 
     public static string lobbyServiceUrl = "http://18.223.185.13:4242";
-
+    internal static readonly string service_username = "ElfenGame";
+    internal static readonly string service_password = "abc123_ABC123";
+    internal static readonly double tokenResetRate = 600;
     private static MouseActivityManager _mouseActivityManager;
     private static Camera _mainCamera;
 
@@ -36,6 +37,8 @@ public static class GameConstants
     private static GameObject _roadGroup;
     private static GameObject _townGroup;
     private static GameObject _tileGroup;
+
+    public static string username;
 
 
 

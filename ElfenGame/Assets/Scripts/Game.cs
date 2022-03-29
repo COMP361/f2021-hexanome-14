@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
@@ -532,23 +531,6 @@ public class Game
         SyncGameProperties();
 
     }
-    // public void InitRound()
-    // {
-    //     //TODO: Stop using this function (players should get their own cards)
-    //     for (int i = 0; i < mPlayers.Count; i++)
-    //     {
-    //         Player p = Player.GetPlayer(mPlayers[i]);
-
-
-    //         if (p.mCards.Count < 8)
-    //         {
-    //             p.AddCards(Draw(8 - p.mCards.Count));
-    //         }
-
-    //         p.AddHiddenTile(RemoveTileFromPile());
-    //     }
-    // }
-
     private void InitPile()
     {
         List<MovementTile> pile = mPile;
@@ -606,44 +588,6 @@ public class Game
         _gameProperties[pDECK] = deck.ToArray();
     }
 
-    // private void YourTurn()
-    // {
-    //     Player local = Player.GetLocalPlayer();
-    //     if (curPhase == GamePhase.SelectTokenToKeep)
-    //     {
-    //         if (local.mHiddenTiles.Count == 0 && (local.mVisibleTiles.Count == 0 ||
-    //          (local.mVisibleTiles.Count == 1 && local.mVisibleTiles[0] == MovementTile.RoadObstacle)))
-    //         {
-    //             nextPlayer();
-    //         }
-    //         else if (MainUIManager.manager)
-    //         {
-    //             MainUIManager.manager.UpdateAvailableTokens();
-    //             MainUIManager.manager.showAvailableTokensToKeep();
-    //         }
-    //         // SelectTokenToKeep but no tokens remain
-    //     }
-    // }
-
-    // private void NotYourTurn()
-    // {
-    //     if (MainUIManager.manager)
-    //     {
-    //         MainUIManager.manager.hideAvailableTokensToKeep();
-    //     }
-    // }
-
-    // private void HandlePlayerUpdate()
-    // {
-    //     if (Player.GetLocalPlayer().IsMyTurn())
-    //     {
-    //         YourTurn();
-    //     }
-    //     else
-    //     {
-    //         NotYourTurn();
-    //     }
-    // }
 
     private void HandlePhaseUpdate()
     {
@@ -686,70 +630,6 @@ public class Game
         }
         // Debug.LogError($"Cur Phase set to {Enum.GetName(typeof(GamePhase), curPhase)}");
     }
-
-
-    // public void UpdateProperties(string key, object data)
-    // {
-    //     if (key == pDECK)
-    //     {
-    //         deck = ((CardEnum[])data).ToList();
-    //     }
-    //     else if (key == pPOINTER)
-    //     {
-    //         curCardPointer = (int)data;
-    //     }
-    //     else if (key == pPLAYERS)
-    //     {
-    //         players = ((string[])data).ToList();
-    //     }
-    //     else if (key == pCUR_PLAYER)
-    //     {
-    //         HandlePlayerUpdate((int)data);
-    //         // Debug.LogError($"The current Player is {Game.currentGame.GetCurPlayer()}");
-    //     }
-    //     else if (key == pCUR_ROUND)
-    //     {
-    //         _curRound = (int)data;
-    //         if (MainUIManager.manager) MainUIManager.manager.UpdateRoundInfo();
-    //     }
-    //     else if (key == pPASSED_PLAYERS)
-    //     {
-    //         _passedPlayers = (int)data;
-    //     }
-    //     else if (key == pCUR_PHASE)
-    //     {
-    //         HandlePhaseUpdate((GamePhase)data);
-    //     }
-    //     else if (key == pMAX_ROUNDS)
-    //     {
-    //         _maxRounds = (int)data;
-    //         if (MainUIManager.manager) MainUIManager.manager.UpdateRoundInfo();
-    //     }
-    //     else if (key == pPILE)
-    //     {
-    //         UpdatePile(((MovementTile[])data).ToList());
-    //     }
-    //     else if (key == pVISIBLE)
-    //     {
-    //         UpdateVisible(((MovementTile[])data).ToList());
-    //     }
-    //     else if (key == pGAME_VARIATION)
-    //     {
-    //         _gameVariation = (string)data;
-    //     }
-    //     else
-    //     {
-    //         for (int i = 0; i < 6; ++i)
-    //         {
-    //             PlayerColor c = (PlayerColor)i;
-    //             if (key == $"{pCOLOR_AVAIL_PREFIX}{Enum.GetName(typeof(PlayerColor), c)}")
-    //             {
-    //                 availableColors[c] = (string)data;
-    //                 if (MainUIManager.manager) MainUIManager.manager.UpdateColorOptions();
-    //             }
-    //         }
-    //     }
-    // }
 
     public MovementTile RemoveVisibleTile(int index)
     {
@@ -881,54 +761,11 @@ public class Game
         _gameProperties[pDECK] = deck.ToArray();
         return ret;
     }
-    internal void SetSession(Lobby.GameSession currentSelectedSession)
+    internal void SetSession(string createdBy, string sessionId)
     {
-        gameCreator = currentSelectedSession.createdBy;
-        gameId = currentSelectedSession.session_ID;
+        gameCreator = createdBy;
+        gameId = sessionId;
     }
-    // public CardEnum Draw()
-    // {
-    //     if (curCardPointer >= deck.Count)
-    //     {
-    //         deck.Shuffle();
-    //         if (NetworkManager.nm) NetworkManager.nm.SetGameProperty(pDECK, deck.ToArray());
-    //         curCardPointer = 0;
-    //     }
-
-    //     CardEnum ret = deck[curCardPointer];
-    //     curCardPointer++;
-
-    //     if (NetworkManager.nm) NetworkManager.nm.SetGameProperty(pPOINTER, curCardPointer);
-
-
-    //     return ret;
-    // }
-
-    // public void AddTileToRoad(string roadName, MovementTile movementTile)
-    // {
-    //     if (onRoad.ContainsKey(roadName))
-    //     {
-    //         MovementTile[] tilesOnRoad = (MovementTile[])onRoad[roadName];
-    //         Array.Resize(ref tilesOnRoad, tilesOnRoad.Length + 1);
-    //         tilesOnRoad[tilesOnRoad.Length - 1] = movementTile;
-    //         onRoad[roadName] = tilesOnRoad;
-    //     }
-    //     else
-    //     {
-    //         onRoad[roadName] = new MovementTile[] { movementTile };
-    //     }
-    // }
-
-    // public void ClearTilesOnAllRoads()
-    // {
-    //     string[] toClear = new string[onRoad.Keys.Count];
-    //     onRoad.Keys.CopyTo(toClear, 0);
-    //     foreach (string roadName in toClear)
-    //     {
-    //         onRoad.Remove(roadName);
-    //     }
-    // }
-
 
     public string GetCurPlayer()
     {

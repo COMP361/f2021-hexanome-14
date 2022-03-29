@@ -32,9 +32,9 @@ public class LoginUIManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Lobby.Init();
         Texture2D glove = Resources.Load("glovecursor") as Texture2D;
         Cursor.SetCursor(glove, new Vector2(0, 0), CursorMode.Auto);
-        LobbyService.initGameService();
     }
 
     // Update is called once per frame
@@ -43,7 +43,7 @@ public class LoginUIManager : MonoBehaviour
 
     }
 
-    public async void OnLoginClicked()
+    public void OnLoginClicked()
     {
         string username = usernameInput.text;
         string password = passwordInput.text;
@@ -52,7 +52,7 @@ public class LoginUIManager : MonoBehaviour
 
         OnAttemptToLogin();
 
-        await Lobby.AuthenticateAsync(usernameInput.text, passwordInput.text);
+        Lobby.user.AuthenticateUser(usernameInput.text, passwordInput.text);
         //Lobby.GetSessions();
     }
 
@@ -85,14 +85,14 @@ public class LoginUIManager : MonoBehaviour
         statusText.color = GameConstants.red;
     }
 
-    public async void QuickLogin(string v)
+    public void QuickLogin(string v)
     {
         string password = "abc123_ABC123";
         Debug.Log($"Logging in with username: {v} and password: {password}");
 
         OnAttemptToLogin();
 
-        await Lobby.AuthenticateAsync(v, password);
+        Lobby.user.AuthenticateUser(v, password);
 
     }
 }

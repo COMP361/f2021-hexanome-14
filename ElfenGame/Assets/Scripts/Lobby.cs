@@ -1,13 +1,10 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
-using System.Text.RegularExpressions;
 using System.Linq;
 using Newtonsoft.Json.Linq;
 using UnityEngine.SceneManagement;
@@ -15,47 +12,24 @@ using System.Threading;
 using System.Security.Cryptography;
 using Newtonsoft.Json;
 
-public class Lobby : MonoBehaviour
+public class Lobby
 {
-
-    private static readonly HttpClient client = new HttpClient();
-    static string accessToken;
-    static string resetToken;
-    static List<string> sessionIDs;
+    public static Lobby user, gameservice;
+    private static bool initWasRun = false;
     public static List<GameSession> availableGames = new List<GameSession>();
 
-    public static HashSet<string> gameSessions = new HashSet<string>();
+    private string accessToken, refreshToken;
+    private string lastHash = "-";
 
-    private static bool waitingForCreateSession = false;
+    private bool renewingToken = false;
+    private DateTime lastRenewed = DateTime.FromOADate(0);
+    private List<Action> onRenewDone = new List<Action>();
 
-    public static string myUsername;
-    public static DateTime lastRenew;
-    public static string lastHash = "-";
+    public List<SavedGame> savedGames = new List<SavedGame>();
 
-
-    // Start is called before the first frame update
-    async void Start()
-    {
-        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("user", "bgp-client-name:bgp-client-pw");
-        // Debug.Log(AuthenticateAsync());
-        // await AuthenticateAsync("maex", "abc123_ABC123");
-        // await RenewToken();
-        //GetToken();
-        await LongPollForUpdates();
-    }
-
-    public class Token
-    {
-        public int access_token { get; set; }
-        public string token_type { get; set; }
-        public string refresh_token { get; set; }
-        public int expires_in { get; set; }
-        public string scope { get; set; }
-    }
-
+    [Serializable]
     public class GameSession
     {
-
         public GameSession(string session_ID, List<string> players, string createdBy, string saveID)
         {
             this.session_ID = session_ID;
@@ -77,77 +51,163 @@ public class Lobby : MonoBehaviour
         }
     }
 
-    static public async Task AuthenticateAsync(string username, string password)
+    [Serializable]
+    public class SavedGame
     {
-        using (var httpClient = new HttpClient())
-        {
-            using (var request = new HttpRequestMessage(new HttpMethod("POST"), $"{GameConstants.lobbyServiceUrl}/oauth/token"))
-            {
-                var base64authorization = Convert.ToBase64String(Encoding.ASCII.GetBytes("bgp-client-name:bgp-client-pw"));
-                request.Headers.TryAddWithoutValidation("Authorization", $"Basic {base64authorization}");
-
-                request.Content = new StringContent(String.Format("grant_type=password&username={0}&password={1}", username, password));
-                request.Content.Headers.ContentType = MediaTypeHeaderValue.Parse("application/x-www-form-urlencoded");
-
-                var response = await httpClient.SendAsync(request);
-
-                // response.EnsureSuccessStatusCode();
-                var responseString = await response.Content.ReadAsStringAsync();
-
-
-                if (response.IsSuccessStatusCode)
-                {
-                    //var result = JsonConvert.DeserializeObject(responseString);
-                    JObject json = JsonConvert.DeserializeObject<JObject>(responseString);
-                    Debug.Log("Access Token Retreived: " + json["access_token"]);
-
-                    accessToken = json["access_token"].ToString().Replace("+", "%2B");
-                    resetToken = json["refresh_token"].ToString().Replace("+", "%2B");
-                    myUsername = username;
-
-                    await RenewToken();
-                    SceneManager.LoadScene("Connecting");
-                }
-                else
-                {
-                    if (LoginUIManager.manager != null)
-                    {
-                        LoginUIManager.manager.OnLoginFailed();
-                    }
-                }
-
-                // await getSessions();
-            }
-        }
+        public string[] players;
+        public string gamename;
+        public string savegameid;
     }
 
-    public static async Task LaunchSession(string sessionID)
+    public static void Init()
     {
-        Debug.Log("Launching session: " + sessionID);
-        using (var httpClient = new HttpClient())
-        {
-            using (var request = new HttpRequestMessage(new HttpMethod("POST"), $"{GameConstants.lobbyServiceUrl}/api/sessions/{sessionID}?access_token={accessToken}"))
-            {
-                var base64authorization = Convert.ToBase64String(Encoding.ASCII.GetBytes("bgp-client-name:bgp-client-pw"));
-                request.Headers.TryAddWithoutValidation("Authorization", $"Basic {base64authorization}");
-                var response = await httpClient.SendAsync(request);
-                // response.EnsureSuccessStatusCode();
-                var responseString = await response.Content.ReadAsStringAsync();
-                if (response.IsSuccessStatusCode)
-                {
-                    Debug.Log("Session Launched: " + responseString);
-                    MainMenuUIManager.manager.CreateGameWithOptions();
-                }
-                else
-                {
-                    Debug.Log("Session Launch Failed: " + responseString);
+        if (initWasRun)
+            return;
 
-                    MainMenuUIManager.manager.CreateGameWithOptions(); // This probably failed because not enough players joined during debugging
-                    //TODO: Remove this
-                }
-            }
-        }
+        initWasRun = true;
+        user = new Lobby();
+        gameservice = new Lobby();
+
+        gameservice.AuthenticateGameService();
+        gameservice.GetSessions();
     }
+
+
+    #region Authentication
+
+    private void SetTokens(string json)
+    {
+        JObject jsonObject = JObject.Parse(json);
+        accessToken = System.Net.WebUtility.UrlEncode(jsonObject["access_token"].ToString());
+        refreshToken = System.Net.WebUtility.UrlEncode(jsonObject["refresh_token"].ToString());
+    }
+    public void AuthenticateAsync(string username, string password, Action<bool, string> callback)
+    {
+        string url = "/oauth/token";
+        string json = $"grant_type=password&username={username}&password={password}";
+
+        Task task = LobbySendAsync(url, HttpMethod.Post, json: json, use_token: false, first_refresh: false, encode_media: true, auth: true, callback: callback);
+    }
+    public void AuthenticateUser(string username, string password)
+    {
+        AuthenticateAsync(username, password,
+        (bool success, string msg) =>
+        {
+            if (success)
+            {
+                Debug.Log($"Successfully authenticated as {username}");
+                SetTokens(msg);
+                GameConstants.username = username;
+                SceneManager.LoadScene("Connecting");
+            }
+            else
+            {
+                Debug.Log($"Failed to authenticate as {username}. Response: {msg}");
+                LoginUIManager.manager.OnLoginFailed();
+            }
+        });
+    }
+
+    private void AuthenticateGameService()
+    {
+        AuthenticateAsync(GameConstants.service_username, GameConstants.service_password,
+        (bool success, string msg) =>
+        {
+            if (success)
+            {
+                Debug.Log($"Successfully authenticated as {GameConstants.service_username}");
+                SetTokens(msg);
+            }
+            else
+            {
+                Debug.LogError($"Failed to authenticate Service Account!");
+                Application.Quit();
+            }
+        });
+    }
+    private void RenewToken(Action onSucess = null)
+    {
+        if (renewingToken)
+        {
+            if (onSucess != null)
+                onRenewDone.Add(onSucess);
+            return;
+        }
+        renewingToken = true;
+        string url = "/oauth/token";
+        string json = $"grant_type=refresh_token&refresh_token={refreshToken}";
+
+        Task task = LobbySendAsync(url, HttpMethod.Post, json: json, use_token: false, first_refresh: false, encode_media: true, auth: true, callback:
+        (bool success, string msg) =>
+        {
+            renewingToken = false;
+            if (success)
+            {
+                Debug.Log("Successfully renewed token");
+                lastRenewed = DateTime.Now;
+                SetTokens(msg);
+                if (onSucess != null)
+                {
+                    onSucess();
+                }
+                foreach (Action action in onRenewDone)
+                {
+                    Debug.Log("Found Action in onRenewDone");
+                    action();
+                }
+                onRenewDone.Clear();
+            }
+            else
+            {
+                Debug.Log("RenewToken failed: " + msg);
+            }
+        });
+    }
+
+    #endregion
+
+    #region Sessions
+    public void CreateSession(string savegameID = "")
+    {
+        string url = "/api/sessions";
+        string q_params = "location=0.0.0.0";
+        string json = "{\"game\":\"ElfenGame\", \"creator\":\"" + GameConstants.username + "\", \"savegame\":\"" + savegameID + "\"}";
+
+        Task task = LobbySendAsync(url, HttpMethod.Post, json: json, q_params: q_params,
+        callback:
+        (bool success, string response) =>
+        {
+            if (success)
+            {
+                Debug.Log("New Game Session: " + response);
+                HandleLocalPlayerGameCreated(response);
+            }
+            else
+            {
+                Debug.LogError($"Failed to create session: {response}");
+            }
+        });
+    }
+    public void LaunchSession(string sessionID)
+    {
+        string url = "/api/session/" + sessionID;
+        Task task = LobbySendAsync(url, HttpMethod.Post,
+        callback:
+        (bool success, string response) =>
+        {
+            if (success)
+            {
+                Debug.Log("Successfully launched session");
+                MainMenuUIManager.manager.CreateGameWithOptions();
+            }
+            else
+            {
+                Debug.LogError("Failed to launch session");
+                MainMenuUIManager.manager.CreateGameWithOptions(); // TODO: Remove when done debugging
+            }
+        });
+    }
+
 
     private static string createMd5Hex(string data)
     {
@@ -161,277 +221,231 @@ public class Lobby : MonoBehaviour
         return sb.ToString();
     }
 
-    public static async Task LongPollForUpdates()
+    public void GetSessions()
     {
-        var url = $"{GameConstants.lobbyServiceUrl}/api/sessions/?hash={lastHash}&location=18.116.53.177&access_token={accessToken}";
-        //Debug.Log(lastHash);
-        using (var client = new HttpClient())
+        string url = "/api/sessions/";
+        string q_params = "hash=" + lastHash;
+        Task task = LobbySendAsync(url, HttpMethod.Get, q_params: q_params, long_poll: true, use_token: false,
+        callback:
+        (bool success, string msg) =>
         {
-            client.Timeout = TimeSpan.FromMilliseconds(Timeout.Infinite);
-            var request = new HttpRequestMessage(HttpMethod.Get, url);
-            using (var response = await client.SendAsync(
-                request,
-                HttpCompletionOption.ResponseHeadersRead))
+            if (success)
             {
+                Debug.Log("GetSessions: " + msg);
+                JObject json = JsonConvert.DeserializeObject<JObject>(msg);
 
-                var responseString = await response.Content.ReadAsStringAsync();
 
-                if (response.IsSuccessStatusCode)
+                availableGames = new List<GameSession>();
+
+                lastHash = createMd5Hex(msg);
+
+                foreach (JToken game in json["sessions"].Children())
                 {
-                    try
-                    {
-                        JObject json = JsonConvert.DeserializeObject<JObject>(responseString);
+                    var property = game as JProperty;
 
-                        //Debug.Log("Access Token Retreived: " + json["access_token"]);
+                    GameSession gameSession = new GameSession(session_ID: property.Name, players: property.Value["players"].ToObject<List<string>>(), createdBy: property.Value["creator"].ToString(), saveID: property.Value["savegameid"].ToString());
+                    availableGames.Add(gameSession);
+                }
 
-                        availableGames = new List<GameSession>();
-
-                        lastHash = createMd5Hex(responseString);
-
-                        // List<GameSession> allGames = new List<GameSession>();
-                        foreach (JToken game in json["sessions"].Children())
-                        {
-                            var property = game as JProperty;
-                            //Debug.Log(property);
-                            //Debug.Log(property.Value["creator"]);
-                            //Debug.Log(property.Value["players"]);
-
-
-                            GameSession gameSession = new GameSession(session_ID: property.Name, players: property.Value["players"].ToObject<List<string>>(), createdBy: property.Value["creator"].ToString(), saveID: property.Value["savegameid"].ToString());
-
-                            availableGames.Add(gameSession);
-
-                            if (waitingForCreateSession && !gameSessions.Contains(gameSession.session_ID) && gameSession.createdBy == myUsername)
-                            {
-                                waitingForCreateSession = false;
-                                gameSessions.Add(gameSession.session_ID);
-                                Debug.Log("New Game Session: " + gameSession.ToString());
-                                HandleLocalPlayerGameCreated(gameSession);
-                            }
-                            //Debug.Log(gameSession.ToString());
-                            // Debug.Log(allGames);
-                        }
-                        //Debug.Log(availableGames);
-
-                        if (MainMenuUIManager.manager != null)
-                        {
-                            MainMenuUIManager.manager.OnUpdatedGameListReceived(availableGames);
-                        }
-                    }
-                    catch (JsonReaderException)
-                    {
-                        Debug.LogError($"Failed to parse json: {responseString}");
-                    }
+                if (MainMenuUIManager.manager != null && !MainMenuUIManager.manager.inLoadGameView)
+                {
+                    MainMenuUIManager.manager.UpdateSessionListView(availableGames);
                 }
             }
-        }
-
-        await LongPollForUpdates();
+            else
+            {
+                Debug.Log("GetSessions failed: " + msg);
+            }
+            GetSessions();
+        });
     }
 
-    private static void HandleLocalPlayerGameCreated(GameSession gs)
+    private static void HandleLocalPlayerGameCreated(string sessionID)
     {
         if (MainMenuUIManager.manager != null)
         {
-            MainMenuUIManager.manager.OnGameCreated(gs);
+            MainMenuUIManager.manager.OnGameCreated(sessionID);
         }
     }
 
-    public static async Task CreateSession(string savegameID = "")
+    public void LeaveSession(string sessionID)
     {
-        using (var httpClient = new HttpClient())
+        string url = "/api/sessions/" + sessionID + "/players/" + GameConstants.username;
+        Task task = LobbySendAsync(url, HttpMethod.Delete, auth: true, callback:
+        (bool success, string msg) =>
         {
-            using (var request = new HttpRequestMessage(new HttpMethod("POST"), $"{GameConstants.lobbyServiceUrl}/api/sessions?location=18.116.53.177&access_token={accessToken}"))
+            if (success)
             {
-                request.Content = new StringContent("{\"game\":\"ElfenGame\", \"creator\":\"" + myUsername + "\", \"savegame\":\"" + savegameID + "\"}");
-                Debug.Log($"Creating session: {request.Content.ToString()}");
-                request.Content.Headers.ContentType = MediaTypeHeaderValue.Parse("application / json");
+                Debug.Log("Successfully left session: " + sessionID);
+            }
+            else
+            {
+                Debug.Log("LeaveSession failed: " + msg);
+            }
+        });
+    }
 
-                waitingForCreateSession = true;
-                var response = await httpClient.SendAsync(request);
+    public void DeleteSession(string sessionID)
+    {
+        string url = "/api/sessions/" + sessionID;
+        Task task = LobbySendAsync(url, HttpMethod.Delete, auth: true, callback:
+        (bool success, string msg) =>
+        {
+            if (success)
+            {
+                Debug.Log("Successfully deleted session: " + sessionID);
+            }
+            else
+            {
+                Debug.Log("DeleteSession failed: " + msg);
+            }
+        });
+    }
 
-                Debug.Log(response);
+    public void JoinSession(string sessionID)
+    {
+        string url = "/api/sessions/" + sessionID + "/players/" + GameConstants.username;
+        string q_params = "location=0.0.0.0";
+        Task task = LobbySendAsync(url, HttpMethod.Put, q_params: q_params, auth: true, callback:
+        (bool success, string msg) =>
+        {
+            if (success)
+            {
+                Debug.Log("Successfully joined session: " + sessionID);
+            }
+            else
+            {
+                Debug.Log("JoinSession failed: " + msg);
+            }
+        });
+    }
+    #endregion
+
+    #region SavedGames
+
+    public void PutSavedGame(string saveid, List<string> playerNames)
+    {
+        string url = "/api/gameservices/ElfenGame/savegames/" + saveid;
+        string json = "{\"players\": " + JsonConvert.SerializeObject(playerNames) + ", \"gamename\": \"ElfenGame\", \"savegameid\": \"" + saveid + "\"}";
+        Task task = LobbySendAsync(url, HttpMethod.Put, json: json, callback:
+        (bool success, string msg) =>
+        {
+            if (success)
+            {
+                Debug.Log("Successfully saved game: " + saveid);
+                user.GetSavedGames();
+            }
+            else
+            {
+                Debug.Log("PutSavedGame failed: " + msg);
+            }
+        });
+    }
+    string fixJson(string value)
+    {
+        value = "{\"Items\":" + value + "}";
+        return value;
+    }
+    public void GetSavedGames()
+    {
+        string url = "/api/gameservices/ElfenGame/savegames";
+        Task task = LobbySendAsync(url, HttpMethod.Get, callback:
+        (bool success, string msg) =>
+        {
+            if (success)
+            {
+                SavedGame[] allSavedGames = JsonHelper.FromJson<SavedGame>(fixJson(msg));
+                savedGames = new List<SavedGame>();
+                foreach (SavedGame savedGame in allSavedGames)
+                {
+                    if (savedGame.players.Contains(GameConstants.username))
+                    {
+                        savedGames.Add(savedGame);
+                    }
+                }
+
+                if (MainMenuUIManager.manager != null && MainMenuUIManager.manager.inLoadGameView)
+                {
+                    MainMenuUIManager.manager.UpdateSavedGameListView(savedGames);
+                }
+
+                Debug.Log("Successfully retrieved saved games");
+            }
+            else
+            {
+                Debug.Log("GetSavedGames failed: " + msg);
 
             }
-        }
+        });
     }
 
-    // public static async Task CreateSaveGame(string savegameID = "")
-    // {
-    //     using (var httpClient = new HttpClient())
-    //     {
-    //         using (var request = new HttpRequestMessage(new HttpMethod("POST"), $"{GameConstants.lobbyServiceUrl}/api/savegames?location=
-
-    // public static bool SessionListUpdated(List<GameSession> list1, List<GameSession> list2)
-    // {
-    //     bool updated = false;
-
-    //     foreach (GameSession game1 in list1)
-    //     {
-    //         bool foundMatch = false;
-    //         foreach (GameSession game2 in list2)
-    //         {
-    //             if (game1.session_ID == game2.session_ID)
-    //             {
-    //                 foundMatch = true;
-    //             }
-    //         }
-
-    //         if (!foundMatch)
-    //         {
-    //             updated = true;
-    //         }
-    //     }
-
-    //     foreach (GameSession game1 in list2)
-    //     {
-    //         bool foundMatch = false;
-    //         foreach (GameSession game2 in list1)
-    //         {
-    //             if (game1.session_ID == game2.session_ID)
-    //             {
-    //                 foundMatch = true;
-    //             }
-    //         }
-
-    //         if (!foundMatch)
-    //         {
-    //             updated = true;
-    //         }
-    //     }
-
-
-    //     return updated;
-    // }
-
-    public static async Task LeaveSession(string sessionID)
+    public void DeleteSavedGame(string saveid)
     {
-        using (var httpClient = new HttpClient())
+        string url = "/api/gameservices/ElfenGame/savegames/" + saveid;
+        Task task = LobbySendAsync(url, HttpMethod.Delete, callback:
+        (bool success, string msg) =>
         {
-            using (var request = new HttpRequestMessage(new HttpMethod("DELETE"), $"{GameConstants.lobbyServiceUrl}/api/sessions/{sessionID}/players/{myUsername}?access_token={accessToken}"))
+            if (success)
             {
-                var base64authorization = Convert.ToBase64String(Encoding.ASCII.GetBytes("bgp-client-name:bgp-client-pw"));
-                request.Headers.TryAddWithoutValidation("authorization", $"Basic {base64authorization}");
-                var response = await httpClient.SendAsync(request);
-
-                string responseString = await response.Content.ReadAsStringAsync();
-                Debug.Log(responseString);
+                Debug.Log("Successfully deleted saved game: " + saveid);
+                user.GetSavedGames();
             }
-        }
-    }
-
-    public static async Task DeleteSession(string sessionID)
-    {
-        using (var httpClient = new HttpClient())
-        {
-            using (var request = new HttpRequestMessage(new HttpMethod("DELETE"), $"{GameConstants.lobbyServiceUrl}/api/sessions/{sessionID}?access_token={accessToken}"))
+            else
             {
-                var base64authorization = Convert.ToBase64String(Encoding.ASCII.GetBytes("bgp-client-name:bgp-client-pw"));
-                request.Headers.TryAddWithoutValidation("authorization", $"Basic {base64authorization}");
-                var response = await httpClient.SendAsync(request);
-
-                // Display content
-                string responseString = await response.Content.ReadAsStringAsync();
-                Debug.Log(responseString);
+                Debug.Log("DeleteSavedGame failed: " + msg);
             }
-        }
+        });
     }
 
-    // public static async Task GetSessions(GameSessionsReceivedInterface callbackTarget)
-    // {
-    //     using (var httpClient = new HttpClient())
-    //     {
-    //         using (var request = new HttpRequestMessage(new HttpMethod("GET"), $"{GameConstants.lobbyServiceUrl}/api/sessions"))
-    //         {
-    //             var response = await httpClient.SendAsync(request);
+    #endregion
 
-    //             var responseString = await response.Content.ReadAsStringAsync();
-
-    //             JObject json = JsonConvert.DeserializeObject<JObject>(responseString);
-    //             //Debug.Log("Access Token Retreived: " + json["access_token"]);
-
-    //             availableGames = new List<GameSession>();
-
-
-    //             // List<GameSession> allGames = new List<GameSession>();
-    //             foreach (var game in json["sessions"].Children())
-    //             {
-    //                 var property = game as JProperty;
-    //                 //Debug.Log(property);
-    //                 //Debug.Log(property.Value["creator"]);
-    //                 //Debug.Log(property.Value["players"]);
-
-
-    //                 GameSession gameSession = new GameSession() { session_ID = property.Name, players = property.Value["players"].ToObject<List<string>>(), createdBy = property.Value["creator"].ToString() };
-
-    //                 availableGames.Add(gameSession);
-    //                 //Debug.Log(gameSession.ToString());
-    //                 // Debug.Log(allGames);
-    //             }
-    //             //Debug.Log(availableGames);
-
-    //             callbackTarget.OnUpdatedGameListReceived(availableGames);
-
-    //             //if (SessionListUpdated(newGames, availableGames))
-    //             //{
-    //             //    availableGames = newGames;
-
-    //             //}
-
-    //         }
-    //     }
-    // }
-
-
-    public static async Task JoinSession(string sessionID)
+    public async Task LobbySendAsync(string url, HttpMethod method, Action<bool, string> callback = null, string q_params = "", string json = "", bool use_token = true, bool first_refresh = true, bool encode_media = false, bool auth = false, bool long_poll = false)
     {
-        using (var httpClient = new HttpClient())
+        HttpClient client = new HttpClient();
+        if (long_poll)
+            client.Timeout = TimeSpan.FromMilliseconds(Timeout.Infinite);
+
+        string endpoint = GameConstants.lobbyServiceUrl + url;
+        if (q_params != "")
+            endpoint += "?" + q_params;
+
+        if (use_token)
+            endpoint += (endpoint.Contains('?') ? "&" : "?") + "access_token=" + accessToken;
+
+        Debug.Log($"Sending request to {endpoint}");
+
+        HttpRequestMessage request = new HttpRequestMessage(method, endpoint);
+
+        if (auth)
         {
-            using (var request = new HttpRequestMessage(new HttpMethod("PUT"), $"{GameConstants.lobbyServiceUrl}/api/sessions/{sessionID}/players/{myUsername}?access_token={accessToken}&location=18.116.53.177"))
+            var base64authorization = Convert.ToBase64String(Encoding.ASCII.GetBytes("bgp-client-name:bgp-client-pw"));
+            request.Headers.TryAddWithoutValidation("Authorization", "Basic " + base64authorization);
+        }
+
+        if (json != "")
+            request.Content = new StringContent(json, Encoding.UTF8, "application/json");
+
+        if (encode_media)
+            request.Content.Headers.ContentType = MediaTypeHeaderValue.Parse("application/x-www-form-urlencoded");
+
+        var response = await client.SendAsync(request);
+        if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized && use_token && first_refresh)
+        {
+            if ((DateTime.Now - lastRenewed).TotalSeconds > GameConstants.tokenResetRate)
             {
-                var response = await httpClient.SendAsync(request);
-
-                // Log response content
-                var responseString = await response.Content.ReadAsStringAsync();
-                Debug.Log(responseString);
+                RenewToken(onSucess:
+                 () =>
+                    {
+                        _ = LobbySendAsync(url, method, callback, q_params, json, use_token, false, encode_media, auth, long_poll);
+                    });
             }
-        }
-    }
 
-    public static async Task RenewToken()
-    {
-        using (var httpClient = new HttpClient())
+        }
+        else
         {
-            using (var request = new HttpRequestMessage(new HttpMethod("POST"), $"{GameConstants.lobbyServiceUrl}/oauth/token"))
-            {
-                var base64authorization = Convert.ToBase64String(Encoding.ASCII.GetBytes("bgp-client-name:bgp-client-pw"));
-                request.Headers.TryAddWithoutValidation("Authorization", $"Basic {base64authorization}");
-
-                request.Content = new StringContent($"grant_type=refresh_token&refresh_token={resetToken}");
-                request.Content.Headers.ContentType = MediaTypeHeaderValue.Parse("application/x-www-form-urlencoded");
-
-                var response = await httpClient.SendAsync(request);
-
-                var responseString = await response.Content.ReadAsStringAsync();
-                var json = JsonConvert.DeserializeObject<JObject>(responseString);
-                Debug.Log("Access Token Retreived: " + json["access_token"]);
-                accessToken = json["access_token"].ToString().Replace("+", "%2B");
-                resetToken = json["refresh_token"].ToString().Replace("+", "%2B");
-                Debug.Log(responseString);
-            }
-        }
-
-        lastRenew = DateTime.Now;
-    }
-
-    // Update is called once per frame
-    async void Update()
-    {
-        if ((DateTime.Now - lastRenew).Milliseconds > 100000)
-        {
-            Debug.Log("Renewing Token Automatically");
-            lastRenew = DateTime.Now;
-            await RenewToken();
+            if (callback != null)
+                callback(response.IsSuccessStatusCode, await response.Content.ReadAsStringAsync());
         }
     }
+
 }

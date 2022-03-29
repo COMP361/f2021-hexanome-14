@@ -37,9 +37,7 @@ public class NewTown : MonoBehaviour, IDragOver
 
         foreach (Player p in Player.GetAllPlayers())
         {
-            bool isVisited = p.isVisited(name); // if true don't display, if false display indicator that player still needs to visit town
-                                                // p.playerColor.GetColor() returns a Color object corresponding to the players color
-
+            bool isVisited = p.isVisited(name);
             if (!isVisited)
             {
                 GameObject g = Instantiate(pointPrefab);
