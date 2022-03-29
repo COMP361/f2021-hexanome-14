@@ -252,6 +252,19 @@ public class MainUIManager : MonoBehaviour
         Game.currentGame.nextPlayer();
     }
 
+    public void OpenChat()
+    {
+        ChatManager.manager.newReset();
+        if (ChatManager.manager != null && !ChatManager.manager.isActive())
+        {
+            ChatManager.manager.setChatVisible();
+        }
+
+        else if (ChatManager.manager != null && ChatManager.manager.isActive())
+        {
+            ChatManager.manager.SetChatInvisible();
+        }
+    }
     private TileHolderScript GetSelectedTokenToKeep()
     {
         foreach (TileHolderScript thscript in tokenToKeepSelectionWindow.GetComponentsInChildren<TileHolderScript>())
