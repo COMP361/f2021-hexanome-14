@@ -79,7 +79,7 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
         Player.ResetPlayers(); // TODO: Move this elsewhere
         gameSelectView.gameObject.SetActive(true);
         homeView.gameObject.SetActive(false);
-        UpdateSessionListView(Lobby.availableGames);
+        UpdateSessionListView(Lobby.availableSessions);
         SwitchToCorrectView();
     }
 
@@ -439,7 +439,7 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
         }
 
         NetworkManager.manager.JoinOrCreateRoom(session.session_ID);
-        UpdateSessionListView(Lobby.availableGames);
+        UpdateSessionListView(Lobby.availableSessions);
 
     }
 
@@ -477,7 +477,6 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
         Lobby.GameSession session = Lobby.activeGames[sessionID];
         if (session.saveID == "")
         {
-            Game.currentGame.saveId = SaveAndLoad.GenerateSaveId();
             Game.currentGame.Init(
                 numRoundOptions[numRounds.value],
                 gameModeDD.options[gameModeDD.value].text,
@@ -485,6 +484,7 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
                 witchButton.GetComponent<VariationButton>().isSelected,
                 randGoldButton.GetComponent<VariationButton>().isSelected
             );
+            Game.currentGame.saveId = SaveAndLoad.GenerateSaveId();
         }
         else
         {
@@ -493,7 +493,8 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
             SaveAndLoad.LoadLocalPlayerState(Game.currentGame.saveId);
         }
         Game.currentGame.SetSession(GameConstants.username, sessionID);
-        UpdateSessionListView(Lobby.availableGames);
+        UpdateSessionListView(Lobby.availableSessions);
+        Game.currentGame.SyncGameProperties();
     }
 
     #endregion

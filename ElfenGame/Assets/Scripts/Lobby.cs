@@ -16,7 +16,7 @@ public class Lobby
 {
     public static Lobby user, gameservice;
     private static bool initWasRun = false;
-    public static List<GameSession> availableGames = new List<GameSession>();
+    public static List<GameSession> availableSessions = new List<GameSession>();
     public static Dictionary<string, GameSession> activeGames = new Dictionary<string, GameSession>(); // Maps sessionIds to GameSessions
     public static Dictionary<string, GameSession> activeSavedGames = new Dictionary<string, GameSession>(); // Maps saveGameIds to GameSessions
     private string accessToken, refreshToken;
@@ -228,9 +228,9 @@ public class Lobby
                 Debug.Log("GetSessions: " + msg);
                 JObject json = JsonConvert.DeserializeObject<JObject>(msg);
 
-
-                availableGames = new List<GameSession>();
-                activeGames = new Dictionary<string, GameSession>();
+                List<GameSession> tempAvailableSessions = new List<GameSession>();
+                Dictionary<string, GameSession> tempActiveGames = new Dictionary<string, GameSession>();
+                Dictionary<string, GameSession> tempActiveSavedGames = new Dictionary<string, GameSession>();
 
                 lastHash = createMd5Hex(msg);
 
@@ -246,20 +246,27 @@ public class Lobby
                         saveID = property.Value["savegameid"].ToString(),
                         launched = property.Value["launched"].ToObject<Boolean>()
                     };
+
                     if (!gameSession.launched)
                     {
-                        availableGames.Add(gameSession);
+                        tempAvailableSessions.Add(gameSession);
                     }
-                    activeGames[gameSession.session_ID] = gameSession;
+                    tempActiveGames[gameSession.session_ID] = gameSession;
                     if (gameSession.saveID != "")
                     {
-                        activeSavedGames[gameSession.saveID] = gameSession;
+                        tempActiveSavedGames[gameSession.saveID] = gameSession;
                     }
+
                 }
+
+
+                availableSessions = tempAvailableSessions;
+                activeGames = tempActiveGames;
+                activeSavedGames = tempActiveSavedGames;
 
                 if (MainMenuUIManager.manager != null)
                 {
-                    MainMenuUIManager.manager.UpdateSessionListView(availableGames);
+                    MainMenuUIManager.manager.UpdateSessionListView(availableSessions);
                 }
             }
             else
@@ -309,6 +316,11 @@ public class Lobby
 
     public void DeleteSession(string sessionID)
     {
+        if (!activeGames.ContainsKey(sessionID))
+        {
+            Debug.LogWarning("Tried to delete session that doesn't exist: " + sessionID);
+            return;
+        }
         GameSession session = activeGames[sessionID];
         string url = "/api/sessions/" + sessionID;
         Task task = LobbySendAsync(url, HttpMethod.Delete, auth: true, callback:
@@ -328,7 +340,7 @@ public class Lobby
             }
             else
             {
-                Debug.Log("DeleteSession failed: " + msg);
+                Debug.LogWarning("DeleteSession failed: " + msg);
             }
         });
     }
