@@ -101,7 +101,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback, IInRo
     {
         if (PhotonNetwork.IsConnectedAndReady && !PhotonNetwork.InRoom)
         {
-            Debug.Log("Joining room: " + roomName);
+            Debug.Log("Joining or creating room: " + roomName);
             PhotonNetwork.JoinOrCreateRoom(roomName, new RoomOptions { MaxPlayers = 6, IsVisible = true, PublishUserId = true }, null);
         }
     }
@@ -109,8 +109,9 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback, IInRo
 
     public void JoinRoom(string roomName)
     {
-        if (PhotonNetwork.IsConnected)
+        if (PhotonNetwork.IsConnected && !PhotonNetwork.InRoom)
         {
+            Debug.Log("Joining room: " + roomName);
             PhotonNetwork.JoinRoom(roomName);
         }
     }
@@ -353,8 +354,9 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback, IInRo
 
     public void CreateRoom(string roomName)
     {
-        if (PhotonNetwork.IsConnectedAndReady)
+        if (PhotonNetwork.IsConnectedAndReady && !PhotonNetwork.InRoom)
         {
+            Debug.Log("Creating room: " + roomName);
             PhotonNetwork.CreateRoom(roomName, new RoomOptions { MaxPlayers = 6, IsVisible = true, PublishUserId = true });
         }
     }
@@ -383,15 +385,16 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback, IInRo
         Debug.Log(message);
     }
 
-
     public override void OnJoinedRoom()
     {
-
+        Debug.Log($"Joined room {PhotonNetwork.CurrentRoom.Name}");
         if (MainMenuUIManager.manager != null)
         {
             MainMenuUIManager.manager.SwitchToCorrectView();
 
         }
+
+        if (PhotonNetwork.IsMasterClient) return; // Don't sync player stats yet because game is not ready
 
         Player.GetLocalPlayer().SyncPlayerStats();
 
@@ -400,11 +403,11 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback, IInRo
     public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer)
     {
         Player.GetLocalPlayer().SyncPlayerStats();
-        if (PhotonNetwork.IsMasterClient && MainMenuUIManager.manager && MainMenuUIManager.manager.GetLoadedOwner() == newPlayer.UserId)
-        {
-            PhotonNetwork.SetMasterClient(newPlayer);
-            return;
-        }
+        // if (PhotonNetwork.IsMasterClient && MainMenuUIManager.manager && MainMenuUIManager.manager.GetLoadedOwner() == newPlayer.UserId)
+        // {
+        //     PhotonNetwork.SetMasterClient(newPlayer);
+        //     return;
+        // }
 
         if (PhotonNetwork.IsMasterClient)
         {
@@ -429,8 +432,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback, IInRo
         {
             Lobby.gameservice.DeleteSession(Game.currentGame.gameId);
         }
-
-        Game.currentGame = new Game();
     }
 
     #endregion

@@ -52,7 +52,18 @@ public class Game
 
     #endregion
 
-    public static Game currentGame = new Game();
+    private static Game _currentGame;
+    public static Game currentGame
+    {
+        get
+        {
+            return _currentGame;
+        }
+        set
+        {
+            _currentGame = value;
+        }
+    }
 
 
     private ExitGames.Client.Photon.Hashtable _gameProperties;
@@ -414,14 +425,53 @@ public class Game
         SyncGameProperties();
 
     }
+
     public Game()
     {
+        Debug.Log("Creating new game");
         _gameProperties = new ExitGames.Client.Photon.Hashtable();
         _colorProperties = new ExitGames.Client.Photon.Hashtable();
         for (int i = 0; i < 6; i++)
         {
             _colorProperties[getColorKey((PlayerColor)i)] = "";
         }
+    }
+    public Game(string sessionId, string saveId, string creator, int maxRnds, string gameMode, bool endTown, bool witchVar, bool randGoldVar) : this()
+    {
+        // Create new game constructor
+        // Note no-param constructor is called first
+        Debug.Log($"Creating new game with sessionId: {sessionId}");
+
+        _gameProperties[pCUR_PLAYER] = 0;
+        _gameProperties[pCUR_ROUND] = 1;
+        _gameProperties[pCUR_PHASE] = GamePhase.DrawCardsAndCounters;
+        _gameProperties[pMAX_ROUNDS] = maxRnds;
+        _gameProperties[pGAME_MODE] = gameMode;
+        _gameProperties[pEND_TOWN] = endTown;
+        _gameProperties[pWITCH_CARD] = witchVar;
+        _gameProperties[pRAND_GOLD] = randGoldVar;
+        _gameProperties[pPASSED_PLAYERS] = 0;
+        _gameProperties[pGAME_ID] = sessionId;
+        _gameProperties[pGAME_CREATOR] = creator;
+        _gameProperties[pSAVE_ID] = saveId;
+
+        _gameProperties[pPLAYERS] = new string[] { };
+        _gameProperties[pPILE] = new MovementTile[0];
+        _gameProperties[pVISIBLE] = new MovementTile[0];
+        _gameProperties[pDISCARD] = new CardEnum[0];
+        _gameProperties[pDECK] = new CardEnum[0];
+
+        InitPile();
+        InitDeck();
+
+    }
+
+    public Game(string sessionId, string saveId, string creator) : this()
+    {
+        // Load Game Constructor
+        Debug.Log($"Loading game with saveId: {saveId}");
+
+        SetFromGameData(SaveAndLoad.LoadGameState(saveId));
     }
 
 
@@ -532,6 +582,15 @@ public class Game
         SyncGameProperties();
 
     }
+
+    public void SetInitialColorValues()
+    {
+
+        if (NetworkManager.manager)
+        {
+            NetworkManager.manager.SetGameProperties(_colorProperties);
+        }
+    }
     private void InitPile()
     {
         List<MovementTile> pile = mPile;
@@ -559,6 +618,11 @@ public class Game
 
     public void InitPlayersList()
     {
+        if (mPlayers.Count > 0)
+        {
+            // Already initialized (probably from loading a game)
+            return;
+        }
         List<string> playersInGame = new List<string>();
         foreach (Photon.Realtime.Player p in NetworkManager.manager.GetPlayers())
         {

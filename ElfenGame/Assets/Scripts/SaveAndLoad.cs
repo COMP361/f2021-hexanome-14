@@ -7,7 +7,7 @@ using UnityEngine;
 public static class SaveAndLoad
 {
     [System.Serializable]
-    public struct GameData
+    public class GameData
     {
         public string gameMode;
         public int numRounds;
@@ -168,7 +168,7 @@ public static class SaveAndLoad
         File.WriteAllText(playerPath, playerJson);
     }
 
-    public static void LoadGameState(string saveid)
+    public static GameData LoadGameState(string saveid)
     {
         string player_save_dir = InitPlayerDir();
         string gamePath = player_save_dir + saveid + ".json";
@@ -176,13 +176,13 @@ public static class SaveAndLoad
         if (!File.Exists(gamePath))
         {
             Debug.LogError("No game found at " + gamePath);
-            return;
+            return null;
         }
         string gameJson = File.ReadAllText(gamePath);
         Debug.LogError("Game JSON: " + gameJson);
         GameData data = JsonUtility.FromJson<GameData>(gameJson);
         Debug.LogError("Done loading game from " + gamePath);
-        Game.currentGame.SetFromGameData(data);
+        return data;
     }
 
     public static void LoadLocalPlayerState(string saveid)

@@ -62,12 +62,15 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
 
     public void Start()
     {
-        Game.currentGame = new Game(); // TODO: Remove this
     }
 
     public string GetLoadedOwner()
     {
-        return Game.currentGame.gameCreator; // TODO: Remove this
+        if (selectedSessionId == "" || !Lobby.activeGames.ContainsKey(selectedSessionId))
+        {
+            return "";
+        }
+        return Lobby.activeGames[selectedSessionId].createdBy;
     }
 
     #region UI Click Handlers
@@ -202,8 +205,7 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
     /// </summary>
     public void OnLeaveGameClicked()
     {
-        Lobby.user.LeaveSession(Game.currentGame.gameId);
-        Game.currentGame = new Game();
+        Lobby.user.LeaveSession(selectedSessionId);
         NetworkManager.manager.LeaveRoom();
         selectedSessionId = "";
         SwitchToCorrectView();
@@ -217,7 +219,6 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
     {
         Debug.Log("Delete Game!!!!!");
         Lobby.user.DeleteSession(selectedSessionId);
-        Game.currentGame = new Game();
         NetworkManager.manager.LeaveRoom();
         selectedSessionId = "";
         SwitchToCorrectView();
@@ -282,7 +283,7 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
             else
             {
                 sessionScript.deactivate();
-                if (sessionScript.gameSession.session_ID != Game.currentGame.gameId)
+                if (sessionScript.gameSession.session_ID != selectedSessionId)
                 {
                     sessionScript.SetUnselectedColor();
                 }
@@ -301,7 +302,7 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
         GameSessionListItemScript sessionScript = newSession.GetComponent<GameSessionListItemScript>();
         sessionScript.SetFields(gameSession);
         sessionScript.SetOnGameSessionClickedHandler(this);
-        if (Game.currentGame.gameId == gameSession.session_ID)
+        if (selectedSessionId == gameSession.session_ID)
         {
             sessionScript.SetSelectedColor();
         }
@@ -431,16 +432,14 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
     public void OnSessionJoined(Lobby.GameSession session)
     {
         //TODO: Summary
-        Game.currentGame.SetSession(session.createdBy, session.session_ID);
+        Game.currentGame = new Game();
         if (session.saveID != "")
         {
-            Game.currentGame.saveId = session.saveID;
             SaveAndLoad.LoadLocalPlayerState(session.saveID);
         }
 
         NetworkManager.manager.JoinOrCreateRoom(session.session_ID);
         UpdateSessionListView(Lobby.availableSessions);
-
     }
 
     /// <summary>
@@ -464,7 +463,7 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
     {
         selectedSessionId = sessionID;
         Debug.Log($"Game created with ID {sessionID}");
-        NetworkManager.manager.JoinOrCreateRoom(sessionID);
+        NetworkManager.manager.CreateRoom(sessionID);
     }
 
     /// <summary>
@@ -477,24 +476,37 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
         Lobby.GameSession session = Lobby.activeGames[sessionID];
         if (session.saveID == "")
         {
-            Game.currentGame.Init(
-                numRoundOptions[numRounds.value],
-                gameModeDD.options[gameModeDD.value].text,
-                endTownButton.GetComponent<VariationButton>().isSelected,
-                witchButton.GetComponent<VariationButton>().isSelected,
-                randGoldButton.GetComponent<VariationButton>().isSelected
+            // Game.currentGame.Init(
+            //     numRoundOptions[numRounds.value],
+            //     gameModeDD.options[gameModeDD.value].text,
+            //     endTownButton.GetComponent<VariationButton>().isSelected,
+            //     witchButton.GetComponent<VariationButton>().isSelected,
+            //     randGoldButton.GetComponent<VariationButton>().isSelected
+            // );
+
+            Game.currentGame = new Game(
+                sessionId: sessionID,
+                saveId: SaveAndLoad.GenerateSaveId(),
+                creator: GameConstants.username,
+                maxRnds: numRoundOptions[numRounds.value],
+                gameMode: gameModeDD.options[gameModeDD.value].text,
+                endTown: endTownButton.GetComponent<VariationButton>().isSelected,
+                witchVar: witchButton.GetComponent<VariationButton>().isSelected,
+                randGoldVar: randGoldButton.GetComponent<VariationButton>().isSelected
             );
-            Game.currentGame.saveId = SaveAndLoad.GenerateSaveId();
         }
         else
         {
-            Game.currentGame.saveId = session.saveID;
-            SaveAndLoad.LoadGameState(Game.currentGame.saveId);
+            Game.currentGame = new Game(sessionId: sessionID,
+                saveId: session.saveID,
+                creator: session.createdBy);
+
             SaveAndLoad.LoadLocalPlayerState(Game.currentGame.saveId);
         }
-        Game.currentGame.SetSession(GameConstants.username, sessionID);
-        UpdateSessionListView(Lobby.availableSessions);
+        Game.currentGame.SetInitialColorValues();
         Game.currentGame.SyncGameProperties();
+        Player.GetLocalPlayer().SyncPlayerStats();
+        UpdateSessionListView(Lobby.availableSessions);
     }
 
     #endregion
