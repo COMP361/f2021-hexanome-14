@@ -471,7 +471,13 @@ public class Game
         // Load Game Constructor
         Debug.Log($"Loading game with saveId: {saveId}");
 
-        SetFromGameData(SaveAndLoad.LoadGameState(saveId));
+        SaveAndLoad.GameData data = SaveAndLoad.LoadGameState(saveId);
+        SetFromGameData(data);
+
+        if (MainUIManager.manager)
+        {
+            MainUIManager.manager.SetTiles(data.tilePaths, data.tileTypes);
+        }
     }
 
 

@@ -25,7 +25,10 @@ public static class SaveAndLoad
         public GamePhase curPhase;
         public int curRound;
         public int passedPlayers;
-        public GameData(Game g)
+
+        public List<string> tilePaths;
+        public List<MovementTile> tileTypes;
+        public GameData(Game g, Tuple<List<string>, List<MovementTile>> tilePositions)
         {
             gameMode = g.gameMode;
             numRounds = g.maxRounds;
@@ -42,6 +45,8 @@ public static class SaveAndLoad
             curPhase = g.curPhase;
             curRound = g.curRound;
             passedPlayers = g.passedPlayers;
+            this.tilePaths = tilePositions.Item1;
+            this.tileTypes = tilePositions.Item2;
         }
     }
 
@@ -147,7 +152,17 @@ public static class SaveAndLoad
         }
 
         string player_save_dir = InitPlayerDir();
-        string gameJson = JsonUtility.ToJson(new GameData(Game.currentGame), false);
+
+        Tuple<List<string>, List<MovementTile>> tilePositions;
+        if (MainUIManager.manager)
+        {
+            tilePositions = MainUIManager.manager.GetTilePositions();
+        }
+        else
+        {
+            tilePositions = new Tuple<List<string>, List<MovementTile>>(new List<string>(), new List<MovementTile>());
+        }
+        string gameJson = JsonUtility.ToJson(new GameData(Game.currentGame, tilePositions), false);
 
         string gamePath = player_save_dir + Game.currentGame.saveId + ".json";
         Debug.Log("Saving game to " + gamePath);

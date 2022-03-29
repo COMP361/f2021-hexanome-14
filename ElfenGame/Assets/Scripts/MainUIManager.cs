@@ -131,6 +131,12 @@ public class MainUIManager : MonoBehaviour
         if (Player.GetLocalPlayer().playerColor == PlayerColor.None)
             chooseColorPanel.SetActive(true);
         UpdateColorOptions();
+
+        SaveAndLoad.GameData data = SaveAndLoad.LoadGameState(Game.currentGame.saveId);
+        if (data != null)
+        {
+            SetTiles(data.tilePaths, data.tileTypes);
+        }
     }
 
     public void UpdateColorOptions()
@@ -181,6 +187,51 @@ public class MainUIManager : MonoBehaviour
 
         // Update ALL UI with current player stats
         p.UpdateDisplay();
+    }
+
+    internal Tuple<List<string>, List<MovementTile>> GetTilePositions()
+    {
+        List<string> tilePaths = new List<string>();
+        List<MovementTile> tiles = new List<MovementTile>();
+        foreach (PathScript path in GameConstants.roadDict.Values)
+        {
+            GridManager grid = path.GetComponentInChildren<GridManager>();
+            foreach (MovementTile tile in grid.GetNonObstacleTiles())
+            {
+                tilePaths.Add(path.name);
+                tiles.Add(tile);
+            }
+
+            if (grid.HasObstacle())
+            {
+                if (path.roadType == RoadType.River || path.roadType == RoadType.Lake)
+                {
+                    tilePaths.Add(path.name);
+                    tiles.Add(MovementTile.WaterObstacle);
+
+                }
+                else
+                {
+                    tilePaths.Add(path.name);
+                    tiles.Add(MovementTile.RoadObstacle);
+                }
+            }
+        }
+
+        return new Tuple<List<string>, List<MovementTile>>(tilePaths, tiles);
+    }
+
+    internal void SetTiles(List<string> tilePaths, List<MovementTile> tileTypes)
+    {
+        for (int i = 0; i < tilePaths.Count; i++)
+        {
+            GameObject g = Instantiate(movementTileSpritePrefab);
+            MovementTileSpriteScript sprite = g.GetComponent<MovementTileSpriteScript>();
+            sprite.SetTileSO(mTileDict[tileTypes[i]]);
+
+            GridManager grid = GameConstants.roadDict[tilePaths[i]].GetComponent<GridManager>();
+            grid.AddElement(g);
+        }
     }
 
     public void OnPausePressed()
