@@ -32,6 +32,7 @@ public class LoginUIManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        // General Initialization for whole game
         Lobby.Init();
         Texture2D glove = Resources.Load("glovecursor") as Texture2D;
         Cursor.SetCursor(glove, new Vector2(0, 0), CursorMode.Auto);
