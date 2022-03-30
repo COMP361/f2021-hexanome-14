@@ -21,6 +21,8 @@ public class Player
     public const string pVISITED = "VISITED";
     private ExitGames.Client.Photon.Hashtable _properties;
 
+    private String _endTown; // Not synced
+
     public Dictionary<MovementTile, int> mTiles;
 
     private int lastInitializedround = 0;
@@ -54,14 +56,14 @@ public class Player
                 MainUIManager.manager.UpdateCardHand();
             }
         }
+
+        if (!IsLocalPlayer())
+            Game.currentGame.GameOver(check: true);
     }
 
     #region Private Update Methods
 
 
-    private void HandleTownChange()
-    {
-    }
     public void SelfInitRound()
     {
         if (Game.currentGame.curRound <= lastInitializedround)
@@ -200,6 +202,27 @@ public class Player
             // Update town
             _properties[pTOWN] = value;
             SyncPlayerStats();
+        }
+    }
+
+    public string endTown
+    {
+        get
+        {
+            if (_endTown == null)
+            {
+                Debug.LogWarning("End town is null");
+                return "";
+            }
+            return _endTown;
+        }
+        set
+        {
+            _endTown = value;
+            if (userName == GameConstants.username && MainUIManager.manager)
+            {
+                MainUIManager.manager.UpdateEndTown(value);
+            }
         }
     }
 
@@ -357,6 +380,48 @@ public class Player
 
         Debug.LogError("Player created: " + userName);
     }
+
+    public void DeductDistToEndTown()
+    {
+        Dictionary<string, List<string>> adj = new Dictionary<string, List<string>>();
+
+        foreach (string townName in GameConstants.townNames)
+        {
+            adj[townName] = new List<string>();
+        }
+
+        foreach (PathScript path in GameConstants.roadDict.Values)
+        {
+            adj[path.town1.name].Add(path.town2.name);
+            adj[path.town2.name].Add(path.town1.name);
+        }
+
+        Dictionary<string, int> dist = new Dictionary<string, int>();
+        foreach (string town in adj.Keys)
+        {
+            dist[town] = -1;
+        }
+
+        Queue<string> q = new Queue<string>();
+        q.Enqueue(curTown);
+        dist[curTown] = 0;
+
+        while (q.Count != 0)
+        {
+            string cTown = q.Dequeue();
+            foreach (string nextTown in adj[cTown])
+            {
+                if (dist[nextTown] == -1)
+                {
+                    dist[nextTown] = dist[cTown] + 1;
+                    q.Enqueue(nextTown);
+                }
+            }
+        }
+
+        _properties[pPOINTS] = nPoints - dist[endTown]; // Sketch but works (updates without sending update)
+
+    }
     internal void SetFromPlayerData(SaveAndLoad.PlayerData data)
     {
         _properties[pNAME] = data.userName;
@@ -367,6 +432,7 @@ public class Player
         _properties[pCARDS] = data.mCards.ToArray();
         _properties[pVISIBLE_TILES] = data.mVisibleTiles.ToArray();
         _properties[pHIDDEN_TILES] = data.mHiddenTiles.ToArray();
+        endTown = data.endTown;
         Dictionary<string, bool> visited = new Dictionary<string, bool>();
         foreach (string town in GameConstants.townNames)
         {
@@ -380,6 +446,7 @@ public class Player
             }
         }
         _properties[pVISITED] = visited;
+        UpdateDisplay();
     }
 
 

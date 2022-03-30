@@ -69,6 +69,8 @@ public class Game
     private ExitGames.Client.Photon.Hashtable _gameProperties;
     private ExitGames.Client.Photon.Hashtable _colorProperties;
 
+    private bool gameIsOver = false;
+
     private void PropertyNotFoundWarning(string property)
     {
         Debug.LogWarning("Property " + property + " not found in game properties");
@@ -516,6 +518,7 @@ public class Game
             }
         }
 
+
         bool updatedProps = false;
         foreach (string key in pGAME_PROPS)
         {
@@ -528,6 +531,15 @@ public class Game
         if (updatedProps)
         {
             Debug.LogError("Game properties updated");
+        }
+
+        foreach (string playerName in mPlayers)
+        {
+            string playerEndTownKey = getEndTownKey(playerName);
+            if (properties.ContainsKey(playerEndTownKey))
+            {
+                Player.GetPlayer(playerName).endTown = properties[playerEndTownKey].ToString();
+            }
         }
         UpdateDisplay();
     }
@@ -636,6 +648,28 @@ public class Game
         }
         playersInGame.Shuffle();
         _gameProperties[pPLAYERS] = playersInGame.ToArray();
+
+        if (endTown)
+        {
+            HashSet<string> claimedTowns = new HashSet<string>();
+            claimedTowns.Add("TownElvenhold");
+            var random = new System.Random();
+            foreach (string player in playersInGame)
+            {
+                string playerEndTown = GameConstants.townNames[random.Next(0, GameConstants.townNames.Count)];
+                while (claimedTowns.Contains(playerEndTown))
+                {
+                    playerEndTown = GameConstants.townNames[random.Next(0, GameConstants.townNames.Count)];
+                }
+                claimedTowns.Add(playerEndTown);
+                _gameProperties[getEndTownKey(player)] = playerEndTown;
+            }
+        }
+    }
+
+    private string getEndTownKey(string player)
+    {
+        return $"{pEND_TOWN}_{player}";
     }
 
     private void InitDeck()
@@ -731,13 +765,20 @@ public class Game
         return ret;
     }
 
-    public void GameOver()
+    public void GameOver(bool check = false)
     {
+        if (check && !gameIsOver)
+        {
+            return;
+        }
+        gameIsOver = true;
+
         List<Player> winners = new List<Player>();
         List<int> scores = new List<int>();
         foreach (Player p in Player.GetAllPlayers())
         {
             winners.Add(p);
+            p.DeductDistToEndTown();
         }
         if (gameMode == "Elfenland")
         {

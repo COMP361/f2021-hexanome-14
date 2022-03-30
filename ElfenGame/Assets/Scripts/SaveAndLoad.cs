@@ -62,6 +62,7 @@ public static class SaveAndLoad
         public List<MovementTile> mHiddenTiles;
         public string userName;
         public string curTown;
+        public string endTown;
         public List<string> mVisited;
         public PlayerData(Player p)
         {
@@ -73,6 +74,7 @@ public static class SaveAndLoad
             mHiddenTiles = p.mHiddenTiles;
             userName = p.userName;
             curTown = p.curTown;
+            endTown = p.endTown;
             mVisited = new List<string>(); // Can't store dict (JsonUtility doesn't support it) so just store the keys of visited towns
             foreach (KeyValuePair<string, bool> entry in p.mVisited)
             {

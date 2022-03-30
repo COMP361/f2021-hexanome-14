@@ -424,7 +424,8 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
 
     public void Update()
     {
-        statusText.text = NetworkManager.manager.IsMasterClient().ToString();
+        // For debugging purposes
+        // statusText.text = NetworkManager.manager.IsMasterClient().ToString();
     }
 
     #region Callbacks

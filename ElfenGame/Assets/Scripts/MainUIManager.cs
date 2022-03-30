@@ -137,10 +137,13 @@ public class MainUIManager : MonoBehaviour
         {
             SetTiles(data.tilePaths, data.tileTypes);
         }
+
+        UpdateEndTown(Player.GetLocalPlayer().endTown);
     }
 
     public void UpdateColorOptions()
     {
+        if (!chooseColorPanel.activeSelf) return;
         colorSelectionDD.ClearOptions();
         List<TMP_Dropdown.OptionData> newOptions = new List<TMP_Dropdown.OptionData>();
 
@@ -149,6 +152,8 @@ public class MainUIManager : MonoBehaviour
             newOptions.Add(new TMP_Dropdown.OptionData(elfNames[(int)c], c.GetSprite()));
         }
         colorSelectionDD.AddOptions(newOptions);
+
+        OnColorSelectionChanged();
     }
 
     public void UpdatePlayerPointDisplay()
@@ -187,6 +192,12 @@ public class MainUIManager : MonoBehaviour
 
         // Update ALL UI with current player stats
         p.UpdateDisplay();
+    }
+
+    internal void UpdateEndTown(string value)
+    {
+        if (value == null || value == "") return;
+        GameConstants.townDict[value].SetEndTown();
     }
 
     internal Tuple<List<string>, List<MovementTile>> GetTilePositions()
@@ -234,6 +245,12 @@ public class MainUIManager : MonoBehaviour
         }
     }
 
+    public void OnColorSelectionChanged()
+    {
+        int index = elfNames.IndexOf(colorSelectionDD.options[colorSelectionDD.value].text);
+        HelpElfManager.elf.SetSprite(colorSelectionDD.options[colorSelectionDD.value].image);
+    }
+
     public void OnPausePressed()
     {
         isPaused = !isPaused;
@@ -250,6 +267,7 @@ public class MainUIManager : MonoBehaviour
     public void CloseColorSelection()
     {
         chooseColorPanel.SetActive(false);
+        HelpElfManager.elf.SetSprite(Player.GetLocalPlayer().playerColor.GetSprite());
     }
 
     public void exitGameClicked()

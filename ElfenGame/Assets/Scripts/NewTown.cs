@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -41,5 +42,11 @@ public class NewTown : MonoBehaviour, IDragOver
                 pointsManager.AddElement(g);
             }
         }
+    }
+
+    internal void SetEndTown()
+    {
+        GameObject g = (GameObject)Instantiate(Resources.Load("RedX"), transform);
+        g.transform.localPosition = new Vector3(0.0f, 0.0f, -1.0f);
     }
 }
