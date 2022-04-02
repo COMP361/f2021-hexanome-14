@@ -44,9 +44,12 @@ public class Game
     public const string pGAME_ID = "GAME_ID";
 
     public const string pSAVE_ID = "SAVE_ID";
+
+    public const string pGOLD_VALUES = "GOLD_VALUES";
     public const string pGAME_CREATOR = "GAME_CREATOR";
     public static string[] pGAME_PROPS = {
-        pDECK, pDISCARD, pPILE, pVISIBLE, pPLAYERS, pCUR_PLAYER, pCUR_ROUND, pCUR_PHASE, pMAX_ROUNDS, pPASSED_PLAYERS, pGAME_ID, pSAVE_ID,  pGAME_MODE, pEND_TOWN, pWITCH_CARD, pRAND_GOLD
+        pDECK, pDISCARD, pPILE, pVISIBLE, pPLAYERS, pCUR_PLAYER, pCUR_ROUND, pCUR_PHASE, pMAX_ROUNDS,
+        pPASSED_PLAYERS, pGAME_ID, pSAVE_ID,  pGAME_MODE, pEND_TOWN, pWITCH_CARD, pRAND_GOLD, pGOLD_VALUES
     };
     private const string pCOLOR_AVAIL_PREFIX = "COLOR_AVAIL";
 
@@ -296,6 +299,22 @@ public class Game
         }
     }
 
+    public List<int> goldValues
+    {
+        get
+        {
+            if (!_gameProperties.ContainsKey(pGOLD_VALUES))
+            {
+                PropertyNotFoundWarning(pGOLD_VALUES);
+                return new List<int>();
+            }
+            return new List<int>((int[])_gameProperties[pGOLD_VALUES]);
+        }
+        set
+        {
+            _gameProperties[pGOLD_VALUES] = value.ToArray();
+        }
+    }
     public List<CardEnum> mDeck
     {
         get
@@ -423,16 +442,20 @@ public class Game
         curRound = data.curRound;
         passedPlayers = data.passedPlayers;
         saveId = data.saveId;
+        goldValues = data.goldValues;
 
         SyncGameProperties();
 
     }
 
     public Game()
-    {
+    {   // Used for non-master clients that receive rest of game state from master client
         Debug.Log("Creating new game");
         _gameProperties = new ExitGames.Client.Photon.Hashtable();
         _colorProperties = new ExitGames.Client.Photon.Hashtable();
+
+        // Default gold values until updated by master client
+        _gameProperties[pGOLD_VALUES] = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
         for (int i = 0; i < 6; i++)
         {
             _colorProperties[getColorKey((PlayerColor)i)] = "";
@@ -462,6 +485,14 @@ public class Game
         _gameProperties[pVISIBLE] = new MovementTile[0];
         _gameProperties[pDISCARD] = new CardEnum[0];
         _gameProperties[pDECK] = new CardEnum[0];
+
+        List<int> tempGoldValues = GameConstants.goldValues;
+        if (randGoldVar)
+        {
+            tempGoldValues.Shuffle(); // doesn't matter if original list is modified (since only use once)
+        }
+        if (gameMode == "Elfengold")
+            _gameProperties[pGOLD_VALUES] = tempGoldValues.ToArray(); // Only set values if Elfengold variant
 
         InitPile();
         InitDeck();
@@ -516,6 +547,13 @@ public class Game
             {
                 HandleColorUpdate((PlayerColor)i, (string)properties[key]);
             }
+        }
+
+        if (properties.ContainsKey(pGOLD_VALUES))
+        {
+            _gameProperties[pGOLD_VALUES] = (int[])properties[pGOLD_VALUES];
+            if (MainUIManager.manager)
+                MainUIManager.manager.UpdateGoldValues();
         }
 
 

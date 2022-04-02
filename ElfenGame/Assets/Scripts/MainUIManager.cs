@@ -139,6 +139,7 @@ public class MainUIManager : MonoBehaviour
         }
 
         UpdateEndTown(Player.GetLocalPlayer().endTown);
+        UpdateGoldValues();
     }
 
     public void UpdateColorOptions()
@@ -511,6 +512,30 @@ public class MainUIManager : MonoBehaviour
         }
 
         return tiles;
+    }
+
+    internal void UpdateGoldValues()
+    {
+        Debug.Log($"UpdateGoldValues called with gamemode: {Game.currentGame.gameMode}");
+        if (Game.currentGame.gameMode != "Elfengold") return; // Only display gold for elvenhold
+        List<int> goldValues = Game.currentGame.goldValues;
+        if (goldValues.Count != GameConstants.townNames.Count - 1) return;
+
+        int index = 0;
+        foreach (string townName in GameConstants.townNames)
+        {
+            NewTown town = GameConstants.townDict[townName];
+            if (town == null) return;
+
+            if (townName == "TownElvenhold")
+            {
+                town.SetGold(0);
+                continue;
+            }
+            town.SetGold(goldValues[index]);
+
+            index++;
+        }
     }
 
     public void GameOverTriggered(List<Player> winners, List<int> scores)
