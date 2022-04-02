@@ -837,7 +837,7 @@ public class Game
         {
             passedPlayers = 0;
         }
-        if ((curPlayerIndex == (curRound - 1) % mPlayers.Count && curPhase != GamePhase.PlaceCounter) || (passedPlayers == mPlayers.Count))
+        if ((curPlayerIndex == (curRound - 1) % mPlayers.Count && curPhase != GamePhase.PlaceCounter && curPhase != GamePhase.Auction) || (passedPlayers == mPlayers.Count))
         {
             if (curPhase == GamePhase.Travel && curRound == maxRounds)
             {
@@ -861,15 +861,14 @@ public class Game
                     }
                 }
                 if (NetworkManager.manager) NetworkManager.manager.ClearAllTiles(); // Other client UI Update
-                curPhase = GamePhase.DrawCardsAndCounters;
                 curRound = curRound + 1;
                 curPlayerIndex = (curRound - 1) % mPlayers.Count;
             }
             else
             {
-                curPhase++;
                 curPlayerIndex = (curRound - 1) % mPlayers.Count;
             }
+            curPhase = curPhase.NextPhase();
 
             //Debug.LogError($"Cur Round is: {curRound}"); 
         }

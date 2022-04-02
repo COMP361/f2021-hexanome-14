@@ -2,7 +2,17 @@
 using UnityEngine;
 
 
-public enum GamePhase : byte { DrawCardsAndCounters, DrawCounters1, DrawCounters2, DrawCounters3, PlaceCounter, Travel, SelectTokenToKeep };
+public enum GamePhase : byte
+{
+    DrawCardsAndCounters,
+    DrawCounters1,
+    DrawCounters2,
+    DrawCounters3,
+    Auction,
+    PlaceCounter,
+    Travel,
+    SelectTokenToKeep
+};
 static class GamePhaseExtension
 {
     public static byte[] Serialize(object phase)
@@ -14,5 +24,30 @@ static class GamePhaseExtension
     public static object Deserialize(byte[] v)
     {
         return (GamePhase)v[0];
+    }
+    public static GamePhase NextPhase(this GamePhase phase)
+    {
+        if (phase == GamePhase.SelectTokenToKeep)
+        {
+            // Last phase (reset)
+            return GamePhase.DrawCardsAndCounters;
+        }
+
+        if (Game.currentGame.gameMode == "Elfengold")
+        {
+            if (phase == GamePhase.DrawCounters1)
+            {
+                return GamePhase.Auction; // Only one round of draw counter in elfengold
+            }
+        }
+        else
+        {
+            if (phase == GamePhase.DrawCounters3)
+            {
+                return GamePhase.PlaceCounter; // Skip auction for Elfenland
+            }
+        }
+
+        return (GamePhase)((byte)phase + 1);
     }
 }
