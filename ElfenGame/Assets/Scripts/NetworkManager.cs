@@ -316,7 +316,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback, IInRo
         }
         else if (photonEvent.Code == EVENT_REMOVE_ALL_TILES_CODE && MainUIManager.manager)
         {
-            MainUIManager.manager.ClearAllTiles();
+            _ = MainUIManager.manager.ClearAllTiles();
         }
         else if (photonEvent.Code == EVENT_GAME_OVER_CODE)
         {

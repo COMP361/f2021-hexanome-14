@@ -765,6 +765,13 @@ public class Game
         return ret;
     }
 
+    public void ReturnTilesToPile(MovementTile[] tiles)
+    {
+        List<MovementTile> pile = mPile;
+        pile.AddRange(tiles);
+        _gameProperties[pPILE] = pile.ToArray();
+    }
+
     public void GameOver(bool check = false)
     {
         if (check && !gameIsOver)
@@ -840,8 +847,20 @@ public class Game
             }
             else if (curPhase == GamePhase.SelectTokenToKeep)
             {
-                if (MainUIManager.manager) MainUIManager.manager.ClearAllTiles();
-                if (NetworkManager.manager) NetworkManager.manager.ClearAllTiles();
+                if (MainUIManager.manager)
+                {
+                    List<MovementTile> cleared = MainUIManager.manager.ClearAllTiles(); // Local UI update
+                    if (cleared != null)
+                    {
+                        if (gameMode == "Elfenland")
+                        {
+                            // Remove used obstacles
+                            cleared.RemoveAll(o => o == MovementTile.RoadObstacle);
+                        }
+                        ReturnTilesToPile(cleared.ToArray());
+                    }
+                }
+                if (NetworkManager.manager) NetworkManager.manager.ClearAllTiles(); // Other client UI Update
                 curPhase = GamePhase.DrawCardsAndCounters;
                 curRound = curRound + 1;
                 curPlayerIndex = (curRound - 1) % mPlayers.Count;
@@ -864,11 +883,24 @@ public class Game
         CardEnum[] ret = new CardEnum[n];
         for (int i = 0; i < n; ++i)
         {
+            if (deck.Count == 0)
+            {
+                deck.AddRange(mDiscardPile);
+                mDiscardPile.Clear();
+                deck.Shuffle();
+            }
             ret[i] = deck[0];
             deck.RemoveAt(0);
         } //TODO: Synce updates across clients (this might be covered now by sync at end of turn)
         _gameProperties[pDECK] = deck.ToArray();
         return ret;
+    }
+
+    public void DiscardCards(CardEnum[] cards)
+    {
+        List<CardEnum> discard = mDiscardPile;
+        discard.AddRange(cards);
+        _gameProperties[pDISCARD] = discard.ToArray();
     }
     internal void SetSession(string createdBy, string sessionId)
     {
