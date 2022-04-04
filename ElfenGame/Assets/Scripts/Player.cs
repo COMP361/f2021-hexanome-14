@@ -271,6 +271,7 @@ public class Player
         {
             hand.Remove(card);
         }
+        Game.currentGame.DiscardCards(cards);
         _properties[pCARDS] = hand.ToArray();
         SyncPlayerStats();
     }

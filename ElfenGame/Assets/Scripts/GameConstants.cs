@@ -33,13 +33,12 @@ public static class GameConstants
     private static Dictionary<string, PathScript> _roadDict = null;
 
     private static List<string> _townNames = null;
-
+    private static List<int> _goldValues = null;
     private static GameObject _roadGroup = null;
     private static GameObject _townGroup = null;
     private static GameObject _tileGroup = null;
 
     public static string username = "";
-
 
 
     public static Camera mainCamera
@@ -84,6 +83,25 @@ public static class GameConstants
                 _tileGroup = GameObject.Find("TileArea");
             }
             return _tileGroup;
+        }
+    }
+
+    public static List<int> goldValues // Note these values are in the same order
+                                       // as townNames (and Elfenhold is removed)
+    {
+        get
+        {
+            if (_goldValues == null)
+            {
+                _goldValues = new List<int>();
+                TextAsset textAsset = Resources.Load<TextAsset>("GoldList");
+                string[] lines = textAsset.text.Split('\n');
+                foreach (string line in lines)
+                {
+                    _goldValues.Add(int.Parse(line));
+                }
+            }
+            return _goldValues;
         }
     }
 

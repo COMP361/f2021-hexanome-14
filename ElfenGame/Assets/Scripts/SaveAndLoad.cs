@@ -28,6 +28,8 @@ public static class SaveAndLoad
 
         public List<string> tilePaths;
         public List<MovementTile> tileTypes;
+
+        public List<int> goldValues;
         public GameData(Game g, Tuple<List<string>, List<MovementTile>> tilePositions)
         {
             gameMode = g.gameMode;
@@ -47,6 +49,7 @@ public static class SaveAndLoad
             passedPlayers = g.passedPlayers;
             this.tilePaths = tilePositions.Item1;
             this.tileTypes = tilePositions.Item2;
+            goldValues = g.goldValues;
         }
     }
 

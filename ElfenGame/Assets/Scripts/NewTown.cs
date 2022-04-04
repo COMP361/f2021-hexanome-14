@@ -6,6 +6,7 @@ using UnityEngine;
 public class NewTown : MonoBehaviour, IDragOver
 {
     private GameObject pointsHolder;
+    private int goldValue;
 
     public void Awake()
     {
@@ -23,6 +24,11 @@ public class NewTown : MonoBehaviour, IDragOver
     {
         //Not a built in method
         transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+    }
+
+    public int getGoldValue()
+    {
+        return goldValue;
     }
 
     public void DisplayVisited()
@@ -48,5 +54,14 @@ public class NewTown : MonoBehaviour, IDragOver
     {
         GameObject g = (GameObject)Instantiate(Resources.Load("RedX"), transform);
         g.transform.localPosition = new Vector3(0.0f, 0.0f, -1.0f);
+    }
+
+    internal void SetGold(int v)
+    {
+        goldValue = v;
+        if (v == 0) return; // Don't display anything for elvenhold
+        GameObject g = (GameObject)Instantiate(Resources.Load("GoldValue"), transform);
+        g.transform.localPosition = new Vector3(0.0f, 0.0f, -1.0f);
+        g.GetComponentInChildren<TextMesh>().text = v.ToString();
     }
 }
