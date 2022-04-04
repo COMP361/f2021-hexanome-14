@@ -481,7 +481,7 @@ public class Player
         }
         else
         {
-            Debug.LogError("Town " + townName + " not found in visitedTowns");
+            Debug.LogWarning("Town " + townName + " not found in visitedTowns");
         }
         return false;
     }

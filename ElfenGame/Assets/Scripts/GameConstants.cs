@@ -25,20 +25,20 @@ public static class GameConstants
     internal static readonly string service_username = "ElfenGame";
     internal static readonly string service_password = "abc123_ABC123";
     internal static readonly double tokenResetRate = 600;
-    private static MouseActivityManager _mouseActivityManager;
-    private static Camera _mainCamera;
+    private static MouseActivityManager _mouseActivityManager = null;
+    private static Camera _mainCamera = null;
 
 
-    private static Dictionary<string, NewTown> _townDict;
-    private static Dictionary<string, PathScript> _roadDict;
+    private static Dictionary<string, NewTown> _townDict = null;
+    private static Dictionary<string, PathScript> _roadDict = null;
 
-    private static List<string> _townNames;
+    private static List<string> _townNames = null;
 
-    private static GameObject _roadGroup;
-    private static GameObject _townGroup;
-    private static GameObject _tileGroup;
+    private static GameObject _roadGroup = null;
+    private static GameObject _townGroup = null;
+    private static GameObject _tileGroup = null;
 
-    public static string username;
+    public static string username = "";
 
 
 
