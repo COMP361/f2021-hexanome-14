@@ -95,7 +95,7 @@ public static class GameConstants
             {
                 _goldValues = new List<int>();
                 TextAsset textAsset = Resources.Load<TextAsset>("GoldList");
-                string[] lines = textAsset.text.Split('\n');
+                string[] lines = textAsset.text.Replace("\r", "").Split('\n');
                 foreach (string line in lines)
                 {
                     _goldValues.Add(int.Parse(line));
@@ -113,7 +113,7 @@ public static class GameConstants
             {
                 _townNames = new List<string>();
                 TextAsset textAsset = Resources.Load("TownList") as TextAsset;
-                string[] lines = textAsset.text.Split('\n');
+                string[] lines = textAsset.text.Replace("\r", "").Split('\n');
                 foreach (string line in lines)
                 {
                     _townNames.Add(line);
