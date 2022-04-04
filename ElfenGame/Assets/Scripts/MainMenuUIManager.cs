@@ -58,6 +58,8 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
     private string selectedSaveId = "";
 
     private string selectedSessionId = "";
+
+    private bool creatingGame = false;
     public bool inLoadGameView = false;
 
     public void Start()
@@ -83,6 +85,8 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
         gameSelectView.gameObject.SetActive(true);
         homeView.gameObject.SetActive(false);
         UpdateSessionListView(Lobby.availableSessions);
+        selectedSessionId = "";
+        selectedSaveId = "";
         SwitchToCorrectView();
     }
 
@@ -171,8 +175,9 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
     /// </summary>
     public void OnCreateSessionClicked()
     {
-        gameOptionButtonsView.SetActive(false);
-        gameCreationMenu.SetActive(true);
+
+        creatingGame = true;
+        SwitchToCorrectView();
 
     }
 
@@ -192,9 +197,8 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
     /// </summary>
     public void OnConfirmCreateClicked()
     {
-
-        gameCreationMenu.SetActive(false);
-        gameCreatorOptionsView.SetActive(true);
+        creatingGame = false;
+        SwitchToCorrectView();
 
         Lobby.user.CreateSession();
     }
@@ -240,6 +244,8 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
         {
             AddGameSession(game);
         }
+
+        SwitchToCorrectView();
     }
 
     /// <summary>
@@ -283,12 +289,9 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
             else
             {
                 sessionScript.deactivate();
-                if (sessionScript.gameSession.session_ID != selectedSessionId)
-                {
-                    sessionScript.SetUnselectedColor();
-                }
             }
         }
+        SetActiveColors(active);
     }
 
     /// <summary>
@@ -310,7 +313,28 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
         {
             sessionScript.SetToDefaultColor();
         }
+    }
 
+    private void SetActiveColors(bool active)
+    {
+        foreach (GameSessionListItemScript sessionScript in sessionListView.GetComponentsInChildren<GameSessionListItemScript>())
+        {
+            if (selectedSessionId == sessionScript.gameSession.session_ID)
+            {
+                sessionScript.SetSelectedColor();
+            }
+            else
+            {
+                if (active)
+                {
+                    sessionScript.SetToDefaultColor();
+                }
+                else
+                {
+                    sessionScript.SetUnselectedColor();
+                }
+            }
+        }
     }
 
     /// <summary>
@@ -358,47 +382,53 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
     /// </summary>
     public void SwitchToCorrectView()
     {
-        gameCreatorOptionsView.SetActive(false);
-        gameJoinedOptionsView.SetActive(false);
-        gameLoadOptionsView.SetActive(false);
-        gameOptionButtonsView.SetActive(false);
-        SetSessionClickEnabled(false);
-        sessionListView.SetActive(false);
-        savedGameListView.SetActive(false);
+        bool gCreate = false, gJoin = false, gLoad = false, gOptions = false,
+        lSession = false, lSaved = false, gCreation = false, clickEnabled = false;
         bool loadedOwner = false;
         if (selectedSessionId != "" && Lobby.activeGames.ContainsKey(selectedSessionId))
         {
             Lobby.GameSession session = Lobby.activeGames[selectedSessionId];
             loadedOwner = session.createdBy == GameConstants.username;
         }
-        if (NetworkManager.manager.inGame() && loadedOwner)
+        SetSessionClickEnabled(false);
+        if (creatingGame)
+        {
+            gCreation = true;
+        }
+        else if (NetworkManager.manager.inGame() && loadedOwner)
         {
             // If in game and you are the game creator, show the game creator options (start game, delete game)
-            gameCreatorOptionsView.SetActive(true);
-            sessionListView.SetActive(true);
+            gCreate = true;
+            lSession = true;
         }
         else if (NetworkManager.manager.inGame())
         {
             // If in game and you are not the game creator, show the game joined options (leave game)
-            gameJoinedOptionsView.SetActive(true);
-            sessionListView.SetActive(true);
+            gJoin = true;
+            lSession = true;
         }
         else if (inLoadGameView)
         {
             // If in load game view, show the game load options (load game, delete saved game, return to lobby)
             selectedSaveId = ""; // Currently selected saved game
-            gameLoadOptionsView.SetActive(true);
-            savedGameListView.SetActive(true);
-
+            gLoad = true;
+            lSaved = true;
         }
         else
         {
             // If not in game && not in load game view, show the game options (create game, join game, load game)
-            selectedSessionId = ""; //TODO: This might clear the session on session list updates
-            gameOptionButtonsView.SetActive(true);
-            sessionListView.SetActive(true);
-            SetSessionClickEnabled(true);
+            gOptions = true;
+            lSession = true;
+            clickEnabled = true;
         }
+        gameCreatorOptionsView.SetActive(gCreate);
+        gameJoinedOptionsView.SetActive(gJoin);
+        gameLoadOptionsView.SetActive(gLoad);
+        gameOptionButtonsView.SetActive(gOptions);
+        sessionListView.SetActive(lSession);
+        savedGameListView.SetActive(lSaved);
+        gameCreationMenu.SetActive(gCreation);
+        SetSessionClickEnabled(clickEnabled);
     }
 
     /// <summary>
@@ -495,6 +525,7 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
                 witchVar: witchButton.GetComponent<VariationButton>().isSelected,
                 randGoldVar: randGoldButton.GetComponent<VariationButton>().isSelected
             );
+            SwitchToCorrectView();
         }
         else
         {

@@ -16,22 +16,28 @@ public class GameSessionListItemScript : MonoBehaviour, IPointerClickHandler
     public Lobby.GameSession gameSession;
     private OnGameSessionClickedHandler handler;
 
+    private Image background;
+
     private bool active = true;
 
-
+    public void Awake()
+    {
+        background = GetComponent<Image>();
+    }
     public void SetToDefaultColor()
     {
-        Image image = GetComponent<Image>();
-        if (gameSession.players.Contains(GameConstants.username))
-        {
-            image.color = GameConstants.blueFaded;
+        // Image image = GetComponent<Image>();
+        // if (gameSession.players.Contains(GameConstants.username))
+        // {
+        //     image.color = GameConstants.blueFaded;
 
-        }
-        else
-        {
-            image.color = GameConstants.redFaded;
+        // }
+        // else
+        // {
+        //     image.color = GameConstants.redFaded;
 
-        }
+        // }
+        background.color = GameConstants.blueFaded;
     }
 
     public void SetFields(Lobby.GameSession gameSession)
@@ -86,14 +92,11 @@ public class GameSessionListItemScript : MonoBehaviour, IPointerClickHandler
 
     internal void SetSelectedColor()
     {
-        Image image = GetComponent<Image>();
-        image.color = GameConstants.greenFaded;
+        background.color = GameConstants.greenFaded;
     }
 
     internal void SetUnselectedColor()
     {
-        Image image = GetComponent<Image>();
-        image.color = GameConstants.greyFaded;
-
+        background.color = GameConstants.greyFaded;
     }
 }
