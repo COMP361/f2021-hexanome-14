@@ -14,6 +14,8 @@ public class NewTown : MonoBehaviour, IDragOver
     }
 
     public GameObject pointPrefab;
+
+    private GameObject goldObject = null, redX = null;
     public void OnDragEnter()
     {
         //Not a built in method
@@ -52,16 +54,23 @@ public class NewTown : MonoBehaviour, IDragOver
 
     internal void SetEndTown()
     {
-        GameObject g = (GameObject)Instantiate(Resources.Load("RedX"), transform);
-        g.transform.localPosition = new Vector3(0.0f, 0.0f, -1.0f);
+        // instantiate the end town if it does not exist
+        if (redX != null) return;
+        redX = (GameObject)Instantiate(Resources.Load("RedX"), transform);
+        redX.name = "EndTownMarker";
+        redX.transform.localPosition = new Vector3(0.0f, 0.0f, -1.0f);
     }
 
     internal void SetGold(int v)
     {
         goldValue = v;
         if (v == 0) return; // Don't display anything for elvenhold
-        GameObject g = (GameObject)Instantiate(Resources.Load("GoldValue"), transform);
-        g.transform.localPosition = new Vector3(0.0f, 0.0f, -1.0f);
-        g.GetComponentInChildren<TextMesh>().text = v.ToString();
+        if (goldObject == null)
+        {
+            goldObject = (GameObject)Instantiate(Resources.Load("GoldValue"), transform);
+            goldObject.transform.localPosition = new Vector3(0.0f, 0.0f, -1.0f);
+        }
+
+        goldObject.GetComponentInChildren<TextMesh>().text = v.ToString();
     }
 }
