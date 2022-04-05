@@ -12,7 +12,8 @@ public enum CardEnum : byte
     Raft,
     TrollWagon,
     Unicorn,
-    Witch
+    Witch,
+    Gold
 }
 
 static class CardEnumExtension
@@ -27,18 +28,19 @@ static class CardEnumExtension
         {CardEnum.TrollWagon, "TrollWagon" },
         {CardEnum.Unicorn, "Unicorn" },
         {CardEnum.Witch, "Witch" },
+        {CardEnum.Gold, "Gold" },
     };
-     
+
     public static Sprite GetSprite(this CardEnum card)
-    { 
-         
+    {
+
         return Resources.Load<Sprite>(resourceNames[card]);
     }
 
     public static byte[] Serialize(object card)
     {
         var c = (CardEnum)card;
-        return new byte[] { (byte)c};
+        return new byte[] { (byte)c };
     }
 
     public static object Deserialize(byte[] v)
