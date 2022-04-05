@@ -313,7 +313,10 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
         DestroyAllChildren(sessionListView.transform);
         foreach (Lobby.GameSession game in gameSessions)
         {
-            AddGameSession(game);
+            if (game.launched == false){
+                AddGameSession(game);
+            }
+            
         }
 
         SwitchToCorrectView();
@@ -371,6 +374,9 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
     /// <param name="gameSession">Session to add to the list</param>
     private void AddGameSession(Lobby.GameSession gameSession)
     {
+        if (gameSession.launched == true){
+            return;
+        }
         GameObject newSession = Instantiate(sessionPrefab, sessionListView.transform);
 
         GameSessionListItemScript sessionScript = newSession.GetComponent<GameSessionListItemScript>();

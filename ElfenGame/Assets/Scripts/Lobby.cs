@@ -250,6 +250,9 @@ public class Lobby
                     if (!gameSession.launched)
                     {
                         tempAvailableSessions.Add(gameSession);
+                    } else {
+                        tempAvailableSessions.Remove(gameSession);
+
                     }
                     tempActiveGames[gameSession.session_ID] = gameSession;
                     if (gameSession.saveID != "")
