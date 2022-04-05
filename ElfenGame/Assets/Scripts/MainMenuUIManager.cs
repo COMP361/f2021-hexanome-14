@@ -2,9 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
-using Photon.Pun;
-using System;
+using UnityEngine.Audio;
 
 public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
 {
@@ -53,6 +51,10 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
     [SerializeField] private Button witchButton;
     [SerializeField] private Button randGoldButton;
 
+    public AudioMixer audioMixer;
+
+    public Image volumeHandleImage;
+
     #endregion
     private List<int> numRoundOptions = new List<int> { 3, 4, 5 };
     private string selectedSaveId = "";
@@ -73,6 +75,23 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
             return "";
         }
         return Lobby.activeGames[selectedSessionId].createdBy;
+    }
+
+    public void SetVolume(float volume)
+    {
+        float curVolume;
+        audioMixer.GetFloat("volume", out curVolume);
+        if (volume <= -30)
+        {
+            volume = -80; // -80 is the minimum value for the audio mixer
+            volumeHandleImage.sprite = Resources.Load<Sprite>("SoundOff");
+        }
+        else if (curVolume == -80)
+        {
+            // Currently set to -80 and being changed to something higher
+            volumeHandleImage.sprite = Resources.Load<Sprite>("SoundOn");
+        }
+        audioMixer.SetFloat("volume", volume);
     }
 
     #region UI Click Handlers

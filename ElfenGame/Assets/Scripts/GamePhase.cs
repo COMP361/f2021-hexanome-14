@@ -13,6 +13,7 @@ public enum GamePhase : byte
     Travel,
     SelectTokenToKeep
 };
+
 static class GamePhaseExtension
 {
     public static byte[] Serialize(object phase)
