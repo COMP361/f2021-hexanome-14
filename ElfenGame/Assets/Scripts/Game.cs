@@ -27,29 +27,15 @@ public class Game
 {
 
     #region Fields
-    public const string pDECK = "DECK";
-    public const string pDISCARD = "DISCARD";
-    public const string pPILE = "PILE";
-    public const string pVISIBLE = "VISIBLE";
-    public const string pPLAYERS = "PLAYERS";
-    public const string pCUR_PLAYER = "CUR_PLAYER";
-    public const string pCUR_ROUND = "CUR_ROUND";
-    public const string pCUR_PHASE = "CUR_PHASE";
-    public const string pMAX_ROUNDS = "MAX_ROUNDS";
-    public const string pGAME_MODE = "GAME_MODE";
-    public const string pEND_TOWN = "END_TOWN";
-    public const string pWITCH_CARD = "WITCH_CARD";
-    public const string pRAND_GOLD = "RAND_GOLD";
-    public const string pPASSED_PLAYERS = "PASSED_PLAYERS";
-    public const string pGAME_ID = "GAME_ID";
 
-    public const string pSAVE_ID = "SAVE_ID";
-
-    public const string pGOLD_VALUES = "GOLD_VALUES";
-    public const string pGAME_CREATOR = "GAME_CREATOR";
+    public const string pDECK = "DECK", pDISCARD = "DISCARD", pPILE = "PILE", pVISIBLE = "VISIBLE",
+    pPLAYERS = "PLAYERS", pCUR_PLAYER = "CUR_PLAYER", pCUR_ROUND = "CUR_ROUND", pCUR_PHASE = "CUR_PHASE",
+    pMAX_ROUNDS = "MAX_ROUNDS", pGAME_MODE = "GAME_MODE", pEND_TOWN = "END_TOWN", pWITCH_CARD = "WITCH_CARD",
+    pRAND_GOLD = "RAND_GOLD", pPASSED_PLAYERS = "PASSED_PLAYERS", pGAME_ID = "GAME_ID", pSAVE_ID = "SAVE_ID",
+    pGOLD_VALUES = "GOLD_VALUES", pGAME_CREATOR = "GAME_CREATOR";
     public static string[] pGAME_PROPS = {
         pDECK, pDISCARD, pPILE, pVISIBLE, pPLAYERS, pCUR_PLAYER, pCUR_ROUND, pCUR_PHASE, pMAX_ROUNDS,
-        pPASSED_PLAYERS, pGAME_ID, pSAVE_ID,  pGAME_MODE, pEND_TOWN, pWITCH_CARD, pRAND_GOLD, pGOLD_VALUES
+        pPASSED_PLAYERS, pGAME_ID, pSAVE_ID,  pGAME_MODE, pEND_TOWN, pWITCH_CARD, pRAND_GOLD, pGOLD_VALUES, pGAME_CREATOR
     };
     private const string pCOLOR_AVAIL_PREFIX = "COLOR_AVAIL";
 
@@ -74,298 +60,56 @@ public class Game
 
     private bool gameIsOver = false;
 
+    #region Properties
     private void PropertyNotFoundWarning(string property)
     {
         Debug.LogWarning("Property " + property + " not found in game properties");
     }
 
-    #region Properties
-    public string gameId
+    private T GetP<T>(string property)
     {
-        get
+        if (_gameProperties.ContainsKey(property))
         {
-            if (!_gameProperties.ContainsKey(pGAME_ID))
-            {
-                PropertyNotFoundWarning(pGAME_ID);
-                return "";
-            }
-            return (string)_gameProperties[pGAME_ID];
+            return (T)_gameProperties[property];
         }
-        set
+        else
         {
-            _gameProperties[pGAME_ID] = value;
+            PropertyNotFoundWarning(property);
+            return default(T);
         }
     }
+    private void SetP<T>(string property, T value)
+    {
+        _gameProperties[property] = value;
+    }
+    private List<T> GetL<T>(string property)
+    {
+        return GetP<T[]>(property).ToList();
+    }
+    private void SetL<T>(string property, List<T> list)
+    {
+        SetP<T[]>(property, list.ToArray());
+    }
+    public string gameId { get => GetP<string>(pGAME_ID); set => SetP<string>(pGAME_ID, value); }
+    public string saveId { get => GetP<string>(pSAVE_ID); set => SetP<string>(pSAVE_ID, value); }
+    public string gameCreator { get => GetP<string>(pGAME_CREATOR); set => SetP<string>(pGAME_CREATOR, value); }
+    public int curPlayerIndex { get => GetP<int>(pCUR_PLAYER); set => SetP<int>(pCUR_PLAYER, value); }
+    public int passedPlayers { get => GetP<int>(pPASSED_PLAYERS); set => SetP<int>(pPASSED_PLAYERS, value); }
+    public int maxRounds { get => GetP<int>(pMAX_ROUNDS); set => SetP<int>(pMAX_ROUNDS, value); }
+    public GamePhase curPhase { get => GetP<GamePhase>(pCUR_PHASE); set => SetP<GamePhase>(pCUR_PHASE, value); }
+    public int curRound { get => GetP<int>(pCUR_ROUND); set => SetP<int>(pCUR_ROUND, value); }
+    public string gameMode { get => GetP<string>(pGAME_MODE); set => SetP<string>(pGAME_MODE, value); }
+    public bool endTown { get => GetP<bool>(pEND_TOWN); set => SetP<bool>(pEND_TOWN, value); }
+    public bool witchCard { get => GetP<bool>(pWITCH_CARD); set => SetP<bool>(pWITCH_CARD, value); }
+    public bool randGold { get => GetP<bool>(pRAND_GOLD); set => SetP<bool>(pRAND_GOLD, value); }
 
-    public string saveId
-    {
-        get
-        {
-            if (!_gameProperties.ContainsKey(pSAVE_ID))
-            {
-                PropertyNotFoundWarning(pSAVE_ID);
-                return "";
-            }
-            return (string)_gameProperties[pSAVE_ID];
-        }
-        set
-        {
-            _gameProperties[pSAVE_ID] = value;
-        }
-    }
-
-    public string gameCreator
-    {
-        get
-        {
-            if (!_gameProperties.ContainsKey(pGAME_CREATOR))
-            {
-                PropertyNotFoundWarning(pGAME_CREATOR);
-                return "";
-            }
-            return (string)_gameProperties[pGAME_CREATOR];
-        }
-        set
-        {
-            _gameProperties[pGAME_CREATOR] = value;
-        }
-    }
-
-    public int curPlayerIndex
-    {
-        get
-        {
-            if (!_gameProperties.ContainsKey(pCUR_PLAYER))
-            {
-                PropertyNotFoundWarning(pCUR_PLAYER);
-                return -1;
-            }
-            return (int)_gameProperties[pCUR_PLAYER];
-        }
-        set
-        {
-            _gameProperties[pCUR_PLAYER] = value;
-        }
-    }
-
-    public int passedPlayers
-    {
-        get
-        {
-            if (!_gameProperties.ContainsKey(pPASSED_PLAYERS))
-            {
-                PropertyNotFoundWarning(pPASSED_PLAYERS);
-                return -1;
-            }
-            return (int)_gameProperties[pPASSED_PLAYERS];
-        }
-        set
-        {
-            _gameProperties[pPASSED_PLAYERS] = value;
-        }
-    }
-
-    public int maxRounds
-    {
-        get
-        {
-            if (!_gameProperties.ContainsKey(pMAX_ROUNDS))
-            {
-                PropertyNotFoundWarning(pMAX_ROUNDS);
-                return -1;
-            }
-            return (int)_gameProperties[pMAX_ROUNDS];
-        }
-        set
-        {
-            _gameProperties[pMAX_ROUNDS] = value;
-        }
-    }
-
-    public GamePhase curPhase
-    {
-        get
-        {
-            if (!_gameProperties.ContainsKey(pCUR_PHASE))
-            {
-                PropertyNotFoundWarning(pCUR_PHASE);
-                return GamePhase.DrawCardsAndCounters;
-            }
-            return (GamePhase)_gameProperties[pCUR_PHASE];
-        }
-        set
-        {
-            _gameProperties[pCUR_PHASE] = value;
-        }
-    }
-
-    public int curRound
-    {
-        get
-        {
-            if (!_gameProperties.ContainsKey(pCUR_ROUND))
-            {
-                PropertyNotFoundWarning(pCUR_ROUND);
-                return -1;
-            }
-            return (int)_gameProperties[pCUR_ROUND];
-        }
-        set
-        {
-            _gameProperties[pCUR_ROUND] = value;
-        }
-    }
-
-    public string gameMode
-    {
-        get
-        {
-            if (!_gameProperties.ContainsKey(pGAME_MODE))
-            {
-                PropertyNotFoundWarning(pGAME_MODE);
-                return "";
-            }
-            return (string)_gameProperties[pGAME_MODE];
-        }
-        set
-        {
-            _gameProperties[pGAME_MODE] = value;
-        }
-    }
-    public bool endTown
-    {
-        get
-        {
-            if (!_gameProperties.ContainsKey(pEND_TOWN))
-            {
-                PropertyNotFoundWarning(pEND_TOWN);
-                return false;
-            }
-            return (bool)_gameProperties[pEND_TOWN];
-        }
-        set
-        {
-            _gameProperties[pEND_TOWN] = value;
-        }
-    }
-    public bool witchCard
-    {
-        get
-        {
-            if (!_gameProperties.ContainsKey(pWITCH_CARD))
-            {
-                PropertyNotFoundWarning(pWITCH_CARD);
-                return false;
-            }
-            return (bool)_gameProperties[pWITCH_CARD];
-        }
-        set
-        {
-            _gameProperties[pWITCH_CARD] = value;
-        }
-    }
-
-    public bool randGold
-    {
-        get
-        {
-            if (!_gameProperties.ContainsKey(pRAND_GOLD))
-            {
-                PropertyNotFoundWarning(pRAND_GOLD);
-                return false;
-            }
-            return (bool)_gameProperties[pRAND_GOLD];
-        }
-        set
-        {
-            _gameProperties[pRAND_GOLD] = value;
-        }
-    }
-
-    public List<string> mPlayers
-    {
-        get
-        {
-            if (!_gameProperties.ContainsKey(pPLAYERS))
-            {
-                PropertyNotFoundWarning(pPLAYERS);
-                return new List<string>();
-            }
-            return new List<string>((string[])_gameProperties[pPLAYERS]);
-        }
-        set
-        {
-            _gameProperties[pPLAYERS] = value.ToArray();
-        }
-    }
-
-    public List<int> goldValues
-    {
-        get
-        {
-            if (!_gameProperties.ContainsKey(pGOLD_VALUES))
-            {
-                PropertyNotFoundWarning(pGOLD_VALUES);
-                return new List<int>();
-            }
-            return new List<int>((int[])_gameProperties[pGOLD_VALUES]);
-        }
-        set
-        {
-            _gameProperties[pGOLD_VALUES] = value.ToArray();
-        }
-    }
-    public List<CardEnum> mDeck
-    {
-        get
-        {
-            if (!_gameProperties.ContainsKey(pDECK))
-            {
-                PropertyNotFoundWarning(pDECK);
-                return new List<CardEnum>();
-            }
-            return new List<CardEnum>((CardEnum[])_gameProperties[pDECK]);
-        }
-
-        set
-        {
-            _gameProperties[pDECK] = value.ToArray();
-        }
-    }
-
-    public List<CardEnum> mDiscardPile
-    {
-        get
-        {
-            if (!_gameProperties.ContainsKey(pDISCARD))
-            {
-                PropertyNotFoundWarning(pDISCARD);
-                return new List<CardEnum>();
-            }
-            return new List<CardEnum>((CardEnum[])_gameProperties[pDISCARD]);
-        }
-        set
-        {
-            _gameProperties[pDISCARD] = value.ToArray();
-        }
-    }
-    public List<MovementTile> mPile
-    {
-        get
-        {
-            if (!_gameProperties.ContainsKey(pPILE))
-            {
-                PropertyNotFoundWarning(pPILE);
-                return new List<MovementTile>();
-            }
-            return new List<MovementTile>((MovementTile[])_gameProperties[pPILE]);
-        }
-        set
-        {
-            _gameProperties[pPILE] = value.ToArray();
-        }
-    }
-
+    // List properties
+    public List<string> mPlayers { get => GetL<string>(pPLAYERS); set => SetL<string>(pPLAYERS, value); }
+    public List<int> goldValues { get => GetL<int>(pGOLD_VALUES); set => SetL<int>(pGOLD_VALUES, value); }
+    public List<CardEnum> mDeck { get => GetL<CardEnum>(pDECK); set => SetL<CardEnum>(pDECK, value); }
+    public List<CardEnum> mDiscardPile { get => GetL<CardEnum>(pDISCARD); set => SetL<CardEnum>(pDISCARD, value); }
+    public List<MovementTile> mPile { get => GetL<MovementTile>(pPILE); set => SetL<MovementTile>(pPILE, value); }
+    public List<MovementTile> mVisibleTiles { get => GetL<MovementTile>(pVISIBLE); set => SetL<MovementTile>(pVISIBLE, value); }
     public List<PlayerColor> mAvailableColors
     {
         get
@@ -379,23 +123,6 @@ public class Game
                 }
             }
             return colors;
-        }
-    }
-
-    public List<MovementTile> mVisibleTiles
-    {
-        get
-        {
-            if (!_gameProperties.ContainsKey(pVISIBLE))
-            {
-                PropertyNotFoundWarning(pVISIBLE);
-                return new List<MovementTile>();
-            }
-            return new List<MovementTile>((MovementTile[])_gameProperties[pVISIBLE]);
-        }
-        set
-        {
-            _gameProperties[pVISIBLE] = value.ToArray();
         }
     }
 
@@ -455,7 +182,7 @@ public class Game
         _colorProperties = new ExitGames.Client.Photon.Hashtable();
 
         // Default gold values until updated by master client
-        _gameProperties[pGOLD_VALUES] = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+        goldValues = new List<int> { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
         for (int i = 0; i < 6; i++)
         {
             _colorProperties[getColorKey((PlayerColor)i)] = "";
@@ -467,32 +194,34 @@ public class Game
         // Note no-param constructor is called first
         Debug.Log($"Creating new game with sessionId: {sessionId}");
 
-        _gameProperties[pCUR_PLAYER] = 0;
-        _gameProperties[pCUR_ROUND] = 1;
-        _gameProperties[pCUR_PHASE] = GamePhase.DrawCardsAndCounters;
-        _gameProperties[pMAX_ROUNDS] = maxRnds;
-        _gameProperties[pGAME_MODE] = gameMode;
-        _gameProperties[pEND_TOWN] = endTown;
-        _gameProperties[pWITCH_CARD] = witchVar;
-        _gameProperties[pRAND_GOLD] = randGoldVar;
-        _gameProperties[pPASSED_PLAYERS] = 0;
-        _gameProperties[pGAME_ID] = sessionId;
-        _gameProperties[pGAME_CREATOR] = creator;
-        _gameProperties[pSAVE_ID] = saveId;
+        this.curPlayerIndex = 0;
+        this.curRound = 1;
+        this.curPhase = GamePhase.DrawCardsAndCounters;
+        this.maxRounds = maxRnds;
+        this.gameMode = gameMode;
+        this.endTown = endTown;
+        this.witchCard = witchVar;
+        this.randGold = randGoldVar;
+        this.passedPlayers = 0;
+        this.saveId = saveId;
+        this.gameId = sessionId;
+        this.gameCreator = creator;
 
-        _gameProperties[pPLAYERS] = new string[] { };
-        _gameProperties[pPILE] = new MovementTile[0];
-        _gameProperties[pVISIBLE] = new MovementTile[0];
-        _gameProperties[pDISCARD] = new CardEnum[0];
-        _gameProperties[pDECK] = new CardEnum[0];
+        this.mPlayers = new List<string>();
+        this.mPile = new List<MovementTile>();
+        this.mVisibleTiles = new List<MovementTile>();
+        this.mDeck = new List<CardEnum>();
+        this.mDiscardPile = new List<CardEnum>();
 
-        List<int> tempGoldValues = GameConstants.goldValues;
-        if (randGoldVar)
-        {
-            tempGoldValues.Shuffle(); // doesn't matter if original list is modified (since only use once)
-        }
         if (gameMode == "Elfengold")
-            _gameProperties[pGOLD_VALUES] = tempGoldValues.ToArray(); // Only set values if Elfengold variant
+        {
+            List<int> tempGoldValues = GameConstants.goldValues;
+            if (randGoldVar)
+            {
+                tempGoldValues.Shuffle(); // doesn't matter if original list is modified (since only use once)
+            }
+            this.goldValues = tempGoldValues; // Set gold values if elfengold (already defaults to 0 for elvenland)
+        }
 
         InitPile();
         InitDeck();
@@ -549,14 +278,6 @@ public class Game
             }
         }
 
-        if (properties.ContainsKey(pGOLD_VALUES))
-        {
-            _gameProperties[pGOLD_VALUES] = (int[])properties[pGOLD_VALUES];
-            if (MainUIManager.manager)
-                MainUIManager.manager.UpdateGoldValues();
-        }
-
-
         bool updatedProps = false;
         foreach (string key in pGAME_PROPS)
         {
@@ -589,12 +310,14 @@ public class Game
             HandlePhaseUpdate();
             MainUIManager.manager.UpdateAvailableTokens();
             MainUIManager.manager.UpdateRoundInfo(); // TODO: pass info as argument?
+            MainUIManager.manager.UpdateGoldValues();
         }
 
         SaveAndLoad.SaveGameState();
 
     }
 
+    // Not longer in use
     public void Init(int maxRnds, string gameMode, bool endTown, bool witchVar, bool randGoldVar)
     {
         // FIXME: This function keeps crashing weirdly
@@ -668,8 +391,8 @@ public class Game
             visible.Add(pile[0]);
             pile.RemoveAt(0);
         }
-        _gameProperties[pPILE] = pile.ToArray();
-        _gameProperties[pVISIBLE] = visible.ToArray();
+        mPile = pile;
+        mVisibleTiles = visible;
     }
 
     public void InitPlayersList()
@@ -685,7 +408,7 @@ public class Game
             playersInGame.Add(p.UserId);
         }
         playersInGame.Shuffle();
-        _gameProperties[pPLAYERS] = playersInGame.ToArray();
+        mPlayers = playersInGame;
 
         if (endTown)
         {
@@ -728,9 +451,8 @@ public class Game
         deck.Add(CardEnum.Raft);
 
         deck.Shuffle();
-        _gameProperties[pDECK] = deck.ToArray();
+        mDeck = deck;
     }
-
 
     private void HandlePhaseUpdate()
     {
@@ -781,8 +503,8 @@ public class Game
         MovementTile ret = visible[index];
         visible[index] = pile[0];
         pile.RemoveAt(0);
-        _gameProperties[pVISIBLE] = visible.ToArray();
-        _gameProperties[pPILE] = pile.ToArray();
+        mPile = pile;
+        mVisibleTiles = visible;
         return ret;
     }
 
@@ -790,7 +512,7 @@ public class Game
     {
         List<MovementTile> pile = mPile;
         pile.AddRange(tiles);
-        _gameProperties[pPILE] = pile.ToArray();
+        mPile = pile;
     }
 
 
@@ -799,7 +521,7 @@ public class Game
         List<MovementTile> pile = mPile;
         MovementTile ret = pile[0];
         pile.RemoveAt(0);
-        _gameProperties[pPILE] = pile.ToArray();
+        mPile = pile;
         return ret;
     }
 
@@ -807,7 +529,7 @@ public class Game
     {
         List<MovementTile> pile = mPile;
         pile.AddRange(tiles);
-        _gameProperties[pPILE] = pile.ToArray();
+        mPile = pile;
     }
 
     public void GameOver(bool check = false)
@@ -929,7 +651,7 @@ public class Game
             ret[i] = deck[0];
             deck.RemoveAt(0);
         } //TODO: Synce updates across clients (this might be covered now by sync at end of turn)
-        _gameProperties[pDECK] = deck.ToArray();
+        this.mDeck = deck;
         return ret;
     }
 
@@ -937,7 +659,7 @@ public class Game
     {
         List<CardEnum> discard = mDiscardPile;
         discard.AddRange(cards);
-        _gameProperties[pDISCARD] = discard.ToArray();
+        this.mDiscardPile = discard;
     }
     internal void SetSession(string createdBy, string sessionId)
     {
