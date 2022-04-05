@@ -52,6 +52,7 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
     [SerializeField] private Button endTownButton;
     [SerializeField] private Button witchButton;
     [SerializeField] private Button randGoldButton;
+    [SerializeField] private Button tradingButton;
 
     #endregion
     private List<int> numRoundOptions = new List<int> { 3, 4, 5 };
@@ -493,7 +494,8 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
                 gameMode: gameModeDD.options[gameModeDD.value].text,
                 endTown: endTownButton.GetComponent<VariationButton>().isSelected,
                 witchVar: witchButton.GetComponent<VariationButton>().isSelected,
-                randGoldVar: randGoldButton.GetComponent<VariationButton>().isSelected
+                randGoldVar: randGoldButton.GetComponent<VariationButton>().isSelected,
+                tradingVar: tradingButton.GetComponent<VariationButton>().isSelected
             );
         }
         else

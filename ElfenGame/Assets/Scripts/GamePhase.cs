@@ -9,6 +9,7 @@ public enum GamePhase : byte
     DrawCounters2,
     DrawCounters3,
     Auction,
+    Trading,
     PlaceCounter,
     Travel,
     SelectTokenToKeep
@@ -33,20 +34,40 @@ static class GamePhaseExtension
             return GamePhase.DrawCardsAndCounters;
         }
 
+
         if (Game.currentGame.gameMode == "Elfengold")
         {
             if (phase == GamePhase.DrawCounters1)
             {
                 return GamePhase.Auction; // Only one round of draw counter in elfengold
             }
+            
         }
         else
         {
             if (phase == GamePhase.DrawCounters3)
             {
-                return GamePhase.PlaceCounter; // Skip auction for Elfenland
+                // TODO: If for trading 
+                if (Game.currentGame.tradingPhase){
+                    return GamePhase.Trading;
+                } else {
+                    return GamePhase.PlaceCounter; // Skip auction for Elfenland
+                }
+                
             }
         }
+
+        // if elfengold and trading phase
+        if (phase == GamePhase.Auction && Game.currentGame.tradingPhase)
+        {
+            return GamePhase.Trading;
+        }
+
+        if (phase == GamePhase.Trading){
+            return GamePhase.PlaceCounter;
+        }
+
+        // if auction -> trading
 
         return (GamePhase)((byte)phase + 1);
     }

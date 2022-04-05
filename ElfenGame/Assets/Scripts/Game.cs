@@ -38,6 +38,7 @@ public class Game
     public const string pMAX_ROUNDS = "MAX_ROUNDS";
     public const string pGAME_MODE = "GAME_MODE";
     public const string pEND_TOWN = "END_TOWN";
+    public const string pTRAD_PHASE = "TRADING_PHASE";
     public const string pWITCH_CARD = "WITCH_CARD";
     public const string pRAND_GOLD = "RAND_GOLD";
     public const string pPASSED_PLAYERS = "PASSED_PLAYERS";
@@ -49,7 +50,7 @@ public class Game
     public const string pGAME_CREATOR = "GAME_CREATOR";
     public static string[] pGAME_PROPS = {
         pDECK, pDISCARD, pPILE, pVISIBLE, pPLAYERS, pCUR_PLAYER, pCUR_ROUND, pCUR_PHASE, pMAX_ROUNDS,
-        pPASSED_PLAYERS, pGAME_ID, pSAVE_ID,  pGAME_MODE, pEND_TOWN, pWITCH_CARD, pRAND_GOLD, pGOLD_VALUES
+        pPASSED_PLAYERS, pGAME_ID, pSAVE_ID,  pGAME_MODE, pEND_TOWN, pTRAD_PHASE, pWITCH_CARD, pRAND_GOLD, pGOLD_VALUES
     };
     private const string pCOLOR_AVAIL_PREFIX = "COLOR_AVAIL";
 
@@ -248,6 +249,24 @@ public class Game
             _gameProperties[pEND_TOWN] = value;
         }
     }
+
+    public bool tradingPhase
+    {
+        get
+        {
+            if (!_gameProperties.ContainsKey(pTRAD_PHASE))
+            {
+                PropertyNotFoundWarning(pTRAD_PHASE);
+                return false;
+            }
+            return (bool)_gameProperties[pTRAD_PHASE];
+        }
+        set
+        {
+            _gameProperties[pTRAD_PHASE] = value;
+        }
+    }
+
     public bool witchCard
     {
         get
@@ -461,7 +480,7 @@ public class Game
             _colorProperties[getColorKey((PlayerColor)i)] = "";
         }
     }
-    public Game(string sessionId, string saveId, string creator, int maxRnds, string gameMode, bool endTown, bool witchVar, bool randGoldVar) : this()
+    public Game(string sessionId, string saveId, string creator, int maxRnds, string gameMode, bool endTown, bool witchVar, bool randGoldVar, bool tradingVar) : this()
     {
         // Create new game constructor
         // Note no-param constructor is called first
@@ -473,6 +492,7 @@ public class Game
         _gameProperties[pMAX_ROUNDS] = maxRnds;
         _gameProperties[pGAME_MODE] = gameMode;
         _gameProperties[pEND_TOWN] = endTown;
+        _gameProperties[pTRAD_PHASE] = tradingVar;
         _gameProperties[pWITCH_CARD] = witchVar;
         _gameProperties[pRAND_GOLD] = randGoldVar;
         _gameProperties[pPASSED_PLAYERS] = 0;
@@ -595,7 +615,7 @@ public class Game
 
     }
 
-    public void Init(int maxRnds, string gameMode, bool endTown, bool witchVar, bool randGoldVar)
+    public void Init(int maxRnds, string gameMode, bool endTown, bool witchVar, bool randGoldVar, bool tradingVar)
     {
         // FIXME: This function keeps crashing weirdly
         // TODO: sync endTown, whitchVar, randGoldVar
@@ -608,6 +628,7 @@ public class Game
         _gameProperties[pMAX_ROUNDS] = maxRnds;
         _gameProperties[pGAME_MODE] = gameMode;
         _gameProperties[pEND_TOWN] = endTown;
+        _gameProperties[pTRAD_PHASE] = tradingVar;
         _gameProperties[pWITCH_CARD] = witchVar;
         _gameProperties[pRAND_GOLD] = randGoldVar;
         _gameProperties[pPASSED_PLAYERS] = 0;
@@ -749,6 +770,7 @@ public class Game
             MainUIManager.manager.hideTokenSelection();
         }
 
+
         Player local = Player.GetLocalPlayer();
         if (curPhase == GamePhase.SelectTokenToKeep && local.IsMyTurn())
         {
@@ -771,6 +793,23 @@ public class Game
         {
             local.SelfInitRound();
         }
+
+        if (curPhase == GamePhase.Trading)
+        {
+
+            if (local.IsMyTurn()){
+                // can propose an offer to everyone and wait for counter offers.
+                // once everyone has either countered or passed, can click accept
+
+                MainUIManager.manager.showTradingOptions();
+
+            } else {
+                // can make a counter offer.
+                MainUIManager.manager.hideTradingOptions();
+            }
+            // I am trading
+        }
+
         // Debug.LogError($"Cur Phase set to {Enum.GetName(typeof(GamePhase), curPhase)}");
     }
 
@@ -867,22 +906,30 @@ public class Game
             return;
         }
 
-        if (curPhase == GamePhase.PlaceCounter && passed)
+        // should include trading here too ?
+        if ((curPhase == GamePhase.PlaceCounter || curPhase == GamePhase.Trading  )&& passed)
         {
+            
             passedPlayers += 1;
+            
         }
         else
         {
             passedPlayers = 0;
         }
-        if ((curPlayerIndex == (curRound - 1) % mPlayers.Count && curPhase != GamePhase.PlaceCounter && curPhase != GamePhase.Auction) || (passedPlayers == mPlayers.Count))
+        // phase is over
+        if ((curPlayerIndex == (curRound - 1) % mPlayers.Count && curPhase != GamePhase.PlaceCounter && curPhase != GamePhase.Auction && curPhase != GamePhase.Trading) || (passedPlayers == mPlayers.Count))
         {
+            
+            
+            // finalize the game 
             if (curPhase == GamePhase.Travel && curRound == maxRounds)
             {
                 GameOver();
                 NetworkManager.manager.GameOver();
                 return;
             }
+            // next round
             else if (curPhase == GamePhase.SelectTokenToKeep)
             {
                 if (MainUIManager.manager)
@@ -902,6 +949,7 @@ public class Game
                 curRound = curRound + 1;
                 curPlayerIndex = (curRound - 1) % mPlayers.Count;
             }
+            // next phase
             else
             {
                 curPlayerIndex = (curRound - 1) % mPlayers.Count;

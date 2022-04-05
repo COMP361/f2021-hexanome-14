@@ -66,6 +66,9 @@ public class MainUIManager : MonoBehaviour
     public GameObject tokenToKeepSelectionWindow;
 
     [SerializeField]
+    public GameObject tradingCreatingWindow;
+
+    [SerializeField]
     public Button endTurnButton;
 
     [SerializeField]
@@ -369,6 +372,10 @@ public class MainUIManager : MonoBehaviour
         }
     }
 
+    public void SelectItemsPressed(){
+
+    }
+
     public void ResetRoadColors()
     {
         foreach (PathScript path in GameConstants.roadDict.Values)
@@ -413,9 +420,52 @@ public class MainUIManager : MonoBehaviour
         tokenToKeepSelectionWindow.SetActive(false);
     }
 
+    public void showTradingOptions()
+    {
+        // selectable items 
+        // Update items to select.
+        UpdateItemsToAsk();
+        tradingCreatingWindow.SetActive(true);
+    }
+
+    public void hideTradingOptions()
+    {
+        tradingCreatingWindow.SetActive(false);
+        // hide the window for selectable items 
+    }
+
     public void UpdateTokenToKeep()
     {
         GridLayoutGroup gridGroup = tokenToKeepSelectionWindow.GetComponentInChildren<GridLayoutGroup>();
+        foreach (TileHolderScript thscript in gridGroup.GetComponentsInChildren<TileHolderScript>())
+        {
+            Destroy(thscript.gameObject);
+        }
+
+        foreach (MovementTile tile in Player.GetLocalPlayer().mVisibleTiles)
+        {
+            GameObject g = Instantiate(tilePrefab, gridGroup.transform);
+
+            TileHolderScript thscript = g.GetComponent<TileHolderScript>();
+            thscript.SetTile(mTileDict[tile]);
+            thscript.SetIsSelectable(true);
+            thscript.SetInVisibleTokens(true);
+        }
+
+        foreach (MovementTile tile in Player.GetLocalPlayer().mHiddenTiles)
+        {
+            GameObject g = Instantiate(tilePrefab, gridGroup.transform);
+
+            TileHolderScript thscript = g.GetComponent<TileHolderScript>();
+            thscript.SetTile(mTileDict[tile]);
+            thscript.SetIsSelectable(true);
+            thscript.SetInVisibleTokens(false);
+        }
+    }
+
+    public void UpdateItemsToAsk()
+    {
+        GridLayoutGroup gridGroup = tradingCreatingWindow.GetComponentInChildren<GridLayoutGroup>();
         foreach (TileHolderScript thscript in gridGroup.GetComponentsInChildren<TileHolderScript>())
         {
             Destroy(thscript.gameObject);
