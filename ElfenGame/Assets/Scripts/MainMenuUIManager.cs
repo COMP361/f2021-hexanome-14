@@ -41,6 +41,7 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
     [SerializeField] private GameObject gameJoinedOptionsView;
     [SerializeField] private GameObject gameCreationMenu;
     [SerializeField] private GameObject gameLoadOptionsView;
+    [SerializeField] private GameObject gameOptionsMenuView;
 
     [Header("Create Game UI")]
 
@@ -51,12 +52,18 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
     [SerializeField] private Button witchButton;
     [SerializeField] private Button randGoldButton;
 
-    public AudioMixer audioMixer;
+    public Dropdown resolutionDropDown;
+
+    public Toggle fullScreenToggle;
+
+    public Slider volumeSlider;
 
     public Image volumeHandleImage;
 
     #endregion
-    private List<int> numRoundOptions = new List<int> { 3, 4, 5 };
+
+    private Resolution[] resolutions;
+    private List<int> numRoundOptions = new List<int> { 3, 4, 5, 6 };
     private string selectedSaveId = "";
 
     private string selectedSessionId = "";
@@ -66,6 +73,34 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
 
     public void Start()
     {
+        resolutions = Screen.resolutions;
+        resolutionDropDown.ClearOptions();
+
+        List<string> options = new List<string>();
+        int savedWidth = PlayerPrefs.GetInt("resolutionwidth");
+        int savedHeight = PlayerPrefs.GetInt("resolutionheight");
+
+        int currentResolutionIndex = 0;
+        for (int i = 0; i < resolutions.Length; i++)
+        {
+            string option = resolutions[i].width + " x " + resolutions[i].height;
+            options.Add(option);
+
+            if (resolutions[i].width == savedWidth && resolutions[i].height == savedHeight)
+            {
+                currentResolutionIndex = i;
+            }
+        }
+
+        resolutionDropDown.AddOptions(options);
+        resolutionDropDown.value = currentResolutionIndex;
+        resolutionDropDown.RefreshShownValue();
+
+        bool isFullScreen = PlayerPrefs.GetInt("fullscreen") == 1 ? true : false;
+        fullScreenToggle.isOn = isFullScreen;
+
+        float volume = PlayerPrefs.GetFloat("volume");
+        volumeSlider.value = volume;
     }
 
     public string GetLoadedOwner()
@@ -79,8 +114,7 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
 
     public void SetVolume(float volume)
     {
-        float curVolume;
-        audioMixer.GetFloat("volume", out curVolume);
+        float curVolume = AudioManager.manager.GetVolume();
         if (volume <= -30)
         {
             volume = -80; // -80 is the minimum value for the audio mixer
@@ -91,7 +125,25 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
             // Currently set to -80 and being changed to something higher
             volumeHandleImage.sprite = Resources.Load<Sprite>("SoundOn");
         }
-        audioMixer.SetFloat("volume", volume);
+        AudioManager.manager.SetVolume(volume);
+        PlayerPrefs.SetFloat("volume", volume);
+        PlayerPrefs.Save();
+    }
+
+    public void SetResolution(int resolutionIndex)
+    {
+        Resolution resolution = resolutions[resolutionIndex];
+        Screen.SetResolution(resolution.width, resolution.height, Screen.fullScreen);
+        PlayerPrefs.SetInt("resolutionwidth", resolution.width);
+        PlayerPrefs.SetInt("resolutionheight", resolution.height);
+        PlayerPrefs.Save();
+    }
+
+    public void SetFullScreen(bool isFullScreen)
+    {
+        Screen.fullScreen = isFullScreen;
+        PlayerPrefs.SetInt("fullscreen", isFullScreen ? 1 : 0);
+        PlayerPrefs.Save();
     }
 
     #region UI Click Handlers
@@ -465,10 +517,40 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
     /// </summary>
     public void OnEscapePressed()
     {
-        gameSelectView.gameObject.SetActive(false);
-        homeView.gameObject.SetActive(true);
-        NetworkManager.manager.LeaveRoom();
-        // FIXME: Update so that it leaves lobby session and handles deleting lobby session
+        bool loadedOwner = false;
+        if (selectedSessionId != "" && Lobby.activeGames.ContainsKey(selectedSessionId))
+        {
+            Lobby.GameSession session = Lobby.activeGames[selectedSessionId];
+            loadedOwner = session.createdBy == GameConstants.username;
+        }
+        if (gameOptionsMenuView.activeSelf)
+        {
+            gameOptionsMenuView.SetActive(false);
+            homeView.SetActive(true);
+        }
+        else if (creatingGame)
+        {
+            creatingGame = false;
+            SwitchToCorrectView();
+        }
+        else if (inLoadGameView)
+        {
+            inLoadGameView = false;
+            SwitchToCorrectView();
+        }
+        else if (NetworkManager.manager.inGame() && loadedOwner)
+        {
+            OnDeleteGameClicked();
+        }
+        else if (NetworkManager.manager.inGame())
+        {
+            OnLeaveGameClicked();
+        }
+        else
+        {
+            gameSelectView.SetActive(false);
+            homeView.SetActive(true);
+        }
     }
 
     public void Update()
