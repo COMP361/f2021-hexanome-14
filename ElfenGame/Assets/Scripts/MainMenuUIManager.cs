@@ -313,7 +313,10 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
         DestroyAllChildren(sessionListView.transform);
         foreach (Lobby.GameSession game in gameSessions)
         {
-            AddGameSession(game);
+            if (game.launched == false){
+                AddGameSession(game);
+            }
+            
         }
 
         SwitchToCorrectView();
