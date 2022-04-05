@@ -51,6 +51,9 @@ public class MainUIManager : MonoBehaviour
     public GameObject cardPanel;
 
     [SerializeField]
+    public GameObject drawCardPanel;
+
+    [SerializeField]
     public GameObject tileGroup, tileWindow;
 
     [SerializeField]
@@ -386,6 +389,17 @@ public class MainUIManager : MonoBehaviour
         }
 
         return cards;
+    }
+
+    public CardEnum GetSelectedCard()
+    {
+        foreach (Card cardScript in drawCardPanel.GetComponentsInChildren<Card>())
+        {
+            if (cardScript.selected) return cardScript.cardType;
+        }
+
+        Debug.LogError("No card selected");
+        return new CardEnum();
     }
 
     public void showTokenSelection()

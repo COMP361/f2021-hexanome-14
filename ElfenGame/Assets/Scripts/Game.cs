@@ -28,13 +28,13 @@ public class Game
 
     #region Fields
 
-    public const string pDECK = "DECK", pDISCARD = "DISCARD", pPILE = "PILE", pVISIBLE = "VISIBLE",
+    public const string pDECK = "DECK", pDISCARD = "DISCARD", pVISIBLECARDS = "VISIBLE_CARDS", pPILE = "PILE", pVISIBLE = "VISIBLE",
     pPLAYERS = "PLAYERS", pCUR_PLAYER = "CUR_PLAYER", pCUR_ROUND = "CUR_ROUND", pCUR_PHASE = "CUR_PHASE",
     pMAX_ROUNDS = "MAX_ROUNDS", pGAME_MODE = "GAME_MODE", pEND_TOWN = "END_TOWN", pWITCH_CARD = "WITCH_CARD",
     pRAND_GOLD = "RAND_GOLD", pPASSED_PLAYERS = "PASSED_PLAYERS", pGAME_ID = "GAME_ID", pSAVE_ID = "SAVE_ID",
     pGOLD_VALUES = "GOLD_VALUES", pGAME_CREATOR = "GAME_CREATOR";
     public static string[] pGAME_PROPS = {
-        pDECK, pDISCARD, pPILE, pVISIBLE, pPLAYERS, pCUR_PLAYER, pCUR_ROUND, pCUR_PHASE, pMAX_ROUNDS,
+        pDECK, pDISCARD, pVISIBLECARDS, pPILE, pVISIBLE, pPLAYERS, pCUR_PLAYER, pCUR_ROUND, pCUR_PHASE, pMAX_ROUNDS,
         pPASSED_PLAYERS, pGAME_ID, pSAVE_ID,  pGAME_MODE, pEND_TOWN, pWITCH_CARD, pRAND_GOLD, pGOLD_VALUES, pGAME_CREATOR
     };
     private const string pCOLOR_AVAIL_PREFIX = "COLOR_AVAIL";
@@ -107,6 +107,7 @@ public class Game
     public List<string> mPlayers { get => GetL<string>(pPLAYERS); set => SetL<string>(pPLAYERS, value); }
     public List<int> goldValues { get => GetL<int>(pGOLD_VALUES); set => SetL<int>(pGOLD_VALUES, value); }
     public List<CardEnum> mDeck { get => GetL<CardEnum>(pDECK); set => SetL<CardEnum>(pDECK, value); }
+    public List<CardEnum> visibleCards { get => GetL<CardEnum>(pVISIBLECARDS); set => SetL<CardEnum>(pVISIBLECARDS, value); }
     public List<CardEnum> mDiscardPile { get => GetL<CardEnum>(pDISCARD); set => SetL<CardEnum>(pDISCARD, value); }
     public List<MovementTile> mPile { get => GetL<MovementTile>(pPILE); set => SetL<MovementTile>(pPILE, value); }
     public List<MovementTile> mVisibleTiles { get => GetL<MovementTile>(pVISIBLE); set => SetL<MovementTile>(pVISIBLE, value); }
@@ -212,6 +213,7 @@ public class Game
         this.mVisibleTiles = new List<MovementTile>();
         this.mDeck = new List<CardEnum>();
         this.mDiscardPile = new List<CardEnum>();
+        this.visibleCards = new List<CardEnum>();
 
         if (gameMode == "Elfengold")
         {
@@ -525,6 +527,7 @@ public class Game
         return ret;
     }
 
+
     public void ReturnTilesToPile(MovementTile[] tiles)
     {
         List<MovementTile> pile = mPile;
@@ -661,6 +664,7 @@ public class Game
         discard.AddRange(cards);
         this.mDiscardPile = discard;
     }
+
     internal void SetSession(string createdBy, string sessionId)
     {
         gameCreator = createdBy;
