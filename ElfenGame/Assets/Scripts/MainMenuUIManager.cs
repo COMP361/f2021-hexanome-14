@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Audio;
+using TMPro;
 
 public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
 {
@@ -45,13 +46,15 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
 
     [Header("Create Game UI")]
 
-    [SerializeField] private Dropdown gameModeDD;
-    [SerializeField] private Dropdown variationDD;
-    [SerializeField] private Dropdown numRounds;
-    [SerializeField] private Button endTownButton;
-    [SerializeField] private Button witchButton;
-    [SerializeField] private Button randGoldButton;
+    [SerializeField] private Toggle elfengoldToggle;
+    [SerializeField] private Toggle endTownToggle;
+    [SerializeField] private Toggle witchToggle;
+    [SerializeField] private Toggle randGoldToggle;
+    [SerializeField] private Slider numRoundsSlider;
+    [SerializeField] private TextMeshProUGUI numRoundsText;
 
+    [SerializeField] private Text randGoldText;
+    [SerializeField] private Text witchText;
     public Dropdown resolutionDropDown;
 
     public Toggle fullScreenToggle;
@@ -101,6 +104,7 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
 
         float volume = PlayerPrefs.GetFloat("volume");
         volumeSlider.value = volume;
+        SetToDefaultCreateGameOptions();
     }
 
     public string GetLoadedOwner()
@@ -144,6 +148,20 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
         Screen.fullScreen = isFullScreen;
         PlayerPrefs.SetInt("fullscreen", isFullScreen ? 1 : 0);
         PlayerPrefs.Save();
+    }
+
+    public void OnNumRoundsChanged(float numRounds)
+    {
+        numRoundsText.text = ((int)numRounds).ToString();
+    }
+
+    public void SetToDefaultCreateGameOptions()
+    {
+        elfengoldToggle.isOn = false;
+        endTownToggle.isOn = false;
+        witchToggle.isOn = false;
+        randGoldToggle.isOn = false;
+        numRoundsSlider.value = 3;
     }
 
     #region UI Click Handlers
@@ -258,6 +276,7 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
     /// </summary>
     public void OnCancelCreateClicked()
     {
+        SetToDefaultCreateGameOptions();
         gameOptionButtonsView.SetActive(true);
         gameCreationMenu.SetActive(false);
     }
@@ -505,10 +524,12 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
     /// <summary>
     /// Enables/Disables the Witch/Gold buttons in the game creation menu
     /// </summary>
-    public void OnGameModeChange()
+    public void OnGameModeChange(bool isElfengold)
     {
-        witchButton.gameObject.SetActive((gameModeDD.options[gameModeDD.value].text == "Elfengold"));
-        randGoldButton.gameObject.SetActive((gameModeDD.options[gameModeDD.value].text == "Elfengold"));
+        witchText.gameObject.SetActive(isElfengold);
+        witchToggle.gameObject.SetActive(isElfengold);
+        randGoldText.gameObject.SetActive(isElfengold);
+        randGoldToggle.gameObject.SetActive(isElfengold);
     }
 
     /// <summary>
@@ -530,6 +551,7 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
         }
         else if (creatingGame)
         {
+            SetToDefaultCreateGameOptions();
             creatingGame = false;
             SwitchToCorrectView();
         }
@@ -616,17 +638,20 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
             //     randGoldButton.GetComponent<VariationButton>().isSelected
             // );
 
+            string gamemode = elfengoldToggle.isOn ? "Elfengold" : "Elfenland";
+
             Game.currentGame = new Game(
                 sessionId: sessionID,
                 saveId: SaveAndLoad.GenerateSaveId(),
                 creator: GameConstants.username,
-                maxRnds: numRoundOptions[numRounds.value],
-                gameMode: gameModeDD.options[gameModeDD.value].text,
-                endTown: endTownButton.GetComponent<VariationButton>().isSelected,
-                witchVar: witchButton.GetComponent<VariationButton>().isSelected,
-                randGoldVar: randGoldButton.GetComponent<VariationButton>().isSelected
+                maxRnds: (int)numRoundsSlider.value,
+                gameMode: gamemode,
+                endTown: endTownToggle.isOn,
+                witchVar: witchToggle.isOn,
+                randGoldVar: randGoldToggle.isOn
             );
             SwitchToCorrectView();
+            SetToDefaultCreateGameOptions();
         }
         else
         {

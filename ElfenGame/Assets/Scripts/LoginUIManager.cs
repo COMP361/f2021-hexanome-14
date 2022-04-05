@@ -37,22 +37,36 @@ public class LoginUIManager : MonoBehaviour
         Texture2D glove = Resources.Load("glovecursor") as Texture2D;
         Cursor.SetCursor(glove, new Vector2(0, 0), CursorMode.Auto);
 
-
-        bool isFullScreen = PlayerPrefs.GetInt("fullscreen") == 1 ? true : false;
-        int savedWidth = PlayerPrefs.GetInt("resolutionwidth");
-        int savedHeight = PlayerPrefs.GetInt("resolutionheight");
-        float volume = PlayerPrefs.GetFloat("volume");
-
-        if (savedWidth != 0 && savedHeight != 0)
+        if (PlayerPrefs.HasKey("fullscreen") && PlayerPrefs.HasKey("resolutionwidth") && PlayerPrefs.HasKey("resolutionheight"))
         {
-            Screen.SetResolution(savedWidth, savedHeight, isFullScreen);
+            bool isFullScreen = PlayerPrefs.GetInt("fullscreen") == 1 ? true : false;
+            int savedWidth = PlayerPrefs.GetInt("resolutionwidth");
+            int savedHeight = PlayerPrefs.GetInt("resolutionheight");
+            if (savedWidth != 0 && savedHeight != 0)
+            {
+                Screen.SetResolution(savedWidth, savedHeight, isFullScreen);
+            }
+            else
+            {
+                Screen.SetResolution(1920, 1080, isFullScreen);
+            }
         }
         else
         {
-            Screen.SetResolution(1920, 1080, isFullScreen);
+            PlayerPrefs.SetInt("fullscreen", Screen.fullScreen ? 1 : 0);
+            PlayerPrefs.SetInt("resolutionwidth", Screen.width);
+            PlayerPrefs.SetInt("resolutionheight", Screen.height);
         }
 
-        AudioManager.manager.SetVolume(volume);
+        if (PlayerPrefs.HasKey("volume"))
+        {
+            float volume = PlayerPrefs.GetFloat("volume");
+            AudioManager.manager.SetVolume(volume);
+        }
+        else
+        {
+            PlayerPrefs.SetFloat("volume", AudioManager.manager.GetVolume());
+        }
     }
 
     // Update is called once per frame
