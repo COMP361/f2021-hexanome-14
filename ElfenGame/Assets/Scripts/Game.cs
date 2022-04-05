@@ -467,11 +467,7 @@ public class Game
                 deck.Add(CardEnum.GiantPig);
                 deck.Add(CardEnum.Raft);
             }
-            // add six gold cards
-            for (int i = 0; i < 6; i++)
-            {
-                deck.Add(CardEnum.Gold);
-            }
+
             // add 6 witch cards if witchVar is true
             if (witchVar)
             {
@@ -483,6 +479,17 @@ public class Game
 
         }
 
+        deck.Shuffle();
+        mDeck = deck;
+    }
+
+    public void AddGoldCards()
+    {
+        List<CardEnum> deck = mDeck;
+        for (int i = 0; i < 6; i++)
+        {
+            deck.Add(CardEnum.Gold);
+        }
         deck.Shuffle();
         mDeck = deck;
     }
