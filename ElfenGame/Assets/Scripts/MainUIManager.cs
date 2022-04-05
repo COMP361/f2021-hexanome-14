@@ -423,6 +423,9 @@ public class MainUIManager : MonoBehaviour
 
         foreach (MovementTile tile in Player.GetLocalPlayer().mVisibleTiles)
         {
+            // For elfenland, only show tokens that are not obstacles
+            if (tile == MovementTile.RoadObstacle) continue;
+
             GameObject g = Instantiate(tilePrefab, gridGroup.transform);
 
             TileHolderScript thscript = g.GetComponent<TileHolderScript>();
