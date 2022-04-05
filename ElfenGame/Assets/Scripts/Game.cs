@@ -215,6 +215,9 @@ public class Game
         this.mDiscardPile = new List<CardEnum>();
         this.visibleCards = new List<CardEnum>();
 
+        InitPile();
+        InitDeck(gameMode, witchVar);
+
         if (gameMode == "Elfengold")
         {
             List<int> tempGoldValues = GameConstants.goldValues;
@@ -225,8 +228,6 @@ public class Game
             this.goldValues = tempGoldValues; // Set gold values if elfengold (already defaults to 0 for elvenland)
         }
 
-        InitPile();
-        InitDeck();
 
     }
 
@@ -347,7 +348,7 @@ public class Game
 
         // InitPlayersList(); // Can't be done until all players have joined
         InitPile();
-        InitDeck();
+        InitDeck(gameMode, witchVar);
 
         //FIXME: Something isn't working with the Game constructor being called
         _colorProperties = new ExitGames.Client.Photon.Hashtable();
@@ -435,23 +436,60 @@ public class Game
         return $"{pEND_TOWN}_{player}";
     }
 
-    private void InitDeck()
+    private void InitDeck(string gameMode, bool witchVar)
     {
         List<CardEnum> deck = mDeck;
-        for (int i = 0; i < 10; i++)
+        if (gameMode == "Elfenland")
         {
-            deck.Add(CardEnum.Dragon);
-            deck.Add(CardEnum.ElfCycle);
-            deck.Add(CardEnum.GiantPig);
-            deck.Add(CardEnum.MagicCloud);
+            for (int i = 0; i < 10; i++)
+            {
+                deck.Add(CardEnum.Dragon);
+                deck.Add(CardEnum.ElfCycle);
+                deck.Add(CardEnum.GiantPig);
+                deck.Add(CardEnum.MagicCloud);
+                deck.Add(CardEnum.Raft);
+                deck.Add(CardEnum.TrollWagon);
+                deck.Add(CardEnum.Unicorn);
+            }
+
             deck.Add(CardEnum.Raft);
-            deck.Add(CardEnum.TrollWagon);
-            deck.Add(CardEnum.Unicorn);
+            deck.Add(CardEnum.Raft);
+        }
+        else
+        {
+            for (int i = 0; i < 9; i++)
+            {
+                deck.Add(CardEnum.Dragon);
+                deck.Add(CardEnum.ElfCycle);
+                deck.Add(CardEnum.TrollWagon);
+                deck.Add(CardEnum.MagicCloud);
+                deck.Add(CardEnum.Unicorn);
+                deck.Add(CardEnum.GiantPig);
+                deck.Add(CardEnum.Raft);
+            }
+
+            // add 6 witch cards if witchVar is true
+            if (witchVar)
+            {
+                for (int i = 0; i < 6; i++)
+                {
+                    deck.Add(CardEnum.Witch);
+                }
+            }
+
         }
 
-        deck.Add(CardEnum.Raft);
-        deck.Add(CardEnum.Raft);
+        deck.Shuffle();
+        mDeck = deck;
+    }
 
+    public void AddGoldCards()
+    {
+        List<CardEnum> deck = mDeck;
+        for (int i = 0; i < 6; i++)
+        {
+            deck.Add(CardEnum.Gold);
+        }
         deck.Shuffle();
         mDeck = deck;
     }
