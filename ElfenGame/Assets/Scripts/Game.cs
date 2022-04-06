@@ -673,7 +673,7 @@ public class Game
         {
             passedPlayers = 0;
         }
-        if ((curPlayerIndex == (curRound - 1) % mPlayers.Count && curPhase != GamePhase.PlaceCounter && curPhase != GamePhase.Auction) || (passedPlayers == mPlayers.Count))
+        if ((curPlayerIndex == (curRound - 1) % mPlayers.Count && curPhase != GamePhase.PlaceCounter) || (passedPlayers == mPlayers.Count))
         {
             if (curPhase == GamePhase.Travel && curRound == maxRounds)
             {

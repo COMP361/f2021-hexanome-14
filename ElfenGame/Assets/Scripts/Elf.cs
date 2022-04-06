@@ -51,7 +51,6 @@ public class Elf : MonoBehaviour
                     }
                     dragOriginManager = parentGrid;
                     MouseActivityManager.manager.BeginDrag<NewTown>();
-
                 }
             }
 
@@ -82,6 +81,19 @@ public class Elf : MonoBehaviour
             if (town != null && MainUIManager.manager)
             {
                 List<CardEnum> cards = MainUIManager.manager.GetSelectedCards();
+
+                if (MovementValidator.validWitchTeleport(cards, Player.GetLocalPlayer()))
+                {
+                    // Witch Teleport
+                    player.curTown = town.name;
+                    player.RemoveCards(cards.ToArray());
+                    player.nCoins -= GameConstants.COST_OF_TELEPORT;
+
+                    MainUIManager.manager.ResetRoadColors();
+                    return;
+                }
+
+
                 foreach (PathScript pathScript in GameConstants.roadDict.Values)
                 {
                     if (pathScript.CanMoveOnPath(GameConstants.townDict[player.curTown], town, cards))

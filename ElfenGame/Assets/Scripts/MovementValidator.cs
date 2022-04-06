@@ -188,7 +188,14 @@ public static class MovementValidator
         return countOfCards;
     }
 
+    public static bool validWitchTeleport(List<CardEnum> cards, Player p)
+    {
+        if (cards.Count != 1) return false;
+        if (cards[0] != CardEnum.Witch) return false;
+        if (p.nCoins < GameConstants.COST_OF_TELEPORT) return false;
 
+        return true;
+    }
 
 
 
