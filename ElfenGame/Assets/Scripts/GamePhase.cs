@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
-
-
+﻿
 public enum GamePhase : byte
 {
     DrawCardsAndCounters,
@@ -34,7 +31,7 @@ static class GamePhaseExtension
             return GamePhase.DrawCardsAndCounters;
         }
 
-        if (Game.currentGame.gameMode == "Elfengold")
+        if (Game.currentGame.gameMode == GameMode.Elfengold)
         {
             if (phase == GamePhase.DrawCounters1)
             {

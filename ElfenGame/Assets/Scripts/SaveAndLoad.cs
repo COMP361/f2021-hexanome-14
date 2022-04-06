@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
@@ -9,12 +8,14 @@ public static class SaveAndLoad
     [System.Serializable]
     public class GameData
     {
-        public string gameMode;
+        public GameMode gameMode;
         public int numRounds;
         public bool endTown;
         public bool witch;
         public bool randGold;
         public List<CardEnum> deck;
+
+        public List<CardEnum> visibleCards;
         public List<CardEnum> discard;
         public List<MovementTile> visible;
         public List<MovementTile> pile;
@@ -25,6 +26,8 @@ public static class SaveAndLoad
         public GamePhase curPhase;
         public int curRound;
         public int passedPlayers;
+
+        public int goldPileValue;
 
         public List<string> tilePaths;
         public List<MovementTile> tileTypes;
@@ -37,7 +40,9 @@ public static class SaveAndLoad
             endTown = g.endTown;
             witch = g.witchCard;
             randGold = g.randGold;
+            goldPileValue = g.goldPileValue;
             deck = new List<CardEnum>(g.mDeck);
+            visibleCards = g.visibleCards;
             discard = new List<CardEnum>(g.mDiscardPile);
             visible = new List<MovementTile>(g.mVisibleTiles);
             pile = new List<MovementTile>(g.mPile);
@@ -192,16 +197,16 @@ public static class SaveAndLoad
     {
         string player_save_dir = InitPlayerDir();
         string gamePath = player_save_dir + saveid + ".json";
-        Debug.LogError("Loading game from " + gamePath);
+        Debug.Log("Loading game from " + gamePath);
         if (!File.Exists(gamePath))
         {
             Debug.LogError("No game found at " + gamePath);
             return null;
         }
         string gameJson = File.ReadAllText(gamePath);
-        Debug.LogError("Game JSON: " + gameJson);
+        Debug.Log("Game JSON: " + gameJson);
         GameData data = JsonUtility.FromJson<GameData>(gameJson);
-        Debug.LogError("Done loading game from " + gamePath);
+        Debug.Log("Done loading game from " + gamePath);
         return data;
     }
 
@@ -209,7 +214,7 @@ public static class SaveAndLoad
     {
         string player_save_dir = InitPlayerDir();
         string playerPath = player_save_dir + saveid + "_player.json";
-        Debug.LogError("Loading player from " + playerPath);
+        Debug.Log("Loading player from " + playerPath);
         if (!File.Exists(playerPath))
         {
             Debug.LogError("No player found at " + playerPath);
@@ -218,7 +223,7 @@ public static class SaveAndLoad
         string playerJson = File.ReadAllText(playerPath);
         PlayerData data = JsonUtility.FromJson<PlayerData>(playerJson);
         Player.GetLocalPlayer().SetFromPlayerData(data);
-        Debug.LogError("Done loading player from " + playerPath);
+        Debug.Log("Done loading player from " + playerPath);
     }
 
 }

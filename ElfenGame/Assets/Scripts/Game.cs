@@ -32,10 +32,10 @@ public class Game
     pPLAYERS = "PLAYERS", pCUR_PLAYER = "CUR_PLAYER", pCUR_ROUND = "CUR_ROUND", pCUR_PHASE = "CUR_PHASE",
     pMAX_ROUNDS = "MAX_ROUNDS", pGAME_MODE = "GAME_MODE", pEND_TOWN = "END_TOWN", pWITCH_CARD = "WITCH_CARD",
     pRAND_GOLD = "RAND_GOLD", pPASSED_PLAYERS = "PASSED_PLAYERS", pGAME_ID = "GAME_ID", pSAVE_ID = "SAVE_ID",
-    pGOLD_VALUES = "GOLD_VALUES", pGAME_CREATOR = "GAME_CREATOR";
+    pGOLD_VALUES = "GOLD_VALUES", pGAME_CREATOR = "GAME_CREATOR", pGOLD_PILE_VALUE = "GOLD_PILE_VALUE";
     public static string[] pGAME_PROPS = {
         pDECK, pDISCARD, pVISIBLECARDS, pPILE, pVISIBLE, pPLAYERS, pCUR_PLAYER, pCUR_ROUND, pCUR_PHASE, pMAX_ROUNDS,
-        pPASSED_PLAYERS, pGAME_ID, pSAVE_ID,  pGAME_MODE, pEND_TOWN, pWITCH_CARD, pRAND_GOLD, pGOLD_VALUES, pGAME_CREATOR
+        pPASSED_PLAYERS, pGAME_ID, pSAVE_ID,  pGAME_MODE, pEND_TOWN, pWITCH_CARD, pRAND_GOLD, pGOLD_VALUES, pGAME_CREATOR, pGOLD_PILE_VALUE
     };
     private const string pCOLOR_AVAIL_PREFIX = "COLOR_AVAIL";
 
@@ -103,7 +103,8 @@ public class Game
     public int maxRounds { get => GetP<int>(pMAX_ROUNDS); set => SetP<int>(pMAX_ROUNDS, value); }
     public GamePhase curPhase { get => GetP<GamePhase>(pCUR_PHASE); set => SetP<GamePhase>(pCUR_PHASE, value); }
     public int curRound { get => GetP<int>(pCUR_ROUND); set => SetP<int>(pCUR_ROUND, value); }
-    public string gameMode { get => GetP<string>(pGAME_MODE); set => SetP<string>(pGAME_MODE, value); }
+    public int goldPileValue { get => GetP<int>(pGOLD_PILE_VALUE); set => SetP<int>(pGOLD_PILE_VALUE, value); }
+    public GameMode gameMode { get => GetP<GameMode>(pGAME_MODE); set => SetP<GameMode>(pGAME_MODE, value); }
     public bool endTown { get => GetP<bool>(pEND_TOWN); set => SetP<bool>(pEND_TOWN, value); }
     public bool witchCard { get => GetP<bool>(pWITCH_CARD); set => SetP<bool>(pWITCH_CARD, value); }
     public bool randGold { get => GetP<bool>(pRAND_GOLD); set => SetP<bool>(pRAND_GOLD, value); }
@@ -164,6 +165,7 @@ public class Game
         endTown = data.endTown;
         witchCard = data.witch;
         randGold = data.randGold;
+        goldPileValue = data.goldPileValue;
         mDeck = data.deck;
         mDiscardPile = data.discard;
         mVisibleTiles = data.visible;
@@ -171,6 +173,7 @@ public class Game
         curPlayerIndex = data.curPlayerIndex;
         mPlayers = data.players;
         // gameId = data.gameId; // TODO: This should not be set (new session id should be kept)
+        visibleCards = data.visibleCards;
         curPhase = data.curPhase;
         curRound = data.curRound;
         passedPlayers = data.passedPlayers;
@@ -194,7 +197,7 @@ public class Game
             _colorProperties[getColorKey((PlayerColor)i)] = "";
         }
     }
-    public Game(string sessionId, string saveId, string creator, int maxRnds, string gameMode, bool endTown, bool witchVar, bool randGoldVar) : this()
+    public Game(string sessionId, string saveId, string creator, int maxRnds, GameMode gameMode, bool endTown, bool witchVar, bool randGoldVar) : this()
     {
         // Create new game constructor
         // Note no-param constructor is called first
@@ -219,11 +222,12 @@ public class Game
         this.mDeck = new List<CardEnum>();
         this.mDiscardPile = new List<CardEnum>();
         this.visibleCards = new List<CardEnum>();
+        this.goldPileValue = 0;
 
         InitPile();
         InitDeck(gameMode, witchVar);
 
-        if (gameMode == "Elfengold")
+        if (gameMode == GameMode.Elfengold)
         {
             List<int> tempGoldValues = GameConstants.goldValues;
             if (randGoldVar)
@@ -297,7 +301,7 @@ public class Game
         }
         if (updatedProps)
         {
-            Debug.LogError("Game properties updated");
+            Debug.Log("Game properties updated");
         }
 
         foreach (string playerName in mPlayers)
@@ -319,56 +323,13 @@ public class Game
             MainUIManager.manager.UpdateAvailableTokens();
             MainUIManager.manager.UpdateRoundInfo(); // TODO: pass info as argument?
             MainUIManager.manager.UpdateGoldValues();
+            MainUIManager.manager.UpdateAvailableCards();
         }
 
         SaveAndLoad.SaveGameState();
 
     }
 
-    // Not longer in use
-    public void Init(int maxRnds, string gameMode, bool endTown, bool witchVar, bool randGoldVar)
-    {
-        // FIXME: This function keeps crashing weirdly
-        // TODO: sync endTown, whitchVar, randGoldVar
-        Debug.Log($"max rnds {maxRnds}, endTown {endTown}, whitchVar {witchVar}, randGoldVar {randGoldVar}");
-        Debug.Log("Game Init Called");
-
-        _gameProperties[pCUR_PLAYER] = 0;
-        _gameProperties[pCUR_ROUND] = 1;
-        _gameProperties[pCUR_PHASE] = GamePhase.DrawCardsAndCounters;
-        _gameProperties[pMAX_ROUNDS] = maxRnds;
-        _gameProperties[pGAME_MODE] = gameMode;
-        _gameProperties[pEND_TOWN] = endTown;
-        _gameProperties[pWITCH_CARD] = witchVar;
-        _gameProperties[pRAND_GOLD] = randGoldVar;
-        _gameProperties[pPASSED_PLAYERS] = 0;
-        _gameProperties[pGAME_ID] = gameId;
-        _gameProperties[pGAME_CREATOR] = gameCreator;
-
-        _gameProperties[pPLAYERS] = new string[] { };
-        _gameProperties[pPILE] = new MovementTile[0];
-        _gameProperties[pVISIBLE] = new MovementTile[0];
-        _gameProperties[pDISCARD] = new CardEnum[0];
-        _gameProperties[pDECK] = new CardEnum[0];
-
-        // InitPlayersList(); // Can't be done until all players have joined
-        InitPile();
-        InitDeck(gameMode, witchVar);
-
-        //FIXME: Something isn't working with the Game constructor being called
-        _colorProperties = new ExitGames.Client.Photon.Hashtable();
-        for (int i = 0; i < 6; i++)
-        {
-            _colorProperties[getColorKey((PlayerColor)i)] = "";
-        }
-
-        if (NetworkManager.manager)
-        {
-            NetworkManager.manager.SetGameProperties(_colorProperties);
-        }
-        SyncGameProperties();
-
-    }
 
     public void SetInitialColorValues()
     {
@@ -442,10 +403,10 @@ public class Game
         return $"{pEND_TOWN}_{player}";
     }
 
-    private void InitDeck(string gameMode, bool witchVar)
+    private void InitDeck(GameMode gameMode, bool witchVar)
     {
         List<CardEnum> deck = mDeck;
-        if (gameMode == "Elfenland")
+        if (gameMode == GameMode.Elfenland)
         {
             for (int i = 0; i < 10; i++)
             {
@@ -460,8 +421,11 @@ public class Game
 
             deck.Add(CardEnum.Raft);
             deck.Add(CardEnum.Raft);
+
+            deck.Shuffle();
+            mDeck = deck;
         }
-        else
+        else // Elfengold
         {
             for (int i = 0; i < 9; i++)
             {
@@ -483,10 +447,20 @@ public class Game
                 }
             }
 
+
+            deck.Shuffle();
+            mDeck = deck;
+
+            List<CardEnum> tempVisibleCards = visibleCards;
+            for (int i = 0; i < 3; i++)
+            {
+                tempVisibleCards.Add(Draw(1)[0]);
+            }
+
+            visibleCards = tempVisibleCards;
+
         }
 
-        deck.Shuffle();
-        mDeck = deck;
     }
 
     public void AddGoldCards()
@@ -529,7 +503,7 @@ public class Game
             {
                 MainUIManager.manager.showAvailableTokensToKeep();
             }
-            if (local.userName == mPlayers[0] && curRound == 1 && gameMode == "Elfengold") // Only do this once (for one player) doesn't matter which
+            if (local.userName == mPlayers[0] && curRound == 1 && gameMode == GameMode.Elfengold) // Only do this once (for one player) doesn't matter which
             {
                 AddGoldCards();
             }
@@ -543,6 +517,15 @@ public class Game
         {
             local.SelfInitRound();
         }
+
+        if (curPhase == GamePhase.DrawCardsAndCounters && local.IsMyTurn() && curRound > 1)
+        {
+            MainUIManager.manager.DrawCardPanelToggle(true);
+        }
+        else
+        {
+            MainUIManager.manager.DrawCardPanelToggle(false);
+        }
         // Debug.LogError($"Cur Phase set to {Enum.GetName(typeof(GamePhase), curPhase)}");
     }
 
@@ -555,6 +538,18 @@ public class Game
         pile.RemoveAt(0);
         mPile = pile;
         mVisibleTiles = visible;
+        return ret;
+    }
+
+    public CardEnum RemoveVisibleCard(int index)
+    {
+        List<CardEnum> deck = mDeck;
+        List<CardEnum> visible = visibleCards;
+        CardEnum ret = visible[index];
+        visible[index] = deck[0];
+        deck.RemoveAt(0);
+        mDeck = deck;
+        visibleCards = visible;
         return ret;
     }
 
@@ -598,19 +593,19 @@ public class Game
             winners.Add(p);
             p.DeductDistToEndTown();
         }
-        if (gameMode == "Elfenland")
+        if (gameMode == GameMode.Elfenland)
         {
             Debug.Log("In Elfenland");
             winners = winners.OrderByDescending(o => o.nPoints * 1000 + o.mCards.Count).ToList();
-            foreach (Player p in winners)
-            {
-                scores.Add(p.nPoints);
-            }
         }
-        else if (gameMode == "Elfengold")
+        else if (gameMode == GameMode.Elfengold)
         {
             Debug.Log("In Elfengold");
-            //TODO: Implement Elfengold Ending
+            winners = winners.OrderByDescending(o => o.nPoints * 1000 + o.nCoins).ToList();
+        }
+        foreach (Player p in winners)
+        {
+            scores.Add(p.nPoints);
         }
         if (MainUIManager.manager) MainUIManager.manager.GameOverTriggered(winners, scores);
     }
@@ -648,7 +643,7 @@ public class Game
         {
             passedPlayers = 0;
         }
-        if ((curPlayerIndex == (curRound - 1) % mPlayers.Count && curPhase != GamePhase.PlaceCounter && curPhase != GamePhase.Auction) || (passedPlayers == mPlayers.Count))
+        if ((curPlayerIndex == (curRound - 1) % mPlayers.Count && curPhase != GamePhase.PlaceCounter) || (passedPlayers == mPlayers.Count))
         {
             if (curPhase == GamePhase.Travel && curRound == maxRounds)
             {
@@ -663,7 +658,7 @@ public class Game
                     List<MovementTile> cleared = MainUIManager.manager.ClearAllTiles(); // Local UI update
                     if (cleared != null)
                     {
-                        if (gameMode == "Elfenland")
+                        if (gameMode == GameMode.Elfenland)
                         {
                             // Remove used obstacles
                             cleared.RemoveAll(o => o == MovementTile.RoadObstacle);

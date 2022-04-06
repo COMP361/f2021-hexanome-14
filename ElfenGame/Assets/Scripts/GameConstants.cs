@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,6 +8,8 @@ public static class GameConstants
 
     public const float pathColoringAlpha = 0.35f;
     public const float pathColoringHoverAlpha = 0.8f;
+
+    public const int COST_OF_TELEPORT = 3;
     public static Color greenFaded = new Color(102f / 255f, 236f / 255f, 77f / 255f, 74f / 255f);
     public static Color redFaded = new Color(238f / 255f, 100f / 255f, 100f / 255f, 74f / 255f);
     public static Color blueFaded = new Color(89f / 255f, 231f / 255f, 230f / 255f, 74f / 255f);

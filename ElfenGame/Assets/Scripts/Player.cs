@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class Player
 {
@@ -83,7 +82,7 @@ public class Player
 
         AddHiddenTile(Game.currentGame.RemoveTileFromPile());
 
-        if (Game.currentGame.gameMode == "Elfengold")
+        if (Game.currentGame.gameMode == GameMode.Elfengold)
         {
             nCoins += 2;
         }
@@ -93,7 +92,7 @@ public class Player
 
     private void SelfInitFirstRound()
     {
-        if (Game.currentGame.gameMode == "Elfengold")
+        if (Game.currentGame.gameMode == GameMode.Elfengold)
         {
             nCoins = 10;
         }
@@ -396,7 +395,7 @@ public class Player
 
         lastInitializedround = 0;
 
-        Debug.LogError("Player created: " + userName);
+        Debug.Log("Player created: " + userName);
     }
 
     public void DeductDistToEndTown()

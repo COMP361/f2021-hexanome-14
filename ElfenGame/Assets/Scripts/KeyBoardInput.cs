@@ -1,7 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class KeyBoardInput : MonoBehaviour
 {
@@ -95,7 +92,7 @@ public class KeyBoardInput : MonoBehaviour
         }
         if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.G))
         {
-            Lobby.Init(force: true);
+            Lobby.StartGetSessionsTask();
         }
     }
 

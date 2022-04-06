@@ -1,11 +1,9 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine.SceneManagement;
 using ExitGames.Client.Photon;
-using System;
 
 public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback, IInRoomCallbacks
 {
@@ -41,6 +39,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback, IInRo
             PhotonPeer.RegisterType(typeof(MovementTile), 252, MovementTileExtension.Serialize, MovementTileExtension.Deserialize);
             PhotonPeer.RegisterType(typeof(PlayerColor), 254, PlayerColorExtension.Serialize, PlayerColorExtension.Deserialize);
             PhotonPeer.RegisterType(typeof(GamePhase), 253, GamePhaseExtension.Serialize, GamePhaseExtension.Deserialize);
+            PhotonPeer.RegisterType(typeof(GameMode), 251, GameModeExtension.Serialize, GameModeExtension.Deserialize);
             networkPlayers = new Dictionary<string, Photon.Realtime.Player>();
             ResetPlayerProperties();
         }

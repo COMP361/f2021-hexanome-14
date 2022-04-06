@@ -1,9 +1,5 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using ExitGames.Client.Photon;
-using Photon.Pun;
-using Photon.Realtime;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -60,6 +56,15 @@ public class MainUIManager : MonoBehaviour
     public GameObject cardPrefab;
 
     [SerializeField]
+    public GameObject availableCardPrefab;
+
+    [SerializeField]
+    public Button claimGoldButton;
+
+    [SerializeField]
+    public GameObject availableCardGroup;
+
+    [SerializeField]
     public GameObject tilePrefab;
 
     [SerializeField]
@@ -98,7 +103,14 @@ public class MainUIManager : MonoBehaviour
     [SerializeField]
     public Image firstPlaceSprite, secondPlaceSprite, thirdPlaceSprite;
 
+    [SerializeField]
+    public Text goldPileValue;
+
+    public Image volumeHandleImage;
+
+    public Slider volumeSlider2;
     #endregion
+
 
     public Dictionary<MovementTile, MovementTileSO> mTileDict;
 
@@ -140,6 +152,8 @@ public class MainUIManager : MonoBehaviour
         {
             SetTiles(data.tilePaths, data.tileTypes);
         }
+        float volume = PlayerPrefs.GetFloat("volume");
+        volumeSlider2.value = volume;
 
         UpdateEndTown(Player.GetLocalPlayer().endTown);
         UpdateGoldValues();
@@ -317,6 +331,24 @@ public class MainUIManager : MonoBehaviour
         if (foundSelected) Game.currentGame.nextPlayer();
     }
 
+    public void DrawFromDeckPressed()
+    {
+        if (!Player.GetLocalPlayer().IsMyTurn()) return;
+        CardEnum[] cards = Game.currentGame.Draw(1);
+
+        // check if card is golold card
+        if (cards[0] == CardEnum.Gold)
+        {
+            Game.currentGame.goldPileValue += 3;
+            Game.currentGame.SyncGameProperties();
+        }
+        else
+        {
+            Player.GetLocalPlayer().AddCards(cards);
+            Game.currentGame.nextPlayer();
+        }
+    }
+
     public void SelectRandomTokenPressed()
     {
         if (!Player.GetLocalPlayer().IsMyTurn()) return;
@@ -338,6 +370,20 @@ public class MainUIManager : MonoBehaviour
             ChatManager.manager.SetChatInvisible();
         }
     }
+
+    public void OnClaimGoldSelected()
+    {
+        if (!Player.GetLocalPlayer().IsMyTurn()) return;
+        Player.GetLocalPlayer().nCoins += Game.currentGame.goldPileValue;
+        // Shuffle one gold card for every three coins into the discardPile
+        for (int i = 0; i < Game.currentGame.goldPileValue / 3; i++)
+        {
+            Game.currentGame.mDiscardPile.Add(CardEnum.Gold);
+        }
+        Game.currentGame.goldPileValue = 0;
+        Game.currentGame.nextPlayer();
+    }
+
     private TileHolderScript GetSelectedTokenToKeep()
     {
         foreach (TileHolderScript thscript in tokenToKeepSelectionWindow.GetComponentsInChildren<TileHolderScript>())
@@ -345,6 +391,18 @@ public class MainUIManager : MonoBehaviour
             if (thscript.selected) return thscript;
         }
         return null;
+    }
+
+    // for draw card
+    private int GetSelectedCard()
+    {
+        int index = 0;
+        foreach (Card card in availableCardGroup.GetComponentsInChildren<Card>())
+        {
+            if (card.selected) return index;
+            index++;
+        }
+        return -1;
     }
 
     public void SelectTokenToKeepPressed()
@@ -358,6 +416,29 @@ public class MainUIManager : MonoBehaviour
         if (thscript.tile.mTile == MovementTile.RoadObstacle) return; // Select non obstacle tile
         localPlayer.SetOnlyTile(thscript.tile.mTile, thscript.GetInVisibleTokens());
         Game.currentGame.nextPlayer();
+    }
+
+    // for draw cards
+    public void OnSelectCardPressed()
+    {
+        int index = GetSelectedCard();
+        if (index == -1) return;
+
+        Player localPlayer = Player.GetLocalPlayer();
+        if (!localPlayer.IsMyTurn()) return;
+
+        CardEnum card = Game.currentGame.RemoveVisibleCard(index);
+        // check if card is golold card
+        if (card == CardEnum.Gold)
+        {
+            Game.currentGame.goldPileValue += 3;
+            Game.currentGame.SyncGameProperties();
+        }
+        else
+        {
+            Player.GetLocalPlayer().AddCards(new CardEnum[] { card });
+            Game.currentGame.nextPlayer();
+        }
     }
 
     public void SelectCardsPressed()
@@ -391,16 +472,6 @@ public class MainUIManager : MonoBehaviour
         return cards;
     }
 
-    public CardEnum GetSelectedCard()
-    {
-        foreach (Card cardScript in drawCardPanel.GetComponentsInChildren<Card>())
-        {
-            if (cardScript.selected) return cardScript.cardType;
-        }
-
-        Debug.LogError("No card selected");
-        return new CardEnum();
-    }
 
     public void showTokenSelection()
     {
@@ -484,6 +555,27 @@ public class MainUIManager : MonoBehaviour
         }
     }
 
+    public void DrawCardPanelToggle(bool active)
+    {
+        drawCardPanel.SetActive(active);
+    }
+
+    public void UpdateAvailableCards()
+    {
+        foreach (Card cardScript in availableCardGroup.GetComponentsInChildren<Card>())
+        {
+            Destroy(cardScript.gameObject);
+        }
+
+        foreach (CardEnum card in Game.currentGame.visibleCards)
+        {
+            GameObject g = Instantiate(availableCardPrefab, availableCardGroup.transform);
+
+            Card cardScript = g.GetComponent<Card>();
+            cardScript.Initialize(card);
+        }
+    }
+
     public void SetTokensNotSelected()
     {
         foreach (TileHolderScript thscript in tileGroup.GetComponentsInChildren<TileHolderScript>())
@@ -533,8 +625,8 @@ public class MainUIManager : MonoBehaviour
 
     internal void UpdateGoldValues()
     {
-        Debug.Log($"UpdateGoldValues called with gamemode: {Game.currentGame.gameMode}");
-        if (Game.currentGame.gameMode != "Elfengold") return; // Only display gold for elvenhold
+        Debug.Log($"UpdateGoldValues called with gamemode: {Enum.GetName(typeof(GameMode), Game.currentGame.gameMode)}");
+        if (Game.currentGame.gameMode != GameMode.Elfengold) return; // Only display gold for elvenhold
         List<int> goldValues = Game.currentGame.goldValues;
         if (goldValues.Count != GameConstants.townNames.Count - 1) return;
 
@@ -553,12 +645,42 @@ public class MainUIManager : MonoBehaviour
 
             index++;
         }
+
+        goldPileValue.text = $"Gold: {Game.currentGame.goldPileValue}";
+        if (Game.currentGame.goldPileValue > 0)
+        {
+            goldPileValue.color = Color.yellow;
+            claimGoldButton.interactable = true;
+        }
+        else
+        {
+            goldPileValue.color = Color.grey;
+            claimGoldButton.interactable = false;
+        }
+    }
+
+    public void SetVolume(float volume)
+    {
+        float curVolume = AudioManager.manager.GetVolume();
+        if (volume <= -30)
+        {
+            volume = -80; // -80 is the minimum value for the audio mixer
+            volumeHandleImage.sprite = Resources.Load<Sprite>("SoundOff");
+        }
+        else if (curVolume == -80)
+        {
+            // Currently set to -80 and being changed to something higher
+            volumeHandleImage.sprite = Resources.Load<Sprite>("SoundOn");
+        }
+        AudioManager.manager.SetVolume(volume);
+        PlayerPrefs.SetFloat("volume", volume);
+        PlayerPrefs.Save();
     }
 
     public void GameOverTriggered(List<Player> winners, List<int> scores)
     {
-        Debug.LogError($"Num winners: {winners.Count}");
-        Debug.LogError($"Num scores: {scores.Count}");
+        Debug.Log($"Num winners: {winners.Count}");
+        Debug.Log($"Num scores: {scores.Count}");
         gameOverScreen.SetActive(true);
 
         firstPlace.SetActive(true);

@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 using UnityEngine.EventSystems;
 
 [RequireComponent(typeof(PolygonCollider2D))]
@@ -47,7 +46,8 @@ public class CameraMovement2 : MonoBehaviour
         if (EventSystem.current.IsPointerOverGameObject())
         {
             Debug.Log("MouseDown on: UI Element");
-        } else
+        }
+        else
         {
             RaycastHit2D hit = Physics2D.Raycast(position, Vector2.zero);
             if (hit.collider != null)

@@ -1,8 +1,5 @@
 ﻿using System;
-using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
-using Photon.Pun;
 
 using UnityEngine.EventSystems;
 
@@ -52,7 +49,7 @@ public static class MovementValidator
             {MovementTile.Dragon, 1}
         }
         },
-        
+
     };
 
     static Dictionary<MovementTile, CardEnum> tileToCard = new Dictionary<MovementTile, CardEnum>()
@@ -78,31 +75,33 @@ public static class MovementValidator
         if (path.roadType == RoadType.River)
         {
             if (CardsAreSame(cards) && cards[0] == CardEnum.Raft)
-            { 
-	            if (startTown.name == path.town1.name) // Downstream
+            {
+                if (startTown.name == path.town1.name) // Downstream
                 {
                     return (cards.Count == 1);
-		        } else { //Upstream
+                }
+                else
+                { //Upstream
                     return (cards.Count == 2);
-		        }
-	        } else
+                }
+            }
+            else
             {
                 return false;
-	        }
+            }
         }
 
         if (path.roadType == RoadType.Lake)
-        { 
-	        if (CardsAreSame(cards) && cards[0] == CardEnum.Raft)
+        {
+            if (CardsAreSame(cards) && cards[0] == CardEnum.Raft)
             {
                 return cards.Count == 2;
-	        } else
+            }
+            else
             {
                 return false;
-	        }
-	    }
-        //path may have multiple tiles due to double spell
-        List<MovementTileSpriteScript> movementTileWrappers = path.GetMovementTiles();
+            }
+        }
 
         foreach (var movementTileWrapper in movementTileWrappers)
         {
@@ -129,14 +128,19 @@ public static class MovementValidator
             }
            
         }
-         // Caravaning
-            if (path.HasObstacle())
-            {
-                return cards.Count == 4;
-            } else
-            {
-                return cards.Count == 3;
-	        }
+         
+        
+
+
+        // Caravaning
+        if (path.HasObstacle())
+        {
+            return cards.Count == 4;
+        }
+        else
+        {
+            return cards.Count == 3;
+        }
     }
 
 
@@ -144,7 +148,7 @@ public static class MovementValidator
     private static bool CardsAreSame(List<CardEnum> cards)
     {
         CardEnum firstCard = cards[0];
-        foreach(CardEnum cEnum in cards)
+        foreach (CardEnum cEnum in cards)
         {
             if (cEnum != firstCard)
             {
@@ -159,7 +163,7 @@ public static class MovementValidator
     private static int NumOfRaftCards(List<CardEnum> cards)
     {
         int numOfRaftCard = 0;
-        foreach(CardEnum cEnum in cards)
+        foreach (CardEnum cEnum in cards)
         {
             if (cEnum == CardEnum.Raft)
             {
@@ -172,9 +176,9 @@ public static class MovementValidator
 
 
 
-     // Counts the number of cards that have the same type as movement tile
-     private static int NumberOfMovementType(List<CardEnum> cards, MovementTile movementTile)
-     {
+    // Counts the number of cards that have the same type as movement tile
+    private static int NumberOfMovementType(List<CardEnum> cards, MovementTile movementTile)
+    {
         int countOfCards = 0;
         String tileName = Enum.GetName(typeof(MovementTile), movementTile);
 
@@ -189,10 +193,17 @@ public static class MovementValidator
         }
         return countOfCards;
     }
-     
+
+    public static bool validWitchTeleport(List<CardEnum> cards, Player p)
+    {
+        if (cards.Count != 1) return false;
+        if (cards[0] != CardEnum.Witch) return false;
+        if (p.nCoins < GameConstants.COST_OF_TELEPORT) return false;
+
+        return true;
+    }
 
 
 
 
-    
 }
