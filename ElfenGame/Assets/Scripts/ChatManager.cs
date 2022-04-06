@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using ExitGames.Client.Photon;
 using Photon.Chat;
 using Photon.Pun;
@@ -38,7 +36,7 @@ public class ChatManager : MonoBehaviour, IChatClientListener
     [SerializeField] InputField toInputField;
     [SerializeField] InputField msgInputField;
     [SerializeField] Text chatContentText;
-    
+
 
     public void DebugReturn(DebugLevel level, string message)
     {

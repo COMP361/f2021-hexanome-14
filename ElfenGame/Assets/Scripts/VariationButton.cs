@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -23,7 +21,8 @@ public class VariationButton : MonoBehaviour
             colors.highlightedColor = selectedColor;
             colors.pressedColor = selectedColor;
             button.colors = colors;
-        } else
+        }
+        else
         {
             isSelected = false;
             var colors = button.colors;

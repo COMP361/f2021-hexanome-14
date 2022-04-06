@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -32,6 +31,13 @@ public class PathScript : MonoBehaviour, IDragOver
 
     public void ColorByMoveValidity(NewTown startTown, List<CardEnum> cards)
     {
+        if (MovementValidator.validWitchTeleport(cards, Player.GetLocalPlayer()))
+        {
+            // Can Teleport
+            SetGreen();
+            return;
+        }
+
         if (startTown.name != town1.name && startTown.name != town2.name) return;
         bool isValid = MovementValidator.IsMoveValid(startTown, this, cards);
         if (isValid)
@@ -42,6 +48,11 @@ public class PathScript : MonoBehaviour, IDragOver
         {
             GetComponent<SpriteRenderer>().color = new Color(1.0f, 0.0f, 0.0f, GameConstants.pathColoringAlpha);
         }
+    }
+
+    public void SetGreen()
+    {
+        GetComponent<SpriteRenderer>().color = new Color(0.0f, 1.0f, 0.0f, GameConstants.pathColoringAlpha);
     }
 
     public bool CanMoveOnPath(NewTown startTown, NewTown endTown, List<CardEnum> cards)
