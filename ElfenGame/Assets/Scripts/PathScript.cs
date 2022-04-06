@@ -76,7 +76,7 @@ public class PathScript : MonoBehaviour, IDragOver
         {
             throw new System.Exception("Paths must have GridManagers in a child Element");
         }
-        if ((movementTileSO.mTile == MovementTile.Double || movementTileSO.mTile == MovementTile.Bounce) && !gm.HasBounce() && !gm.HasDouble() && gm.GetMovementTile() != null) return true; //place spell tile on path with movement tile
+        if ((movementTileSO.mTile == MovementTile.Double || movementTileSO.mTile == MovementTile.Bounce) && !gm.HasBounce() && !gm.HasDouble() && gm.GetMovementTile() != null) return true; //place spell tile on path with movement tile 
 
         if (!movementTileSO.mValidRoads.Contains(roadType)) return false;
 
