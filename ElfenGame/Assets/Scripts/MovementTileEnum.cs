@@ -11,8 +11,11 @@ public enum MovementTile : byte
     GiantPig,
     Dragon,
     RoadObstacle,
-    WaterObstacle
+    WaterObstacle,
 //TODO: Add other tiles for elvengold
+    Double,
+    Bounce
+
 }
 
 static class MovementTileExtension
