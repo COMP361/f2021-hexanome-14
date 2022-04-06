@@ -340,6 +340,7 @@ public class Lobby
             }
             else
             {
+
                 Debug.LogWarning("DeleteSession failed: " + msg);
             }
         });

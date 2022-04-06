@@ -36,6 +36,37 @@ public class LoginUIManager : MonoBehaviour
         Lobby.Init();
         Texture2D glove = Resources.Load("glovecursor") as Texture2D;
         Cursor.SetCursor(glove, new Vector2(0, 0), CursorMode.Auto);
+
+        if (PlayerPrefs.HasKey("fullscreen") && PlayerPrefs.HasKey("resolutionwidth") && PlayerPrefs.HasKey("resolutionheight"))
+        {
+            bool isFullScreen = PlayerPrefs.GetInt("fullscreen") == 1 ? true : false;
+            int savedWidth = PlayerPrefs.GetInt("resolutionwidth");
+            int savedHeight = PlayerPrefs.GetInt("resolutionheight");
+            if (savedWidth != 0 && savedHeight != 0)
+            {
+                Screen.SetResolution(savedWidth, savedHeight, isFullScreen);
+            }
+            else
+            {
+                Screen.SetResolution(1920, 1080, isFullScreen);
+            }
+        }
+        else
+        {
+            PlayerPrefs.SetInt("fullscreen", Screen.fullScreen ? 1 : 0);
+            PlayerPrefs.SetInt("resolutionwidth", Screen.width);
+            PlayerPrefs.SetInt("resolutionheight", Screen.height);
+        }
+
+        if (PlayerPrefs.HasKey("volume"))
+        {
+            float volume = PlayerPrefs.GetFloat("volume");
+            AudioManager.manager.SetVolume(volume);
+        }
+        else
+        {
+            PlayerPrefs.SetFloat("volume", AudioManager.manager.GetVolume());
+        }
     }
 
     // Update is called once per frame

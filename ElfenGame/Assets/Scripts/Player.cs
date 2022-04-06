@@ -71,6 +71,10 @@ public class Player
             Debug.Log($"Already initialized round {Game.currentGame.curRound} for player {userName}");
             return;
         }
+        if (Game.currentGame.curRound == 1)
+        {
+            SelfInitFirstRound();
+        }
         List<CardEnum> cards = mCards;
         if (cards.Count < 8)
         {
@@ -79,7 +83,20 @@ public class Player
 
         AddHiddenTile(Game.currentGame.RemoveTileFromPile());
 
+        if (Game.currentGame.gameMode == "Elfengold")
+        {
+            nCoins += 2;
+        }
+
         lastInitializedround = Game.currentGame.curRound;
+    }
+
+    private void SelfInitFirstRound()
+    {
+        if (Game.currentGame.gameMode == "Elfengold")
+        {
+            nCoins = 10;
+        }
     }
 
     private void UpdateTiles()
