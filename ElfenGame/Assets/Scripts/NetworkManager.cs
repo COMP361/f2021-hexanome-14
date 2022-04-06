@@ -46,7 +46,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback, IInRo
         }
     }
 
-
     private Dictionary<string, Photon.Realtime.Player> networkPlayers;
     public Photon.Realtime.Player GetPlayer(string playerId)
     {
@@ -430,7 +429,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback, IInRo
 
         if (Game.currentGame.gameCreator == GameConstants.username)
         {
-            Lobby.gameservice.DeleteSession(Game.currentGame.gameId);
+            Lobby.gameservice.DeleteSession(Game.currentGame.gameId); // Deletes session if launched
+            Lobby.user.DeleteSession(Game.currentGame.gameId); // Deletes session if not launched
         }
     }
 

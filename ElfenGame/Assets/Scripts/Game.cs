@@ -84,7 +84,12 @@ public class Game
     }
     private List<T> GetL<T>(string property)
     {
-        return GetP<T[]>(property).ToList();
+        T[] array = GetP<T[]>(property);
+        if (array == null)
+        {
+            return new List<T>();
+        }
+        return array.ToList();
     }
     private void SetL<T>(string property, List<T> list)
     {
