@@ -98,6 +98,9 @@ public class MainUIManager : MonoBehaviour
     [SerializeField]
     public Image firstPlaceSprite, secondPlaceSprite, thirdPlaceSprite;
 
+    [SerializeField]
+    public Text goldPileValue;
+
     #endregion
 
     public Dictionary<MovementTile, MovementTileSO> mTileDict;
