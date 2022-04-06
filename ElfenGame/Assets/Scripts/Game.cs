@@ -224,7 +224,7 @@ public class Game
         this.visibleCards = new List<CardEnum>();
         this.goldPileValue = 0;
 
-        InitPile();
+        InitPile(gameMode);
         InitDeck(gameMode, witchVar);
 
         if (gameMode == GameMode.Elfengold)
@@ -339,28 +339,66 @@ public class Game
             NetworkManager.manager.SetGameProperties(_colorProperties);
         }
     }
-    private void InitPile()
+    private void InitPile(GameMode gameMode)
     {
         List<MovementTile> pile = mPile;
         List<MovementTile> visible = mVisibleTiles;
-        for (int i = 0; i < 8; ++i)
+
+        if (gameMode == GameMode.Elfenland){
+             for (int i = 0; i < 8; ++i)
+            {
+                pile.Add(MovementTile.Dragon);
+                pile.Add(MovementTile.Elfcycle);
+                pile.Add(MovementTile.GiantPig);
+                pile.Add(MovementTile.MagicCloud);
+                pile.Add(MovementTile.TrollWagon);
+                pile.Add(MovementTile.Unicorn);
+                
+            }
+
+        }
+        else
         {
-            pile.Add(MovementTile.Dragon);
-            pile.Add(MovementTile.Elfcycle);
-            pile.Add(MovementTile.GiantPig);
-            pile.Add(MovementTile.MagicCloud);
-            pile.Add(MovementTile.TrollWagon);
-            pile.Add(MovementTile.Unicorn);
-            
+            for (int i= 0; i<4;i++)
+            {
+                pile.Add(MovementTile.Dragon);
+                pile.Add(MovementTile.MagicCloud);
+            }
+
+            for (int i= 0; i<5;i++)
+            {
+                pile.Add(MovementTile.Unicorn);
+                
+            }
+            for (int i= 0; i<8;i++)
+            {
+                pile.Add(MovementTile.Elfcycle);
+                pile.Add(MovementTile.TrollWagon);
+            }
+
+            for (int i= 0; i<9;i++)
+            {
+                pile.Add(MovementTile.GiantPig);
+                
+            }
+
+            for (int i= 0; i<2;i++)
+            {
+                pile.Add(MovementTile.Double);
+                pile.Add(MovementTile.Bounce);
+                pile.Add(MovementTile.RoadObstacle);
+                pile.Add(MovementTile.WaterObstacle);
+            }
         }
 
         pile.Shuffle();
 
-        for (int i = 0; i < 5; ++i)
-        {
-            visible.Add(pile[0]);
-            pile.RemoveAt(0);
-        }
+            for (int i = 0; i < 5; ++i)
+            {
+                visible.Add(pile[0]);
+                pile.RemoveAt(0);
+            }
+        
         mPile = pile;
         mVisibleTiles = visible;
     }
@@ -463,7 +501,7 @@ public class Game
 
     }
 
-    public void AddGoldCards()
+    public void AddGoldCards() 
     {
         List<CardEnum> deck = mDeck;
         for (int i = 0; i < 6; i++)

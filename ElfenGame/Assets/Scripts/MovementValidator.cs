@@ -102,7 +102,8 @@ public static class MovementValidator
                 return false;
             }
         }
-
+        
+        List<MovementTileSpriteScript> movementTileWrappers = path.GetMovementTiles();
         foreach (var movementTileWrapper in movementTileWrappers)
         {
             if (movementTileWrapper == null) return false;
