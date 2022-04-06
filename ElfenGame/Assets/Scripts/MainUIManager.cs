@@ -421,8 +421,18 @@ public class MainUIManager : MonoBehaviour
         Player localPlayer = Player.GetLocalPlayer();
         if (!localPlayer.IsMyTurn()) return;
 
-        localPlayer.AddCards(new CardEnum[] { Game.currentGame.RemoveVisibleCard(index) });
-        Game.currentGame.nextPlayer();
+        CardEnum card = Game.currentGame.RemoveVisibleCard(index);
+        // check if card is golold card
+        if (card == CardEnum.Gold)
+        {
+            Game.currentGame.goldPileValue += 3;
+            Game.currentGame.SyncGameProperties();
+        }
+        else
+        {
+            Player.GetLocalPlayer().AddCards(new CardEnum[] { card });
+            Game.currentGame.nextPlayer();
+        }
     }
 
     public void SelectCardsPressed()
@@ -537,6 +547,11 @@ public class MainUIManager : MonoBehaviour
             thscript.SetTile(mTileDict[tile]);
             thscript.SetIsSelectable(true);
         }
+    }
+
+    public void DrawCardPanelToggle(bool active)
+    {
+        drawCardPanel.SetActive(active);
     }
 
     public void UpdateAvailableCards()

@@ -514,6 +514,15 @@ public class Game
         {
             local.SelfInitRound();
         }
+
+        if (curPhase == GamePhase.DrawCardsAndCounters && local.IsMyTurn() && curRound > 1)
+        {
+            MainUIManager.manager.DrawCardPanelToggle(true);
+        }
+        else
+        {
+            MainUIManager.manager.DrawCardPanelToggle(false);
+        }
         // Debug.LogError($"Cur Phase set to {Enum.GetName(typeof(GamePhase), curPhase)}");
     }
 
@@ -585,15 +594,15 @@ public class Game
         {
             Debug.Log("In Elfenland");
             winners = winners.OrderByDescending(o => o.nPoints * 1000 + o.mCards.Count).ToList();
-            foreach (Player p in winners)
-            {
-                scores.Add(p.nPoints);
-            }
         }
         else if (gameMode == "Elfengold")
         {
             Debug.Log("In Elfengold");
-            //TODO: Implement Elfengold Ending
+            winners = winners.OrderByDescending(o => o.nPoints * 1000 + o.nCoins).ToList();
+        }
+        foreach (Player p in winners)
+        {
+            scores.Add(p.nPoints);
         }
         if (MainUIManager.manager) MainUIManager.manager.GameOverTriggered(winners, scores);
     }
