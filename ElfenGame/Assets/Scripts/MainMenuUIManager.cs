@@ -636,7 +636,7 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
             //     randGoldButton.GetComponent<VariationButton>().isSelected
             // );
 
-            string gamemode = elfengoldToggle.isOn ? "Elfengold" : "Elfenland";
+            GameMode gamemode = elfengoldToggle.isOn ? GameMode.Elfengold : GameMode.Elfenland;
 
             Game.currentGame = new Game(
                 sessionId: sessionID,

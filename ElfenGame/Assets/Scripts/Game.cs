@@ -227,7 +227,7 @@ public class Game
         InitPile();
         InitDeck(gameMode, witchVar);
 
-        if (gameMode == "Elfengold")
+        if (gameMode == GameMode.Elfengold)
         {
             List<int> tempGoldValues = GameConstants.goldValues;
             if (randGoldVar)
@@ -402,10 +402,10 @@ public class Game
         return $"{pEND_TOWN}_{player}";
     }
 
-    private void InitDeck(string gameMode, bool witchVar)
+    private void InitDeck(GameMode gameMode, bool witchVar)
     {
         List<CardEnum> deck = mDeck;
-        if (gameMode == "Elfenland")
+        if (gameMode == GameMode.Elfenland)
         {
             for (int i = 0; i < 10; i++)
             {
