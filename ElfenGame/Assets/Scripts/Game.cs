@@ -165,6 +165,7 @@ public class Game
         endTown = data.endTown;
         witchCard = data.witch;
         randGold = data.randGold;
+        goldPileValue = data.goldPileValue;
         mDeck = data.deck;
         mDiscardPile = data.discard;
         mVisibleTiles = data.visible;
@@ -172,6 +173,7 @@ public class Game
         curPlayerIndex = data.curPlayerIndex;
         mPlayers = data.players;
         // gameId = data.gameId; // TODO: This should not be set (new session id should be kept)
+        visibleCards = data.visibleCards;
         curPhase = data.curPhase;
         curRound = data.curRound;
         passedPlayers = data.passedPlayers;
@@ -299,7 +301,7 @@ public class Game
         }
         if (updatedProps)
         {
-            Debug.LogError("Game properties updated");
+            Debug.Log("Game properties updated");
         }
 
         foreach (string playerName in mPlayers)

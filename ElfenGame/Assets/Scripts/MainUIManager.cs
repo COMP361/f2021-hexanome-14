@@ -655,8 +655,8 @@ public class MainUIManager : MonoBehaviour
 
     public void GameOverTriggered(List<Player> winners, List<int> scores)
     {
-        Debug.LogError($"Num winners: {winners.Count}");
-        Debug.LogError($"Num scores: {scores.Count}");
+        Debug.Log($"Num winners: {winners.Count}");
+        Debug.Log($"Num scores: {scores.Count}");
         gameOverScreen.SetActive(true);
 
         firstPlace.SetActive(true);

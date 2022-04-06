@@ -395,7 +395,7 @@ public class Player
 
         lastInitializedround = 0;
 
-        Debug.LogError("Player created: " + userName);
+        Debug.Log("Player created: " + userName);
     }
 
     public void DeductDistToEndTown()
