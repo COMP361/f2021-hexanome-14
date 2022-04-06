@@ -625,8 +625,8 @@ public class MainUIManager : MonoBehaviour
 
     internal void UpdateGoldValues()
     {
-        Debug.Log($"UpdateGoldValues called with gamemode: {Game.currentGame.gameMode}");
-        if (Game.currentGame.gameMode != "Elfengold") return; // Only display gold for elvenhold
+        Debug.Log($"UpdateGoldValues called with gamemode: {Enum.GetName(typeof(GameMode), Game.currentGame.gameMode)}");
+        if (Game.currentGame.gameMode != GameMode.Elfengold) return; // Only display gold for elvenhold
         List<int> goldValues = Game.currentGame.goldValues;
         if (goldValues.Count != GameConstants.townNames.Count - 1) return;
 

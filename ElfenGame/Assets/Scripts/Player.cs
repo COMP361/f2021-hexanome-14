@@ -82,7 +82,7 @@ public class Player
 
         AddHiddenTile(Game.currentGame.RemoveTileFromPile());
 
-        if (Game.currentGame.gameMode == "Elfengold")
+        if (Game.currentGame.gameMode == GameMode.Elfengold)
         {
             nCoins += 2;
         }
@@ -92,7 +92,7 @@ public class Player
 
     private void SelfInitFirstRound()
     {
-        if (Game.currentGame.gameMode == "Elfengold")
+        if (Game.currentGame.gameMode == GameMode.Elfengold)
         {
             nCoins = 10;
         }

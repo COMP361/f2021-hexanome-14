@@ -8,7 +8,7 @@ public static class SaveAndLoad
     [System.Serializable]
     public class GameData
     {
-        public string gameMode;
+        public GameMode gameMode;
         public int numRounds;
         public bool endTown;
         public bool witch;
