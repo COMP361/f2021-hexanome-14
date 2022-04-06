@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
@@ -18,7 +16,7 @@ public class MessageIndicatorScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (ChatManager.manager != null && !ChatManager.manager.isActive() && ChatManager.manager.newMessage()!=0)
+        if (ChatManager.manager != null && !ChatManager.manager.isActive() && ChatManager.manager.newMessage() != 0)
         {
             if (ChatManager.manager.newMessage() < 9)
             {

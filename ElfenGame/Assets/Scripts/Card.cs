@@ -1,8 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.EventSystems;
 
 
 public class Card : MonoBehaviour
@@ -16,7 +13,8 @@ public class Card : MonoBehaviour
 
 
 
-    public void Initialize(CardEnum e){
+    public void Initialize(CardEnum e)
+    {
         cardType = e;
         selected = false;
         background = GetComponent<Image>();
@@ -26,14 +24,18 @@ public class Card : MonoBehaviour
     }
 
 
-    public void OnClickCard(){
+    public void OnClickCard()
+    {
 
         selected = !selected;
         Debug.Log("Clicked, now it is : " + selected);
 
-        if (selected){
+        if (selected)
+        {
             background.color = GameConstants.green;
-        } else {
+        }
+        else
+        {
             background.color = GameConstants.blue;
         }
     }

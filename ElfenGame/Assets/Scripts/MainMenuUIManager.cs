@@ -1,8 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.Audio;
 using TMPro;
 
 public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler

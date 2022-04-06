@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
-
-
+﻿
 public enum GamePhase : byte
 {
     DrawCardsAndCounters,
