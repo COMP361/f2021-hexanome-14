@@ -67,6 +67,7 @@ public static class MovementValidator
 
     public static bool IsMoveValid(NewTown startTown, PathScript path, List<CardEnum> cards)
     {
+        
         // No cards given
         if (cards.Count == 0)
         {
@@ -100,39 +101,42 @@ public static class MovementValidator
                 return false;
 	        }
 	    }
+        //path may have multiple tiles due to double spell
+        List<MovementTileSpriteScript> movementTileWrappers = path.GetMovementTiles();
 
-        MovementTileSpriteScript movementTileWrapper = path.GetMovementTile();
-
-        if (movementTileWrapper == null) return false;
-
-        MovementTile movementTile = movementTileWrapper.mTile.mTile;
-
-        if (transportationChart[path.roadType].ContainsKey(movementTile))
+        foreach (var movementTileWrapper in movementTileWrappers)
         {
-            // Getting num of cards from dictionary
-            int requiredCount = transportationChart[path.roadType][movementTile];
+            if (movementTileWrapper == null) return false;
 
-            // adding 1 to required num of cards if theres an obstacle
+            MovementTile movementTile = movementTileWrapper.mTile.mTile;
+
+            if (transportationChart[path.roadType].ContainsKey(movementTile))
+            {
+                // Getting num of cards from dictionary
+                int requiredCount = transportationChart[path.roadType][movementTile];
+
+                // adding 1 to required num of cards if theres an obstacle
+                if (path.HasObstacle())
+                {
+                    requiredCount++;
+                }
+                
+
+                if (CardsAreSame(cards) && tileToCard[movementTile] == cards[0])
+                {
+                    return cards.Count == requiredCount;
+                }
+            }
+           
+        }
+         // Caravaning
             if (path.HasObstacle())
             {
-                requiredCount++;
-            }
-
-            if (CardsAreSame(cards) && tileToCard[movementTile] == cards[0])
+                return cards.Count == 4;
+            } else
             {
-                return cards.Count == requiredCount;
-            }
-        }
-
-
-        // Caravaning
-        if (path.HasObstacle())
-        {
-            return cards.Count == 4;
-	    } else
-        {
-            return cards.Count == 3;
-	    }
+                return cards.Count == 3;
+	        }
     }
 
 

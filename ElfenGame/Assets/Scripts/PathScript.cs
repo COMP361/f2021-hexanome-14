@@ -64,6 +64,11 @@ public class PathScript : MonoBehaviour, IDragOver
         return gridManager.GetMovementTile();
     }
 
+    public List<MovementTileSpriteScript> GetMovementTiles()
+    {
+        return gridManager.GetMovementTiles();
+    }
+
     public bool isValid(MovementTileSO movementTileSO)
     {
         GridManager gm = GetComponentInChildren<GridManager>();
@@ -71,6 +76,7 @@ public class PathScript : MonoBehaviour, IDragOver
         {
             throw new System.Exception("Paths must have GridManagers in a child Element");
         }
+        if ((movementTileSO.mTile == MovementTile.Double || movementTileSO.mTile == MovementTile.Bounce) && !gm.HasBounce() && !gm.HasDouble() && gm.GetMovementTile() != null) return true; //place spell tile on path with movement tile
 
         if (!movementTileSO.mValidRoads.Contains(roadType)) return false;
 
@@ -88,6 +94,16 @@ public class PathScript : MonoBehaviour, IDragOver
         return gridManager.HasObstacle();
 
 
+    }
+
+    public bool HasDouble()
+    {
+        return gridManager.HasDouble();
+    }
+
+    public bool hasBounce()
+    {
+        return gridManager.HasBounce();
     }
 
 }

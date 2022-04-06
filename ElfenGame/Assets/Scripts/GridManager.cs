@@ -119,7 +119,7 @@ public class GridManager : MonoBehaviour
         return n;
     }
 
-    public bool checkHasSpecial(PathScript p)
+    public bool checkHasSpecial(PathScript p) 
     {
         return false;
     }
@@ -138,12 +138,29 @@ public class GridManager : MonoBehaviour
 
             moveTile = element.GetComponent<MovementTileSpriteScript>();
             MovementTile tile = moveTile.mTile.mTile;
-            if (tile != MovementTile.RoadObstacle)
+            if (tile != MovementTile.RoadObstacle && tile != MovementTile.Double && tile != MovementTile.Bounce)
             {
                 return moveTile;
             }
         }
         return null;
+    }
+    public List<MovementTileSpriteScript> GetMovementTiles()
+    {
+        List<MovementTileSpriteScript> moveTiles= new List<MovementTileSpriteScript>();
+        MovementTileSpriteScript moveTile = null;
+
+        foreach (GameObject element in elements)
+        {
+
+            moveTile = element.GetComponent<MovementTileSpriteScript>();
+            MovementTile tile = moveTile.mTile.mTile;
+            if (tile != MovementTile.RoadObstacle &&  tile != MovementTile.Double && tile != MovementTile.Bounce)
+            {
+                moveTiles.Add(moveTile);
+            }
+        }
+        return moveTiles;
     }
 
     public bool HasObstacle()
@@ -159,6 +176,37 @@ public class GridManager : MonoBehaviour
 
         }
         return false;
+    }
+
+    public bool HasDouble()
+    {
+        foreach (GameObject element in elements)
+        {
+            MovementTileSpriteScript moveTile = element.GetComponent<MovementTileSpriteScript>();
+            MovementTile tile = moveTile.mTile.mTile;
+            if (tile == MovementTile.Double)
+            {
+                return true;
+            }
+
+        }
+        return false;
+
+    }
+     public bool HasBounce()
+    {
+        foreach (GameObject element in elements)
+        {
+            MovementTileSpriteScript moveTile = element.GetComponent<MovementTileSpriteScript>();
+            MovementTile tile = moveTile.mTile.mTile;
+            if (tile == MovementTile.Bounce)
+            {
+                return true;
+            }
+
+        }
+        return false;
+
     }
 
 
