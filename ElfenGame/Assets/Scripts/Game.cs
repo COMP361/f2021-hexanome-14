@@ -319,56 +319,57 @@ public class Game
             MainUIManager.manager.UpdateAvailableTokens();
             MainUIManager.manager.UpdateRoundInfo(); // TODO: pass info as argument?
             MainUIManager.manager.UpdateGoldValues();
+            MainUIManager.manager.UpdateAvailableCards();
         }
 
         SaveAndLoad.SaveGameState();
 
     }
 
-    // Not longer in use
-    public void Init(int maxRnds, string gameMode, bool endTown, bool witchVar, bool randGoldVar)
-    {
-        // FIXME: This function keeps crashing weirdly
-        // TODO: sync endTown, whitchVar, randGoldVar
-        Debug.Log($"max rnds {maxRnds}, endTown {endTown}, whitchVar {witchVar}, randGoldVar {randGoldVar}");
-        Debug.Log("Game Init Called");
+    // // Not longer in use
+    // public void Init(int maxRnds, string gameMode, bool endTown, bool witchVar, bool randGoldVar)
+    // {
+    //     // FIXME: This function keeps crashing weirdly
+    //     // TODO: sync endTown, whitchVar, randGoldVar
+    //     Debug.Log($"max rnds {maxRnds}, endTown {endTown}, whitchVar {witchVar}, randGoldVar {randGoldVar}");
+    //     Debug.Log("Game Init Called");
 
-        _gameProperties[pCUR_PLAYER] = 0;
-        _gameProperties[pCUR_ROUND] = 1;
-        _gameProperties[pCUR_PHASE] = GamePhase.DrawCardsAndCounters;
-        _gameProperties[pMAX_ROUNDS] = maxRnds;
-        _gameProperties[pGAME_MODE] = gameMode;
-        _gameProperties[pEND_TOWN] = endTown;
-        _gameProperties[pWITCH_CARD] = witchVar;
-        _gameProperties[pRAND_GOLD] = randGoldVar;
-        _gameProperties[pPASSED_PLAYERS] = 0;
-        _gameProperties[pGAME_ID] = gameId;
-        _gameProperties[pGAME_CREATOR] = gameCreator;
+    //     _gameProperties[pCUR_PLAYER] = 0;
+    //     _gameProperties[pCUR_ROUND] = 1;
+    //     _gameProperties[pCUR_PHASE] = GamePhase.DrawCardsAndCounters;
+    //     _gameProperties[pMAX_ROUNDS] = maxRnds;
+    //     _gameProperties[pGAME_MODE] = gameMode;
+    //     _gameProperties[pEND_TOWN] = endTown;
+    //     _gameProperties[pWITCH_CARD] = witchVar;
+    //     _gameProperties[pRAND_GOLD] = randGoldVar;
+    //     _gameProperties[pPASSED_PLAYERS] = 0;
+    //     _gameProperties[pGAME_ID] = gameId;
+    //     _gameProperties[pGAME_CREATOR] = gameCreator;
 
-        _gameProperties[pPLAYERS] = new string[] { };
-        _gameProperties[pPILE] = new MovementTile[0];
-        _gameProperties[pVISIBLE] = new MovementTile[0];
-        _gameProperties[pDISCARD] = new CardEnum[0];
-        _gameProperties[pDECK] = new CardEnum[0];
+    //     _gameProperties[pPLAYERS] = new string[] { };
+    //     _gameProperties[pPILE] = new MovementTile[0];
+    //     _gameProperties[pVISIBLE] = new MovementTile[0];
+    //     _gameProperties[pDISCARD] = new CardEnum[0];
+    //     _gameProperties[pDECK] = new CardEnum[0];
 
-        // InitPlayersList(); // Can't be done until all players have joined
-        InitPile();
-        InitDeck(gameMode, witchVar);
+    //     // InitPlayersList(); // Can't be done until all players have joined
+    //     InitPile();
+    //     InitDeck(gameMode, witchVar);
 
-        //FIXME: Something isn't working with the Game constructor being called
-        _colorProperties = new ExitGames.Client.Photon.Hashtable();
-        for (int i = 0; i < 6; i++)
-        {
-            _colorProperties[getColorKey((PlayerColor)i)] = "";
-        }
+    //     //FIXME: Something isn't working with the Game constructor being called
+    //     _colorProperties = new ExitGames.Client.Photon.Hashtable();
+    //     for (int i = 0; i < 6; i++)
+    //     {
+    //         _colorProperties[getColorKey((PlayerColor)i)] = "";
+    //     }
 
-        if (NetworkManager.manager)
-        {
-            NetworkManager.manager.SetGameProperties(_colorProperties);
-        }
-        SyncGameProperties();
+    //     if (NetworkManager.manager)
+    //     {
+    //         NetworkManager.manager.SetGameProperties(_colorProperties);
+    //     }
+    //     SyncGameProperties();
 
-    }
+    // }
 
     public void SetInitialColorValues()
     {
@@ -459,8 +460,11 @@ public class Game
 
             deck.Add(CardEnum.Raft);
             deck.Add(CardEnum.Raft);
+
+            deck.Shuffle();
+            mDeck = deck;
         }
-        else
+        else // Elfengold
         {
             for (int i = 0; i < 9; i++)
             {
@@ -482,10 +486,20 @@ public class Game
                 }
             }
 
+
+            deck.Shuffle();
+            mDeck = deck;
+
+            List<CardEnum> tempVisibleCards = visibleCards;
+            for (int i = 0; i < 3; i++)
+            {
+                tempVisibleCards.Add(Game.currentGame.Draw(1)[0]);
+            }
+
+            visibleCards = tempVisibleCards;
+
         }
 
-        deck.Shuffle();
-        mDeck = deck;
     }
 
     public void AddGoldCards()
@@ -554,6 +568,18 @@ public class Game
         pile.RemoveAt(0);
         mPile = pile;
         mVisibleTiles = visible;
+        return ret;
+    }
+
+    public CardEnum RemoveVisibleCard(int index)
+    {
+        List<CardEnum> deck = mDeck;
+        List<CardEnum> visible = visibleCards;
+        CardEnum ret = visible[index];
+        visible[index] = deck[0];
+        deck.RemoveAt(0);
+        mDeck = deck;
+        visibleCards = visible;
         return ret;
     }
 

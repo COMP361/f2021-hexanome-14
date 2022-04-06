@@ -56,6 +56,12 @@ public class MainUIManager : MonoBehaviour
     public GameObject cardPrefab;
 
     [SerializeField]
+    public GameObject availableCardPrefab;
+
+    [SerializeField]
+    public GameObject availableCardGroup;
+
+    [SerializeField]
     public GameObject tilePrefab;
 
     [SerializeField]
@@ -93,6 +99,9 @@ public class MainUIManager : MonoBehaviour
 
     [SerializeField]
     public Image firstPlaceSprite, secondPlaceSprite, thirdPlaceSprite;
+
+    [SerializeField]
+    public Text goldPileValue;
 
     #endregion
 
@@ -313,6 +322,14 @@ public class MainUIManager : MonoBehaviour
         if (foundSelected) Game.currentGame.nextPlayer();
     }
 
+    public void DrawFromDeckPressed()
+    {
+        if (!Player.GetLocalPlayer().IsMyTurn()) return;
+        CardEnum[] cards = Game.currentGame.Draw(1);
+        Player.GetLocalPlayer().AddCards(cards);
+        Game.currentGame.nextPlayer();
+    }
+
     public void SelectRandomTokenPressed()
     {
         if (!Player.GetLocalPlayer().IsMyTurn()) return;
@@ -343,6 +360,18 @@ public class MainUIManager : MonoBehaviour
         return null;
     }
 
+    // for draw card
+    private int GetSelectedCard()
+    {
+        int index = 0;
+        foreach (Card card in availableCardGroup.GetComponentsInChildren<Card>())
+        {
+            if (card.selected) return index;
+            index++;
+        }
+        return -1;
+    }
+
     public void SelectTokenToKeepPressed()
     {
         Player localPlayer = Player.GetLocalPlayer();
@@ -353,6 +382,19 @@ public class MainUIManager : MonoBehaviour
 
         if (thscript.tile.mTile == MovementTile.RoadObstacle) return; // Select non obstacle tile
         localPlayer.SetOnlyTile(thscript.tile.mTile, thscript.GetInVisibleTokens());
+        Game.currentGame.nextPlayer();
+    }
+
+    // for draw cards
+    public void OnSelectCardPressed()
+    {
+        int index = GetSelectedCard();
+        if (index == -1) return;
+
+        Player localPlayer = Player.GetLocalPlayer();
+        if (!localPlayer.IsMyTurn()) return;
+
+        localPlayer.AddCards(new CardEnum[] { Game.currentGame.RemoveVisibleCard(index) });
         Game.currentGame.nextPlayer();
     }
 
@@ -387,16 +429,6 @@ public class MainUIManager : MonoBehaviour
         return cards;
     }
 
-    public CardEnum GetSelectedCard()
-    {
-        foreach (Card cardScript in drawCardPanel.GetComponentsInChildren<Card>())
-        {
-            if (cardScript.selected) return cardScript.cardType;
-        }
-
-        Debug.LogError("No card selected");
-        return new CardEnum();
-    }
 
     public void showTokenSelection()
     {
@@ -477,6 +509,22 @@ public class MainUIManager : MonoBehaviour
             TileHolderScript thscript = g.GetComponent<TileHolderScript>();
             thscript.SetTile(mTileDict[tile]);
             thscript.SetIsSelectable(true);
+        }
+    }
+
+    public void UpdateAvailableCards()
+    {
+        foreach (Card cardScript in availableCardGroup.GetComponentsInChildren<Card>())
+        {
+            Destroy(cardScript.gameObject);
+        }
+
+        foreach (CardEnum card in Game.currentGame.visibleCards)
+        {
+            GameObject g = Instantiate(availableCardPrefab, availableCardGroup.transform);
+
+            Card cardScript = g.GetComponent<Card>();
+            cardScript.Initialize(card);
         }
     }
 
