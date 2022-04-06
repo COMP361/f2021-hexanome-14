@@ -63,6 +63,9 @@ public class MainUIManager : MonoBehaviour
     public GameObject availableCardPrefab;
 
     [SerializeField]
+    public Button claimGoldButton;
+
+    [SerializeField]
     public GameObject availableCardGroup;
 
     [SerializeField]
@@ -330,8 +333,18 @@ public class MainUIManager : MonoBehaviour
     {
         if (!Player.GetLocalPlayer().IsMyTurn()) return;
         CardEnum[] cards = Game.currentGame.Draw(1);
-        Player.GetLocalPlayer().AddCards(cards);
-        Game.currentGame.nextPlayer();
+
+        // check if card is golold card
+        if (cards[0] == CardEnum.Gold)
+        {
+            Game.currentGame.goldPileValue += 3;
+            Game.currentGame.SyncGameProperties();
+        }
+        else
+        {
+            Player.GetLocalPlayer().AddCards(cards);
+            Game.currentGame.nextPlayer();
+        }
     }
 
     public void SelectRandomTokenPressed()
@@ -355,6 +368,20 @@ public class MainUIManager : MonoBehaviour
             ChatManager.manager.SetChatInvisible();
         }
     }
+
+    public void OnClaimGoldSelected()
+    {
+        if (!Player.GetLocalPlayer().IsMyTurn()) return;
+        Player.GetLocalPlayer().nCoins += Game.currentGame.goldPileValue;
+        // Shuffle one gold card for every three coins into the discardPile
+        for (int i = 0; i < Game.currentGame.goldPileValue / 3; i++)
+        {
+            Game.currentGame.mDiscardPile.Add(CardEnum.Gold);
+        }
+        Game.currentGame.goldPileValue = 0;
+        Game.currentGame.nextPlayer();
+    }
+
     private TileHolderScript GetSelectedTokenToKeep()
     {
         foreach (TileHolderScript thscript in tokenToKeepSelectionWindow.GetComponentsInChildren<TileHolderScript>())
@@ -600,6 +627,18 @@ public class MainUIManager : MonoBehaviour
             town.SetGold(goldValues[index]);
 
             index++;
+        }
+
+        goldPileValue.text = $"Gold: {Game.currentGame.goldPileValue}";
+        if (Game.currentGame.goldPileValue > 0)
+        {
+            goldPileValue.color = Color.yellow;
+            claimGoldButton.interactable = true;
+        }
+        else
+        {
+            goldPileValue.color = Color.grey;
+            claimGoldButton.interactable = false;
         }
     }
 

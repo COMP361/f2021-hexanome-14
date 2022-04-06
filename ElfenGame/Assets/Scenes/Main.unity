@@ -2894,7 +2894,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 709859055341044673, guid: 596d692525ed94d76910cd44cce397db, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: SelectTokenPressed
+      value: OnClaimGoldSelected
       objectReference: {fileID: 0}
     - target: {fileID: 709859055341044673, guid: 596d692525ed94d76910cd44cce397db, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
@@ -3031,6 +3031,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 709859055341044678, guid: 596d692525ed94d76910cd44cce397db, type: 3}
   m_PrefabInstance: {fileID: 247318316}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &247318318 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 709859055341044673, guid: 596d692525ed94d76910cd44cce397db, type: 3}
+  m_PrefabInstance: {fileID: 247318316}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &248821004
 GameObject:
   m_ObjectHideFlags: 0
@@ -15917,6 +15928,7 @@ MonoBehaviour:
   tileWindow: {fileID: 1589816822}
   cardPrefab: {fileID: 382647109788817177, guid: 43a10a912996f435793c972cbc8bf73d, type: 3}
   availableCardPrefab: {fileID: 6650630334552190697, guid: 2074e82944b7bbe43bef0935165e01c4, type: 3}
+  claimGoldButton: {fileID: 247318318}
   availableCardGroup: {fileID: 1363154932}
   tilePrefab: {fileID: 2586788237553594906, guid: 6db846eb99f7d40bf87fc938b0c2c095, type: 3}
   tokenDisplayPrefab: {fileID: 2947252748801959607, guid: 68f677b0b4fc8433887001d03fd146ba, type: 3}

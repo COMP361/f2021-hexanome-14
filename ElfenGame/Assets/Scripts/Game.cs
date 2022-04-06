@@ -32,10 +32,10 @@ public class Game
     pPLAYERS = "PLAYERS", pCUR_PLAYER = "CUR_PLAYER", pCUR_ROUND = "CUR_ROUND", pCUR_PHASE = "CUR_PHASE",
     pMAX_ROUNDS = "MAX_ROUNDS", pGAME_MODE = "GAME_MODE", pEND_TOWN = "END_TOWN", pWITCH_CARD = "WITCH_CARD",
     pRAND_GOLD = "RAND_GOLD", pPASSED_PLAYERS = "PASSED_PLAYERS", pGAME_ID = "GAME_ID", pSAVE_ID = "SAVE_ID",
-    pGOLD_VALUES = "GOLD_VALUES", pGAME_CREATOR = "GAME_CREATOR";
+    pGOLD_VALUES = "GOLD_VALUES", pGAME_CREATOR = "GAME_CREATOR", pGOLD_PILE_VALUE = "GOLD_PILE_VALUE";
     public static string[] pGAME_PROPS = {
         pDECK, pDISCARD, pVISIBLECARDS, pPILE, pVISIBLE, pPLAYERS, pCUR_PLAYER, pCUR_ROUND, pCUR_PHASE, pMAX_ROUNDS,
-        pPASSED_PLAYERS, pGAME_ID, pSAVE_ID,  pGAME_MODE, pEND_TOWN, pWITCH_CARD, pRAND_GOLD, pGOLD_VALUES, pGAME_CREATOR
+        pPASSED_PLAYERS, pGAME_ID, pSAVE_ID,  pGAME_MODE, pEND_TOWN, pWITCH_CARD, pRAND_GOLD, pGOLD_VALUES, pGAME_CREATOR, pGOLD_PILE_VALUE
     };
     private const string pCOLOR_AVAIL_PREFIX = "COLOR_AVAIL";
 
@@ -103,6 +103,7 @@ public class Game
     public int maxRounds { get => GetP<int>(pMAX_ROUNDS); set => SetP<int>(pMAX_ROUNDS, value); }
     public GamePhase curPhase { get => GetP<GamePhase>(pCUR_PHASE); set => SetP<GamePhase>(pCUR_PHASE, value); }
     public int curRound { get => GetP<int>(pCUR_ROUND); set => SetP<int>(pCUR_ROUND, value); }
+    public int goldPileValue { get => GetP<int>(pGOLD_PILE_VALUE); set => SetP<int>(pGOLD_PILE_VALUE, value); }
     public string gameMode { get => GetP<string>(pGAME_MODE); set => SetP<string>(pGAME_MODE, value); }
     public bool endTown { get => GetP<bool>(pEND_TOWN); set => SetP<bool>(pEND_TOWN, value); }
     public bool witchCard { get => GetP<bool>(pWITCH_CARD); set => SetP<bool>(pWITCH_CARD, value); }
@@ -219,6 +220,7 @@ public class Game
         this.mDeck = new List<CardEnum>();
         this.mDiscardPile = new List<CardEnum>();
         this.visibleCards = new List<CardEnum>();
+        this.goldPileValue = 0;
 
         InitPile();
         InitDeck(gameMode, witchVar);
@@ -326,50 +328,6 @@ public class Game
 
     }
 
-    // // Not longer in use
-    // public void Init(int maxRnds, string gameMode, bool endTown, bool witchVar, bool randGoldVar)
-    // {
-    //     // FIXME: This function keeps crashing weirdly
-    //     // TODO: sync endTown, whitchVar, randGoldVar
-    //     Debug.Log($"max rnds {maxRnds}, endTown {endTown}, whitchVar {witchVar}, randGoldVar {randGoldVar}");
-    //     Debug.Log("Game Init Called");
-
-    //     _gameProperties[pCUR_PLAYER] = 0;
-    //     _gameProperties[pCUR_ROUND] = 1;
-    //     _gameProperties[pCUR_PHASE] = GamePhase.DrawCardsAndCounters;
-    //     _gameProperties[pMAX_ROUNDS] = maxRnds;
-    //     _gameProperties[pGAME_MODE] = gameMode;
-    //     _gameProperties[pEND_TOWN] = endTown;
-    //     _gameProperties[pWITCH_CARD] = witchVar;
-    //     _gameProperties[pRAND_GOLD] = randGoldVar;
-    //     _gameProperties[pPASSED_PLAYERS] = 0;
-    //     _gameProperties[pGAME_ID] = gameId;
-    //     _gameProperties[pGAME_CREATOR] = gameCreator;
-
-    //     _gameProperties[pPLAYERS] = new string[] { };
-    //     _gameProperties[pPILE] = new MovementTile[0];
-    //     _gameProperties[pVISIBLE] = new MovementTile[0];
-    //     _gameProperties[pDISCARD] = new CardEnum[0];
-    //     _gameProperties[pDECK] = new CardEnum[0];
-
-    //     // InitPlayersList(); // Can't be done until all players have joined
-    //     InitPile();
-    //     InitDeck(gameMode, witchVar);
-
-    //     //FIXME: Something isn't working with the Game constructor being called
-    //     _colorProperties = new ExitGames.Client.Photon.Hashtable();
-    //     for (int i = 0; i < 6; i++)
-    //     {
-    //         _colorProperties[getColorKey((PlayerColor)i)] = "";
-    //     }
-
-    //     if (NetworkManager.manager)
-    //     {
-    //         NetworkManager.manager.SetGameProperties(_colorProperties);
-    //     }
-    //     SyncGameProperties();
-
-    // }
 
     public void SetInitialColorValues()
     {
@@ -493,7 +451,7 @@ public class Game
             List<CardEnum> tempVisibleCards = visibleCards;
             for (int i = 0; i < 3; i++)
             {
-                tempVisibleCards.Add(Game.currentGame.Draw(1)[0]);
+                tempVisibleCards.Add(Draw(1)[0]);
             }
 
             visibleCards = tempVisibleCards;
