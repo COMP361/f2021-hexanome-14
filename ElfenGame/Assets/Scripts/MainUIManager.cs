@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using static AuctionItem;
 
 public class MainUIManager : MonoBehaviour
 {
@@ -711,5 +712,164 @@ public class MainUIManager : MonoBehaviour
         spriteScript.SetTileSO(mTileDict[movementTile]);
 
         _ = pathScript.GetComponentInChildren<GridManager>().AddElement(newTileSprite);
+    }
+
+
+
+
+
+
+    //AUCTION SCREEN
+    // Show auction screen that displays all tiles that will be up for auction.
+
+    // TODO connect auctionPanel to AuctionPanel in the UI.
+    [SerializeField]
+    public GameObject auctionPanel;
+
+    [SerializeField]
+    public List<AuctionItem> auctionItems = new List<AuctionItem>();
+
+    [SerializeField]
+    public AuctionItem currentAuctionItem;
+
+
+    // TODO call this from somewhere
+    public void ShowAuctionScreen()
+    {
+        InitAuctionPhase();
+        auctionPanel.SetActive(true);
+        endTurnButton.interactable = false;
+        endTurnButton.enabled = false;
+
+    }
+
+    private void InitAuctionPhase()
+    {
+
+        // auction twice as many tiles as num of players
+        int numOfPlayers = Game.currentGame.mPlayers.Count;
+
+        int numOfAuctionItems = numOfPlayers * 2;
+
+        // Get 2x number of tiles as num of players
+        // Transform Movemnt tiles from MovementTiles into AuctionItems
+        List<MovementTile> tilesForAuction = Game.currentGame.mPile.GetRange(0, numOfAuctionItems);
+        foreach (MovementTile tile in tilesForAuction)
+        {
+            MovementTileSO tileSO = mTileDict[tile];
+            AuctionItem auctionItem = new AuctionItem(tileSO);
+            auctionItems.Add(auctionItem);
+        }
+        
+
+        // Go to next (first) auction item
+        GoToNextAuctionItem();
+
+    }
+
+    // Go to the next item in the auction
+    private void GoToNextAuctionItem()
+    {
+        // get the next item
+        currentAuctionItem = auctionItems[0];
+        // remove it from the list
+        auctionItems.RemoveAt(0);
+        // update the tile image in the UI
+        auctionPanel.GetComponent<SpriteRenderer>().sprite = currentAuctionItem.tile.mImage;
+        // reset the user's bid amount
+        auctionPanel.GetComponentInChildren<TextMeshPro>().SetText("0");
+        
+    }
+
+    public void HideAuctionScreen()
+    {
+        auctionPanel.SetActive(false);
+        endTurnButton.interactable = true;
+        endTurnButton.enabled = true;
+    }
+
+    
+
+
+    public void BidButtonPressed()
+    {
+        if (!Player.GetLocalPlayer().IsMyTurn()) return;
+
+        String rawUserBidInput = auctionPanel.GetComponentInChildren<TextMeshPro>().text;
+        if (!int.TryParse(rawUserBidInput, out int userBidAmount))
+        {
+            // if user entered some illegal characters, just set their bid to 0.
+            userBidAmount = 0;
+        }
+
+        //bid amount can't be greater than the players number of coins
+        //USER INPUT
+        if (userBidAmount > Player.GetLocalPlayer().nCoins)
+        {
+            // TODO: if user inputs a bid too large... what do we do?
+            return;
+        }
+
+        // add bid onto auctionItem's bid list
+        currentAuctionItem.AddToBidsList(new Bid(Player.GetLocalPlayer().userName, userBidAmount));
+
+
+        // Go to next auction state
+        GoToNextAuctionState();
+    }
+
+    public void PassButtonPressed()
+    {
+        if (!Player.GetLocalPlayer().IsMyTurn()) return;
+        
+        //If player passes, set the item's curBid to 0 and go to next player's turn
+        currentAuctionItem.AddToBidsList(new Bid (Player.GetLocalPlayer().userName, 0));
+
+        // Go to next auction state
+        GoToNextAuctionState();
+        
+    }
+
+    private void GoToNextAuctionState()
+    {
+
+        // check if auctionItem has gone through all players
+
+        if (!IsAuctionItemDone())
+        {
+            Game.currentGame.nextPlayer();
+            return;
+        }
+
+        // give the winner the tile. if no one bidded, no one gets it
+        if (currentAuctionItem.maxBid.bidAmount != 0)
+        {
+            String winnerId = currentAuctionItem.maxBid.playerIdentifer;
+            Player winner = Player.GetPlayer(winnerId);
+            winner.nCoins -= currentAuctionItem.maxBid.bidAmount;
+            winner.AddVisibleTile(currentAuctionItem.tile.mTile);
+            
+        }
+
+        // if auction is done, hide the auction screen
+        if (IsAuctionDone())
+        {
+            HideAuctionScreen();
+            return;
+        }
+
+        // Go to next auction item
+        GoToNextAuctionItem();
+    }
+
+    // Returns true once all items have been auctioned
+    private bool IsAuctionDone()
+    {
+        return auctionItems.Count == 0 && IsAuctionItemDone();
+    }
+
+    // Returns true once every player has bid (note that a pass is equivalent to a bid of 0)
+    private bool IsAuctionItemDone() {
+        return currentAuctionItem.GetBidsList().Count == Player.GetAllPlayers().Count;
     }
 }
