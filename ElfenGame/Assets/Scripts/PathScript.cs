@@ -91,10 +91,12 @@ public class PathScript : MonoBehaviour, IDragOver
 
         if (!movementTileSO.mValidRoads.Contains(roadType)) return false;
 
-        if (movementTileSO.mTile != MovementTile.RoadObstacle && gm.GetMovementTile() == null)
+        if (movementTileSO.mTile != MovementTile.RoadObstacle && gm.GetMovementTile() == null) //will also pass when path only has switch tile
         {
             return true;
         }
+        if (movementTileSO.mTile != MovementTile.RoadObstacle && gm.GetMovementTiles().Count == 1 && gm.HasDouble()) return true;//if has double spell and only 1 movement tile on path 
+
 
         if (movementTileSO.mTile == MovementTile.RoadObstacle && !gm.HasObstacle() && gm.GetMovementTile() != null) return true; // Place obstacle on path with 
         return false;
