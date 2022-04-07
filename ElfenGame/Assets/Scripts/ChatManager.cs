@@ -244,6 +244,7 @@ public class ChatManager : MonoBehaviour, IChatClientListener
     public void SetChatInvisible()
     {
         chatPanel.SetActive(false);
+        newMessages = 0;
     }
 
     public void ToggleChat()
