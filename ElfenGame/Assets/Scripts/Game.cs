@@ -517,7 +517,7 @@ public class Game
             local.SelfInitRound();
         }
 
-        if (curPhase == GamePhase.DrawCardsAndCounters && local.IsMyTurn() && curRound > 1)
+        if (gameMode == GameMode.Elfengold && curPhase == GamePhase.DrawCardsAndCounters && curRound > 1)
         {
             MainUIManager.manager.DrawCardPanelToggle(true);
         }
