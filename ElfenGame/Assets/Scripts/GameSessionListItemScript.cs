@@ -34,6 +34,10 @@ public class GameSessionListItemScript : MonoBehaviour, IPointerClickHandler
         //     image.color = GameConstants.redFaded;
 
         // }
+        if (background == null)
+        {
+            background = GetComponent<Image>();
+        }
         background.color = GameConstants.blueFaded;
     }
 

@@ -27,6 +27,8 @@ public class ChatManager : MonoBehaviour, IChatClientListener
 
     ChatClient chatClient;
 
+    private static ChatManager instance = null;
+
     private bool chatVisible
     {
         get
@@ -181,9 +183,17 @@ public class ChatManager : MonoBehaviour, IChatClientListener
     // Start is called before the first frame update
     void Awake()
     {
-        DontDestroyOnLoad(gameObject);
-        chatClient = new ChatClient(this);
-        chatClient.Connect(PhotonNetwork.PhotonServerSettings.AppSettings.AppIdChat, PhotonNetwork.AppVersion, new AuthenticationValues(GameConstants.username));
+        DontDestroyOnLoad(this);
+        if (instance == null)
+        {
+            instance = this;
+            chatClient = new ChatClient(this);
+            chatClient.Connect(PhotonNetwork.PhotonServerSettings.AppSettings.AppIdChat, PhotonNetwork.AppVersion, new AuthenticationValues(GameConstants.username));
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
     // Update is called once per frame
