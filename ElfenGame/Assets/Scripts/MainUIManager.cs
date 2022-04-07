@@ -333,6 +333,7 @@ public class MainUIManager : MonoBehaviour
 
     public void DrawFromDeckPressed()
     {
+        if (!Player.GetLocalPlayer().IsMyTurn() || Player.GetLocalPlayer().cardsToDraw == 0) return;
         if (!Player.GetLocalPlayer().IsMyTurn()) return;
         CardEnum[] cards = Game.currentGame.Draw(1);
 
@@ -345,7 +346,7 @@ public class MainUIManager : MonoBehaviour
         else
         {
             Player.GetLocalPlayer().AddCards(cards);
-            Game.currentGame.nextPlayer();
+            CardDrawn();
         }
     }
 
@@ -371,9 +372,20 @@ public class MainUIManager : MonoBehaviour
         }
     }
 
+    private void CardDrawn()
+    {
+        Player.GetLocalPlayer().cardsToDraw--;
+
+        if (Player.GetLocalPlayer().cardsToDraw == 0)
+        {
+            Player.GetLocalPlayer().cardsToDraw = 3;
+            Game.currentGame.nextPlayer();
+        }
+    }
+
     public void OnClaimGoldSelected()
     {
-        if (!Player.GetLocalPlayer().IsMyTurn()) return;
+        if (!Player.GetLocalPlayer().IsMyTurn() || Player.GetLocalPlayer().cardsToDraw == 0) return;
         Player.GetLocalPlayer().nCoins += Game.currentGame.goldPileValue;
         // Shuffle one gold card for every three coins into the discardPile
         for (int i = 0; i < Game.currentGame.goldPileValue / 3; i++)
@@ -381,7 +393,8 @@ public class MainUIManager : MonoBehaviour
             Game.currentGame.mDiscardPile.Add(CardEnum.Gold);
         }
         Game.currentGame.goldPileValue = 0;
-        Game.currentGame.nextPlayer();
+        Game.currentGame.SyncGameProperties();
+        CardDrawn();
     }
 
     private TileHolderScript GetSelectedTokenToKeep()
@@ -421,24 +434,16 @@ public class MainUIManager : MonoBehaviour
     // for draw cards
     public void OnSelectCardPressed()
     {
+        // check if it's your turn
+        if (!Player.GetLocalPlayer().IsMyTurn() || Player.GetLocalPlayer().cardsToDraw == 0) return;
         int index = GetSelectedCard();
         if (index == -1) return;
 
-        Player localPlayer = Player.GetLocalPlayer();
-        if (!localPlayer.IsMyTurn()) return;
-
         CardEnum card = Game.currentGame.RemoveVisibleCard(index);
-        // check if card is golold card
-        if (card == CardEnum.Gold)
-        {
-            Game.currentGame.goldPileValue += 3;
-            Game.currentGame.SyncGameProperties();
-        }
-        else
-        {
-            Player.GetLocalPlayer().AddCards(new CardEnum[] { card });
-            Game.currentGame.nextPlayer();
-        }
+
+        Player.GetLocalPlayer().AddCards(new CardEnum[] { card });
+        CardDrawn();
+        Game.currentGame.SyncGameProperties();
     }
 
     public void SelectCardsPressed()
