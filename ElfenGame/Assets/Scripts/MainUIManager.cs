@@ -119,6 +119,12 @@ public class MainUIManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //for Elfenland we do NOT have double and Bounce
+        if (Game.currentGame.gameMode == GameMode.Elfenland)
+        {
+            mTiles.RemoveAt(8);
+            mTiles.RemoveAt(7);
+        }
         mTileDict = new Dictionary<MovementTile, MovementTileSO>();
         foreach (MovementTileSO tile in mTiles)
         {
