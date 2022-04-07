@@ -543,9 +543,25 @@ public class Game
         List<CardEnum> deck = mDeck;
         List<CardEnum> visible = visibleCards;
         CardEnum ret = visible[index];
-        visible[index] = deck[0];
-        deck.RemoveAt(0);
-        mDeck = deck;
+        CardEnum drawn = Draw(1)[0];
+        bool needValidCard = false;
+        do
+        {
+            if (drawn == CardEnum.Gold)
+            {
+                needValidCard = true;
+                Debug.Log("Gold card");
+                Game.currentGame.goldPileValue += 3;
+                Game.currentGame.SyncGameProperties();
+                drawn = Draw(1)[0];
+            }
+            else
+            {
+                needValidCard = false;
+            }
+        } while (needValidCard);
+
+        visible[index] = drawn;
         visibleCards = visible;
         return ret;
     }

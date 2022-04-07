@@ -18,6 +18,7 @@ public class Player
     public const string pTOWN = "TOWN";
 
     public const string pVISITED = "VISITED";
+    public const string pCARDS_TO_DRAW = "CARDS_TO_DRAW";
     private ExitGames.Client.Photon.Hashtable _properties;
 
     private String _endTown; // Not synced
@@ -242,6 +243,19 @@ public class Player
         }
     }
 
+    public int cardsToDraw
+    {
+        get
+        {
+            return (int)_properties[pCARDS_TO_DRAW];
+        }
+        set
+        {
+            _properties[pCARDS_TO_DRAW] = value;
+            SyncPlayerStats();
+        }
+    }
+
     public Dictionary<string, bool> mVisited
     {
         get
@@ -390,6 +404,7 @@ public class Player
         _properties[pVISIBLE_TILES] = new MovementTile[] { MovementTile.RoadObstacle }; // TODO: Update for Elvengold
         _properties[pHIDDEN_TILES] = new MovementTile[] { };
         _properties[pVISITED] = new Dictionary<string, bool>();
+        _properties[pCARDS_TO_DRAW] = 3;
 
         InitVisited();
 
