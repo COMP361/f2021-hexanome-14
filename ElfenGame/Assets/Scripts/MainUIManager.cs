@@ -360,6 +360,48 @@ public class MainUIManager : MonoBehaviour
         Game.currentGame.nextPlayer();
     }
 
+    public void SelectTradePressed()
+    {
+        Player localPlayer = Player.GetLocalPlayer();
+        if (!localPlayer.IsMyTurn()) return;
+
+        List<GameObject> selected = GetTradingItemsToKeep();
+        if (selected == null || selected.Count == 0) return;
+        Debug.Log("DEBUGGER1");
+        TradeOffer t = new TradeOffer(selected);
+        Debug.Log("DEBUGGER2");
+        Game.currentGame.nextPlayer();
+    }
+
+    public void SelectPassTrade()
+    {
+        Player localPlayer = Player.GetLocalPlayer();
+        if (!localPlayer.IsMyTurn()) return;
+
+        
+        Game.currentGame.nextPlayer(true);
+    }
+
+    public List<GameObject> GetTradingItemsToKeep()
+    {
+        List<GameObject> list = new List<GameObject>();
+        foreach (TileHolderScript thscript in tradingCreatingWindow.GetComponentsInChildren<TileHolderScript>())
+        {
+            if (thscript.selected) {
+                list.Add(thscript.gameObject);
+            }
+        }
+
+        foreach (Card card in tradingCreatingWindow.GetComponentsInChildren<Card>())
+        {
+            if (card.selected) {
+                list.Add(card.gameObject);
+            }
+        }
+
+        return list;
+    }
+
     public void SelectCardsPressed()
     {
         cardPanel.SetActive(false);
@@ -466,30 +508,49 @@ public class MainUIManager : MonoBehaviour
     public void UpdateItemsToAsk()
     {
         GridLayoutGroup gridGroup = tradingCreatingWindow.GetComponentInChildren<GridLayoutGroup>();
-        foreach (TileHolderScript thscript in gridGroup.GetComponentsInChildren<TileHolderScript>())
+        foreach (Transform child in gridGroup.transform)
         {
-            Destroy(thscript.gameObject);
+            Destroy(child.gameObject);
         }
 
-        foreach (MovementTile tile in Player.GetLocalPlayer().mVisibleTiles)
-        {
-            GameObject g = Instantiate(tilePrefab, gridGroup.transform);
+        // add cards
+        // add tokens
+        // add gold 
 
-            TileHolderScript thscript = g.GetComponent<TileHolderScript>();
-            thscript.SetTile(mTileDict[tile]);
-            thscript.SetIsSelectable(true);
-            thscript.SetInVisibleTokens(true);
+        // instantiate all kinds of travelTokens + Obstacles
+        foreach (MovementTile tile in Enum.GetValues(typeof(MovementTile)))
+        {
+            if (mTileDict.ContainsKey(tile)){
+                GameObject g = Instantiate(tilePrefab, gridGroup.transform);
+
+                TileHolderScript thscript = g.GetComponent<TileHolderScript>();
+                thscript.trading = true;
+            
+                thscript.SetTile(mTileDict[tile]);
+                thscript.SetIsSelectable(true);
+                
+            }
+            
         }
 
-        foreach (MovementTile tile in Player.GetLocalPlayer().mHiddenTiles)
+        // instantiate all kinds of cards 
+        foreach (CardEnum c in Enum.GetValues(typeof(CardEnum)))
         {
-            GameObject g = Instantiate(tilePrefab, gridGroup.transform);
+            //Debug.Log("Cards being added !!!!!!!!");
+            GameObject g = Instantiate(cardPrefab, gridGroup.transform);
+            Card card = g.GetComponent<Card>();
 
-            TileHolderScript thscript = g.GetComponent<TileHolderScript>();
-            thscript.SetTile(mTileDict[tile]);
-            thscript.SetIsSelectable(true);
-            thscript.SetInVisibleTokens(false);
+            card.Initialize(c);
+
+            
         }
+
+        if (Game.currentGame.gameMode == "Elfengold")
+        {
+            // gold option
+        }
+
+        
     }
 
     public void UpdateMovementTileCounts()

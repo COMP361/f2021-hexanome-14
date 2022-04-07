@@ -14,6 +14,7 @@ public class TileHolderScript : MonoBehaviour
     public bool selected;
     public bool isSelectable;
     private bool inVisible;
+    public bool trading;
     private Image background;
 
     public void Awake()
@@ -69,8 +70,14 @@ public class TileHolderScript : MonoBehaviour
     public void ClickedOn()
     {
         if (!isSelectable) return;
+        if (trading && MainUIManager.manager){
+            selected = !selected;
+            SetBackGroundColor();
+            return;
+        }
         if (MainUIManager.manager) MainUIManager.manager.SetTokensNotSelected();
         selected = true;
         SetBackGroundColor();
+        
     }
 }

@@ -800,7 +800,7 @@ public class Game
             if (local.IsMyTurn()){
                 // can propose an offer to everyone and wait for counter offers.
                 // once everyone has either countered or passed, can click accept
-
+                Debug.Log("Here my friend");
                 MainUIManager.manager.showTradingOptions();
 
             } else {
@@ -808,7 +808,7 @@ public class Game
                 MainUIManager.manager.hideTradingOptions();
             }
             // I am trading
-        }
+        } else {MainUIManager.manager.hideTradingOptions();}
 
         // Debug.LogError($"Cur Phase set to {Enum.GetName(typeof(GamePhase), curPhase)}");
     }
@@ -917,10 +917,12 @@ public class Game
         {
             passedPlayers = 0;
         }
+
+        Debug.Log("Players in the game :" + mPlayers.Count + " players passed : " + passedPlayers);
         // phase is over
         if ((curPlayerIndex == (curRound - 1) % mPlayers.Count && curPhase != GamePhase.PlaceCounter && curPhase != GamePhase.Auction && curPhase != GamePhase.Trading) || (passedPlayers == mPlayers.Count))
         {
-            
+            Debug.Log("DEBUGGER3");
             
             // finalize the game 
             if (curPhase == GamePhase.Travel && curRound == maxRounds)

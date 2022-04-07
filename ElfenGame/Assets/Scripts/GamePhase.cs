@@ -64,6 +64,7 @@ static class GamePhaseExtension
         }
 
         if (phase == GamePhase.Trading){
+            Debug.Log("DEBUGGER4");
             return GamePhase.PlaceCounter;
         }
 
