@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 10468c9f488a5480a906bcbcd7ee9559, type: 3}
   m_Name: Gold
   m_EditorClassIdentifier: 
-  mTile: 0
-  mImage: {fileID: 0}
-  mValidRoads: 
+  mTile: 10
+  mImage: {fileID: 21300000, guid: d5f9b602ddbee4d84a323dc432189d10, type: 3}
+  mValidRoads: 000000000100000002000000030000000400000005000000
