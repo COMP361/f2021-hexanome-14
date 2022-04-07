@@ -76,7 +76,7 @@ public class Player
             SelfInitFirstRound();
         }
         List<CardEnum> cards = mCards;
-        if (cards.Count < 8)
+        if (cards.Count < 8 && Game.currentGame.gameMode == GameMode.Elfenland)
         {
             AddCards(Game.currentGame.Draw(8 - cards.Count));
         }
