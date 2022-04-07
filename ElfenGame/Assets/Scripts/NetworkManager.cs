@@ -431,6 +431,9 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback, IInRo
             Lobby.gameservice.DeleteSession(Game.currentGame.gameId); // Deletes session if launched
             Lobby.user.DeleteSession(Game.currentGame.gameId); // Deletes session if not launched
         }
+
+        // Leave Game chat
+        ChatManager.manager.LeaveGroup();
     }
 
     #endregion

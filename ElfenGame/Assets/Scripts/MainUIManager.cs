@@ -358,20 +358,6 @@ public class MainUIManager : MonoBehaviour
         Game.currentGame.nextPlayer();
     }
 
-    public void OpenChat()
-    {
-        ChatManager.manager.newReset();
-        if (ChatManager.manager != null && !ChatManager.manager.isActive())
-        {
-            ChatManager.manager.setChatVisible();
-        }
-
-        else if (ChatManager.manager != null && ChatManager.manager.isActive())
-        {
-            ChatManager.manager.SetChatInvisible();
-        }
-    }
-
     private void CardDrawn()
     {
         Player.GetLocalPlayer().cardsToDraw--;

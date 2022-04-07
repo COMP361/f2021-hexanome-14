@@ -599,6 +599,8 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
 
         NetworkManager.manager.JoinOrCreateRoom(session.session_ID);
         UpdateSessionListView(Lobby.availableSessions);
+
+        ChatManager.manager.JoinGroup(session.session_ID);
     }
 
     /// <summary>
@@ -623,6 +625,7 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
         selectedSessionId = sessionID;
         Debug.Log($"Game created with ID {sessionID}");
         NetworkManager.manager.CreateRoom(sessionID);
+        ChatManager.manager.JoinGroup(sessionID);
     }
 
     /// <summary>
