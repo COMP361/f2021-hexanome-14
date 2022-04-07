@@ -192,13 +192,30 @@ public class GridManager : MonoBehaviour
         return false;
 
     }
-     public bool HasBounce()
+    
+    public bool HasBounce()
     {
         foreach (GameObject element in elements)
         {
             MovementTileSpriteScript moveTile = element.GetComponent<MovementTileSpriteScript>();
             MovementTile tile = moveTile.mTile.mTile;
             if (tile == MovementTile.Bounce)
+            {
+                return true;
+            }
+
+        }
+        return false;
+
+    }
+
+    public bool HasGold()
+    {
+        foreach (GameObject element in elements)
+        {
+            MovementTileSpriteScript moveTile = element.GetComponent<MovementTileSpriteScript>();
+            MovementTile tile = moveTile.mTile.mTile;
+            if (tile == MovementTile.Gold)
             {
                 return true;
             }
