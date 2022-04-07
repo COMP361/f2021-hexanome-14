@@ -98,7 +98,13 @@ public class MovementTileSpriteScript : MonoBehaviour
                 }
                 else
                 {
+                    //dont think this is correct
+                    if (mTile.mTile == MovementTile.Bounce) //when placing the bounce tile on path, remove the tile currently on it
+                    {
+                        Destroy(gm.GetMovementTile());
+                    }
                     if (NetworkManager.manager) NetworkManager.manager.AddTileToRoad(path.name, mTile.mTile);
+                    
                 }
             }
             ResetPathColor();

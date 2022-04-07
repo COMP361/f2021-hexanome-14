@@ -386,18 +386,18 @@ public class Game
             {
                 pile.Add(MovementTile.Double);
                 pile.Add(MovementTile.Bounce);
-                pile.Add(MovementTile.RoadObstacle);
-                pile.Add(MovementTile.WaterObstacle);
+                //pile.Add(MovementTile.RoadObstacle);
+                //pile.Add(MovementTile.WaterObstacle);
             }
         }
 
         pile.Shuffle();
 
-            for (int i = 0; i < 5; ++i)
-            {
-                visible.Add(pile[0]);
-                pile.RemoveAt(0);
-            }
+        for (int i = 0; i < 5; ++i)
+        {
+            visible.Add(pile[0]);
+            pile.RemoveAt(0);
+        }
         
         mPile = pile;
         mVisibleTiles = visible;
@@ -444,6 +444,7 @@ public class Game
     private void InitDeck(GameMode gameMode, bool witchVar)
     {
         List<CardEnum> deck = mDeck;
+         
         if (gameMode == GameMode.Elfenland)
         {
             for (int i = 0; i < 10; i++)
@@ -484,8 +485,6 @@ public class Game
                     deck.Add(CardEnum.Witch);
                 }
             }
-
-
             deck.Shuffle();
             mDeck = deck;
 
@@ -494,9 +493,8 @@ public class Game
             {
                 tempVisibleCards.Add(Draw(1)[0]);
             }
-
             visibleCards = tempVisibleCards;
-
+            
         }
 
     }
