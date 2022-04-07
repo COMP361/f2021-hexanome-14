@@ -63,7 +63,7 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
 
     #endregion
 
-    private Resolution[] resolutions;
+    private List<Resolution> resolutions;
     private List<int> numRoundOptions = new List<int> { 3, 4, 5, 6 };
     private string selectedSaveId = "";
 
@@ -74,7 +74,8 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
 
     public void Start()
     {
-        resolutions = Screen.resolutions;
+        Resolution[] tempResolutions = Screen.resolutions;
+        resolutions = new List<Resolution>();
         resolutionDropDown.ClearOptions();
 
         List<string> options = new List<string>();
@@ -82,14 +83,20 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
         int savedHeight = PlayerPrefs.GetInt("resolutionheight");
 
         int currentResolutionIndex = 0;
-        for (int i = 0; i < resolutions.Length; i++)
+        int curIndex = 0;
+        for (int i = 0; i < tempResolutions.Length; i++)
         {
-            string option = resolutions[i].width + " x " + resolutions[i].height;
-            options.Add(option);
-
-            if (resolutions[i].width == savedWidth && resolutions[i].height == savedHeight)
+            string option = tempResolutions[i].width + " x " + tempResolutions[i].height;
+            if (!options.Contains(option)) // Handle duplicate resolutions
             {
-                currentResolutionIndex = i;
+                options.Add(option);
+                resolutions.Add(tempResolutions[i]);
+
+                if (tempResolutions[i].width == savedWidth && tempResolutions[i].height == savedHeight)
+                {
+                    currentResolutionIndex = curIndex;
+                }
+                curIndex++;
             }
         }
 
@@ -636,7 +643,7 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
             //     randGoldButton.GetComponent<VariationButton>().isSelected
             // );
 
-            string gamemode = elfengoldToggle.isOn ? "Elfengold" : "Elfenland";
+            GameMode gamemode = elfengoldToggle.isOn ? GameMode.Elfengold : GameMode.Elfenland;
 
             Game.currentGame = new Game(
                 sessionId: sessionID,

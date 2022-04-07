@@ -106,7 +106,11 @@ public class MainUIManager : MonoBehaviour
     [SerializeField]
     public Text goldPileValue;
 
+    public Image volumeHandleImage;
+
+    public Slider volumeSlider2;
     #endregion
+
 
     public Dictionary<MovementTile, MovementTileSO> mTileDict;
 
@@ -148,6 +152,8 @@ public class MainUIManager : MonoBehaviour
         {
             SetTiles(data.tilePaths, data.tileTypes);
         }
+        float volume = PlayerPrefs.GetFloat("volume");
+        volumeSlider2.value = volume;
 
         UpdateEndTown(Player.GetLocalPlayer().endTown);
         UpdateGoldValues();
@@ -623,8 +629,8 @@ public class MainUIManager : MonoBehaviour
 
     internal void UpdateGoldValues()
     {
-        Debug.Log($"UpdateGoldValues called with gamemode: {Game.currentGame.gameMode}");
-        if (Game.currentGame.gameMode != "Elfengold") return; // Only display gold for elvenhold
+        Debug.Log($"UpdateGoldValues called with gamemode: {Enum.GetName(typeof(GameMode), Game.currentGame.gameMode)}");
+        if (Game.currentGame.gameMode != GameMode.Elfengold) return; // Only display gold for elvenhold
         List<int> goldValues = Game.currentGame.goldValues;
         if (goldValues.Count != GameConstants.townNames.Count - 1) return;
 
@@ -657,10 +663,28 @@ public class MainUIManager : MonoBehaviour
         }
     }
 
+    public void SetVolume(float volume)
+    {
+        float curVolume = AudioManager.manager.GetVolume();
+        if (volume <= -30)
+        {
+            volume = -80; // -80 is the minimum value for the audio mixer
+            volumeHandleImage.sprite = Resources.Load<Sprite>("SoundOff");
+        }
+        else if (curVolume == -80)
+        {
+            // Currently set to -80 and being changed to something higher
+            volumeHandleImage.sprite = Resources.Load<Sprite>("SoundOn");
+        }
+        AudioManager.manager.SetVolume(volume);
+        PlayerPrefs.SetFloat("volume", volume);
+        PlayerPrefs.Save();
+    }
+
     public void GameOverTriggered(List<Player> winners, List<int> scores)
     {
-        Debug.LogError($"Num winners: {winners.Count}");
-        Debug.LogError($"Num scores: {scores.Count}");
+        Debug.Log($"Num winners: {winners.Count}");
+        Debug.Log($"Num scores: {scores.Count}");
         gameOverScreen.SetActive(true);
 
         firstPlace.SetActive(true);

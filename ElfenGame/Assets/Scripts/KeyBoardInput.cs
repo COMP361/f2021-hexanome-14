@@ -92,7 +92,7 @@ public class KeyBoardInput : MonoBehaviour
         }
         if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.G))
         {
-            Lobby.Init(force: true);
+            Lobby.StartGetSessionsTask();
         }
     }
 

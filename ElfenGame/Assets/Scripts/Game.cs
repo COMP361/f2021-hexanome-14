@@ -104,7 +104,7 @@ public class Game
     public GamePhase curPhase { get => GetP<GamePhase>(pCUR_PHASE); set => SetP<GamePhase>(pCUR_PHASE, value); }
     public int curRound { get => GetP<int>(pCUR_ROUND); set => SetP<int>(pCUR_ROUND, value); }
     public int goldPileValue { get => GetP<int>(pGOLD_PILE_VALUE); set => SetP<int>(pGOLD_PILE_VALUE, value); }
-    public string gameMode { get => GetP<string>(pGAME_MODE); set => SetP<string>(pGAME_MODE, value); }
+    public GameMode gameMode { get => GetP<GameMode>(pGAME_MODE); set => SetP<GameMode>(pGAME_MODE, value); }
     public bool endTown { get => GetP<bool>(pEND_TOWN); set => SetP<bool>(pEND_TOWN, value); }
     public bool witchCard { get => GetP<bool>(pWITCH_CARD); set => SetP<bool>(pWITCH_CARD, value); }
     public bool randGold { get => GetP<bool>(pRAND_GOLD); set => SetP<bool>(pRAND_GOLD, value); }
@@ -165,6 +165,7 @@ public class Game
         endTown = data.endTown;
         witchCard = data.witch;
         randGold = data.randGold;
+        goldPileValue = data.goldPileValue;
         mDeck = data.deck;
         mDiscardPile = data.discard;
         mVisibleTiles = data.visible;
@@ -172,6 +173,7 @@ public class Game
         curPlayerIndex = data.curPlayerIndex;
         mPlayers = data.players;
         // gameId = data.gameId; // TODO: This should not be set (new session id should be kept)
+        visibleCards = data.visibleCards;
         curPhase = data.curPhase;
         curRound = data.curRound;
         passedPlayers = data.passedPlayers;
@@ -195,7 +197,7 @@ public class Game
             _colorProperties[getColorKey((PlayerColor)i)] = "";
         }
     }
-    public Game(string sessionId, string saveId, string creator, int maxRnds, string gameMode, bool endTown, bool witchVar, bool randGoldVar) : this()
+    public Game(string sessionId, string saveId, string creator, int maxRnds, GameMode gameMode, bool endTown, bool witchVar, bool randGoldVar) : this()
     {
         // Create new game constructor
         // Note no-param constructor is called first
@@ -225,7 +227,7 @@ public class Game
         InitPile();
         InitDeck(gameMode, witchVar);
 
-        if (gameMode == "Elfengold")
+        if (gameMode == GameMode.Elfengold)
         {
             List<int> tempGoldValues = GameConstants.goldValues;
             if (randGoldVar)
@@ -299,7 +301,7 @@ public class Game
         }
         if (updatedProps)
         {
-            Debug.LogError("Game properties updated");
+            Debug.Log("Game properties updated");
         }
 
         foreach (string playerName in mPlayers)
@@ -400,10 +402,10 @@ public class Game
         return $"{pEND_TOWN}_{player}";
     }
 
-    private void InitDeck(string gameMode, bool witchVar)
+    private void InitDeck(GameMode gameMode, bool witchVar)
     {
         List<CardEnum> deck = mDeck;
-        if (gameMode == "Elfenland")
+        if (gameMode == GameMode.Elfenland)
         {
             for (int i = 0; i < 10; i++)
             {
@@ -500,7 +502,7 @@ public class Game
             {
                 MainUIManager.manager.showAvailableTokensToKeep();
             }
-            if (local.userName == mPlayers[0] && curRound == 1 && gameMode == "Elfengold") // Only do this once (for one player) doesn't matter which
+            if (local.userName == mPlayers[0] && curRound == 1 && gameMode == GameMode.Elfengold) // Only do this once (for one player) doesn't matter which
             {
                 AddGoldCards();
             }
@@ -606,12 +608,12 @@ public class Game
             winners.Add(p);
             p.DeductDistToEndTown();
         }
-        if (gameMode == "Elfenland")
+        if (gameMode == GameMode.Elfenland)
         {
             Debug.Log("In Elfenland");
             winners = winners.OrderByDescending(o => o.nPoints * 1000 + o.mCards.Count).ToList();
         }
-        else if (gameMode == "Elfengold")
+        else if (gameMode == GameMode.Elfengold)
         {
             Debug.Log("In Elfengold");
             winners = winners.OrderByDescending(o => o.nPoints * 1000 + o.nCoins).ToList();
@@ -671,7 +673,7 @@ public class Game
                     List<MovementTile> cleared = MainUIManager.manager.ClearAllTiles(); // Local UI update
                     if (cleared != null)
                     {
-                        if (gameMode == "Elfenland")
+                        if (gameMode == GameMode.Elfenland)
                         {
                             // Remove used obstacles
                             cleared.RemoveAll(o => o == MovementTile.RoadObstacle);

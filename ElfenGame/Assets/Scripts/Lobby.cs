@@ -62,6 +62,11 @@ public class Lobby
         gameservice = new Lobby();
 
         gameservice.AuthenticateGameService();
+        StartGetSessionsTask();
+    }
+
+    public static void StartGetSessionsTask()
+    {
         gameservice.GetSessions();
     }
 
