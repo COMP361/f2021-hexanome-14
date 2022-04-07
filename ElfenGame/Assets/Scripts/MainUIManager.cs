@@ -393,6 +393,7 @@ public class MainUIManager : MonoBehaviour
             Game.currentGame.mDiscardPile.Add(CardEnum.Gold);
         }
         Game.currentGame.goldPileValue = 0;
+        Game.currentGame.SyncGameProperties();
         CardDrawn();
     }
 
