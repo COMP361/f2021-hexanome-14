@@ -124,6 +124,7 @@ public class MainUIManager : MonoBehaviour
         {
             mTiles.RemoveAt(8);
             mTiles.RemoveAt(7);
+            mTiles.RemoveAt(9);
         }
         mTileDict = new Dictionary<MovementTile, MovementTileSO>();
         foreach (MovementTileSO tile in mTiles)
@@ -232,6 +233,7 @@ public class MainUIManager : MonoBehaviour
         {
             GridManager grid = path.GetComponentInChildren<GridManager>();
             foreach (MovementTile tile in grid.GetNonObstacleTiles())
+            //might need to add separate implementation for spell+gold tiles
             {
                 tilePaths.Add(path.name);
                 tiles.Add(tile);
@@ -520,7 +522,7 @@ public class MainUIManager : MonoBehaviour
         foreach (MovementTile tile in Player.GetLocalPlayer().mVisibleTiles)
         {
             // For elfenland, only show tokens that are not obstacles
-            if (tile == MovementTile.RoadObstacle) continue;
+            if (tile == MovementTile.RoadObstacle || tile == MovementTile.WaterObstacle) continue;
 
             GameObject g = Instantiate(tilePrefab, gridGroup.transform);
 

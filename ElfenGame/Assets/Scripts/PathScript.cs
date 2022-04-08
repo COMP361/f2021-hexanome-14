@@ -94,7 +94,7 @@ public class PathScript : MonoBehaviour, IDragOver
             return false;
         } 
          
-        else if (movementTileSO.mTile != MovementTile.RoadObstacle && movementTileSO.mTile != MovementTile.Bounce && movementTileSO.mTile != MovementTile.Double && gm.GetMovementTile() == null) //will also pass when path only has switch tile
+        else if (movementTileSO.mTile != MovementTile.RoadObstacle && movementTileSO.mTile != MovementTile.Bounce && movementTileSO.mTile != MovementTile.Double && movementTileSO.mTile != MovementTile.Gold && gm.GetMovementTile() == null) //will also pass when path only has switch tile
         {
             return true;
         }
@@ -103,9 +103,9 @@ public class PathScript : MonoBehaviour, IDragOver
             return true;//if has double spell and only 1 movement tile on path 
         }
 
-        else if (movementTileSO.mTile == MovementTile.RoadObstacle && !gm.HasObstacle() && gm.GetMovementTile() != null) 
+        else if (movementTileSO.mTile == MovementTile.RoadObstacle && !gm.HasObstacle() && !HasGold() && gm.GetMovementTile() != null) 
         {
-            return true; // Place obstacle on path with 
+            return true; // Place obstacle on path with no other obstacle or gold, but contains transport tile
         }
         else if (movementTileSO.mTile == MovementTile.Double && !gm.HasBounce() &&  gm.GetMovementTile() != null)
         {
@@ -114,6 +114,10 @@ public class PathScript : MonoBehaviour, IDragOver
         else if (movementTileSO.mTile == MovementTile.Bounce && !gm.HasDouble() && gm.GetMovementTile() != null) 
         {
             return true; //place bounce spell tile on path with movement tile
+        }
+        else if (movementTileSO.mTile == MovementTile.Gold && !gm.HasObstacle() && gm.GetMovementTile() != null && !gm.HasGold())
+        {
+            return true; //place gold tile on path if no obstacle and has transport tile and no other gold tile
         }
 
         Debug.Log("hasDouble: "+gm.HasDouble());
@@ -140,6 +144,10 @@ public class PathScript : MonoBehaviour, IDragOver
     public bool hasBounce()
     {
         return gridManager.HasBounce();
+    }
+
+    public bool HasGold(){
+        return gridManager.HasGold();
     }
 
 }
