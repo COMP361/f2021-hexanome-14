@@ -94,7 +94,7 @@ public class PathScript : MonoBehaviour, IDragOver
             return false;
         } 
          
-        else if (movementTileSO.mTile != MovementTile.RoadObstacle && movementTileSO.mTile != MovementTile.Bounce && movementTileSO.mTile != MovementTile.Double && gm.GetMovementTile() == null) //will also pass when path only has switch tile
+        else if (movementTileSO.mTile != MovementTile.RoadObstacle && movementTileSO.mTile != MovementTile.Bounce && movementTileSO.mTile != MovementTile.Double && movementTileSO.mTile != MovementTile.Gold && gm.GetMovementTile() == null) //will also pass when path only has switch tile
         {
             return true;
         }
@@ -117,7 +117,7 @@ public class PathScript : MonoBehaviour, IDragOver
         }
         else if (movementTileSO.mTile == MovementTile.Gold && !gm.HasObstacle() && gm.GetMovementTile() != null && !gm.HasGold())
         {
-            return true; //place gold tile on path if no obstacle and has transport tile
+            return true; //place gold tile on path if no obstacle and has transport tile and no other gold tile
         }
 
         Debug.Log("hasDouble: "+gm.HasDouble());
