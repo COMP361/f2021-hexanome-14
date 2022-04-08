@@ -124,6 +124,7 @@ public class MainUIManager : MonoBehaviour
         {
             mTiles.RemoveAt(8);
             mTiles.RemoveAt(7);
+            mTiles.RemoveAt(9);
         }
         mTileDict = new Dictionary<MovementTile, MovementTileSO>();
         foreach (MovementTileSO tile in mTiles)
