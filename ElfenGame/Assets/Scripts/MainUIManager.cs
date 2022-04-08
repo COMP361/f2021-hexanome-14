@@ -109,6 +109,8 @@ public class MainUIManager : MonoBehaviour
     public Image volumeHandleImage;
 
     public Slider volumeSlider2;
+    
+    public List<MovementTileSO> elfengoldItems;
     #endregion
 
 
@@ -120,11 +122,10 @@ public class MainUIManager : MonoBehaviour
     void Start()
     {
         //for Elfenland we do NOT have double and Bounce
-        if (Game.currentGame.gameMode == GameMode.Elfenland)
+        if (Game.currentGame.gameMode == GameMode.Elfengold)
         {
-            mTiles.RemoveAt(8);
-            mTiles.RemoveAt(7);
-            mTiles.RemoveAt(9);
+            mTiles.AddRange(elfengoldItems);
+            
         }
         mTileDict = new Dictionary<MovementTile, MovementTileSO>();
         foreach (MovementTileSO tile in mTiles)

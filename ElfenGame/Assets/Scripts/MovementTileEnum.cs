@@ -12,7 +12,6 @@ public enum MovementTile : byte
     Double,
     Bounce,
     Gold
-
 }
 
 static class MovementTileExtension

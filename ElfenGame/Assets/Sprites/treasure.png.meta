@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<< HEAD
 guid: d5f9b602ddbee4d84a323dc432189d10
+=======
+guid: b42714d827e134769b4815666237a48e
+>>>>>>> 98a7303 (added double coins and fixed elfengold specific)
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
