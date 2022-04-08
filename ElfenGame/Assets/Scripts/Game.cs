@@ -502,7 +502,17 @@ public class Game
             MainUIManager.manager.hideTokenSelection();
         }
 
+        if (curPhase == GamePhase.Auction)
+        {
+            MainUIManager.manager.ShowAuctionScreen();
+        }
+        else
+        {
+            MainUIManager.manager.HideAuctionScreen();
+        }
+
         Player local = Player.GetLocalPlayer();
+
         if (curPhase == GamePhase.SelectTokenToKeep && local.IsMyTurn())
         {
             if (local.mHiddenTiles.Count == 0 && (local.mVisibleTiles.Count == 0 ||
