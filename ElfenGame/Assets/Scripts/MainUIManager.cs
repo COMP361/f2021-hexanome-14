@@ -97,6 +97,7 @@ public class MainUIManager : MonoBehaviour
 
     [SerializeField]
     public Image firstPlaceSprite, secondPlaceSprite, thirdPlaceSprite;
+    public GameObject tradeTile;
 
     #endregion
 
@@ -369,6 +370,9 @@ public class MainUIManager : MonoBehaviour
         if (selected == null || selected.Count == 0) return;
         Debug.Log("DEBUGGER1");
         TradeOffer t = new TradeOffer(selected);
+        GameObject g = Instantiate(tradeTile, leftPane.transform);
+        g.GetChild(0).GetComponent<Text>()
+        tradeTile.GetComponent<TradeTile>().SetTrade(t);
         Debug.Log("DEBUGGER2");
         Game.currentGame.nextPlayer();
     }
