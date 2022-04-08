@@ -15495,6 +15495,7 @@ MonoBehaviour:
   endTurnButton: {fileID: 9948182}
   roundInfo: {fileID: 882909193}
   movementTileSpritePrefab: {fileID: 710000644895225578, guid: bae1bd41308d8427eb114e1101763928, type: 3}
+  tradeDisplayObject: {fileID: 2271704100679164574, guid: cb0db886ccf7d477cb9b7fa49e086870, type: 3}
   mTiles:
   - {fileID: 11400000, guid: 2122c5e4ddb2b45c085c587bccc0e55e, type: 2}
   - {fileID: 11400000, guid: 9263f6467da9e4eb68cc43f2d30da6ae, type: 2}

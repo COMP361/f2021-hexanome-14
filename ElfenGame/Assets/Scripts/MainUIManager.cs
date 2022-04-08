@@ -78,6 +78,9 @@ public class MainUIManager : MonoBehaviour
     public GameObject movementTileSpritePrefab;
 
     [SerializeField]
+    public GameObject tradeDisplayObject;
+
+    [SerializeField]
     public List<MovementTileSO> mTiles;
 
     [SerializeField]
@@ -371,8 +374,23 @@ public class MainUIManager : MonoBehaviour
         Debug.Log("DEBUGGER1");
         TradeOffer t = new TradeOffer(selected);
         GameObject g = Instantiate(tradeTile, leftPane.transform);
-        g.GetChild(0).GetComponent<Text>()
-        tradeTile.GetComponent<TradeTile>().SetTrade(t);
+        g.transform.GetChild(0).GetComponent<Text>();
+
+
+        
+
+        // Trade Display
+        GameObject tradeDisplayObjec = Instantiate(tradeDisplayObject, mainCanvas.transform);
+        TradeItemsDisplay tradeDisplay = tradeDisplayObjec.GetComponent<TradeItemsDisplay>();
+        //tradeDisplay.SetName(username);
+        tradeDisplayObjec.transform.SetSiblingIndex(tradeDisplay.transform.GetSiblingIndex() - 1); // Ensure the pause menu is on top of view
+        
+        
+        
+        g.transform.GetComponent<TradeTile>().SetTrade(t, tradeDisplay);
+        tradeDisplay.SetItems(t, mTileDict);
+        
+
         Debug.Log("DEBUGGER2");
         Game.currentGame.nextPlayer();
     }

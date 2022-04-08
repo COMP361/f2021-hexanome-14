@@ -6,13 +6,17 @@ using UnityEngine.UI;
 
 public class TradeOffer
 {
+    
     [SerializeField]
     private GameObject tooltip;
     public List<CardEnum> cardsWanted;
     public List<MovementTile> tilesWanted;
     public bool available = true;
 
+    public List<GameObject> chosenItems;
+
     public TradeOffer(List<GameObject> chosenItems){
+        this.chosenItems = chosenItems;
         tilesWanted = new List<MovementTile>();
         cardsWanted = new List<CardEnum>();
         foreach (GameObject g in chosenItems)
