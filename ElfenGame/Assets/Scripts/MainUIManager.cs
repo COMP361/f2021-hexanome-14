@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using static AuctionItem;
 
 public class MainUIManager : MonoBehaviour
 {
@@ -109,6 +110,20 @@ public class MainUIManager : MonoBehaviour
     public Image volumeHandleImage;
 
     public Slider volumeSlider2;
+
+
+    [Header("Auction Fields")]
+
+    public GameObject auctionGroup;
+    public GameObject auctionPanel;
+    public GameObject auctionItemPrefab;
+
+    public Text curBestBidText;
+    public Image curBestBidSprite;
+    public Text curBestBidderText;
+    public Text curBidText;
+    public Text bidStatusText;
+
     #endregion
 
 
@@ -116,6 +131,8 @@ public class MainUIManager : MonoBehaviour
 
     private bool isPaused = false;
     private List<string> elfNames = new List<string> { "Blue", "Cyan", "Red", "Orange", "Pink", "Green" };
+    private List<AuctionItem> auctionItems = new List<AuctionItem>();
+    private AuctionItem currentAuctionItem;
     // Start is called before the first frame update
     void Start()
     {
@@ -703,4 +720,190 @@ public class MainUIManager : MonoBehaviour
 
         _ = pathScript.GetComponentInChildren<GridManager>().AddElement(newTileSprite);
     }
+
+
+
+
+
+
+
+    #region Auction Screen
+
+    public void OnAuctionBidUpArrowClicked()
+    {
+        int curBidAmount = int.Parse(curBidText.text);
+        curBidText.text = (1 + curBidAmount).ToString();
+    }
+
+    public void OnAuctionBidDownArrowClicked()
+    {
+        int curBidAmount = int.Parse(curBidText.text);
+        if (curBidAmount > 0)
+            curBidText.text = (curBidAmount - 1).ToString();
+    }
+
+    //AUCTION SCREEN
+    // Show auction screen that displays all tiles that will be up for auction.
+
+    // TODO call this from somewhere
+    public void ShowAuctionScreen()
+    {
+        auctionPanel.SetActive(true);
+        endTurnButton.interactable = false;
+        endTurnButton.enabled = false;
+    }
+
+    // Go to the next item in the auction
+    private void GoToNextAuctionItem()
+    {
+        // get the next item
+        currentAuctionItem = auctionItems[0];
+        // remove it from the list
+        auctionItems.RemoveAt(0);
+        // update the tile image in the UI
+        auctionPanel.GetComponent<SpriteRenderer>().sprite = currentAuctionItem.tile.mImage;
+        // reset the user's bid amount
+        auctionPanel.GetComponentInChildren<TextMeshPro>().SetText("0");
+
+    }
+
+    public void HideAuctionScreen()
+    {
+        auctionPanel.SetActive(false);
+        endTurnButton.interactable = true;
+        endTurnButton.enabled = true;
+    }
+
+
+
+
+    public void OnBidButtonClicked()
+    {
+        if (!Player.GetLocalPlayer().IsMyTurn()) return;
+
+        int bidAmount = int.Parse(curBidText.text);
+
+        //bid amount can't be greater than the players number of coins
+        //USER INPUT
+        if (bidAmount > Player.GetLocalPlayer().nCoins)
+        {
+            bidStatusText.gameObject.SetActive(true);
+            bidStatusText.text = "Not Enough Gold!";
+            return;
+        }
+        else if (bidAmount <= Game.currentGame.curBid)
+        {
+            bidStatusText.gameObject.SetActive(true);
+            bidStatusText.text = "Bid Too Low!";
+            return;
+        }
+
+        bidStatusText.gameObject.SetActive(false);
+
+
+        Game.currentGame.curBid = bidAmount;
+        Game.currentGame.curBidPlayer = Player.GetLocalPlayer().userName;
+        Game.currentGame.nextPlayer();
+    }
+
+    public void OnPassButtonClicked()
+    {
+        if (!Player.GetLocalPlayer().IsMyTurn()) return;
+
+        bidStatusText.gameObject.SetActive(false);
+        Game.currentGame.nextPlayer(passed: true);
+    }
+
+    private void GoToNextAuctionState()
+    {
+
+        // check if auctionItem has gone through all players
+
+        if (!IsAuctionItemDone())
+        {
+            Game.currentGame.nextPlayer();
+            return;
+        }
+
+        // give the winner the tile. if no one bidded, no one gets it
+        if (currentAuctionItem.maxBid.bidAmount != 0)
+        {
+            String winnerId = currentAuctionItem.maxBid.playerIdentifer;
+            Player winner = Player.GetPlayer(winnerId);
+            winner.nCoins -= currentAuctionItem.maxBid.bidAmount;
+            winner.AddVisibleTile(currentAuctionItem.tile.mTile);
+            Game.currentGame.RemoveTileFromPile();
+        }
+
+        // if auction is done, hide the auction screen
+        if (IsAuctionDone())
+        {
+            HideAuctionScreen();
+            return;
+        }
+
+        // Go to next auction item
+        GoToNextAuctionItem();
+    }
+
+    // Returns true once all items have been auctioned
+    private bool IsAuctionDone()
+    {
+        return auctionItems.Count == 0 && IsAuctionItemDone();
+    }
+
+    // Returns true once every player has bid (note that a pass is equivalent to a bid of 0)
+    private bool IsAuctionItemDone()
+    {
+        return currentAuctionItem.GetBidsList().Count == Player.GetAllPlayers().Count;
+    }
+
+    public void UpdateAuctionCurrentBestBid(int bidAmount, string playername)
+    {
+        curBestBidText.text = bidAmount.ToString();
+        curBestBidderText.text = playername;
+        if (playername != "")
+        {
+            curBestBidSprite.sprite = Player.GetPlayer(playername).playerColor.GetSprite();
+        }
+        else
+        {
+            curBestBidSprite.sprite = PlayerColor.None.GetSprite();
+        }
+    }
+
+    // Instantiate prefab and add prefab to its parent: auctionGroup
+    //ntiles is the remaining tiles up for display
+    public void UpdateAuctionItems(List<MovementTile> tilesForAuction)
+    {
+
+        // auction twice as many tiles as num of players
+        foreach (AuctionItem item in auctionGroup.GetComponentsInChildren<AuctionItem>())
+        {
+            Destroy(item.gameObject);
+        }
+
+        bool first = true;
+
+        foreach (MovementTile tile in tilesForAuction)
+        {
+
+            GameObject g = Instantiate(auctionItemPrefab, auctionGroup.transform);
+
+            AuctionItem auctionItem = g.GetComponent<AuctionItem>();
+            auctionItem.SetTile(mTileDict[tile]);
+
+            if (first)
+            {
+                first = false;
+                g.GetComponent<Image>().color = GameConstants.greenFaded;
+            }
+
+        }
+    }
+
+    #endregion
+
+
+
 }

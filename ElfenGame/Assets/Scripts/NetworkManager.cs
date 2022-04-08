@@ -28,6 +28,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback, IInRo
     const byte EVENT_REMOVE_ALL_TILES_CODE = 4;
     const byte EVENT_GAME_OVER_CODE = 5;
 
+    const byte EVENT_PLAYER_WON_AUCTION_CODE = 6;
+
     public void Connect()
     {
         if (!PhotonNetwork.IsConnected)
@@ -270,6 +272,12 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback, IInRo
         RaiseEvent(EVENT_ADD_TILE_CODE, data);
     }
 
+    public void SignalPlayerWonAuction(string playerName, int BidAmount, MovementTile auctionTile)
+    {
+        object[] data = new object[] { playerName, BidAmount, auctionTile };
+        RaiseEvent(EVENT_PLAYER_WON_AUCTION_CODE, data);
+    }
+
     public void ClearAllTiles()
     {
         object[] data = new object[] { };
@@ -319,6 +327,19 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback, IInRo
         else if (photonEvent.Code == EVENT_GAME_OVER_CODE)
         {
             Game.currentGame.GameOver();
+        }
+        else if (photonEvent.Code == EVENT_PLAYER_WON_AUCTION_CODE)
+        {
+            object[] data = (object[])photonEvent.CustomData;
+            string playerName = (string)data[0];
+            int bidAmount = (int)data[1];
+            MovementTile auctionTile = (MovementTile)data[2];
+            Player local = Player.GetLocalPlayer();
+            if (local.userName == playerName)
+            {
+                local.nCoins -= bidAmount;
+                local.AddVisibleTile(auctionTile);
+            }
         }
     }
 
