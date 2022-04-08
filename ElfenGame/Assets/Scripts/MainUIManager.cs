@@ -732,6 +732,9 @@ public class MainUIManager : MonoBehaviour
     [SerializeField]
     public AuctionItem currentAuctionItem;
 
+    [SerializeField]
+    public GameObject auctionItemPrefab;
+
 
     // TODO call this from somewhere
     public void ShowAuctionScreen()
