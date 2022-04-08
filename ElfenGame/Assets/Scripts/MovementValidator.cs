@@ -104,6 +104,9 @@ public static class MovementValidator
         }
         
         List<MovementTileSpriteScript> movementTileWrappers = path.GetMovementTiles();
+
+        if (movementTileWrappers == null) return false;
+
         foreach (var movementTileWrapper in movementTileWrappers)
         {
             if (movementTileWrapper == null) return false;
@@ -115,15 +118,14 @@ public static class MovementValidator
                 // Getting num of cards from dictionary
                 int requiredCount = transportationChart[path.roadType][movementTile];
 
-                // adding 1 to required num of cards if theres an obstacle
-                if (path.HasObstacle())
-                {
-                    requiredCount++;
-                }
-                
-
                 if (CardsAreSame(cards) && tileToCard[movementTile] == cards[0])
                 {
+                    // adding 1 to required num of cards if theres an obstacle
+                    if (path.HasObstacle())
+                    {
+                        requiredCount++;
+                    }
+
                     return cards.Count == requiredCount;
                 }
             }

@@ -137,7 +137,7 @@ public class GridManager : MonoBehaviour
 
             moveTile = element.GetComponent<MovementTileSpriteScript>();
             MovementTile tile = moveTile.mTile.mTile;
-            if (tile != MovementTile.RoadObstacle && tile != MovementTile.Double && tile != MovementTile.Bounce)
+            if (tile != MovementTile.RoadObstacle && tile != MovementTile.WaterObstacle && tile != MovementTile.Double && tile != MovementTile.Bounce)
             {
                 return moveTile;
             }
@@ -154,7 +154,7 @@ public class GridManager : MonoBehaviour
 
             moveTile = element.GetComponent<MovementTileSpriteScript>();
             MovementTile tile = moveTile.mTile.mTile;
-            if (tile != MovementTile.RoadObstacle &&  tile != MovementTile.Double && tile != MovementTile.Bounce)
+            if (tile != MovementTile.RoadObstacle &&  tile != MovementTile.WaterObstacle && tile != MovementTile.Double && tile != MovementTile.Bounce)
             {
                 moveTiles.Add(moveTile);
             }

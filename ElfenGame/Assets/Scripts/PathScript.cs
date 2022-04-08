@@ -83,7 +83,7 @@ public class PathScript : MonoBehaviour, IDragOver
     public bool isValid(MovementTileSO movementTileSO)
     {
         GridManager gm = GetComponentInChildren<GridManager>();
-        Debug.Log(gm.GetMovementTiles().Count);
+
         if (gm == null)
         {
             throw new System.Exception("Paths must have GridManagers in a child Element");
@@ -107,11 +107,11 @@ public class PathScript : MonoBehaviour, IDragOver
         {
             return true; // Place obstacle on path with no other obstacle or gold, but contains transport tile
         }
-        else if (movementTileSO.mTile == MovementTile.Double && !gm.HasBounce() &&  gm.GetMovementTile() != null)
+        else if (movementTileSO.mTile == MovementTile.Double && !gm.HasDouble() &&  gm.GetMovementTile() != null)
         {
             return true; //place double spell tile on path with movement tile 
         } 
-        else if (movementTileSO.mTile == MovementTile.Bounce && !gm.HasDouble() && gm.GetMovementTile() != null) 
+        else if (movementTileSO.mTile == MovementTile.Bounce && gm.GetMovementTile() != null) 
         {
             return true; //place bounce spell tile on path with movement tile
         }
@@ -120,12 +120,12 @@ public class PathScript : MonoBehaviour, IDragOver
             return true; //place gold tile on path if no obstacle and has transport tile and no other gold tile
         }
 
-        Debug.Log("hasDouble: "+gm.HasDouble());
-        Debug.Log("movementTileSO.mTile == MovementTile.Bounce:"+(movementTileSO.mTile == MovementTile.Bounce).ToString());
-        Debug.Log("movementTileSO.mTile == MovementTile.Double"+(movementTileSO.mTile == MovementTile.Double).ToString());
-        Debug.Log("hasDouble()"+gm.HasDouble().ToString());
-        Debug.Log("HasBounce()"+gm.HasBounce().ToString());
-        Debug.Log(movementTileSO.mTile.ToString());
+        // Debug.Log("hasDouble: "+gm.HasDouble());
+        // Debug.Log("movementTileSO.mTile == MovementTile.Bounce:"+(movementTileSO.mTile == MovementTile.Bounce).ToString());
+        // Debug.Log("movementTileSO.mTile == MovementTile.Double"+(movementTileSO.mTile == MovementTile.Double).ToString());
+        // Debug.Log("hasDouble()"+gm.HasDouble().ToString());
+        // Debug.Log("HasBounce()"+gm.HasBounce().ToString());
+        // Debug.Log(movementTileSO.mTile.ToString());
         return false;
     }
 
