@@ -770,17 +770,28 @@ public class MainUIManager : MonoBehaviour
     }
 
     // Go to the next item in the auction
-    private void GoToNextAuctionItem()
+    private void GoToNextAuctionItem(bool first = false)
     {
+        AuctionItem[] auctionItems = GetActiveAuctionItems();
+
+        if (first)
+        {
+            currentAuctionItem = auctionItems[0];
+            return;
+        }
+            
         // get the next item
-        currentAuctionItem = auctionItems[0];
-        // remove it from the list
-        auctionItems.RemoveAt(0);
-        // update the tile image in the UI
-        auctionPanel.GetComponent<SpriteRenderer>().sprite = currentAuctionItem.tile.mImage;
+        currentAuctionItem = auctionItems[1];
+        // remove current auction item
+        Destroy(auctionItems[0].gameObject);
         // reset the user's bid amount
         auctionPanel.GetComponentInChildren<TextMeshPro>().SetText("0");
 
+    }
+
+    private AuctionItem[] GetActiveAuctionItems()
+    {
+        return auctionGroup.GetComponentsInChildren<AuctionItem>();
     }
 
     public void HideAuctionScreen()
@@ -860,12 +871,6 @@ public class MainUIManager : MonoBehaviour
 
         // Go to next auction item
         GoToNextAuctionItem();
-    }
-
-    // Returns true once all items have been auctioned
-    private bool IsAuctionDone()
-    {
-        return auctionItems.Count == 0 && IsAuctionItemDone();
     }
 
     // Returns true once every player has bid (note that a pass is equivalent to a bid of 0)
