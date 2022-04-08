@@ -724,7 +724,7 @@ public class MainUIManager : MonoBehaviour
 
     // TODO connect auctionPanel to AuctionPanel in the UI.
     [SerializeField]
-    public GameObject auctionPanel;
+    public GameObject auctionGroup, auctionPanel;
 
     [SerializeField]
     public List<AuctionItem> auctionItems = new List<AuctionItem>();
