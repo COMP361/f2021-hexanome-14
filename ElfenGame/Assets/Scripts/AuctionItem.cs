@@ -13,7 +13,11 @@ public class AuctionItem : MonoBehaviour
     [SerializeField]
     public MovementTileSO tile;
 
-    
+    [SerializeField]
+    public Image tileImage;
+
+
+ 
 
     public List<Bid> bidsList = new List<Bid>();
         //model passes as a bid of 0 
@@ -37,6 +41,14 @@ public class AuctionItem : MonoBehaviour
         return bidsList;
     }
 
+
+    public void SetTile(MovementTileSO tile)
+    {
+        this.tile = tile;
+        tileImage.sprite = tile.mImage;
+    }
+
+
     public class Bid
     {
         [SerializeField]
@@ -51,6 +63,7 @@ public class AuctionItem : MonoBehaviour
             bidAmount = pBidAmount;
         }
     }
+
 }
 
 

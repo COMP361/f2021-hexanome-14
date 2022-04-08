@@ -736,6 +736,7 @@ public class MainUIManager : MonoBehaviour
     public GameObject auctionItemPrefab;
 
 
+
     // TODO call this from somewhere
     public void ShowAuctionScreen()
     {
@@ -851,7 +852,7 @@ public class MainUIManager : MonoBehaviour
             Player winner = Player.GetPlayer(winnerId);
             winner.nCoins -= currentAuctionItem.maxBid.bidAmount;
             winner.AddVisibleTile(currentAuctionItem.tile.mTile);
-            
+            Game.currentGame.RemoveTileFromPile();
         }
 
         // if auction is done, hide the auction screen
@@ -875,4 +876,43 @@ public class MainUIManager : MonoBehaviour
     private bool IsAuctionItemDone() {
         return currentAuctionItem.GetBidsList().Count == Player.GetAllPlayers().Count;
     }
+    
+    // Instantiate prefab and add prefab to its parent: auctionGroup
+    //ntiles is the remaining tiles up for display
+    public AuctionItem UpdateAuctionItems(int nItems) {
+
+        // auction twice as many tiles as num of players
+        List<MovementTile> tilesForAuction = Game.currentGame.mPile.GetRange(0, nItems);
+
+        foreach (AuctionItem item in auctionGroup.GetComponentsInChildren<AuctionItem>())
+        {
+            Destroy(item.gameObject);
+        }
+
+        AuctionItem curItem = null;
+
+        
+        foreach (MovementTile tile in tilesForAuction) { 
+
+
+            GameObject g = Instantiate(auctionItemPrefab, auctionGroup.transform);
+
+            AuctionItem auctionItem = g.GetComponent<AuctionItem>();
+            auctionItem.SetTile(mTileDict[tile]);
+
+            if (curItem == null)
+            {
+                curItem = auctionItem;
+            }
+
+        }
+
+        return curItem;
+
+    }
+
+
+
+
+
 }
