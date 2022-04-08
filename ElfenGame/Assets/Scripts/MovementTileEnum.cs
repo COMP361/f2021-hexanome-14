@@ -11,8 +11,7 @@ public enum MovementTile : byte
     //TODO: Add other tiles for elvengold
     Double,
     Bounce,
-    Gold
-
+    DoubleCoins
 }
 
 static class MovementTileExtension

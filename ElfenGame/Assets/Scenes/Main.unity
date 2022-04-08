@@ -16645,6 +16645,10 @@ MonoBehaviour:
   goldPileValue: {fileID: 1032472755}
   volumeHandleImage: {fileID: 1845340022}
   volumeSlider2: {fileID: 998620543}
+  elfengoldItems:
+  - {fileID: 11400000, guid: 98f88d35a109a454989f7e517cf764e0, type: 2}
+  - {fileID: 11400000, guid: b5ceeaafd761a4dbdaee56474d0b9f1e, type: 2}
+  - {fileID: 11400000, guid: 27e6025bf2f4a491aacfa20e03bae4df, type: 2}
 --- !u!1 &1582467135
 GameObject:
   m_ObjectHideFlags: 0
