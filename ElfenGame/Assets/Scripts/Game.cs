@@ -359,7 +359,7 @@ public class Game
         }
         else
         {
-            for (int i= 0; i<4;i++)
+            for (int i= 0; i<4;i++)//change to 8
             {
                 pile.Add(MovementTile.Dragon);
                 pile.Add(MovementTile.MagicCloud);
