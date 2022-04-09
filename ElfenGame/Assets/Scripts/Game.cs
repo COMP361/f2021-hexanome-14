@@ -345,7 +345,7 @@ public class Game
         List<MovementTile> visible = mVisibleTiles;
 
         if (gameMode == GameMode.Elfenland){
-             for (int i = 0; i < 8; ++i)
+             for (int i = 0; i < 4; ++i)
             {
                 pile.Add(MovementTile.Dragon);
                 pile.Add(MovementTile.Elfcycle);

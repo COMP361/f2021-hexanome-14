@@ -162,6 +162,20 @@ public class GridManager : MonoBehaviour
         return moveTiles;
     }
 
+    public List<MovementTileSpriteScript> GetAllTiles()
+    {
+        List<MovementTileSpriteScript> moveTiles= new List<MovementTileSpriteScript>();
+        MovementTileSpriteScript moveTile = null;
+
+        foreach (GameObject element in elements)
+        {
+            moveTile = element.GetComponent<MovementTileSpriteScript>();
+            moveTiles.Add(moveTile);
+        }
+        return moveTiles;
+
+    }
+
     public bool HasObstacle()
     {
         foreach (GameObject element in elements)
