@@ -752,6 +752,33 @@ public class Game
 
             //Debug.LogError($"Cur Round is: {curRound}"); 
         }
+
+        HelpElfManager helper = GameObject.FindObjectOfType<HelpElfManager>();
+        HelpMessage hm = helper.gameObject.GetComponent<HelpMessage>();
+        switch ( curPhase){
+            case GamePhase.Auction:
+                
+                hm.helpMessage = "Auction is for bidding on tokens the highest bidder will take it ";
+                break;
+            case GamePhase.DrawCardsAndCounters:
+                
+                hm.helpMessage = "Draw Cards and Counters Phase ! ";
+                break;
+
+            case GamePhase.PlaceCounter:
+                hm.helpMessage = "Place counter on the roads to prepare for the traveling phase ";
+                break;
+            case GamePhase.SelectTokenToKeep:
+                hm.helpMessage = "Select a token to keep ";
+                break;
+
+            case GamePhase.Travel:
+                hm.helpMessage = "Start Traveling, by choosing cards from the CardHand on the top right and dragging to the town of your choice, remember to visit new towns and try to get as many tokens as possible! ";
+                break;
+            default:
+                hm.helpMessage = "choose a token from the selection or get a random token";
+                break;
+        }
         SyncGameProperties();
     }
 

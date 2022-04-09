@@ -58,6 +58,7 @@ public class Card : MonoBehaviour
         cardType = e;
 
         cardImage.sprite = e.GetSprite();
+        
     }
 
 

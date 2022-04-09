@@ -581,6 +581,10 @@ public class MainUIManager : MonoBehaviour
 
             Card cardScript = g.GetComponent<Card>();
             cardScript.Initialize(card);
+            if (cardScript.cardType == CardEnum.Witch){
+                HelpMessage hm = g.AddComponent(typeof(HelpMessage)) as HelpMessage;
+                hm.helpMessage = "Witch is used to jump to a town selected, by using 3 gold coins or skip an obstacle for 1 coin";
+            }
         }
     }
 
@@ -614,6 +618,10 @@ public class MainUIManager : MonoBehaviour
             Card card = g.GetComponent<Card>();
 
             card.Initialize(c);
+            if (card.cardType == CardEnum.Witch){
+                HelpMessage hm = g.AddComponent(typeof(HelpMessage)) as HelpMessage;
+                hm.helpMessage = "Witch is used to jump to a town selected, by using 3 gold coins or skip an obstacle for 1 coin";
+            }
         }
     }
 
