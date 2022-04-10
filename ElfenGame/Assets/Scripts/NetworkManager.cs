@@ -27,7 +27,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback, IInRo
     const byte EVENT_ADD_TILE_CODE = 3;
     const byte EVENT_REMOVE_ALL_TILES_CODE = 4;
     const byte EVENT_GAME_OVER_CODE = 5;
-    const byte EVENT_REMOVE_TILE_CODE = 6; 
+    const byte EVENT_REMOVE_TILE_CODE = 6;
 
     const byte EVENT_PLAYER_WON_AUCTION_CODE = 6;
 
@@ -281,7 +281,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback, IInRo
     public void RemoveTileFromRoad(MovementTile m1, PathScript path)
     {
         object[] data = new object[] { m1, path };
-        RaiseEvent(EVENT_REMOVE_TILE_CODE,data);
+        RaiseEvent(EVENT_REMOVE_TILE_CODE, data);
     }
 
     public void SignalPlayerWonAuction(string playerName, int BidAmount, MovementTile auctionTile)
@@ -333,12 +333,12 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback, IInRo
 
             MainUIManager.manager.AddTile(roadName, movementTile);
         }
-        else if (photonEvent.Code == EVENT_REMOVE_TILE_CODE && MainUIManager.manager) 
+        else if (photonEvent.Code == EVENT_REMOVE_TILE_CODE && MainUIManager.manager)
         {
             object[] data = (object[])photonEvent.CustomData;
             MovementTile m1 = (MovementTile)data[0];
             PathScript path = (PathScript)data[1];
-            MainUIManager.manager.RemoveTile(m1,path);
+            MainUIManager.manager.RemoveTile(m1, path);
         }
         else if (photonEvent.Code == EVENT_REMOVE_ALL_TILES_CODE && MainUIManager.manager)
         {
