@@ -61,6 +61,12 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
 
     public Image volumeHandleImage;
 
+    public CurrentGameViewScript currentGameView;
+
+    public GameObject gameScrollContainer;
+
+    public GameObject refreshButton;
+
     #endregion
 
     private List<Resolution> resolutions;
@@ -193,7 +199,6 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
         SaveAndLoad.UpdateLocalSavedIds();
         Lobby.user.GetSavedGames();
         inLoadGameView = true;
-        gameSessionsText.text = "Saved Games:";
         SwitchToCorrectView();
     }
 
@@ -204,7 +209,6 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
     public void OnReturnToLobbyViewClicked()
     {
         inLoadGameView = false;
-        gameSessionsText.text = "Game Sessions:";
         SwitchToCorrectView();
     }
 
@@ -337,6 +341,10 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
         DestroyAllChildren(sessionListView.transform);
         foreach (Lobby.GameSession game in gameSessions)
         {
+            if (!NetworkManager.manager.cachedRoomList.ContainsKey(game.session_ID))
+            {
+                continue;
+            }
             AddGameSession(game);
         }
 
@@ -478,7 +486,7 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
     public void SwitchToCorrectView()
     {
         bool gCreate = false, gJoin = false, gLoad = false, gOptions = false,
-        lSession = false, lSaved = false, gCreation = false, clickEnabled = false;
+        lSession = false, lSaved = false, gCreation = false, clickEnabled = false, showCurrentGame = false;
         bool loadedOwner = false;
         if (selectedSessionId != "" && Lobby.activeGames.ContainsKey(selectedSessionId))
         {
@@ -494,13 +502,13 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
         {
             // If in game and you are the game creator, show the game creator options (start game, delete game)
             gCreate = true;
-            lSession = true;
+            showCurrentGame = true;
         }
         else if (NetworkManager.manager.inGame())
         {
             // If in game and you are not the game creator, show the game joined options (leave game)
             gJoin = true;
-            lSession = true;
+            showCurrentGame = true;
         }
         else if (inLoadGameView)
         {
@@ -516,6 +524,7 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
             lSession = true;
             clickEnabled = true;
         }
+        currentGameView.gameObject.SetActive(showCurrentGame);
         gameCreatorOptionsView.SetActive(gCreate);
         gameJoinedOptionsView.SetActive(gJoin);
         gameLoadOptionsView.SetActive(gLoad);
@@ -524,6 +533,29 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
         savedGameListView.SetActive(lSaved);
         gameCreationMenu.SetActive(gCreation);
         SetSessionClickEnabled(clickEnabled);
+        if (lSession)
+        {
+            gameSessionsText.text = "Game Sessions:";
+            gameScrollContainer.SetActive(true);
+            refreshButton.SetActive(true);
+        }
+        else if (lSaved)
+        {
+            gameSessionsText.text = "Saved Games:";
+            gameScrollContainer.SetActive(true);
+            refreshButton.SetActive(true);
+        }
+        else if (showCurrentGame)
+        {
+            gameScrollContainer.SetActive(false);
+            gameSessionsText.text = "Current Game:";
+            if (Lobby.activeGames.ContainsKey(selectedSessionId))
+            {
+                Lobby.GameSession session = Lobby.activeGames[selectedSessionId];
+                currentGameView.SetSession(session);
+            }
+            refreshButton.SetActive(false);
+        }
     }
 
     /// <summary>
@@ -535,6 +567,18 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
         witchToggle.gameObject.SetActive(isElfengold);
         randGoldText.gameObject.SetActive(isElfengold);
         randGoldToggle.gameObject.SetActive(isElfengold);
+    }
+
+    public void OnRefreshClicked()
+    {
+        if (inLoadGameView)
+        {
+            Lobby.user.GetSavedGames();
+        }
+        else
+        {
+            Lobby.StartGetSessionsTask();
+        }
     }
 
     /// <summary>
@@ -599,6 +643,8 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
 
         NetworkManager.manager.JoinOrCreateRoom(session.session_ID);
         UpdateSessionListView(Lobby.availableSessions);
+
+        ChatManager.manager.JoinGroup(session.session_ID);
     }
 
     /// <summary>
@@ -623,6 +669,7 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
         selectedSessionId = sessionID;
         Debug.Log($"Game created with ID {sessionID}");
         NetworkManager.manager.CreateRoom(sessionID);
+        ChatManager.manager.JoinGroup(sessionID);
     }
 
     /// <summary>

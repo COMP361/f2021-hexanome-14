@@ -28,14 +28,16 @@ public class Game
 
     #region Fields
 
-    public const string pDECK = "DECK", pDISCARD = "DISCARD", pVISIBLECARDS = "VISIBLE_CARDS", pPILE = "PILE", pVISIBLE = "VISIBLE",
+    public const string pDECK = "DECK", pDISCARD = "DISCARD", pVISIBLECARDS = "VISIBLE_CARDS", pPILE = "PILE",
     pPLAYERS = "PLAYERS", pCUR_PLAYER = "CUR_PLAYER", pCUR_ROUND = "CUR_ROUND", pCUR_PHASE = "CUR_PHASE",
     pMAX_ROUNDS = "MAX_ROUNDS", pGAME_MODE = "GAME_MODE", pEND_TOWN = "END_TOWN", pWITCH_CARD = "WITCH_CARD",
     pRAND_GOLD = "RAND_GOLD", pPASSED_PLAYERS = "PASSED_PLAYERS", pGAME_ID = "GAME_ID", pSAVE_ID = "SAVE_ID",
-    pGOLD_VALUES = "GOLD_VALUES", pGAME_CREATOR = "GAME_CREATOR", pGOLD_PILE_VALUE = "GOLD_PILE_VALUE";
+    pGOLD_VALUES = "GOLD_VALUES", pGAME_CREATOR = "GAME_CREATOR", pGOLD_PILE_VALUE = "GOLD_PILE_VALUE", pVISIBLE = "VISIBLE",
+    pCUR_BID = "CUR_BID", pCUR_BID_PLAYER = "CUR_BID_PLAYER", pNUM_REM_BIDS = "NUM_REM_BIDS";
     public static string[] pGAME_PROPS = {
         pDECK, pDISCARD, pVISIBLECARDS, pPILE, pVISIBLE, pPLAYERS, pCUR_PLAYER, pCUR_ROUND, pCUR_PHASE, pMAX_ROUNDS,
-        pPASSED_PLAYERS, pGAME_ID, pSAVE_ID,  pGAME_MODE, pEND_TOWN, pWITCH_CARD, pRAND_GOLD, pGOLD_VALUES, pGAME_CREATOR, pGOLD_PILE_VALUE
+        pPASSED_PLAYERS, pGAME_ID, pSAVE_ID,  pGAME_MODE, pEND_TOWN, pWITCH_CARD, pRAND_GOLD, pGOLD_VALUES, pGAME_CREATOR,
+        pGOLD_PILE_VALUE, pCUR_BID, pCUR_BID_PLAYER, pNUM_REM_BIDS
     };
     private const string pCOLOR_AVAIL_PREFIX = "COLOR_AVAIL";
 
@@ -108,6 +110,11 @@ public class Game
     public bool endTown { get => GetP<bool>(pEND_TOWN); set => SetP<bool>(pEND_TOWN, value); }
     public bool witchCard { get => GetP<bool>(pWITCH_CARD); set => SetP<bool>(pWITCH_CARD, value); }
     public bool randGold { get => GetP<bool>(pRAND_GOLD); set => SetP<bool>(pRAND_GOLD, value); }
+
+    public int curBid { get => GetP<int>(pCUR_BID); set => SetP<int>(pCUR_BID, value); }
+    public string curBidPlayer { get => GetP<string>(pCUR_BID_PLAYER); set => SetP<string>(pCUR_BID_PLAYER, value); }
+
+    public int numRemainingAuctionItems { get => GetP<int>(pNUM_REM_BIDS); set => SetP<int>(pNUM_REM_BIDS, value); }
 
     // List properties
     public List<string> mPlayers { get => GetL<string>(pPLAYERS); set => SetL<string>(pPLAYERS, value); }
@@ -223,6 +230,9 @@ public class Game
         this.mDiscardPile = new List<CardEnum>();
         this.visibleCards = new List<CardEnum>();
         this.goldPileValue = 0;
+        this.curBid = 0;
+        this.curBidPlayer = "";
+        this.numRemainingAuctionItems = 0;
 
         InitPile(gameMode);
         InitDeck(gameMode, witchVar);
@@ -435,6 +445,8 @@ public class Game
                 _gameProperties[getEndTownKey(player)] = playerEndTown;
             }
         }
+
+        numRemainingAuctionItems = 2 * mPlayers.Count; // Set num Auction Items
     }
 
     private string getEndTownKey(string player)
@@ -563,7 +575,17 @@ public class Game
         {
             MainUIManager.manager.DrawCardPanelToggle(false);
         }
-        // Debug.LogError($"Cur Phase set to {Enum.GetName(typeof(GamePhase), curPhase)}");
+
+        if (curPhase == GamePhase.Auction)
+        {
+            MainUIManager.manager.ShowAuctionScreen();
+            MainUIManager.manager.UpdateAuctionItems(mPile.GetRange(0, numRemainingAuctionItems));
+            MainUIManager.manager.UpdateAuctionCurrentBestBid(curBid, curBidPlayer);
+        }
+        else
+        {
+            MainUIManager.manager.HideAuctionScreen();
+        }
     }
 
     public MovementTile RemoveVisibleTile(int index)
@@ -688,7 +710,7 @@ public class Game
             return;
         }
 
-        if (curPhase == GamePhase.PlaceCounter && passed)
+        if ((curPhase == GamePhase.PlaceCounter || curPhase == GamePhase.Auction) && passed)
         {
             passedPlayers += 1;
         }
@@ -696,7 +718,44 @@ public class Game
         {
             passedPlayers = 0;
         }
-        if ((curPlayerIndex == (curRound - 1) % mPlayers.Count && curPhase != GamePhase.PlaceCounter) || (passedPlayers == mPlayers.Count))
+
+        if (curPhase == GamePhase.Auction && passedPlayers >= mPlayers.Count - 1)
+        {
+
+            // Auction Round done
+            curPlayerIndex = (curRound - 1) % mPlayers.Count; // Switch back to starting player
+
+            MovementTile auctionTile = RemoveTileFromPile();
+
+            Player local = Player.GetLocalPlayer();
+            if (local.userName == curBidPlayer)
+            {
+                local.nCoins -= curBid;
+                local.AddVisibleTile(auctionTile);
+            }
+            else
+            {
+                NetworkManager.manager.SignalPlayerWonAuction(curBidPlayer, curBid, auctionTile);
+            }
+
+            curBid = 0;
+            curBidPlayer = "";
+            numRemainingAuctionItems -= 1;
+
+            if (numRemainingAuctionItems != 0)
+            {
+                SyncGameProperties();
+                return; // Don't move to next round if there are still items to auction
+            }
+            else
+            {
+                // Set num remaining items to max for next round
+                numRemainingAuctionItems = 2 * mPlayers.Count;
+                passedPlayers = 0; // Set passed players for next phase to 0
+                curPhase = curPhase.NextPhase();
+            }
+        }
+        else if ((curPlayerIndex == (curRound - 1) % mPlayers.Count && curPhase != GamePhase.PlaceCounter && curPhase != GamePhase.Auction) || (passedPlayers == mPlayers.Count))
         {
             if (curPhase == GamePhase.Travel && curRound == maxRounds)
             {
@@ -731,12 +790,39 @@ public class Game
 
             //Debug.LogError($"Cur Round is: {curRound}"); 
         }
+
+        HelpElfManager helper = GameObject.FindObjectOfType<HelpElfManager>();
+        HelpMessage hm = helper.gameObject.GetComponent<HelpMessage>();
+        switch (curPhase)
+        {
+            case GamePhase.Auction:
+
+                hm.helpMessage = "Auction is for bidding on tokens the highest bidder will take it ";
+                break;
+            case GamePhase.DrawCardsAndCounters:
+
+                hm.helpMessage = "Draw Cards and Counters Phase ! ";
+                break;
+
+            case GamePhase.PlaceCounter:
+                hm.helpMessage = "Place counter on the roads to prepare for the traveling phase ";
+                break;
+            case GamePhase.SelectTokenToKeep:
+                hm.helpMessage = "Select a token to keep ";
+                break;
+
+            case GamePhase.Travel:
+                hm.helpMessage = "Start Traveling, by choosing cards from the CardHand on the top right and dragging to the town of your choice, remember to visit new towns and try to get as many tokens as possible! ";
+                break;
+            default:
+                hm.helpMessage = "choose a token from the selection or get a random token";
+                break;
+        }
         SyncGameProperties();
     }
 
     public CardEnum[] Draw(int n)
     {
-        //TODO: reshuffle deck with empty (use discard pile)
         List<CardEnum> deck = mDeck;
         CardEnum[] ret = new CardEnum[n];
         for (int i = 0; i < n; ++i)
