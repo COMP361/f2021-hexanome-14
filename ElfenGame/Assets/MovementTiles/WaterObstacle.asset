@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: WaterObstacle
   m_EditorClassIdentifier: 
   mTile: 7
-  mImage: {fileID: 0}
+  mImage: {fileID: 21300000, guid: f86bad354c4ce494c81666643423c493, type: 3}
   mValidRoads: 0400000005000000
