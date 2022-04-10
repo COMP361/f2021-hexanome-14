@@ -1,13 +1,20 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 using System.Collections.Generic;
+using System.Collections;
 
 public class MovementTileSpriteScript : MonoBehaviour
 {
     public MovementTileSO mTile;
 
     private MovementTileUIScript dragOrigin;
+
     private bool drag = false;
+
+    private bool lookingForSwap = false;
+    private MovementTileSpriteScript swap; 
+    private PathScript aPath;
+    
 
 
     public void Start()
@@ -16,6 +23,25 @@ public class MovementTileSpriteScript : MonoBehaviour
         {
             SetTileSO(mTile);
         }
+    }
+    public bool GetLookingForSwap()
+    {
+        return lookingForSwap;
+    }
+
+    public void SetLookingForSwap(bool pBool)
+    {
+        lookingForSwap = pBool;
+    }
+
+    public MovementTileSpriteScript GetSwap()
+    {
+        return swap;
+    }
+
+    public void SetSwap(MovementTileSpriteScript pSwap)
+    {
+        swap = pSwap;
     }
 
     public void SetTileSO(MovementTileSO newTileSO)
@@ -64,7 +90,8 @@ public class MovementTileSpriteScript : MonoBehaviour
                 if (mTile.mTile == tileScript.mTile.mTile)
                 {
                     //dont colour tile
-                    tileScript.SetGreen();
+                    //tileScript.SetGreen();
+                    Debug.Log(mTile.mTile);
                 }
                 else if (tileScript.mTile.mTile == MovementTile.Bounce || tileScript.mTile.mTile == MovementTile.RoadObstacle || tileScript.mTile.mTile == MovementTile.WaterObstacle || tileScript.mTile.mTile == MovementTile.Double || tileScript.mTile.mTile == MovementTile.Gold)
                 {
@@ -81,10 +108,10 @@ public class MovementTileSpriteScript : MonoBehaviour
 
             }
 
-            // Debug.Log(tile.mTile.mTile);
-            // 
-
-
+        }
+        if (gm.GetMovementTiles().Count == 1)
+        {
+            gm.GetMovementTiles()[0].SetBlue();
 
         }
         
@@ -98,6 +125,11 @@ public class MovementTileSpriteScript : MonoBehaviour
     public void SetRed()
     {
         GetComponent<SpriteRenderer>().color = new Color(1.0f, 0.0f, 0.0f, GameConstants.tileColoringAlpha);
+    }
+
+    public void SetBlue()
+    {
+         GetComponent<SpriteRenderer>().color = new Color(0.0f, 0.0f, 1.0f, GameConstants.tileColoringAlpha);
     }
 
     public void ResetColor()
@@ -115,17 +147,23 @@ public class MovementTileSpriteScript : MonoBehaviour
 
     public bool CanSwap(MovementTileSpriteScript pTile)
     {
-        // //return mTile.mValidRoads.Intersect(pTile.mTile.mValidRoads).Any(); not sure why this gives compilation error
-        // foreach (RoadType road in mTile.mValidRoads)
-        // {
-        //     if (pTile.mTile.mValidRoads.Contains(road));
-        //     {
-        //         return true;
-        //         break;
-        //     }
-        // }
-        // return false;
-        return true;
+        //return mTile.mValidRoads.Intersect(pTile.mTile.mValidRoads).Any(); not sure why cant find intersect
+        if (mTile.mTile != MovementTile.Bounce && mTile.mTile != MovementTile.Double && mTile.mTile != MovementTile.RoadObstacle && mTile.mTile != MovementTile.WaterObstacle && mTile.mTile != MovementTile.Gold)
+        {
+            foreach (RoadType road in mTile.mValidRoads)
+            {
+                if (pTile.mTile.mValidRoads.Contains(road));
+                {
+                    return true;
+                    break;
+                }
+            }
+            return false;
+
+        }
+        return false;
+        
+        
     
     }
 
@@ -133,13 +171,20 @@ public class MovementTileSpriteScript : MonoBehaviour
     {
         Debug.Log("initiate swapping now");
         GridManager gm = path.GetComponentInChildren<GridManager>();
-        Debug.Log(gm.GetNonObstacleTiles().Count);
-        if (gm.GetNonObstacleTiles().Count == 1)
+        
+        
+        if (gm.GetMovementTiles().Count == 1)
         {
-            Debug.Log(gm.GetNonObstacleTiles()[0]);
+            MovementTileSpriteScript tile1 = gm.GetMovementTiles()[0];
+            tile1.SetLookingForSwap(true);
         }
         ColorTilesByBounceValidity(path);
 
+    }
+
+    public void Swap()
+    {
+        Debug.Log("swapping!");
     }
 
     private void OnMouseDown()
@@ -154,9 +199,60 @@ public class MovementTileSpriteScript : MonoBehaviour
             if (hit.collider != null)
             {
                 Debug.Log("MouseDown on: " + hit.collider.gameObject.name);
+                Debug.Log("this object is " + mTile.mTile);
                 if (hit.collider.gameObject == gameObject)
                 {
                     Debug.Log("THis POOP IS PRESSED");
+                    //check if there are tiles looking for a swap 
+
+                    foreach ( PathScript path2 in GameConstants.roadGroup.GetComponentsInChildren<PathScript>())
+                    {
+                        GridManager gm2 = path2.GetComponentInChildren<GridManager>();
+                        List<MovementTileSpriteScript> path2Tiles = gm2.GetMovementTiles(); //since want to highlight red/green all tiles including special/obstacles
+                        foreach (MovementTileSpriteScript tileScript in path2Tiles)
+                        {
+                            if (tileScript.GetLookingForSwap())
+                            {
+                                if (CanSwap(tileScript))
+                                {
+                                    SetBlue();
+                                    SetLookingForSwap(true);
+                                    SetSwap(tileScript);
+                                    tileScript.SetSwap(this);
+                                    Swap();
+                                    return;
+                                }
+                                else
+                                {
+                                    return;
+                                }
+                                
+                            }
+                        }
+                    }
+                    //since no tiles looking for swap, check if bounce is on the board -> in play
+
+                    GridManager gm = aPath.GetComponentInChildren<GridManager>(); //since instance exists, aPath !=null
+                    if ( gm.HasBounce() && mTile.mTile != MovementTile.Bounce && mTile.mTile != MovementTile.Double && mTile.mTile != MovementTile.RoadObstacle && mTile.mTile != MovementTile.WaterObstacle && mTile.mTile != MovementTile.Gold)
+                    {
+                        SetBlue();
+                        SetLookingForSwap(true);
+                    }
+                   
+
+                    
+
+
+
+                        //if yes, check if valid
+                            //if valid, set colour to blue and swap
+                            //if not valid, ignore
+                        //if no, check if there is a bounce tile on the board
+                            //if yes, set colour to blue
+                            //if no, ignore
+                    
+
+
                 }
             }
         }
@@ -193,6 +289,7 @@ public class MovementTileSpriteScript : MonoBehaviour
             }
             else
             {
+                aPath = path;
                 GridManager gm = path.GetComponentInChildren<GridManager>();
                 if (gm == null)
                 {

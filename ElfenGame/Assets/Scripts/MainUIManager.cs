@@ -632,7 +632,7 @@ public class MainUIManager : MonoBehaviour
         List<MovementTile> tiles = new List<MovementTile>();
         foreach (GridManager gm in GameConstants.roadGroup.GetComponentsInChildren<GridManager>())
         {
-            tiles.AddRange(gm.GetNonObstacleTiles());
+            tiles.AddRange(gm.GetNonObstacleTiles()); //why do we clear non obstacles only? - this makes spell+gold tiles also notclear need to fix
             gm.Clear();
         }
 
