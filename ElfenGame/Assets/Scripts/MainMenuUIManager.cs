@@ -285,9 +285,9 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
     /// </summary>
     public void OnCancelCreateClicked()
     {
+        creatingGame = false;
         SetToDefaultCreateGameOptions();
-        gameOptionButtonsView.SetActive(true);
-        gameCreationMenu.SetActive(false);
+        SwitchToCorrectView();
     }
 
     /// <summary>
@@ -486,7 +486,7 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
     public void SwitchToCorrectView()
     {
         bool gCreate = false, gJoin = false, gLoad = false, gOptions = false,
-        lSession = false, lSaved = false, gCreation = false, clickEnabled = false, showCurrentGame = false;
+        lSession = false, lSaved = false, gCreation = false, clickEnabled = false, showCurrentGame = false, rButton = false;
         bool loadedOwner = false;
         if (selectedSessionId != "" && Lobby.activeGames.ContainsKey(selectedSessionId))
         {
@@ -516,6 +516,7 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
             selectedSaveId = ""; // Currently selected saved game
             gLoad = true;
             lSaved = true;
+            rButton = true;
         }
         else
         {
@@ -523,6 +524,7 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
             gOptions = true;
             lSession = true;
             clickEnabled = true;
+            rButton = true;
         }
         currentGameView.gameObject.SetActive(showCurrentGame);
         gameCreatorOptionsView.SetActive(gCreate);
@@ -533,17 +535,16 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
         savedGameListView.SetActive(lSaved);
         gameCreationMenu.SetActive(gCreation);
         SetSessionClickEnabled(clickEnabled);
+        refreshButton.SetActive(rButton);
         if (lSession)
         {
             gameSessionsText.text = "Game Sessions:";
             gameScrollContainer.SetActive(true);
-            refreshButton.SetActive(true);
         }
         else if (lSaved)
         {
             gameSessionsText.text = "Saved Games:";
             gameScrollContainer.SetActive(true);
-            refreshButton.SetActive(true);
         }
         else if (showCurrentGame)
         {
@@ -554,7 +555,6 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
                 Lobby.GameSession session = Lobby.activeGames[selectedSessionId];
                 currentGameView.SetSession(session);
             }
-            refreshButton.SetActive(false);
         }
     }
 
