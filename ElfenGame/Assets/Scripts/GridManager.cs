@@ -102,6 +102,7 @@ public class GridManager : MonoBehaviour
                 {
                     elements.Remove(el);
                     PositionElements();
+                    return; // Only remove one
                 }
             }
         }
@@ -134,7 +135,7 @@ public class GridManager : MonoBehaviour
         return n;
     }
 
-    public bool checkHasSpecial(PathScript p) 
+    public bool checkHasSpecial(PathScript p)
     {
         return false;
     }
@@ -153,7 +154,11 @@ public class GridManager : MonoBehaviour
 
             moveTile = element.GetComponent<MovementTileSpriteScript>();
             MovementTile tile = moveTile.mTile.mTile;
-            if (tile != MovementTile.RoadObstacle && tile != MovementTile.WaterObstacle && tile != MovementTile.Double && tile != MovementTile.Bounce)
+            if (tile != MovementTile.RoadObstacle
+                && tile != MovementTile.WaterObstacle
+                && tile != MovementTile.Double
+                && tile != MovementTile.Bounce
+                && tile != MovementTile.Gold)
             {
                 return moveTile;
             }
@@ -171,7 +176,7 @@ public class GridManager : MonoBehaviour
     }
     public List<MovementTileSpriteScript> GetMovementTiles()
     {
-        List<MovementTileSpriteScript> moveTiles= new List<MovementTileSpriteScript>();
+        List<MovementTileSpriteScript> moveTiles = new List<MovementTileSpriteScript>();
         MovementTileSpriteScript moveTile = null;
 
         foreach (GameObject element in elements)
@@ -179,7 +184,11 @@ public class GridManager : MonoBehaviour
 
             moveTile = element.GetComponent<MovementTileSpriteScript>();
             MovementTile tile = moveTile.mTile.mTile;
-            if (tile != MovementTile.RoadObstacle &&  tile != MovementTile.WaterObstacle && tile != MovementTile.Double && tile != MovementTile.Bounce && tile != MovementTile.Gold)
+            if (tile != MovementTile.RoadObstacle
+                && tile != MovementTile.WaterObstacle
+                && tile != MovementTile.Double
+                && tile != MovementTile.Bounce
+                && tile != MovementTile.Gold)
             {
                 moveTiles.Add(moveTile);
             }
@@ -189,7 +198,7 @@ public class GridManager : MonoBehaviour
 
     public List<MovementTileSpriteScript> GetAllTiles()
     {
-        List<MovementTileSpriteScript> moveTiles= new List<MovementTileSpriteScript>();
+        List<MovementTileSpriteScript> moveTiles = new List<MovementTileSpriteScript>();
         MovementTileSpriteScript moveTile = null;
 
         foreach (GameObject element in elements)
@@ -231,7 +240,7 @@ public class GridManager : MonoBehaviour
         return false;
 
     }
-    
+
     public bool HasBounce()
     {
         foreach (GameObject element in elements)

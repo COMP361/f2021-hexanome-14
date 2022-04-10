@@ -111,7 +111,7 @@ public class MainUIManager : MonoBehaviour
 
     public Slider volumeSlider2;
 
-    
+
     public List<MovementTileSO> elfengoldItems;
 
 
@@ -145,7 +145,7 @@ public class MainUIManager : MonoBehaviour
         if (Game.currentGame.gameMode == GameMode.Elfengold)
         {
             mTiles.AddRange(elfengoldItems);
-            
+
         }
         mTileDict = new Dictionary<MovementTile, MovementTileSO>();
         foreach (MovementTileSO tile in mTiles)
@@ -438,8 +438,8 @@ public class MainUIManager : MonoBehaviour
         }
         return -1;
     }
-    
-   
+
+
 
     public void SelectTokenToKeepPressed()
     {
@@ -537,7 +537,7 @@ public class MainUIManager : MonoBehaviour
         foreach (MovementTile tile in Player.GetLocalPlayer().mVisibleTiles)
         {
             // For elfenland, only show tokens that are not obstacles
-            if (tile == MovementTile.RoadObstacle || tile == MovementTile.WaterObstacle) continue;
+            if (Game.currentGame.gameMode == GameMode.Elfenland && tile == MovementTile.RoadObstacle) continue;
 
             GameObject g = Instantiate(tilePrefab, gridGroup.transform);
 
@@ -654,7 +654,20 @@ public class MainUIManager : MonoBehaviour
         List<MovementTile> tiles = new List<MovementTile>();
         foreach (GridManager gm in GameConstants.roadGroup.GetComponentsInChildren<GridManager>())
         {
-            tiles.AddRange(gm.GetNonObstacleTiles()); //why do we clear non obstacles only? - this makes spell+gold tiles also notclear need to fix
+            if (Game.currentGame.gameMode == GameMode.Elfenland)
+            {
+                // For elfenland, don't return road obstacles into pile
+                tiles.AddRange(gm.GetNonObstacleTiles());
+            }
+            else
+            {
+                // For elfengold all tiles go back into pile
+                List<MovementTileSpriteScript> tileSprites = gm.GetAllTiles();
+                foreach (MovementTileSpriteScript tileSprite in tileSprites)
+                {
+                    tiles.Add(tileSprite.mTile.mTile);
+                }
+            }
             gm.Clear();
         }
 
