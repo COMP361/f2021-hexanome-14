@@ -17,6 +17,11 @@ public class PathScript : MonoBehaviour, IDragOver
         gridManager = GetComponentInChildren<GridManager>();
     }
 
+    public GridManager GetGridManager()
+    {
+        return gridManager;
+    }
+
     public void OnDragEnter()
     {
         Color curColor = GetComponent<SpriteRenderer>().color;

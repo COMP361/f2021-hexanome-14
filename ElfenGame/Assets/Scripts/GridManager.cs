@@ -91,6 +91,22 @@ public class GridManager : MonoBehaviour
         }
     }
 
+    public void RemoveTile(MovementTile mTile)
+    {
+        foreach (GameObject el in elements)
+        {
+            MovementTileSpriteScript tile = el.GetComponent<MovementTileSpriteScript>();
+            if (tile != null)
+            {
+                if (tile.mTile.mTile == mTile)
+                {
+                    elements.Remove(el);
+                    PositionElements();
+                }
+            }
+        }
+    }
+
     /*
     public bool checkHasObstacle(PathScript p){
         foreach ( GameObject el in elements)

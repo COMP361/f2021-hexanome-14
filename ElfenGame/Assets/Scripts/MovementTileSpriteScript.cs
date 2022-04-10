@@ -44,6 +44,11 @@ public class MovementTileSpriteScript : MonoBehaviour
         swap = pSwap;
     }
 
+    public PathScript GetPath()
+    {
+        return aPath;
+    }
+
     public void SetTileSO(MovementTileSO newTileSO)
     {
         mTile = newTileSO;
@@ -177,14 +182,33 @@ public class MovementTileSpriteScript : MonoBehaviour
         {
             MovementTileSpriteScript tile1 = gm.GetMovementTiles()[0];
             tile1.SetLookingForSwap(true);
+            tile1.ColorTilesByBounceValidity(path);
+            tile1.SetBlue();
         }
-        ColorTilesByBounceValidity(path);
+        else 
+        {
+             //since want to highlight red/green all tiles including special/obstacles
+            foreach (MovementTileSpriteScript tileScript in gm.GetMovementTiles())
+            {
+                tileScript.SetGreen();
+            }
+            //ColorTilesByBounceValidity(path);
+
+        }
+       
 
     }
 
-    public void Swap()
+    public void Swap(MovementTileSpriteScript m1, MovementTileSpriteScript m2)
     {
-        Debug.Log("swapping!");
+         if (NetworkManager.manager)
+         {
+             NetworkManager.manager.RemoveTileFromRoad(m1.mTile.mTile,m1.GetPath());
+             NetworkManager.manager.RemoveTileFromRoad(m2.mTile.mTile, m2.GetPath());
+             NetworkManager.manager.AddTileToRoad(m1.GetPath().name, m2.mTile.mTile);
+             NetworkManager.manager.AddTileToRoad(m2.GetPath().name, m1.mTile.mTile);
+
+         } 
     }
 
     private void OnMouseDown()
@@ -199,12 +223,15 @@ public class MovementTileSpriteScript : MonoBehaviour
             if (hit.collider != null)
             {
                 Debug.Log("MouseDown on: " + hit.collider.gameObject.name);
-                Debug.Log("this object is " + mTile.mTile);
+                
                 if (hit.collider.gameObject == gameObject)
                 {
-                    Debug.Log("THis POOP IS PRESSED");
                     //check if there are tiles looking for a swap 
-
+                    Debug.Log("this object is " + mTile.mTile);
+                    if (lookingForSwap)
+                    {
+                        return; //if tile is already blue dont do anything
+                    }
                     foreach ( PathScript path2 in GameConstants.roadGroup.GetComponentsInChildren<PathScript>())
                     {
                         GridManager gm2 = path2.GetComponentInChildren<GridManager>();
@@ -219,7 +246,7 @@ public class MovementTileSpriteScript : MonoBehaviour
                                     SetLookingForSwap(true);
                                     SetSwap(tileScript);
                                     tileScript.SetSwap(this);
-                                    Swap();
+                                    Swap(this,tileScript);
                                     return;
                                 }
                                 else
@@ -238,21 +265,12 @@ public class MovementTileSpriteScript : MonoBehaviour
                         SetBlue();
                         SetLookingForSwap(true);
                     }
-                   
-
-                    
-
-
-
                         //if yes, check if valid
                             //if valid, set colour to blue and swap
                             //if not valid, ignore
                         //if no, check if there is a bounce tile on the board
                             //if yes, set colour to blue
                             //if no, ignore
-                    
-
-
                 }
             }
         }
@@ -300,9 +318,7 @@ public class MovementTileSpriteScript : MonoBehaviour
                 {
                     if (mTile.mTile == MovementTile.Bounce){
                         DoSwap(path);
-                        
-
-                    
+                        Destroy(gameObject);                    
                     }
                     else 
                     {
@@ -314,11 +330,6 @@ public class MovementTileSpriteScript : MonoBehaviour
                         }
                         else
                         {
-                            //dont think this is correct
-                            if (mTile.mTile == MovementTile.Bounce) //when placing the bounce tile on path, remove the tile currently on it
-                            {
-                                Destroy(gm.GetMovementTile());
-                            }
                             if (NetworkManager.manager) NetworkManager.manager.AddTileToRoad(path.name, mTile.mTile);
                             
                         }

@@ -728,4 +728,9 @@ public class MainUIManager : MonoBehaviour
 
         _ = pathScript.GetComponentInChildren<GridManager>().AddElement(newTileSprite);
     }
+
+    internal void RemoveTile(MovementTile mTile, PathScript path)
+    {
+        path.GetGridManager().RemoveTile(mTile);
+    }
 }

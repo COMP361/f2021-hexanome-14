@@ -27,6 +27,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback, IInRo
     const byte EVENT_ADD_TILE_CODE = 3;
     const byte EVENT_REMOVE_ALL_TILES_CODE = 4;
     const byte EVENT_GAME_OVER_CODE = 5;
+    const byte EVENT_REMOVE_TILE_CODE = 6; 
 
     public void Connect()
     {
@@ -270,6 +271,12 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback, IInRo
         RaiseEvent(EVENT_ADD_TILE_CODE, data);
     }
 
+    public void RemoveTileFromRoad(MovementTile m1, PathScript path)
+    {
+        object[] data = new object[] { m1, path };
+        RaiseEvent(EVENT_REMOVE_TILE_CODE,data);
+    }
+
     public void ClearAllTiles()
     {
         object[] data = new object[] { };
@@ -311,6 +318,13 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback, IInRo
             //Debug.LogError($"Add Tile Event triggered for road {roadName} and Tile {Enum.GetName(typeof(MovementTile), movementTile)}");
 
             MainUIManager.manager.AddTile(roadName, movementTile);
+        }
+        else if (photonEvent.Code == EVENT_REMOVE_TILE_CODE && MainUIManager.manager) 
+        {
+            object[] data = (object[])photonEvent.CustomData;
+            MovementTile m1 = (MovementTile)data[0];
+            PathScript path = (PathScript)data[1];
+            MainUIManager.manager.RemoveTile(m1,path);
         }
         else if (photonEvent.Code == EVENT_REMOVE_ALL_TILES_CODE && MainUIManager.manager)
         {
