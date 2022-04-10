@@ -9,7 +9,7 @@ public static class GameConstants
     public const float pathColoringAlpha = 0.35f;
     public const float pathColoringHoverAlpha = 0.8f;
 
-    public const float tileColoringAlpha = 0.9f;
+    public const float tileColoringAlpha = 1.0f;
     public const float tileColoringHoverAlpha = 1.0f;
 
     public const int COST_OF_TELEPORT = 3;

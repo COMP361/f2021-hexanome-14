@@ -134,7 +134,7 @@ public class MovementTileSpriteScript : MonoBehaviour
 
     public void SetBlue()
     {
-         GetComponent<SpriteRenderer>().color = new Color(0.0f, 0.0f, 1.0f, GameConstants.tileColoringAlpha);
+         GetComponent<SpriteRenderer>().color = new Color(0.4f, 0.5f, 0.85f, GameConstants.tileColoringAlpha);
     }
 
     public void ResetColor()
@@ -242,11 +242,24 @@ public class MovementTileSpriteScript : MonoBehaviour
                             {
                                 if (CanSwap(tileScript))
                                 {
+                                    //swap
                                     SetBlue();
                                     SetLookingForSwap(true);
                                     SetSwap(tileScript);
                                     tileScript.SetSwap(this);
                                     Swap(this,tileScript);
+                                    //after swap reset tile colours
+                                    foreach (PathScript path in GameConstants.roadGroup.GetComponentsInChildren<PathScript>())
+                                    {
+                                        GridManager gm3 = path.GetComponentInChildren<GridManager>();
+                                        gm3.ResetTileColors();
+                                        //remove bounce tile from board
+                                        if (gm3.HasBounce())
+                                        {
+                                            gm3.RemoveTile(MovementTile.Bounce);
+                                        }
+                                    }
+                                    
                                     return;
                                 }
                                 else
@@ -317,8 +330,9 @@ public class MovementTileSpriteScript : MonoBehaviour
                 else
                 {
                     if (mTile.mTile == MovementTile.Bounce){
+                        if (NetworkManager.manager) NetworkManager.manager.AddTileToRoad(path.name, mTile.mTile);
                         DoSwap(path);
-                        Destroy(gameObject);                    
+                                           
                     }
                     else 
                     {

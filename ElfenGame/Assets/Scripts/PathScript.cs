@@ -103,9 +103,9 @@ public class PathScript : MonoBehaviour, IDragOver
         {
             return true;
         }
-        else if (movementTileSO.mTile != MovementTile.RoadObstacle && gm.GetMovementTiles().Count == 1 && gm.HasDouble()) 
+        else if (movementTileSO.mTile != MovementTile.RoadObstacle && movementTileSO.mTile != MovementTile.Bounce && movementTileSO.mTile != MovementTile.Double && movementTileSO.mTile != MovementTile.Gold && gm.GetMovementTiles().Count == 1 && gm.HasDouble()) 
         {
-            return true;//if has double spell and only 1 movement tile on path 
+            return true;//if has double spell and only 1 movement tile on path and tile is a transportation tile
         }
 
         else if (movementTileSO.mTile == MovementTile.RoadObstacle && !gm.HasObstacle() && !HasGold() && gm.GetMovementTile() != null) 

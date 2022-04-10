@@ -160,6 +160,15 @@ public class GridManager : MonoBehaviour
         }
         return null;
     }
+
+    public void ResetTileColors()
+    {
+        foreach (GameObject element in elements)
+        {
+            element.GetComponent<MovementTileSpriteScript>().ResetColor();
+        }
+
+    }
     public List<MovementTileSpriteScript> GetMovementTiles()
     {
         List<MovementTileSpriteScript> moveTiles= new List<MovementTileSpriteScript>();
@@ -170,7 +179,7 @@ public class GridManager : MonoBehaviour
 
             moveTile = element.GetComponent<MovementTileSpriteScript>();
             MovementTile tile = moveTile.mTile.mTile;
-            if (tile != MovementTile.RoadObstacle &&  tile != MovementTile.WaterObstacle && tile != MovementTile.Double && tile != MovementTile.Bounce)
+            if (tile != MovementTile.RoadObstacle &&  tile != MovementTile.WaterObstacle && tile != MovementTile.Double && tile != MovementTile.Bounce && tile != MovementTile.Gold)
             {
                 moveTiles.Add(moveTile);
             }
