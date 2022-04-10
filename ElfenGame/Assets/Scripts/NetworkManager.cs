@@ -29,6 +29,11 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback, IInRo
     const byte EVENT_GAME_OVER_CODE = 5;
     const byte EVENT_REMOVE_TILE_CODE = 6; 
 
+    const byte EVENT_PLAYER_WON_AUCTION_CODE = 6;
+
+    private TypedLobby mainLobby = new TypedLobby("ElfenGameLobby", LobbyType.Default);
+
+    public Dictionary<string, RoomInfo> cachedRoomList = new Dictionary<string, RoomInfo>();
     public void Connect()
     {
         if (!PhotonNetwork.IsConnected)
@@ -170,7 +175,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback, IInRo
     public override void OnPlayerLeftRoom(Photon.Realtime.Player otherPlayer)
     {
         //base.OnPlayerLeftRoom(otherPlayer);
-        if (otherPlayer != PhotonNetwork.LocalPlayer)
+        if (otherPlayer != PhotonNetwork.LocalPlayer && (MainUIManager.manager ||
+        (MainMenuUIManager.manager && MainMenuUIManager.manager.GetLoadedOwner() == otherPlayer.UserId)))
         {
             LeaveRoom();
         }
@@ -275,6 +281,10 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback, IInRo
     {
         object[] data = new object[] { m1, path };
         RaiseEvent(EVENT_REMOVE_TILE_CODE,data);
+    public void SignalPlayerWonAuction(string playerName, int BidAmount, MovementTile auctionTile)
+    {
+        object[] data = new object[] { playerName, BidAmount, auctionTile };
+        RaiseEvent(EVENT_PLAYER_WON_AUCTION_CODE, data);
     }
 
     public void ClearAllTiles()
@@ -334,6 +344,19 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback, IInRo
         {
             Game.currentGame.GameOver();
         }
+        else if (photonEvent.Code == EVENT_PLAYER_WON_AUCTION_CODE)
+        {
+            object[] data = (object[])photonEvent.CustomData;
+            string playerName = (string)data[0];
+            int bidAmount = (int)data[1];
+            MovementTile auctionTile = (MovementTile)data[2];
+            Player local = Player.GetLocalPlayer();
+            if (local.userName == playerName)
+            {
+                local.nCoins -= bidAmount;
+                local.AddVisibleTile(auctionTile);
+            }
+        }
     }
 
     public void LoadArena()
@@ -351,6 +374,53 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback, IInRo
         PhotonNetwork.LoadLevel("Main");
     }
 
+
+
+    private void UpdateCachedRoomList(List<RoomInfo> roomList)
+    {
+        for (int i = 0; i < roomList.Count; i++)
+        {
+            RoomInfo info = roomList[i];
+            if (info.RemovedFromList)
+            {
+                cachedRoomList.Remove(info.Name);
+            }
+            else
+            {
+                cachedRoomList[info.Name] = info;
+            }
+        }
+    }
+
+    public override void OnJoinedLobby()
+    {
+        cachedRoomList.Clear();
+    }
+
+    public bool InLobby()
+    {
+        return PhotonNetwork.InLobby && PhotonNetwork.CurrentLobby == mainLobby;
+    }
+
+    public override void OnRoomListUpdate(List<RoomInfo> roomList)
+    {
+        UpdateCachedRoomList(roomList);
+        if (MainMenuUIManager.manager)
+        {
+            MainMenuUIManager.manager.UpdateSessionListView(Lobby.availableSessions);
+        }
+    }
+
+    public override void OnLeftLobby()
+    {
+        cachedRoomList.Clear();
+    }
+
+    public override void OnDisconnected(DisconnectCause cause)
+    {
+        cachedRoomList.Clear();
+    }
+
     public bool IsMasterClient()
     {
         return PhotonNetwork.IsMasterClient;
@@ -361,6 +431,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback, IInRo
     public override void OnConnectedToMaster()
     {
         Debug.Log($"Connected to server.");
+        PhotonNetwork.JoinLobby(mainLobby);
     }
 
 
@@ -445,6 +516,9 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback, IInRo
             Lobby.gameservice.DeleteSession(Game.currentGame.gameId); // Deletes session if launched
             Lobby.user.DeleteSession(Game.currentGame.gameId); // Deletes session if not launched
         }
+
+        // Leave Game chat
+        ChatManager.manager.LeaveGroup();
     }
 
     #endregion

@@ -4,34 +4,27 @@ using TMPro;
 public class MessageIndicatorScript : MonoBehaviour
 {
 
-    [SerializeField] private Canvas messageIndicator;
+    [SerializeField] private GameObject messageIndicator;
     [SerializeField] private TextMeshProUGUI txt;
 
     // Start is called before the first frame update
-    void Start()
+    public void UpdateNumMessages(int numMessages)
     {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        if (ChatManager.manager != null && !ChatManager.manager.isActive() && ChatManager.manager.newMessage() != 0)
+        if (numMessages > 0)
         {
-            if (ChatManager.manager.newMessage() < 9)
-            {
-                txt.text = "" + ChatManager.manager.newMessage();
-            }
-            else
+            messageIndicator.SetActive(true);
+            if (numMessages > 9)
             {
                 txt.text = "9+";
             }
-            messageIndicator.gameObject.SetActive(true);
+            else
+            {
+                txt.text = numMessages.ToString();
+            }
         }
         else
         {
-            messageIndicator.gameObject.SetActive(false);
+            messageIndicator.SetActive(false);
         }
-
     }
 }

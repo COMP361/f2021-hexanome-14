@@ -25,9 +25,11 @@ public class ConnectingUIManager : MonoBehaviour
             //Debug.Log(connectionStatus.text);
             if (!NetworkManager.manager.isConnected())
                 NetworkManager.manager.Connect();
-        }
 
-        if (NetworkManager.manager && NetworkManager.manager.getNetworkState() == "ConnectedToMasterServer")
-            SceneManager.LoadScene("MainMenu");
+            if (NetworkManager.manager.InLobby())
+            {
+                SceneManager.LoadScene("MainMenu");
+            }
+        }
     }
 }
