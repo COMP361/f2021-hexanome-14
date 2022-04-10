@@ -699,8 +699,8 @@ public class MainMenuUIManager : MonoBehaviour, OnGameSessionClickedHandler
                 maxRnds: (int)numRoundsSlider.value,
                 gameMode: gamemode,
                 endTown: endTownToggle.isOn,
-                witchVar: witchToggle.isOn,
-                randGoldVar: randGoldToggle.isOn
+                witchVar: elfengoldToggle.isOn && witchToggle.isOn,
+                randGoldVar: elfengoldToggle.isOn && randGoldToggle.isOn
             );
             SwitchToCorrectView();
             SetToDefaultCreateGameOptions();
