@@ -13755,7 +13755,7 @@ RectTransform:
   - {fileID: 1862407846}
   - {fileID: 1980262155}
   m_Father: {fileID: 783978451}
-  m_RootOrder: 18
+  m_RootOrder: 16
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -16923,6 +16923,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: a8b617198bc074765bd10b07c2257242, type: 2}
   - {fileID: 11400000, guid: 5ffb6bcf1977a405e9f6df41c925c08d, type: 2}
   - {fileID: 11400000, guid: 46335361afdff644ab7211fcad0e0e97, type: 2}
+  - {fileID: 11400000, guid: b5ceeaafd761a4dbdaee56474d0b9f1e, type: 2}
+  - {fileID: 11400000, guid: 98f88d35a109a454989f7e517cf764e0, type: 2}
+  - {fileID: 11400000, guid: 9dcf7362fd45c4fbab5c66ffe78b5434, type: 2}
   movementTileUIPrefab: {fileID: 4131624656378400591, guid: d7f8e7b4263ed44ac98881b738a32700, type: 3}
   mainCanvas: {fileID: 783978447}
   colorSelectionDD: {fileID: 514855566}
