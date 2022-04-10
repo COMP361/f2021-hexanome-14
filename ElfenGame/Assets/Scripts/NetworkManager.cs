@@ -277,14 +277,17 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback, IInRo
         RaiseEvent(EVENT_ADD_TILE_CODE, data);
     }
 
+
     public void RemoveTileFromRoad(MovementTile m1, PathScript path)
     {
         object[] data = new object[] { m1, path };
         RaiseEvent(EVENT_REMOVE_TILE_CODE,data);
+
     public void SignalPlayerWonAuction(string playerName, int BidAmount, MovementTile auctionTile)
     {
         object[] data = new object[] { playerName, BidAmount, auctionTile };
         RaiseEvent(EVENT_PLAYER_WON_AUCTION_CODE, data);
+
     }
 
     public void ClearAllTiles()

@@ -110,8 +110,10 @@ public class MainUIManager : MonoBehaviour
     public Image volumeHandleImage;
 
     public Slider volumeSlider2;
+
     
     public List<MovementTileSO> elfengoldItems;
+
 
 
     [Header("Auction Fields")]
@@ -125,6 +127,7 @@ public class MainUIManager : MonoBehaviour
     public Text curBestBidderText;
     public Text curBidText;
     public Text bidStatusText;
+
 
     #endregion
 
@@ -748,10 +751,12 @@ public class MainUIManager : MonoBehaviour
         _ = pathScript.GetComponentInChildren<GridManager>().AddElement(newTileSprite);
     }
 
+
     internal void RemoveTile(MovementTile mTile, PathScript path)
     {
         path.GetGridManager().RemoveTile(mTile);
     }
+
 
 
 
@@ -934,7 +939,4 @@ public class MainUIManager : MonoBehaviour
     }
 
     #endregion
-
-
-
 }
