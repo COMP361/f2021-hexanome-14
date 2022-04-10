@@ -96,7 +96,11 @@ public class Player
         if (Game.currentGame.gameMode == GameMode.Elfengold)
         {
             nCoins = 10;
-            AddCards(Game.currentGame.Draw(3));
+            AddCards(Game.currentGame.Draw(5));
+        }
+        else
+        {
+            AddVisibleTile(MovementTile.RoadObstacle);
         }
     }
 
@@ -403,7 +407,7 @@ public class Player
         _properties[pCOLOR] = PlayerColor.None;
         _properties[pTOWN] = "TownElvenhold";
         _properties[pCARDS] = new CardEnum[] { };
-        _properties[pVISIBLE_TILES] = new MovementTile[] { MovementTile.RoadObstacle }; // TODO: Update for Elvengold
+        _properties[pVISIBLE_TILES] = new MovementTile[] { };
         _properties[pHIDDEN_TILES] = new MovementTile[] { };
         _properties[pVISITED] = new Dictionary<string, bool>();
         _properties[pCARDS_TO_DRAW] = 3;

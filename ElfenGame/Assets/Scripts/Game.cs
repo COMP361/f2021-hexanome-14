@@ -354,8 +354,9 @@ public class Game
         List<MovementTile> pile = mPile;
         List<MovementTile> visible = mVisibleTiles;
 
-        if (gameMode == GameMode.Elfenland){
-             for (int i = 0; i < 4; ++i)
+        if (gameMode == GameMode.Elfenland)
+        {
+            for (int i = 0; i < 4; ++i)
             {
                 pile.Add(MovementTile.Dragon);
                 pile.Add(MovementTile.Elfcycle);
@@ -363,36 +364,36 @@ public class Game
                 pile.Add(MovementTile.MagicCloud);
                 pile.Add(MovementTile.TrollWagon);
                 pile.Add(MovementTile.Unicorn);
-                
+
             }
 
         }
         else
         {
-            for (int i= 0; i<4;i++)//change to 8
+            for (int i = 0; i < 4; i++)//change to 8
             {
                 pile.Add(MovementTile.Dragon);
                 pile.Add(MovementTile.MagicCloud);
             }
 
-            for (int i= 0; i<5;i++)
+            for (int i = 0; i < 5; i++)
             {
                 pile.Add(MovementTile.Unicorn);
-                
+
             }
-            for (int i= 0; i<8;i++)
+            for (int i = 0; i < 8; i++)
             {
                 pile.Add(MovementTile.Elfcycle);
                 pile.Add(MovementTile.TrollWagon);
             }
 
-            for (int i= 0; i<9;i++)
+            for (int i = 0; i < 9; i++)
             {
                 pile.Add(MovementTile.GiantPig);
-                
+
             }
 
-            for (int i= 0; i<15;i++) //just for testing purposes
+            for (int i = 0; i < 15; i++) //just for testing purposes
             {
                 pile.Add(MovementTile.Double);
                 pile.Add(MovementTile.Bounce);
@@ -409,7 +410,7 @@ public class Game
             visible.Add(pile[0]);
             pile.RemoveAt(0);
         }
-        
+
         mPile = pile;
         mVisibleTiles = visible;
     }
@@ -457,7 +458,7 @@ public class Game
     private void InitDeck(GameMode gameMode, bool witchVar)
     {
         List<CardEnum> deck = mDeck;
-         
+
         if (gameMode == GameMode.Elfenland)
         {
             for (int i = 0; i < 10; i++)
@@ -502,17 +503,14 @@ public class Game
             mDeck = deck;
 
             List<CardEnum> tempVisibleCards = visibleCards;
-            for (int i = 0; i < 3; i++)
-            {
-                tempVisibleCards.Add(Draw(1)[0]);
-            }
+            tempVisibleCards.AddRange(Draw(3));
             visibleCards = tempVisibleCards;
-            
+
         }
 
     }
 
-    public void AddGoldCards() 
+    public void AddGoldCards()
     {
         List<CardEnum> deck = mDeck;
         for (int i = 0; i < 6; i++)
