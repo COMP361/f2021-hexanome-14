@@ -765,9 +765,10 @@ public class MainUIManager : MonoBehaviour
     }
 
 
-    internal void RemoveTile(MovementTile mTile, PathScript path)
+    internal void RemoveTile(MovementTile mTile, String path)
     {
-        path.GetGridManager().RemoveTile(mTile);
+        PathScript pathScript = GameConstants.roadDict[path];
+        pathScript.GetGridManager().RemoveTile(mTile);
     }
 
 
