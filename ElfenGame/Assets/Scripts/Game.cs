@@ -755,13 +755,14 @@ public class Game
 
         HelpElfManager helper = GameObject.FindObjectOfType<HelpElfManager>();
         HelpMessage hm = helper.gameObject.GetComponent<HelpMessage>();
-        switch ( curPhase){
+        switch (curPhase)
+        {
             case GamePhase.Auction:
-                
+
                 hm.helpMessage = "Auction is for bidding on tokens the highest bidder will take it ";
                 break;
             case GamePhase.DrawCardsAndCounters:
-                
+
                 hm.helpMessage = "Draw Cards and Counters Phase ! ";
                 break;
 
@@ -784,7 +785,6 @@ public class Game
 
     public CardEnum[] Draw(int n)
     {
-        //TODO: reshuffle deck with empty (use discard pile)
         List<CardEnum> deck = mDeck;
         CardEnum[] ret = new CardEnum[n];
         for (int i = 0; i < n; ++i)

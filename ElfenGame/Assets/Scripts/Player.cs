@@ -75,10 +75,10 @@ public class Player
         {
             SelfInitFirstRound();
         }
-        List<CardEnum> cards = mCards;
-        if (cards.Count < 8 && Game.currentGame.gameMode == GameMode.Elfenland)
+        int nCards = mCards.Count;
+        if (nCards < 8 && Game.currentGame.gameMode == GameMode.Elfenland)
         {
-            AddCards(Game.currentGame.Draw(8 - cards.Count));
+            AddCards(Game.currentGame.Draw(8 - nCards));
         }
 
         AddHiddenTile(Game.currentGame.RemoveTileFromPile());
@@ -290,6 +290,7 @@ public class Player
     {
         List<CardEnum> hand = mCards;
         hand.AddRange(cards);
+        hand.Sort();
         _properties[pCARDS] = hand.ToArray();
         SyncPlayerStats();
     }

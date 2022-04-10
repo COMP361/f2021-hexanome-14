@@ -38,7 +38,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 100, y: 27.3492}
-  m_SizeDelta: {x: 100, y: 150}
+  m_SizeDelta: {x: 300, y: 450}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5084830841250371450
 CanvasRenderer:
@@ -62,6 +62,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardImage: {fileID: 6795739834529219034}
   cardType: 0
+  toggle: {fileID: 0}
   selected: 0
 --- !u!114 &281428004656493171
 MonoBehaviour:
