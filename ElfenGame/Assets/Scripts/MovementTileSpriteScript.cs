@@ -203,10 +203,11 @@ public class MovementTileSpriteScript : MonoBehaviour
     {
          if (NetworkManager.manager)
          {
-             NetworkManager.manager.RemoveTileFromRoad(m1.mTile.mTile,m1.GetPath());
-             NetworkManager.manager.RemoveTileFromRoad(m2.mTile.mTile, m2.GetPath());
+             
              NetworkManager.manager.AddTileToRoad(m1.GetPath().name, m2.mTile.mTile);
              NetworkManager.manager.AddTileToRoad(m2.GetPath().name, m1.mTile.mTile);
+             NetworkManager.manager.RemoveTileFromRoad(m1.mTile.mTile,m1.GetPath().name);
+             NetworkManager.manager.RemoveTileFromRoad(m2.mTile.mTile, m2.GetPath().name);
 
          } 
     }

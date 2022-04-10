@@ -278,7 +278,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback, IInRo
     }
 
 
-    public void RemoveTileFromRoad(MovementTile m1, PathScript path)
+    public void RemoveTileFromRoad(MovementTile m1, string path)
     {
         object[] data = new object[] { m1, path };
         RaiseEvent(EVENT_REMOVE_TILE_CODE, data);
@@ -337,7 +337,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback, IInRo
         {
             object[] data = (object[])photonEvent.CustomData;
             MovementTile m1 = (MovementTile)data[0];
-            PathScript path = (PathScript)data[1];
+            string path = (string)data[1];
             MainUIManager.manager.RemoveTile(m1, path);
         }
         else if (photonEvent.Code == EVENT_REMOVE_ALL_TILES_CODE && MainUIManager.manager)
