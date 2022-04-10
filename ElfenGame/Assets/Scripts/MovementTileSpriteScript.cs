@@ -139,7 +139,7 @@ public class MovementTileSpriteScript : MonoBehaviour
 
     public void ResetColor()
     {
-        GetComponent<SpriteRenderer>().color = new Color(1.0f, 1.0f, 1.0f, 0.0f);
+        GetComponent<SpriteRenderer>().color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
     }
 
     public void ResetPathColor()
@@ -203,11 +203,28 @@ public class MovementTileSpriteScript : MonoBehaviour
     {
          if (NetworkManager.manager)
          {
+             Debug.Log("swapping "+m1.mTile.mTile+" with "+m2.mTile.mTile);
+             GridManager gm1 = m1.GetPath().GetComponentInChildren<GridManager>();
+             GridManager gm2 = m2.GetPath().GetComponentInChildren<GridManager>();
+             bool added1 = gm1.AddElement(gm2.GetElement(m2.mTile.mTile));
+             bool added2 = gm2.AddElement(gm1.GetElement(m1.mTile.mTile));
+             if (added1 && added2)
+             {
+                NetworkManager.manager.AddTileToRoad(m1.GetPath().name, m2.mTile.mTile);
+                NetworkManager.manager.AddTileToRoad(m2.GetPath().name, m1.mTile.mTile);
+                //NetworkManager.manager.RemoveTileFromRoad(m1.mTile.mTile,m1.GetPath().name);
+                //NetworkManager.manager.RemoveTileFromRoad(m2.mTile.mTile, m2.GetPath().name);
+             }
+             else
+             {
+                Destroy(gm2.GetElement(m2.mTile.mTile));
+                Destroy(gm1.GetElement(m1.mTile.mTile));
+                 
+             }
+
+
              
-             NetworkManager.manager.AddTileToRoad(m1.GetPath().name, m2.mTile.mTile);
-             NetworkManager.manager.AddTileToRoad(m2.GetPath().name, m1.mTile.mTile);
-             NetworkManager.manager.RemoveTileFromRoad(m1.mTile.mTile,m1.GetPath().name);
-             NetworkManager.manager.RemoveTileFromRoad(m2.mTile.mTile, m2.GetPath().name);
+            
 
          } 
     }
@@ -249,15 +266,23 @@ public class MovementTileSpriteScript : MonoBehaviour
                                     SetSwap(tileScript);
                                     tileScript.SetSwap(this);
                                     Swap(this,tileScript);
+                                    Debug.Log("finished swap");
+
                                     //after swap reset tile colours
                                     foreach (PathScript path in GameConstants.roadGroup.GetComponentsInChildren<PathScript>())
                                     {
                                         GridManager gm3 = path.GetComponentInChildren<GridManager>();
                                         gm3.ResetTileColors();
+
+                                       
                                         //remove bounce tile from board
                                         if (gm3.HasBounce())
                                         {
+                                            Debug.Log("removing bounce tile");
+                                            Destroy(gm3.GetElement(MovementTile.Bounce));
                                             gm3.RemoveTile(MovementTile.Bounce);
+                                            if (NetworkManager.manager) NetworkManager.manager.RemoveTileFromRoad(MovementTile.Bounce, path2.name);
+
                                         }
                                     }
                                     
@@ -335,21 +360,19 @@ public class MovementTileSpriteScript : MonoBehaviour
                         DoSwap(path);
                                            
                     }
-                    else 
+                    added = gm.AddElement(gameObject);
+
+                    if (!added)
                     {
-                        added = gm.AddElement(gameObject);
-
-                        if (!added)
-                        {
-                            Destroy(gameObject);
-                        }
-                        else
-                        {
-                            if (NetworkManager.manager) NetworkManager.manager.AddTileToRoad(path.name, mTile.mTile);
-                            
-                        }
-
+                        Destroy(gameObject);
                     }
+                    else
+                    {
+                        if (NetworkManager.manager) NetworkManager.manager.AddTileToRoad(path.name, mTile.mTile);
+                        
+                    }
+
+                    
                     
                     
                 }

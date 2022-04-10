@@ -47,6 +47,8 @@ public class GridManager : MonoBehaviour
         return nonObstacleTiles;
     }
 
+    
+
     private void PositionElements()
     {
         int colsNeeded = Mathf.Min(nCols, elements.Count);
@@ -80,6 +82,19 @@ public class GridManager : MonoBehaviour
         PositionElements();
 
         return true;
+    }
+
+    public GameObject GetElement(MovementTile mTile)
+    {
+        foreach (GameObject go in elements)
+        {
+            MovementTileSpriteScript spriteScript = go.GetComponent<MovementTileSpriteScript>();
+            if (spriteScript.mTile.mTile == mTile)
+            {
+                return go;
+            }
+        }
+        return null;
     }
 
     public void RemoveElement(GameObject gameObject)
