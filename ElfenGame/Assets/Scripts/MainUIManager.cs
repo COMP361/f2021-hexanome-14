@@ -161,7 +161,13 @@ public class MainUIManager : MonoBehaviour
         }
 
         if (Player.GetLocalPlayer().playerColor == PlayerColor.None)
+        {
             chooseColorPanel.SetActive(true);
+        }
+        else
+        {
+            HelpElfManager.elf.SetSprite(Player.GetLocalPlayer().playerColor.GetSprite());
+        }
         UpdateColorOptions();
 
         SaveAndLoad.GameData data = SaveAndLoad.LoadGameState(Game.currentGame.saveId);
