@@ -203,7 +203,7 @@ public class Lobby
             {
                 Debug.LogError("Failed to launch session:" + response);
                 // MainMenuUIManager.manager.CreateGameWithOptions(); // TODO: Remove when done debugging
-                MainMenuUIManager.manager.OnSessionLaunched();
+                // MainMenuUIManager.manager.OnSessionLaunched();
             }
         });
     }
