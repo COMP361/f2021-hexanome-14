@@ -29,7 +29,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback, IInRo
     const byte EVENT_GAME_OVER_CODE = 5;
     const byte EVENT_REMOVE_TILE_CODE = 6;
 
-    const byte EVENT_PLAYER_WON_AUCTION_CODE = 6;
+    const byte EVENT_PLAYER_WON_AUCTION_CODE = 7;
 
     private TypedLobby mainLobby = new TypedLobby("ElfenGameLobby", LobbyType.Default);
 
@@ -360,7 +360,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback, IInRo
                 local.nCoins -= bidAmount;
                 local.AddVisibleTile(auctionTile);
             }
-            Game.currentGame.OnAuctionWin();
         }
     }
 
