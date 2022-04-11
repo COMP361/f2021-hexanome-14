@@ -58,12 +58,26 @@ public class MovementTileSpriteScript : MonoBehaviour
 
     public void BeginDrag(MovementTileUIScript dragOrigin)
     {
+        //check if there is a swap tile on the game board, if yes, then dont do anything
+        bool BounceExists = false;
+        foreach (PathScript path in GameConstants.roadGroup.GetComponentsInChildren<PathScript>())
+        {
+             GridManager gm = path.GetComponentInChildren<GridManager>();
+             if (gm.HasBounce())BounceExists = true;
+
+        }
+
+        if (!BounceExists)
+        {
+            Debug.Log("Dragging Tile Sprite.");
+            this.dragOrigin = dragOrigin;
+            drag = true;
+            MouseActivityManager.manager.BeginDrag<PathScript>();
+            ColorPathsByValidity();
+
+        }
         // Custom Function
-        Debug.Log("Dragging Tile Sprite.");
-        this.dragOrigin = dragOrigin;
-        drag = true;
-        MouseActivityManager.manager.BeginDrag<PathScript>();
-        ColorPathsByValidity();
+        
     }
 
     public void ColorPathsByValidity()
@@ -153,10 +167,6 @@ public class MovementTileSpriteScript : MonoBehaviour
 
         }
         return false;
-
-
-
-
     }
 
     private void DoSwap(PathScript path)
@@ -179,7 +189,6 @@ public class MovementTileSpriteScript : MonoBehaviour
             {
                 tileScript.SetGreen();
             }
-            //ColorTilesByBounceValidity(path);
 
         }
 
@@ -194,9 +203,6 @@ public class MovementTileSpriteScript : MonoBehaviour
             GridManager gm1 = m1.GetPath().GetComponentInChildren<GridManager>();
             GridManager gm2 = m2.GetPath().GetComponentInChildren<GridManager>();
 
-            //Destroy(gm2.GetElement(m2.mTile.mTile));
-            //Destroy(gm1.GetElement(m1.mTile.mTile));
-
             m1.AddToPath(m2.GetPath());
             m2.AddToPath(m1.GetPath());
 
@@ -208,8 +214,6 @@ public class MovementTileSpriteScript : MonoBehaviour
             NetworkManager.manager.RemoveTileFromRoad(m2.mTile.mTile, m2.GetPath().name);
             NetworkManager.manager.AddTileToRoad(m1.GetPath().name, m1.mTile.mTile);
             NetworkManager.manager.AddTileToRoad(m2.GetPath().name, m2.mTile.mTile);
-            List<MovementTileSpriteScript> list1 = m1.GetPath().GetGridManager().GetAllTiles();
-            List<MovementTileSpriteScript> list2 = m2.GetPath().GetGridManager().GetAllTiles();
 
         }
     }
@@ -289,12 +293,6 @@ public class MovementTileSpriteScript : MonoBehaviour
                         SetBlue();
                         SetLookingForSwap(true);
                     }
-                    //if yes, check if valid
-                    //if valid, set colour to blue and swap
-                    //if not valid, ignore
-                    //if no, check if there is a bounce tile on the board
-                    //if yes, set colour to blue
-                    //if no, ignore
                 }
             }
         }
@@ -370,12 +368,21 @@ public class MovementTileSpriteScript : MonoBehaviour
 
                 else
                 {
-                    if (mTile.mTile == MovementTile.Bounce)
+                    if (gm.HasDouble())
+                    //then need to remove Double tile from the path since now adding second tile
                     {
+                        Debug.Log("removing bounce tile");
+                        Destroy(gm.GetElement(MovementTile.Double));
+                        gm.RemoveTile(MovementTile.Double);
+                        if (NetworkManager.manager) NetworkManager.manager.RemoveTileFromRoad(MovementTile.Double, path.name);
+
+                    }
+                    else if (mTile.mTile == MovementTile.Bounce){
                         if (NetworkManager.manager) NetworkManager.manager.AddTileToRoad(path.name, mTile.mTile);
                         DoSwap(path);
 
                     }
+                    
                     added = gm.AddElement(gameObject);
 
                     if (!added)
@@ -385,11 +392,7 @@ public class MovementTileSpriteScript : MonoBehaviour
                     else
                     {
                         if (NetworkManager.manager) NetworkManager.manager.AddTileToRoad(path.name, mTile.mTile);
-
                     }
-
-
-
 
                 }
 

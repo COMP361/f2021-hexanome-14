@@ -88,6 +88,25 @@ public class PathScript : MonoBehaviour, IDragOver
     public bool isValid(MovementTileSO movementTileSO)
     {
         GridManager gm = GetComponentInChildren<GridManager>();
+        //first check if there is double on board
+        bool DoubleExists = false;
+        foreach (PathScript pathScript in GameConstants.roadGroup.GetComponentsInChildren<PathScript>())
+        {
+            GridManager gManager = pathScript.GetComponentInChildren<GridManager>();
+            if (gManager.HasDouble())DoubleExists = true;
+
+        }
+        if (DoubleExists && (movementTileSO.mTile == MovementTile.Double ||  movementTileSO.mTile == MovementTile.Bounce ||  movementTileSO.mTile == MovementTile.WaterObstacle ||  movementTileSO.mTile == MovementTile.RoadObstacle ||  movementTileSO.mTile == MovementTile.Gold || !gm.HasDouble()))
+        {
+            return false;
+        }
+        if (DoubleExists && gm.HasDouble())
+        {
+            foreach (MovementTileSpriteScript tile in gm.GetMovementTiles())
+            {
+                if (tile.mTile.mTile == movementTileSO.mTile) return false;
+            }
+        }
 
         if (gm == null)
         {
@@ -124,13 +143,6 @@ public class PathScript : MonoBehaviour, IDragOver
         {
             return true; //place gold tile on path if no obstacle and has transport tile and no other gold tile
         }
-
-        // Debug.Log("hasDouble: "+gm.HasDouble());
-        // Debug.Log("movementTileSO.mTile == MovementTile.Bounce:"+(movementTileSO.mTile == MovementTile.Bounce).ToString());
-        // Debug.Log("movementTileSO.mTile == MovementTile.Double"+(movementTileSO.mTile == MovementTile.Double).ToString());
-        // Debug.Log("hasDouble()"+gm.HasDouble().ToString());
-        // Debug.Log("HasBounce()"+gm.HasBounce().ToString());
-        // Debug.Log(movementTileSO.mTile.ToString());
         return false;
     }
 
