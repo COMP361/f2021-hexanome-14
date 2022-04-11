@@ -768,6 +768,7 @@ public class Game
             curBid = 0;
             curBidPlayer = "";
             numRemainingAuctionItems -= 1;
+            passedPlayers = 0;
 
             if (numRemainingAuctionItems != 0)
             {
@@ -778,7 +779,6 @@ public class Game
             {
                 // Set num remaining items to max for next round
                 numRemainingAuctionItems = 2 * mPlayers.Count;
-                passedPlayers = 0; // Set passed players for next phase to 0
                 curPhase = curPhase.NextPhase();
             }
         }
