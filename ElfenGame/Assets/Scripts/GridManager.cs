@@ -125,19 +125,6 @@ public class GridManager : MonoBehaviour
         }
     }
 
-    /*
-    public bool checkHasObstacle(PathScript p){
-        foreach ( GameObject el in elements)
-        {
-            MovementTileSpriteScript mvts = el.GetComponent<Obstacle>();
-            if (mvts != null){
-                return true;
-            }
-        }
-        return true;
-    }
-    */
-
     public int checkNumMovTile(PathScript p)
     {
         int n = 0;
