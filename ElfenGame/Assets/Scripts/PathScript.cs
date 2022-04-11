@@ -88,6 +88,19 @@ public class PathScript : MonoBehaviour, IDragOver
     public bool isValid(MovementTileSO movementTileSO)
     {
         GridManager gm = GetComponentInChildren<GridManager>();
+        //first check if there is double on board
+        bool DoubleExists = false;
+        foreach (PathScript pathScript in GameConstants.roadGroup.GetComponentsInChildren<PathScript>())
+        {
+            GridManager gManager = pathScript.GetComponentInChildren<GridManager>();
+            if (gManager.HasDouble())DoubleExists = true;
+
+        }
+        Debug.Log("doubleExists: "+DoubleExists);
+        if (DoubleExists && (movementTileSO.mTile == MovementTile.Double ||  movementTileSO.mTile == MovementTile.Bounce ||  movementTileSO.mTile == MovementTile.WaterObstacle ||  movementTileSO.mTile == MovementTile.RoadObstacle ||  movementTileSO.mTile == MovementTile.Gold || !gm.HasDouble()))
+        {
+            return false;
+        }
 
         if (gm == null)
         {

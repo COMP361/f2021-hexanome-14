@@ -362,10 +362,12 @@ public class MovementTileSpriteScript : MonoBehaviour
 
             if (path == null || !path.isValid(mTile))
             {
+                Debug.Log("is not valid");
                 Destroy(gameObject);
             }
             else
             {
+                Debug.Log("is valid ");
                 aPath = path;
                 GridManager gm = path.GetComponentInChildren<GridManager>();
                 if (gm == null)
@@ -375,11 +377,28 @@ public class MovementTileSpriteScript : MonoBehaviour
                 
                 else
                 {
+                    //dont do anything if there is a double tile and current tile is a special tile or current path does not have the double tile
+                    // bool DoubleExists = false;
+                    // foreach (PathScript pathScript in GameConstants.roadGroup.GetComponentsInChildren<PathScript>())
+                    // {
+                    //     GridManager gManager = path.GetComponentInChildren<GridManager>();
+                    //     if (gm.HasDouble())DoubleExists = true;
+
+                    // }
+                    // Debug.Log("doubleExists: "+DoubleExists);
+                    // if (DoubleExists && (mTile.mTile == MovementTile.Double ||  mTile.mTile == MovementTile.Bounce ||  mTile.mTile == MovementTile.WaterObstacle ||  mTile.mTile == MovementTile.RoadObstacle ||  mTile.mTile == MovementTile.Gold || !gm.HasDouble()))
+                    // {
+                    //     Debug.Log("destroying game item");
+                    //     Destroy(gameObject);
+                    //     ResetPathColor();
+                    //     return false;
+                    // }
                     if (mTile.mTile == MovementTile.Bounce){
                         if (NetworkManager.manager) NetworkManager.manager.AddTileToRoad(path.name, mTile.mTile);
                         DoSwap(path);
                                            
                     }
+                    
                     added = gm.AddElement(gameObject);
 
                     if (!added)
@@ -388,6 +407,7 @@ public class MovementTileSpriteScript : MonoBehaviour
                     }
                     else
                     {
+                        Debug.Log("adding "+mTile.mTile);
                         if (NetworkManager.manager) NetworkManager.manager.AddTileToRoad(path.name, mTile.mTile);
                         
                     }
