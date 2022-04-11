@@ -91,14 +91,8 @@ public class MovementTileSpriteScript : MonoBehaviour
             List<MovementTileSpriteScript> path2Tiles = gm2.GetAllTiles(); //since want to highlight red/green all tiles including special/obstacles
             foreach (MovementTileSpriteScript tileScript in path2Tiles)
             {
-                Debug.Log(tileScript.mTile.mTile);
-                if (mTile.mTile == tileScript.mTile.mTile)
-                {
-                    //dont colour tile
-                    //tileScript.SetGreen();
-                    Debug.Log(mTile.mTile);
-                }
-                else if (tileScript.mTile.mTile == MovementTile.Bounce || tileScript.mTile.mTile == MovementTile.RoadObstacle || tileScript.mTile.mTile == MovementTile.WaterObstacle || tileScript.mTile.mTile == MovementTile.Double || tileScript.mTile.mTile == MovementTile.Gold)
+
+                if (tileScript.mTile.mTile == MovementTile.Bounce || tileScript.mTile.mTile == MovementTile.RoadObstacle || tileScript.mTile.mTile == MovementTile.WaterObstacle || tileScript.mTile.mTile == MovementTile.Double || tileScript.mTile.mTile == MovementTile.Gold)
                 {
                     tileScript.SetRed();
                 }
@@ -155,18 +149,11 @@ public class MovementTileSpriteScript : MonoBehaviour
         //return mTile.mValidRoads.Intersect(pTile.mTile.mValidRoads).Any(); not sure why cant find intersect
         if (mTile.mTile != MovementTile.Bounce && mTile.mTile != MovementTile.Double && mTile.mTile != MovementTile.RoadObstacle && mTile.mTile != MovementTile.WaterObstacle && mTile.mTile != MovementTile.Gold)
         {
-            foreach (RoadType road in mTile.mValidRoads)
-            {
-                if (pTile.mTile.mValidRoads.Contains(road));
-                {
-                    return true;
-                    break;
-                }
-            }
-            return false;
-
+            return (pTile.mTile.mValidRoads.Contains(aPath.roadType) && mTile.mValidRoads.Contains(pTile.GetPath().roadType));
+           
         }
         return false;
+        
         
         
     
@@ -206,25 +193,20 @@ public class MovementTileSpriteScript : MonoBehaviour
              Debug.Log("swapping "+m1.mTile.mTile+" with "+m2.mTile.mTile);
              GridManager gm1 = m1.GetPath().GetComponentInChildren<GridManager>();
              GridManager gm2 = m2.GetPath().GetComponentInChildren<GridManager>();
-             bool added1 = gm1.AddElement(gm2.GetElement(m2.mTile.mTile));
-             bool added2 = gm2.AddElement(gm1.GetElement(m1.mTile.mTile));
-             if (added1 && added2)
-             {
-                NetworkManager.manager.AddTileToRoad(m1.GetPath().name, m2.mTile.mTile);
-                NetworkManager.manager.AddTileToRoad(m2.GetPath().name, m1.mTile.mTile);
-                //NetworkManager.manager.RemoveTileFromRoad(m1.mTile.mTile,m1.GetPath().name);
-                //NetworkManager.manager.RemoveTileFromRoad(m2.mTile.mTile, m2.GetPath().name);
-             }
-             else
-             {
-                Destroy(gm2.GetElement(m2.mTile.mTile));
-                Destroy(gm1.GetElement(m1.mTile.mTile));
-                 
-             }
 
-
-             
+            //Destroy(gm2.GetElement(m2.mTile.mTile));
+            //Destroy(gm1.GetElement(m1.mTile.mTile));
             
+
+             //gm1.AddElement(gm2.GetElement(m2.mTile.mTile));
+             //gm2.AddElement(gm1.GetElement(m1.mTile.mTile));
+            
+            NetworkManager.manager.AddTileToRoad(m1.GetPath().name, m2.mTile.mTile);
+            NetworkManager.manager.AddTileToRoad(m2.GetPath().name, m1.mTile.mTile);
+            NetworkManager.manager.RemoveTileFromRoad(m1.mTile.mTile,m1.GetPath().name);
+            NetworkManager.manager.RemoveTileFromRoad(m2.mTile.mTile, m2.GetPath().name);
+
+                
 
          } 
     }
@@ -281,7 +263,7 @@ public class MovementTileSpriteScript : MonoBehaviour
                                             Debug.Log("removing bounce tile");
                                             Destroy(gm3.GetElement(MovementTile.Bounce));
                                             gm3.RemoveTile(MovementTile.Bounce);
-                                            if (NetworkManager.manager) NetworkManager.manager.RemoveTileFromRoad(MovementTile.Bounce, path2.name);
+                                            if (NetworkManager.manager) NetworkManager.manager.RemoveTileFromRoad(MovementTile.Bounce, path.name);
 
                                         }
                                     }
