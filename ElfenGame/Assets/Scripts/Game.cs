@@ -763,6 +763,7 @@ public class Game
             else
             {
                 NetworkManager.manager.SignalPlayerWonAuction(curBidPlayer, curBid, auctionTile);
+                return;
             }
 
             curBid = 0;
@@ -819,6 +820,28 @@ public class Game
         }
 
         SyncGameProperties();
+    }
+
+    public void OnAuctionWin()
+    {
+
+        curBid = 0;
+        curBidPlayer = "";
+        numRemainingAuctionItems -= 1;
+
+        if (numRemainingAuctionItems != 0)
+        {
+            SyncGameProperties();
+            return; // Don't move to next round if there are still items to auction
+        }
+        else
+        {
+            // Set num remaining items to max for next round
+            numRemainingAuctionItems = 2 * mPlayers.Count;
+            passedPlayers = 0; // Set passed players for next phase to 0
+            curPhase = curPhase.NextPhase();
+            SyncGameProperties();
+        }
     }
 
     public CardEnum[] Draw(int n)

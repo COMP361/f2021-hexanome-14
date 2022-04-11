@@ -360,6 +360,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IOnEventCallback, IInRo
                 local.nCoins -= bidAmount;
                 local.AddVisibleTile(auctionTile);
             }
+            Game.currentGame.OnAuctionWin();
         }
     }
 
