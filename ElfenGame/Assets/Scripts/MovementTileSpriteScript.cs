@@ -332,7 +332,7 @@ public class MovementTileSpriteScript : MonoBehaviour
 
     }
 
-    public bool RemoveFromPath()
+    public void RemoveFromPath()
     {
         GridManager gm = aPath.GetComponentInChildren<GridManager>();
         if (gm == null)
@@ -342,7 +342,7 @@ public class MovementTileSpriteScript : MonoBehaviour
         
         else
         {
-            return gm.RemoveElement(gameObject);
+            gm.RemoveElement(gameObject);
         }
     }
     public bool EndDrag()
