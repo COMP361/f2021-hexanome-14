@@ -392,13 +392,13 @@ public class Game
                 
             }
 
-            for (int i= 0; i<20;i++)
+            for (int i= 0; i<2;i++)
             {
                 pile.Add(MovementTile.Double);
                 pile.Add(MovementTile.Bounce);
-                //pile.Add(MovementTile.RoadObstacle);
-                //pile.Add(MovementTile.WaterObstacle);
-                //pile.Add(MovementTile.Gold);
+                pile.Add(MovementTile.RoadObstacle);
+                pile.Add(MovementTile.WaterObstacle);
+                pile.Add(MovementTile.Gold);
             }
         }
 
