@@ -179,16 +179,17 @@ public class Game
         mPile = data.pile;
         curPlayerIndex = data.curPlayerIndex;
         mPlayers = data.players;
-        // gameId = data.gameId; // TODO: This should not be set (new session id should be kept)
         visibleCards = data.visibleCards;
         curPhase = data.curPhase;
         curRound = data.curRound;
         passedPlayers = data.passedPlayers;
         saveId = data.saveId;
         goldValues = data.goldValues;
+        numRemainingAuctionItems = data.numRemainingAuctionItems;
+        curBid = data.curBid;
+        curBidPlayer = data.curBidPlayer;
 
         SyncGameProperties();
-
     }
 
     public Game()
@@ -393,7 +394,7 @@ public class Game
 
             }
 
-            for (int i = 0; i < 15; i++) //just for testing purposes
+            for (int i = 0; i < 2; i++)
             {
                 pile.Add(MovementTile.Double);
                 pile.Add(MovementTile.Bounce);
@@ -584,6 +585,34 @@ public class Game
         {
             MainUIManager.manager.HideAuctionScreen();
         }
+
+        HelpMessage hm = HelpElfManager.elf.gameObject.GetComponent<HelpMessage>();
+        switch (curPhase)
+        {
+            case GamePhase.Auction:
+
+                hm.helpMessage = "Auction is for bidding on tokens the highest bidder will take it ";
+                break;
+            case GamePhase.DrawCardsAndCounters:
+
+                hm.helpMessage = "Draw Cards and Counters Phase! Press End Turn to end your turn";
+                break;
+
+            case GamePhase.PlaceCounter:
+                hm.helpMessage = "Place counter on the roads to prepare for the traveling phase ";
+                break;
+            case GamePhase.SelectTokenToKeep:
+                hm.helpMessage = "Select a token to keep (red tokens are visible, blue tokens are hidden) ";
+                break;
+
+            case GamePhase.Travel:
+                hm.helpMessage = "Start Traveling, by choosing cards from the CardHand on the top right and dragging to the town of your choice, remember to visit new towns and try to get as many tokens as possible! ";
+                break;
+            default:
+                hm.helpMessage = "choose a token from the selection or get a random token";
+                break;
+        }
+        // HelpElfManager.elf.DisplayHelpMessage(hm.helpMessage);
     }
 
     public MovementTile RemoveVisibleTile(int index)
@@ -789,33 +818,6 @@ public class Game
             //Debug.LogError($"Cur Round is: {curRound}"); 
         }
 
-        HelpElfManager helper = GameObject.FindObjectOfType<HelpElfManager>();
-        HelpMessage hm = helper.gameObject.GetComponent<HelpMessage>();
-        switch (curPhase)
-        {
-            case GamePhase.Auction:
-
-                hm.helpMessage = "Auction is for bidding on tokens the highest bidder will take it ";
-                break;
-            case GamePhase.DrawCardsAndCounters:
-
-                hm.helpMessage = "Draw Cards and Counters Phase ! ";
-                break;
-
-            case GamePhase.PlaceCounter:
-                hm.helpMessage = "Place counter on the roads to prepare for the traveling phase ";
-                break;
-            case GamePhase.SelectTokenToKeep:
-                hm.helpMessage = "Select a token to keep ";
-                break;
-
-            case GamePhase.Travel:
-                hm.helpMessage = "Start Traveling, by choosing cards from the CardHand on the top right and dragging to the town of your choice, remember to visit new towns and try to get as many tokens as possible! ";
-                break;
-            default:
-                hm.helpMessage = "choose a token from the selection or get a random token";
-                break;
-        }
         SyncGameProperties();
     }
 

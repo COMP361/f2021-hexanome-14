@@ -66,12 +66,12 @@ public class Player
 
     public void SelfInitRound()
     {
-        // Debug.LogError("SelfInitRound called");
         if (Game.currentGame.curRound <= lastInitializedround)
         {
             Debug.Log($"Already initialized round {Game.currentGame.curRound} for player {userName}");
             return;
         }
+        Debug.Log("SelfInitRound running");
         if (Game.currentGame.curRound == 1)
         {
             SelfInitFirstRound();
@@ -471,6 +471,7 @@ public class Player
         _properties[pCARDS] = data.mCards.ToArray();
         _properties[pVISIBLE_TILES] = data.mVisibleTiles.ToArray();
         _properties[pHIDDEN_TILES] = data.mHiddenTiles.ToArray();
+        _properties[pCARDS_TO_DRAW] = data.cardsToDraw;
         endTown = data.endTown;
         Dictionary<string, bool> visited = new Dictionary<string, bool>();
         foreach (string town in GameConstants.townNames)
