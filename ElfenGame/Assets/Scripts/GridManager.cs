@@ -103,7 +103,9 @@ public class GridManager : MonoBehaviour
         {
             elements.Remove(gameObject);
             PositionElements();
+            
         }
+        
     }
 
     public void RemoveTile(MovementTile mTile)

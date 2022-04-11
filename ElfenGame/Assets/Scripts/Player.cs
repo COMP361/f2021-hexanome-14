@@ -66,6 +66,7 @@ public class Player
 
     public void SelfInitRound()
     {
+        // Debug.LogError("SelfInitRound called");
         if (Game.currentGame.curRound <= lastInitializedround)
         {
             Debug.Log($"Already initialized round {Game.currentGame.curRound} for player {userName}");
