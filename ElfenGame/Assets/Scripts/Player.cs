@@ -71,6 +71,7 @@ public class Player
             Debug.Log($"Already initialized round {Game.currentGame.curRound} for player {userName}");
             return;
         }
+        Debug.Log("SelfInitRound running");
         if (Game.currentGame.curRound == 1)
         {
             SelfInitFirstRound();
@@ -96,7 +97,11 @@ public class Player
         if (Game.currentGame.gameMode == GameMode.Elfengold)
         {
             nCoins = 10;
-            AddCards(Game.currentGame.Draw(3));
+            AddCards(Game.currentGame.Draw(5));
+        }
+        else
+        {
+            AddVisibleTile(MovementTile.RoadObstacle);
         }
     }
 
@@ -403,7 +408,7 @@ public class Player
         _properties[pCOLOR] = PlayerColor.None;
         _properties[pTOWN] = "TownElvenhold";
         _properties[pCARDS] = new CardEnum[] { };
-        _properties[pVISIBLE_TILES] = new MovementTile[] { MovementTile.RoadObstacle }; // TODO: Update for Elvengold
+        _properties[pVISIBLE_TILES] = new MovementTile[] { };
         _properties[pHIDDEN_TILES] = new MovementTile[] { };
         _properties[pVISITED] = new Dictionary<string, bool>();
         _properties[pCARDS_TO_DRAW] = 3;
@@ -466,6 +471,7 @@ public class Player
         _properties[pCARDS] = data.mCards.ToArray();
         _properties[pVISIBLE_TILES] = data.mVisibleTiles.ToArray();
         _properties[pHIDDEN_TILES] = data.mHiddenTiles.ToArray();
+        _properties[pCARDS_TO_DRAW] = data.cardsToDraw;
         endTown = data.endTown;
         Dictionary<string, bool> visited = new Dictionary<string, bool>();
         foreach (string town in GameConstants.townNames)

@@ -33,6 +33,10 @@ public static class SaveAndLoad
         public List<MovementTile> tileTypes;
 
         public List<int> goldValues;
+
+        public int curBid;
+        public string curBidPlayer;
+        public int numRemainingAuctionItems;
         public GameData(Game g, Tuple<List<string>, List<MovementTile>> tilePositions)
         {
             gameMode = g.gameMode;
@@ -55,6 +59,9 @@ public static class SaveAndLoad
             this.tilePaths = tilePositions.Item1;
             this.tileTypes = tilePositions.Item2;
             goldValues = g.goldValues;
+            curBid = g.curBid;
+            curBidPlayer = g.curBidPlayer;
+            numRemainingAuctionItems = g.numRemainingAuctionItems;
         }
     }
 
@@ -72,6 +79,8 @@ public static class SaveAndLoad
         public string curTown;
         public string endTown;
         public List<string> mVisited;
+
+        public int cardsToDraw;
         public PlayerData(Player p)
         {
             nCoins = p.nCoins;
@@ -83,6 +92,7 @@ public static class SaveAndLoad
             userName = p.userName;
             curTown = p.curTown;
             endTown = p.endTown;
+            cardsToDraw = p.cardsToDraw;
             mVisited = new List<string>(); // Can't store dict (JsonUtility doesn't support it) so just store the keys of visited towns
             foreach (KeyValuePair<string, bool> entry in p.mVisited)
             {

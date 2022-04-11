@@ -179,16 +179,17 @@ public class Game
         mPile = data.pile;
         curPlayerIndex = data.curPlayerIndex;
         mPlayers = data.players;
-        // gameId = data.gameId; // TODO: This should not be set (new session id should be kept)
         visibleCards = data.visibleCards;
         curPhase = data.curPhase;
         curRound = data.curRound;
         passedPlayers = data.passedPlayers;
         saveId = data.saveId;
         goldValues = data.goldValues;
+        numRemainingAuctionItems = data.numRemainingAuctionItems;
+        curBid = data.curBid;
+        curBidPlayer = data.curBidPlayer;
 
         SyncGameProperties();
-
     }
 
     public Game()
@@ -354,8 +355,9 @@ public class Game
         List<MovementTile> pile = mPile;
         List<MovementTile> visible = mVisibleTiles;
 
-        if (gameMode == GameMode.Elfenland){
-             for (int i = 0; i < 4; ++i)
+        if (gameMode == GameMode.Elfenland)
+        {
+            for (int i = 0; i < 4; ++i)
             {
                 pile.Add(MovementTile.Dragon);
                 pile.Add(MovementTile.Elfcycle);
@@ -363,36 +365,36 @@ public class Game
                 pile.Add(MovementTile.MagicCloud);
                 pile.Add(MovementTile.TrollWagon);
                 pile.Add(MovementTile.Unicorn);
-                
+
             }
 
         }
         else
         {
-            for (int i= 0; i<4;i++)//change to 8
+            for (int i = 0; i < 4; i++)//change to 8
             {
                 pile.Add(MovementTile.Dragon);
                 pile.Add(MovementTile.MagicCloud);
             }
 
-            for (int i= 0; i<5;i++)
+            for (int i = 0; i < 5; i++)
             {
                 pile.Add(MovementTile.Unicorn);
-                
+
             }
-            for (int i= 0; i<8;i++)
+            for (int i = 0; i < 8; i++)
             {
                 pile.Add(MovementTile.Elfcycle);
                 pile.Add(MovementTile.TrollWagon);
             }
 
-            for (int i= 0; i<9;i++)
+            for (int i = 0; i < 9; i++)
             {
                 pile.Add(MovementTile.GiantPig);
-                
+
             }
 
-            for (int i= 0; i<2;i++)
+            for (int i = 0; i < 2; i++)
             {
                 pile.Add(MovementTile.Double);
                 pile.Add(MovementTile.Bounce);
@@ -409,7 +411,7 @@ public class Game
             visible.Add(pile[0]);
             pile.RemoveAt(0);
         }
-        
+
         mPile = pile;
         mVisibleTiles = visible;
     }
@@ -457,7 +459,7 @@ public class Game
     private void InitDeck(GameMode gameMode, bool witchVar)
     {
         List<CardEnum> deck = mDeck;
-         
+
         if (gameMode == GameMode.Elfenland)
         {
             for (int i = 0; i < 10; i++)
@@ -502,17 +504,14 @@ public class Game
             mDeck = deck;
 
             List<CardEnum> tempVisibleCards = visibleCards;
-            for (int i = 0; i < 3; i++)
-            {
-                tempVisibleCards.Add(Draw(1)[0]);
-            }
+            tempVisibleCards.AddRange(Draw(3));
             visibleCards = tempVisibleCards;
-            
+
         }
 
     }
 
-    public void AddGoldCards() 
+    public void AddGoldCards()
     {
         List<CardEnum> deck = mDeck;
         for (int i = 0; i < 6; i++)
@@ -586,6 +585,34 @@ public class Game
         {
             MainUIManager.manager.HideAuctionScreen();
         }
+
+        HelpMessage hm = HelpElfManager.elf.gameObject.GetComponent<HelpMessage>();
+        switch (curPhase)
+        {
+            case GamePhase.Auction:
+
+                hm.helpMessage = "Auction is for bidding on tokens the highest bidder will take it ";
+                break;
+            case GamePhase.DrawCardsAndCounters:
+
+                hm.helpMessage = "Draw Cards and Counters Phase! Press End Turn to end your turn";
+                break;
+
+            case GamePhase.PlaceCounter:
+                hm.helpMessage = "Place counter on the roads to prepare for the traveling phase ";
+                break;
+            case GamePhase.SelectTokenToKeep:
+                hm.helpMessage = "Select a token to keep (red tokens are visible, blue tokens are hidden) ";
+                break;
+
+            case GamePhase.Travel:
+                hm.helpMessage = "Start Traveling, by choosing cards from the CardHand on the top right and dragging to the town of your choice, remember to visit new towns and try to get as many tokens as possible! ";
+                break;
+            default:
+                hm.helpMessage = "choose a token from the selection or get a random token";
+                break;
+        }
+        // HelpElfManager.elf.DisplayHelpMessage(hm.helpMessage);
     }
 
     public MovementTile RemoveVisibleTile(int index)
@@ -791,33 +818,6 @@ public class Game
             //Debug.LogError($"Cur Round is: {curRound}"); 
         }
 
-        HelpElfManager helper = GameObject.FindObjectOfType<HelpElfManager>();
-        HelpMessage hm = helper.gameObject.GetComponent<HelpMessage>();
-        switch (curPhase)
-        {
-            case GamePhase.Auction:
-
-                hm.helpMessage = "Auction is for bidding on tokens the highest bidder will take it ";
-                break;
-            case GamePhase.DrawCardsAndCounters:
-
-                hm.helpMessage = "Draw Cards and Counters Phase ! ";
-                break;
-
-            case GamePhase.PlaceCounter:
-                hm.helpMessage = "Place counter on the roads to prepare for the traveling phase ";
-                break;
-            case GamePhase.SelectTokenToKeep:
-                hm.helpMessage = "Select a token to keep ";
-                break;
-
-            case GamePhase.Travel:
-                hm.helpMessage = "Start Traveling, by choosing cards from the CardHand on the top right and dragging to the town of your choice, remember to visit new towns and try to get as many tokens as possible! ";
-                break;
-            default:
-                hm.helpMessage = "choose a token from the selection or get a random token";
-                break;
-        }
         SyncGameProperties();
     }
 
