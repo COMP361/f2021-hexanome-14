@@ -196,17 +196,20 @@ public class MovementTileSpriteScript : MonoBehaviour
 
             //Destroy(gm2.GetElement(m2.mTile.mTile));
             //Destroy(gm1.GetElement(m1.mTile.mTile));
-            
 
-             //gm1.AddElement(gm2.GetElement(m2.mTile.mTile));
-             //gm2.AddElement(gm1.GetElement(m1.mTile.mTile));
-            
-            NetworkManager.manager.AddTileToRoad(m1.GetPath().name, m2.mTile.mTile);
-            NetworkManager.manager.AddTileToRoad(m2.GetPath().name, m1.mTile.mTile);
+            m1.AddToPath(m2.GetPath());
+            m2.AddToPath(m1.GetPath());
+
+            m1.RemoveFromPath();
+            m2.RemoveFromPath();
+
+            //not 100% sure if these 4 lines are needed but i think so
             NetworkManager.manager.RemoveTileFromRoad(m1.mTile.mTile,m1.GetPath().name);
             NetworkManager.manager.RemoveTileFromRoad(m2.mTile.mTile, m2.GetPath().name);
-
-                
+            NetworkManager.manager.AddTileToRoad(m1.GetPath().name, m1.mTile.mTile);
+            NetworkManager.manager.AddTileToRoad(m2.GetPath().name, m2.mTile.mTile);
+            List<MovementTileSpriteScript> list1 = m1.GetPath().GetGridManager().GetAllTiles();
+            List<MovementTileSpriteScript> list2 = m2.GetPath().GetGridManager().GetAllTiles();
 
          } 
     }
@@ -311,7 +314,37 @@ public class MovementTileSpriteScript : MonoBehaviour
     }
 
    
+    public bool AddToPath(PathScript path)
+    {
+      
+        GridManager gm = path.GetComponentInChildren<GridManager>();
+        if (gm == null)
+        {
+            throw new System.Exception("Paths must have GridManagers in a child Element");
+        }
+        
+        else
+        {
+            return gm.AddElement(gameObject);
+        }
+        
 
+
+    }
+
+    public bool RemoveFromPath()
+    {
+        GridManager gm = aPath.GetComponentInChildren<GridManager>();
+        if (gm == null)
+        {
+            throw new System.Exception("Paths must have GridManagers in a child Element");
+        }
+        
+        else
+        {
+            return gm.RemoveElement(gameObject);
+        }
+    }
     public bool EndDrag()
     {
         bool added = false;
