@@ -17,6 +17,11 @@ public class PathScript : MonoBehaviour, IDragOver
         gridManager = GetComponentInChildren<GridManager>();
     }
 
+    public GridManager GetGridManager()
+    {
+        return gridManager;
+    }
+
     public void OnDragEnter()
     {
         Color curColor = GetComponent<SpriteRenderer>().color;
@@ -75,22 +80,57 @@ public class PathScript : MonoBehaviour, IDragOver
         return gridManager.GetMovementTile();
     }
 
+    public List<MovementTileSpriteScript> GetMovementTiles()
+    {
+        return gridManager.GetMovementTiles();
+    }
+
     public bool isValid(MovementTileSO movementTileSO)
     {
         GridManager gm = GetComponentInChildren<GridManager>();
+
         if (gm == null)
         {
             throw new System.Exception("Paths must have GridManagers in a child Element");
         }
 
-        if (!movementTileSO.mValidRoads.Contains(roadType)) return false;
-
-        if (movementTileSO.mTile != MovementTile.RoadObstacle && gm.GetMovementTile() == null)
+        if (!movementTileSO.mValidRoads.Contains(roadType))
+        {
+            return false;
+        } 
+         
+        else if (movementTileSO.mTile != MovementTile.RoadObstacle && movementTileSO.mTile != MovementTile.Bounce && movementTileSO.mTile != MovementTile.Double && movementTileSO.mTile != MovementTile.Gold && gm.GetMovementTile() == null) //will also pass when path only has switch tile
         {
             return true;
         }
+        else if (movementTileSO.mTile != MovementTile.RoadObstacle && movementTileSO.mTile != MovementTile.Bounce && movementTileSO.mTile != MovementTile.Double && movementTileSO.mTile != MovementTile.Gold && gm.GetMovementTiles().Count == 1 && gm.HasDouble()) 
+        {
+            return true;//if has double spell and only 1 movement tile on path and tile is a transportation tile
+        }
 
-        if (movementTileSO.mTile == MovementTile.RoadObstacle && !gm.HasObstacle() && gm.GetMovementTile() != null) return true; // Place obstacle on path with 
+        else if (movementTileSO.mTile == MovementTile.RoadObstacle && !gm.HasObstacle() && !HasGold() && gm.GetMovementTile() != null) 
+        {
+            return true; // Place obstacle on path with no other obstacle or gold, but contains transport tile
+        }
+        else if (movementTileSO.mTile == MovementTile.Double && !gm.HasDouble() &&  gm.GetMovementTile() != null)
+        {
+            return true; //place double spell tile on path with movement tile 
+        } 
+        else if (movementTileSO.mTile == MovementTile.Bounce && gm.GetMovementTile() != null) 
+        {
+            return true; //place bounce spell tile on path with movement tile
+        }
+        else if (movementTileSO.mTile == MovementTile.Gold && !gm.HasObstacle() && gm.GetMovementTile() != null && !gm.HasGold())
+        {
+            return true; //place gold tile on path if no obstacle and has transport tile and no other gold tile
+        }
+
+        // Debug.Log("hasDouble: "+gm.HasDouble());
+        // Debug.Log("movementTileSO.mTile == MovementTile.Bounce:"+(movementTileSO.mTile == MovementTile.Bounce).ToString());
+        // Debug.Log("movementTileSO.mTile == MovementTile.Double"+(movementTileSO.mTile == MovementTile.Double).ToString());
+        // Debug.Log("hasDouble()"+gm.HasDouble().ToString());
+        // Debug.Log("HasBounce()"+gm.HasBounce().ToString());
+        // Debug.Log(movementTileSO.mTile.ToString());
         return false;
     }
 
@@ -99,6 +139,20 @@ public class PathScript : MonoBehaviour, IDragOver
         return gridManager.HasObstacle();
 
 
+    }
+
+    public bool HasDouble()
+    {
+        return gridManager.HasDouble();
+    }
+
+    public bool hasBounce()
+    {
+        return gridManager.HasBounce();
+    }
+
+    public bool HasGold(){
+        return gridManager.HasGold();
     }
 
 }

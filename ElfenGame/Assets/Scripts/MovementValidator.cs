@@ -64,6 +64,7 @@ public static class MovementValidator
 
     public static bool IsMoveValid(NewTown startTown, PathScript path, List<CardEnum> cards)
     {
+        
         // No cards given
         if (cards.Count == 0)
         {
@@ -101,29 +102,37 @@ public static class MovementValidator
                 return false;
             }
         }
+        
+        List<MovementTileSpriteScript> movementTileWrappers = path.GetMovementTiles();
 
-        MovementTileSpriteScript movementTileWrapper = path.GetMovementTile();
+        if (movementTileWrappers == null) return false;
 
-        if (movementTileWrapper == null) return false;
-
-        MovementTile movementTile = movementTileWrapper.mTile.mTile;
-
-        if (transportationChart[path.roadType].ContainsKey(movementTile))
+        foreach (var movementTileWrapper in movementTileWrappers)
         {
-            // Getting num of cards from dictionary
-            int requiredCount = transportationChart[path.roadType][movementTile];
+            if (movementTileWrapper == null) return false;
 
-            // adding 1 to required num of cards if theres an obstacle
-            if (path.HasObstacle())
-            {
-                requiredCount++;
-            }
+            MovementTile movementTile = movementTileWrapper.mTile.mTile;
 
-            if (CardsAreSame(cards) && tileToCard[movementTile] == cards[0])
+            if (transportationChart[path.roadType].ContainsKey(movementTile))
             {
-                return cards.Count == requiredCount;
+                // Getting num of cards from dictionary
+                int requiredCount = transportationChart[path.roadType][movementTile];
+
+                if (CardsAreSame(cards) && tileToCard[movementTile] == cards[0])
+                {
+                    // adding 1 to required num of cards if theres an obstacle
+                    if (path.HasObstacle())
+                    {
+                        requiredCount++;
+                    }
+
+                    return cards.Count == requiredCount;
+                }
             }
+           
         }
+         
+        
 
 
         // Caravaning

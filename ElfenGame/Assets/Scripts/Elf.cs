@@ -100,7 +100,15 @@ public class Elf : MonoBehaviour
                     {
                         player.curTown = town.name;
                         player.RemoveCards(cards.ToArray());
-                        player.nCoins += town.getGoldValue(); // TODO: Only receive gold if witches not used
+                        if (pathScript.HasGold())
+                        {
+                            player.nCoins += 2* town.getGoldValue();
+                        }
+                        else
+                        {
+                             player.nCoins += town.getGoldValue(); // TODO: Only receive gold if witches not used
+                        }
+                       
 
                         MainUIManager.manager.ResetRoadColors();
                         return;

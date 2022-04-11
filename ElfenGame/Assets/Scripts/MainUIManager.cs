@@ -112,6 +112,10 @@ public class MainUIManager : MonoBehaviour
     public Slider volumeSlider2;
 
 
+    public List<MovementTileSO> elfengoldItems;
+
+
+
     [Header("Auction Fields")]
 
     public GameObject auctionGroup;
@@ -123,6 +127,7 @@ public class MainUIManager : MonoBehaviour
     public Text curBestBidderText;
     public Text curBidText;
     public Text bidStatusText;
+
 
     #endregion
 
@@ -136,6 +141,12 @@ public class MainUIManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //for Elfenland we do NOT have double and Bounce
+        if (Game.currentGame.gameMode == GameMode.Elfengold)
+        {
+            mTiles.AddRange(elfengoldItems);
+
+        }
         mTileDict = new Dictionary<MovementTile, MovementTileSO>();
         foreach (MovementTileSO tile in mTiles)
         {
@@ -249,6 +260,7 @@ public class MainUIManager : MonoBehaviour
         {
             GridManager grid = path.GetComponentInChildren<GridManager>();
             foreach (MovementTile tile in grid.GetNonObstacleTiles())
+            //might need to add separate implementation for spell+gold tiles
             {
                 tilePaths.Add(path.name);
                 tiles.Add(tile);
@@ -427,6 +439,8 @@ public class MainUIManager : MonoBehaviour
         return -1;
     }
 
+
+
     public void SelectTokenToKeepPressed()
     {
         Player localPlayer = Player.GetLocalPlayer();
@@ -523,7 +537,7 @@ public class MainUIManager : MonoBehaviour
         foreach (MovementTile tile in Player.GetLocalPlayer().mVisibleTiles)
         {
             // For elfenland, only show tokens that are not obstacles
-            if (tile == MovementTile.RoadObstacle) continue;
+            if (Game.currentGame.gameMode == GameMode.Elfenland && tile == MovementTile.RoadObstacle) continue;
 
             GameObject g = Instantiate(tilePrefab, gridGroup.transform);
 
@@ -640,7 +654,20 @@ public class MainUIManager : MonoBehaviour
         List<MovementTile> tiles = new List<MovementTile>();
         foreach (GridManager gm in GameConstants.roadGroup.GetComponentsInChildren<GridManager>())
         {
-            tiles.AddRange(gm.GetNonObstacleTiles());
+            if (Game.currentGame.gameMode == GameMode.Elfenland)
+            {
+                // For elfenland, don't return road obstacles into pile
+                tiles.AddRange(gm.GetNonObstacleTiles());
+            }
+            else
+            {
+                // For elfengold all tiles go back into pile
+                List<MovementTileSpriteScript> tileSprites = gm.GetAllTiles();
+                foreach (MovementTileSpriteScript tileSprite in tileSprites)
+                {
+                    tiles.Add(tileSprite.mTile.mTile);
+                }
+            }
             gm.Clear();
         }
 
@@ -735,6 +762,13 @@ public class MainUIManager : MonoBehaviour
         spriteScript.SetTileSO(mTileDict[movementTile]);
 
         _ = pathScript.GetComponentInChildren<GridManager>().AddElement(newTileSprite);
+    }
+
+
+    internal void RemoveTile(MovementTile mTile, String path)
+    {
+        PathScript pathScript = GameConstants.roadDict[path];
+        pathScript.GetGridManager().RemoveTile(mTile);
     }
 
 
@@ -919,7 +953,4 @@ public class MainUIManager : MonoBehaviour
     }
 
     #endregion
-
-
-
 }

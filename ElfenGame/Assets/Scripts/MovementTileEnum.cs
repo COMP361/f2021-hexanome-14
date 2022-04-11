@@ -10,8 +10,8 @@ public enum MovementTile : byte
     WaterObstacle,
     //TODO: Add other tiles for elvengold
     Double,
-    Bounce
-
+    Bounce,
+    Gold
 }
 
 static class MovementTileExtension

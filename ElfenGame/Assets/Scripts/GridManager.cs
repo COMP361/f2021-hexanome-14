@@ -47,6 +47,8 @@ public class GridManager : MonoBehaviour
         return nonObstacleTiles;
     }
 
+    
+
     private void PositionElements()
     {
         int colsNeeded = Mathf.Min(nCols, elements.Count);
@@ -82,12 +84,44 @@ public class GridManager : MonoBehaviour
         return true;
     }
 
+    public GameObject GetElement(MovementTile mTile)
+    {
+        foreach (GameObject go in elements)
+        {
+            MovementTileSpriteScript spriteScript = go.GetComponent<MovementTileSpriteScript>();
+            if (spriteScript.mTile.mTile == mTile)
+            {
+                return go;
+            }
+        }
+        return null;
+    }
+
     public void RemoveElement(GameObject gameObject)
     {
         if (elements.Contains(gameObject))
         {
             elements.Remove(gameObject);
             PositionElements();
+            
+        }
+        
+    }
+
+    public void RemoveTile(MovementTile mTile)
+    {
+        foreach (GameObject el in elements)
+        {
+            MovementTileSpriteScript tile = el.GetComponent<MovementTileSpriteScript>();
+            if (tile != null)
+            {
+                if (tile.mTile.mTile == mTile)
+                {
+                    elements.Remove(el);
+                    PositionElements();
+                    return; // Only remove one
+                }
+            }
         }
     }
 
@@ -137,12 +171,60 @@ public class GridManager : MonoBehaviour
 
             moveTile = element.GetComponent<MovementTileSpriteScript>();
             MovementTile tile = moveTile.mTile.mTile;
-            if (tile != MovementTile.RoadObstacle)
+            if (tile != MovementTile.RoadObstacle
+                && tile != MovementTile.WaterObstacle
+                && tile != MovementTile.Double
+                && tile != MovementTile.Bounce
+                && tile != MovementTile.Gold)
             {
                 return moveTile;
             }
         }
         return null;
+    }
+
+    public void ResetTileColors()
+    {
+        foreach (GameObject element in elements)
+        {
+            element.GetComponent<MovementTileSpriteScript>().ResetColor();
+        }
+
+    }
+    public List<MovementTileSpriteScript> GetMovementTiles()
+    {
+        List<MovementTileSpriteScript> moveTiles = new List<MovementTileSpriteScript>();
+        MovementTileSpriteScript moveTile = null;
+
+        foreach (GameObject element in elements)
+        {
+
+            moveTile = element.GetComponent<MovementTileSpriteScript>();
+            MovementTile tile = moveTile.mTile.mTile;
+            if (tile != MovementTile.RoadObstacle
+                && tile != MovementTile.WaterObstacle
+                && tile != MovementTile.Double
+                && tile != MovementTile.Bounce
+                && tile != MovementTile.Gold)
+            {
+                moveTiles.Add(moveTile);
+            }
+        }
+        return moveTiles;
+    }
+
+    public List<MovementTileSpriteScript> GetAllTiles()
+    {
+        List<MovementTileSpriteScript> moveTiles = new List<MovementTileSpriteScript>();
+        MovementTileSpriteScript moveTile = null;
+
+        foreach (GameObject element in elements)
+        {
+            moveTile = element.GetComponent<MovementTileSpriteScript>();
+            moveTiles.Add(moveTile);
+        }
+        return moveTiles;
+
     }
 
     public bool HasObstacle()
@@ -158,6 +240,54 @@ public class GridManager : MonoBehaviour
 
         }
         return false;
+    }
+
+    public bool HasDouble()
+    {
+        foreach (GameObject element in elements)
+        {
+            MovementTileSpriteScript moveTile = element.GetComponent<MovementTileSpriteScript>();
+            MovementTile tile = moveTile.mTile.mTile;
+            if (tile == MovementTile.Double)
+            {
+                return true;
+            }
+
+        }
+        return false;
+
+    }
+
+    public bool HasBounce()
+    {
+        foreach (GameObject element in elements)
+        {
+            MovementTileSpriteScript moveTile = element.GetComponent<MovementTileSpriteScript>();
+            MovementTile tile = moveTile.mTile.mTile;
+            if (tile == MovementTile.Bounce)
+            {
+                return true;
+            }
+
+        }
+        return false;
+
+    }
+
+    public bool HasGold()
+    {
+        foreach (GameObject element in elements)
+        {
+            MovementTileSpriteScript moveTile = element.GetComponent<MovementTileSpriteScript>();
+            MovementTile tile = moveTile.mTile.mTile;
+            if (tile == MovementTile.Gold)
+            {
+                return true;
+            }
+
+        }
+        return false;
+
     }
 
 

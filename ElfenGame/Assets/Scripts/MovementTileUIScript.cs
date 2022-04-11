@@ -37,6 +37,32 @@ public class MovementTileUIScript : MonoBehaviour, IDragHandler, IBeginDragHandl
         }
     }
 
+    private void OnMouseDown()
+    {
+        if (EventSystem.current.IsPointerOverGameObject())
+        {
+            Debug.Log("MouseDown on: UI Element");
+        }
+        else
+        {
+            RaycastHit2D hit = Physics2D.Raycast(GameConstants.mainCamera.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
+            if (hit.collider != null)
+            {
+                Debug.Log("MouseDown on: " + hit.collider.gameObject.name);
+
+                if (hit.collider.gameObject == gameObject)
+                {
+                    Debug.Log("this is poop");
+                }
+            }
+        }
+
+
+    } 
+
+    
+
+
     public void OnBeginDrag(PointerEventData eventData)
     {
         if (nTiles <= 0 || !Player.GetLocalPlayer().IsMyTurn() || Game.currentGame.curPhase != GamePhase.PlaceCounter) return;

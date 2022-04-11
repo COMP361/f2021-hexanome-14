@@ -96,6 +96,7 @@ public class Player
         if (Game.currentGame.gameMode == GameMode.Elfengold)
         {
             nCoins = 10;
+            AddCards(Game.currentGame.Draw(3));
         }
     }
 
