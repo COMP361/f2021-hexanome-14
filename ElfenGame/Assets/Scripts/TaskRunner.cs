@@ -44,7 +44,8 @@ public class TaskRunner : MonoBehaviour
                 }
                 catch (Exception e)
                 {
-                    Debug.LogError(e);
+                    //Debug.LogError(e);
+                    Debug.Log(e);
                 }
             }
             toRun.Clear();
